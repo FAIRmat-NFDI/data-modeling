@@ -1,4 +1,3 @@
-
 # Standalone converter from json to HDF5/Nexus
 
 This is a development tool to help with designing the final shape of our Nexus App definition. The script here is part of the Nion Swift Nexus exporter being worked on by Sherjeel Shabih.
@@ -29,4 +28,4 @@ python json_to_nexus.py --input input.json --transaltion translation.json --outp
 You can really map the output however you like. Whether it's a leaf in the JSON tree structure or just another node. The code will handle nesting further or pulling out the structure as you imagine. Please refer to the example translation.json.
 
 
-**Special thanks to Dr. Benedikt Haas for providing the example data.
+**Special thanks to Dr. Benedikt Haas for providing the example data.**
