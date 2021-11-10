@@ -1,1 +1,233 @@
+# experimental procedure
+stage:
+  description:  where and how is the sample mounted
+  types:
+    - manual stage
+    - scanning stage
+    - liquid stage
+  required: one
 
+coordinates:
+  description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam.
+  position:
+    description:
+      position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+    mandatory:  yes
+
+    X:
+      type: numeric
+      unit: length
+
+    Y:
+      type: numeric
+      unit: length
+
+    Z:
+      description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this.
+      type: numeric
+      unit: distance
+
+    alternative:
+      type: text
+      values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
+  orientation:
+    horizontal angle:
+      description: angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
+      type: numeric
+      unit: angle
+      alternative:
+        type: text
+        values: parallel, perpendicular, diagonal
+
+    vertical orientation:
+      mandatory: no
+      description: how is the sample tilted vs. the plane of incidence. In reflection measurements this must be 90 degrees. For transmission, it may be different.
+      type: numeric
+      unit: angle
+
+wavelength range:
+  description: define the range of light used as minimum and maximum values
+  type: numeric
+  unit: length
+  length: 2
+  mandatory: yes
+
+medium:
+  description: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
+  type: text
+  mandatory: yes
+  alternative:
+    description: or provide the complex refractive index of the medium for every measured wavelength.
+    type: numeric
+    unit: none
+
+environment conditions:
+  description: external parameters that have influenced the sample
+  mandatory: no
+
+  temperature:
+    type: numeric
+    unit: temperature
+    alternative: text
+      value: room temperature, RT
+
+  pH:
+    type: numeric
+    unit: none
+    alternative:
+      type: text
+      value: neutral, undefined
+    default: undefined
+
+  stress:
+    mandatory: no
+    type: numeric
+    unit: pressure
+
+    orientation:
+      description: Euler angles of stress relative to sample
+      type: numeric
+      length: 3
+      unit: angle
+
+# instrument
+mandatory: yes
+model:
+  description: the name and type number of the instrument
+  type: string
+
+company:
+  description: name of the company
+  type: string
+
+construction year:
+  type: numeric
+
+hardware version:
+  description: the used version of the hardware if available
+  mandatory: no
+  type: string
+
+software version:
+  description: software name and version used for measurement
+  type: string
+
+ellipsometry type:
+  description: what type of ellipsometry was used? See Fujiwara Table 4.2.
+  type: string
+    values:
+      rotating analyzer,
+      rotating analyzer with analyzer compensator,
+      rotating analyzer with polarizer compensator,
+      rotating polarizer,
+      rotating compensator on polarizer side,
+      rotating compensator on analyzer side,
+      modulator on polarizer side,
+      modulator on analyzer side,
+      dual compensator,
+      phase modulation
+
+calibration:
+  description: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
+
+  calibration time:
+    description: when calibration was last performed before this measurement
+    type: date and time
+    alternative:
+      type: text
+      values: no calibration, within 1 hour, within 1 day, within 1 week
+
+  calibration provided:
+    description: is the measured data provided?
+    type: bool
+    values: yes, no
+
+  calibration data:
+    description: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
+    data type:
+      type: string
+      values: psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix
+
+    angle of incidence:
+      type: numeric
+      unit: angle
+
+    wavelength:
+      description: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
+      type: numeric
+      unit: length
+
+    calibration data:
+      type: numeric
+      unit: none
+
+    calibration sample:
+      description: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
+      type: string
+
+window:
+  description:
+    for environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties
+  thickness:
+    type: numeric
+    unit: length
+
+  orientation angle:
+    description: angle in the plane of incidence
+    type: numeric
+    unit: angle
+
+  calibration data:
+    wavelength:
+      type: numeric
+      unit: length
+
+    data array:
+      type: numeric
+      unit: none
+
+    calibration sample:
+      description: what sample was used to callibrate the window effect?
+      type: string
+
+duration:
+  description: integration time for the measurement. Single number or array if it was varied.
+  type: numeric
+  unit: time
+
+# measured data
+mandatory: yes
+
+data ID:
+  description: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
+  type: numeric
+
+data type:
+  type: text
+  value: psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data
+  mandatory: yes
+
+wavelength:
+  type: numeric
+  unit: length
+
+data:
+  type: numeric
+  units: none
+
+angle of incidence:
+  description: the angle of incidence on the sample, defined as in standard optics
+  type: numeric
+  unit: angle
+
+time points:
+  description: an array of relative time points if a time series was recorded
+  type: numeric
+  unit: time
+  mandatory: no
+
+# derived parameters
+description: what parameters are derived from the above data
+depolarization:
+  type: numeric
+  unit: none
