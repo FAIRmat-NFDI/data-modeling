@@ -5,6 +5,7 @@ stage:
     - manual stage
     - scanning stage
     - liquid stage
+    - gas cell
   required: one
 
 coordinates:
@@ -67,6 +68,48 @@ environment conditions:
   description: external parameters that have influenced the sample
   mandatory: no
 
+  optical excitation:
+    description: describe if the spectra where taken under optical excitation
+    
+    excitation source:
+      description: specify the source for the external excitation
+      type: text
+
+    wavelength:
+      description: range 
+      type: numeric
+      unit: length
+    
+    broadening:
+      description: specify the FWHM of the excitation
+      type: numeric
+      unit: length
+
+    type:
+      description: cw or pulsed excitation
+      values: cw, pulsed
+
+    pulsed length:
+      type: numeric
+      unit: time
+
+    repetition rate:
+      type: numeric
+      unit: frequency
+
+    pulse energy:
+      type: numeric
+      unit: energy
+
+    excitation power:
+      type: numeric
+      unit: W
+
+  voltage:
+    description: if the spectra were taken under bias
+    type: numeric
+    unit: voltage
+
   temperature:
     type: numeric
     unit: temperature
@@ -115,6 +158,15 @@ software version:
   description: software name and version used for measurement
   type: string
 
+bandwidth:
+  description: specify the bandwidth of the light
+  type: numeric
+  length: number of wavelength
+
+light source:
+  description: specify the used light source
+  type: text
+
 ellipsometry type:
   description: what type of ellipsometry was used? See Fujiwara Table 4.2.
   type: string
@@ -128,7 +180,8 @@ ellipsometry type:
     modulator on polarizer side,
     modulator on analyzer side,
     dual compensator,
-    phase modulation
+    phase modulation,
+    null ellipsometry
 
 calibration:
   description: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
@@ -198,9 +251,53 @@ duration:
   type: numeric
   unit: time
 
+revolution:
+  description: define how many rotations of the rotating element were taken into account for one spectra
+  rotating element:
+    description: define which elements rotates
+    type:
+      - polarizer (source side)
+      - polarizer (detector side)
+      - compensator (source side)
+      - compensator (detector side)
+
+    fixed revolution:
+      description: if the revolution does not change during the measurement
+      type: numeric
+
+    variable revolution:
+      description: specify maximum and minimum values for the revolution
+      type: numeric
+      length: 2
+
 ---
 # measured data
 mandatory: yes
+
+sample:
+  description: specification of the sample (invlved materials and layer structure)
+
+  ID:
+    description: unique ID for the sample
+    type: text
+    unit: dimensionless
+  
+  layer structure:
+    description: specification of the layer structure
+    type: text
+    unit: dimensionless
+
+  orientation:
+    description: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
+    type: numeric
+    length: 3
+    unit: radiant
+
+  position:
+    description: specifiy the position (e.g. in a line scan) with respect to a reference point
+    type: numeric
+    length: 3
+    unit: length
 
 data ID:
   description: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
