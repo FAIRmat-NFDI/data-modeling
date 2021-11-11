@@ -1,0 +1,24 @@
+{
+	"root":
+	{
+		"@class": "NXem_cs_corrector",
+		"doc": "A device for correcting spherical aberrations as a component of an electron microscope.",
+		"name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Colloquial or short name for the corrector. For manufacturer names and identifiers use respective manufacturer fields." },
+		"manufacturer_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the corrector." },
+		"manufacturer_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier given by the manufacturer to identify the corrector." },
+		"description": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Ideally an identifier, link, or text which gives further details about the lens or a persistent link where further information can be found." },
+		"transformations":
+		{
+			"@class": "NXtransformations",
+			"@recommended": "true",
+			"doc": "Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in e.g. a microscope. We follow the conventions in the NXtransformations base class. Therefore, consult NXtransformations for further details. This implies that we use in principle the McSTAS coordinate system. We make two key modifications though, we place the origin of the coordinate system in the center of the gun pinhole as this is an identifiable component of the electron gun where we can ignore the detailed geometry of the gun component itself. A right-handed coordinate system is assumed whose z-axis is parallel to the optical axis and positive means in the direction of the propagating electrons, i.e. towards the specimen." },
+			"position": 
+			{
+				"@minOccurs": "1",				
+				"@transformation_type": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Following transformation_type argument of NXtranslations but allowed value is only translation" },
+				"@vector": { "@minOccurs": "1", "@type": "NX_NUMBER", "doc": "Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with a coordinate system in the center of the lens." },
+				"@depends_on": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Enter the path where the reference coordinate system for the microscope is defined" } 
+			}						
+		}
+	}
+}
