@@ -167,6 +167,19 @@ light source:
   description: specify the used light source
   type: text
 
+focussing probes:
+  description: specify if focussing probes (lenses) were used
+  type: bool
+
+  data_correction:
+    description: specify of the recorded data are corrected by the window effects of the lenses
+    type: bool
+
+  angular spread:
+    description: specify the angular spread caused by the focussing probes
+    type: numeric
+    unit: radiant
+
 ellipsometry type:
   description: what type of ellipsometry was used? See Fujiwara Table 4.2.
   type: string
@@ -181,6 +194,7 @@ ellipsometry type:
     modulator on analyzer side,
     dual compensator,
     phase modulation,
+    imaging ellipsometry,
     null ellipsometry
 
 calibration:
