@@ -3,7 +3,7 @@
 	{
 		"@class": "NXemlens",
 		"doc": "An electro-magnetic lens that is e.g. a component of an electron microscope.",
-		"name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Colloquial or short name for the lens. For manufacturer names and identifiers use identifier field." },
+		"name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Colloquial or short name for the lens. For manufacturer names and identifiers use respective manufacturer fields." },
 		"manufacturer_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the lens." },
 		"manufacturer_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier given by the manufacturer to identify the lens." },
 		"description": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Ideally an identifier, link, or text which gives further details about the lens or a persistent link where further information can be found." },
