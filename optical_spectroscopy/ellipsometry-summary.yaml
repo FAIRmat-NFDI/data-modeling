@@ -15,35 +15,37 @@ coordinates:
     mandatory:  yes
 
     X:
+      description: direction of the beam along the stage towards the detector
       type: numeric
       unit: length
 
     Y:
+      description: perpendicular to the plane of incidence, to the right hand side from X
       type: numeric
       unit: length
 
     Z:
-      description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this.
+      description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
       type: numeric
       unit: distance
 
     alternative:
       type: text
       values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
+  
   orientation:
-    horizontal angle:
+    angle of incidence:
+      type: numeric
+      unit: angle
+
+    Euler angles:
       description: angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
       type: numeric
       unit: angle
+      length: 3
       alternative:
         type: text
         values: parallel, perpendicular, diagonal
-
-    vertical orientation:
-      mandatory: no
-      description: how is the sample tilted vs. the plane of incidence. In reflection measurements this must be 90 degrees. For transmission, it may be different.
-      type: numeric
-      unit: angle
 
 wavelength range:
   description: define the range of light used as minimum and maximum values
