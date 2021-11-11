@@ -191,18 +191,18 @@ instrument:
     description: what type of ellipsometry was used? See Fujiwara Table 4.2.
     type: string
     value:
-      rotating analyzer,
-      rotating analyzer with analyzer compensator,
-      rotating analyzer with polarizer compensator,
-      rotating polarizer,
-      rotating compensator on polarizer side,
-      rotating compensator on analyzer side,
-      modulator on polarizer side,
-      modulator on analyzer side,
-      dual compensator,
-      phase modulation,
-      imaging ellipsometry,
-      null ellipsometry
+      - rotating analyzer,
+      - rotating analyzer with analyzer compensator,
+      - rotating analyzer with polarizer compensator,
+      - rotating polarizer,
+      - rotating compensator on polarizer side,
+      - rotating compensator on analyzer side,
+      - modulator on polarizer side,
+      - modulator on analyzer side,
+      - dual compensator,
+      - phase modulation,
+      - imaging ellipsometry,
+      - null ellipsometry
 
   calibration:
     description: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
