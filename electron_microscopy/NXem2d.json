@@ -1,0 +1,281 @@
+{
+	"root":
+	{
+		"@class": "NXentry",
+		"@minOccurs": "1",
+		"@maxOccurs": "1",
+		"@default": "??",
+		"experiment_identifier": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Unique identifier of the experiment, for instance a globally unique persistent identifier, defined usually by the facility, possibly linked to the proposals" },
+		"experiment_description": { "@minOccurs": "1", "@type": "NX_CHAR" },
+		"start_time": { "@minOccurs": "1", "@type": "NX_DATE_TIME", "@units": "NX_TIME" },
+		"end_time": { "@minOccurs": "1", "@type": "NX_DATE_TIME", "@units": "NX_TIME" },
+		"duration": { "recommended": "true", "@type": "NX_INT", "@units": "NX_TIME" },
+		"collection_time": { "recommended": "true", "@type": "NX_INT", "@units": "NX_TIME" },
+		"program_name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Commercial of given name to the program used to generate this file" },
+		"program_version": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Either version with build number of commit hash or description of a repository where this program can be found and configured in such a way that it creates an ideally deterministically same result." },
+		"application_def":
+		{
+			"@class": "NXsubentry",
+			"@minOccurs": "1",
+			"definition_local": { 
+				"@minOccurs": "1", 
+				"@type": "NX_CHAR", 
+				"doc": "FAIRmat-specific candidate proposal for an application definition exemplifying for scanning nanobeam diffraction",
+				"version": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"url": { "@minOccurs": "1", "@type": "NX_CHAR" }
+			 }
+		}
+		"operator":
+		{
+			"@class": "NXuser",
+			"@minOccurs": "1",
+			"@maxOccurs": "unbounded",
+			"doc": "Contact information of at least the user of the instrument session which created the file. Adding multiple users is recommended.",
+			"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+			"affiliation": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Name of the user, if only one user is added to the file this you be the responsible user for this entry." },
+			"address": { "@minOccurs": "1", "@type": "NX_CHAR" },
+			"email": { "@minOccurs": "1", "@type": "NX_CHAR" },
+			"orcid": { "@recommended": "true", "@type": "NX_CHAR" },
+			"telephone_number": { "@recommended": "true", "@type": "NX_CHAR" }
+		},
+		"specimen":
+		{
+			"@class": "NXsample",
+			"@minOccurs": "1",
+			"@maxOccurs": "1",
+			"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+			"sample_history": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Ideally reference to or unique identifier (e.g.) of another a file which gives as many as possible details of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In case such a detailed history of the sample is not available, use this field as a free-text description to specify further details of the sample and its preparation." },
+			"preparation_date": { "@minOccurs": "0", "@type": "NX_DATE_TIME", "@units": "NX_TIME" },
+			"preparation_description": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Ideally reference to another application definition that gives details for the preparation of the sample. If such an application definition is not available, use this field to give preparation details." },
+			"description": { "@minOccurs": "0", "@type": "NX_CHAR" },
+			"short_title": { "@recommended": "true", "@type": "NX_CHAR" },
+			"temperature": { "@minOccurs": "1", "@type": "NX_FLOAT", "@units": "NX_TEMPERATURE" },
+			"atom_types": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Use Hill's system for listing elements of the periodic table which are in the specimen. The purpose of this field is to allow materials database to parse the relevant elements without having to interpret the sample history." }
+		},
+		"monitor":
+		{
+			"@class": "NXmonitor",
+			"??"
+		},
+		"data":
+		{	
+			"@class": "NXdata",
+			"??"
+		},
+		"scan_align":
+		{
+			"@class": "NXprocess",
+			"@minOccurs": "1",			
+			"program_name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Commercial of given name to the program used for this processing" },
+			"program_version": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Either version with build number of commit hash or description of a repository where this program can be found and configured in such a way that it creates an ideally deterministically same result." },
+			"description": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Description of the processing steps." },
+			"?? ADD ALL FIELDS FROM CHRISTOPHS LIST IS POSSIBLE ??"
+		},	
+		"em_lab":
+		{
+			"@class": "NXinstrument",
+			"@minOccurs": "1",
+			"@maxOccurs": "1",
+			"name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Name of the microscope." },
+			"time_zone": { "@minOccurs": "1", "@type": "NX_DATE_TIME", "@units": "NX_TIME" },
+			"instrument_manufacturer": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Manufacturer of the entire instrument to enable e.g. queries about manufacturers. Usually more technical details are needed which is why it is recommended to fill as many of the individual components of the instrument as possible." },
+			"instrument_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Manufacturer brand/model to enable e.g. queries about microscope models. See comments on instrument_manufacturer on how to provide further specification." },
+			"instrument_capability": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "List of controlled EM-community vocabulary terms of functional components. If provided compose the list from the following terms: Feg, Astar, OmegaFilter" },
+			"electron_gun":
+			{
+				"@class": "NXsource",
+				"minOccurs": "1",
+				"maxOccurs": "1",
+				"doc": "The source creating an electron beam"
+				"voltage": { "@minOccurs": "1", "@type": "NX_FLOAT", "@units": "NX_VOLTAGE", "doc": "Voltage relevant to compute the energy of the electrons immediately after they left the gun." },
+				"probe": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "electron" },
+				"wavelength": { "@minOccurs": "1", "@type": "NX_FLOAT", "@units": "NX_WAVELENGTH", "doc": "to be discussed" },
+				"emitter_type": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Emitter type used to create the beam in the first place. Possible values: thermionic, schottky, feg." },
+				"description": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Ideally reference to (another) file via link, name, or a unique identifier (e.g.) that gives further details about the electron gun." }
+			},
+			"condenser_lens_1":
+			{
+				"@class": "NXemlens",
+				"minOccurs": "1"
+			},
+			"condenser_lens_1_aperture":
+			{
+				"@class": "NXaperture",
+				"@minOccurs": "1",
+				"doc": "A electron beam aperture",
+				"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"manufacturer_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the aperture." },
+				"manufacturer_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier given by the manufacturer to identify the aperture." },
+				"description": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Ideally an identifier, link, or text which gives further details about the aperture or a persistent link where further information can be found." },
+				"transformations":
+				{
+					"@class": "NXtransformations",
+					"@minOccurs": "0"
+				}
+			},
+			"condenser_lens_2":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "1"
+			},
+			"condenser_lens_2_aperture":
+			{
+				"@class": "NXaperture",
+				"@minOccurs": "1",
+				"doc": "A electron beam aperture",
+				"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"manufacturer_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the aperture." },
+				"manufacturer_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier given by the manufacturer to identify the aperture." },
+				"description": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Ideally an identifier, link, or text which gives further details about the aperture or a persistent link where further information can be found." },
+				"transformations":
+				{
+					"@class": "NXtransformations",
+					"@minOccurs": "0"
+				}
+			},
+			"cs_corrector":
+			{	
+				"@class": "NXem_cs_corrector",
+				"@minOccurs": "0"
+			},
+			"prefield_or_mini_lens":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0"
+			},
+			"scanning_coils":
+			{
+				"@class": "NXem_deflector",
+				"@minOccurs": "0"
+			},
+			"specimen_stage":
+			{
+				"@class": "NXpositioner",
+				"@minOccurs": "1",
+				"@maxOccurs": "1",
+				"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"description": { "@minOccurs": "1", "@type": "NX_CHAR" }
+			},
+			"objective_lens":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "1"
+			},
+			"objective_mini_lens":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0",
+			},						
+			"selected_area_aperture":
+			{
+				"@class": "NXaperture",
+				"@minOccurs": "0"
+			},
+			"intermediate_lens_1":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "1"
+			},
+			"intermediate_lens_2":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0"
+			},
+			"intermediate_lens_3":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0"
+			},
+			"intermediate_lens_4":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0"
+			},
+			"haadf_detector":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			},
+			"omega_filter":
+			{
+				"@class": "NXem_omega_filter",
+			 	"@minOccurs": "0"
+			},
+			"energy_filter_1_aperture:"
+			{
+				"@class": "NXaperture",
+				"@minOccurs": "0",
+				"doc": "A electron beam aperture",
+				"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"manufacturer_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the aperture." },
+				"manufacturer_model": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier given by the manufacturer to identify the aperture." },
+				"description": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Ideally an identifier, link, or text which gives further details about the aperture or a persistent link where further information can be found." },
+				"transformations":
+				{
+					"@class": "NXtransformations",
+					"@minOccurs": "0"
+				}
+			},
+			"energy_filter_1":
+			{
+			  "@class": "NXfilter",
+			  "@minOccurs": "0"
+			},
+			"projector_lens_1":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "1"
+			},
+			"projector_lens_2":
+			{
+				"@class": "NXemlens",
+				"minOccurs": "0"
+			},
+			"projector_lens_3":
+			{
+				"@class": "NXemlens",
+				"@minOccurs": "0"
+			},
+			"fluorescent_screen_detector":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			},
+			"mirror_1":
+			{
+				"@class": "NXem_mirror",
+				"@minOccurs": "0"
+			},
+			"ccd_camera_1":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			},
+			"dark_field_detector":
+			{
+				"@class": "NXdetector",
+				"minOccurs": "0"
+			},
+			"bright_field_detector":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			},
+			"ccd_camera_2":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			},
+			"eels_aperture":
+			{
+				"@class": "NXaperture",
+				"@minOccurs": "0"
+			},
+			"eels_detector":
+			{
+				"@class": "NXdetector",
+				"@minOccurs": "0"
+			}
+		}		
+	}
+}
