@@ -1,10 +1,9 @@
 {
-	"root":
+	"entry1":
 	{
 		"@class": "NXentry",
 		"@minOccurs": "1",
 		"@maxOccurs": "1",
-		"@default": "??",
 		"experiment_identifier": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Unique identifier of the experiment, for instance a globally unique persistent identifier, defined usually by the facility, possibly linked to the proposals" },
 		"experiment_description": { "@minOccurs": "1", "@type": "NX_CHAR" },
 		"start_time": { "@minOccurs": "1", "@type": "NX_DATE_TIME", "@units": "NX_TIME" },
@@ -24,7 +23,7 @@
 				"version": { "@minOccurs": "1", "@type": "NX_CHAR" },
 				"url": { "@minOccurs": "1", "@type": "NX_CHAR" }
 			 }
-		}
+		},
 		"operator":
 		{
 			"@class": "NXuser",
@@ -55,12 +54,12 @@
 		"monitor":
 		{
 			"@class": "NXmonitor",
-			"??"
+			"@recommended": "true"
 		},
 		"data":
 		{	
 			"@class": "NXdata",
-			"??"
+			"link": "scanalign/data"
 		},
 		"scan_align":
 		{
@@ -69,8 +68,46 @@
 			"program_name": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Commercial of given name to the program used for this processing" },
 			"program_version": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Either version with build number of commit hash or description of a repository where this program can be found and configured in such a way that it creates an ideally deterministically same result." },
 			"description": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Description of the processing steps." },
-			"?? ADD ALL FIELDS FROM CHRISTOPHS LIST IS POSSIBLE ??"
-		},	
+			"misc":
+			{
+				"@class": "NXcollection",
+				"@minOccurs": "1",
+				"cartesian_scan_dimensions": { "@minOccurs": "1", "@type": "NX_UINT", "doc": "need to double check with Christoph what this is, but I think the member names for this and the next two members are not nice. I consider these three more like a dummy like the WONI experiment to understand how to store n-dimensional data using NeXus" },
+				"cartesian_scan_dimension_1_count": { "@minOccurs": "1", "@type": "NX_UINT", "doc": "need to double check with Christoph what this is, but I think the member names for this and the next two members are not nice. I consider these three more like a dummy like the WONI experiment to understand how to store n-dimensional data using NeXus" },
+				"cartesian_scan_dimension_2_count": { "@minOccurs": "1", "@type": "NX_UINT", "doc": "need to double check with Christoph what this is, but I think the member names for this and the next two members are not nice. I consider these three more like a dummy like the WONI experiment to understand how to store n-dimensional data using NeXus" }				
+			},
+			"acquired_data":
+			{
+				"@class": "NXdata",
+				"@signal": "imagestack",
+				"@axes": ["imageid", "ypos", "xpos"],
+				"@imageid_indices": "2",
+				"@ypos_indices": "1",
+				"@xpos_indices": "0",
+				"imagestack": "NX_NUMBER[nimg,ny,nx]",
+				"imageid": "NX_UINT[nimg]",
+				"@long_name": { "@recommended": "true", "@type": "NX_CHAR" },
+				"ypos": "NX_NUMBER[ny]",
+				"@long_name": { "@recommended": "true", "@type": "NX_CHAR" },		
+				"xpos": "NX_NUMBER[nx]",
+				"@long_name": { "@recommended": "true", "@type": "NX_CHAR" },
+				"doc": "A stack of two-dimensional images with imageid changing slowest, ypos changing faster, and xpos changing fastest, i.e. xpos + ypos * nx + imageid * nx*ny implicit indexing"
+			},
+			"series_params":
+			{
+				"@class": "NXdata",
+				"@type": "NX_NUMBER",
+				"parms": "NX_NUMBER[nimg,2]",
+				"doc": "A collection of parameter pairs for each image, i.e. 0 or 1 + imageid * 2 implicit indexing"
+			},
+			"aligned_positions":
+			{
+				"@class": "NXdata",
+				"@type": "NX_NUMBER",
+				"positions": "NX_NUMBER[nimg,5]",
+				"doc": "A collection of alignment position quintets for each image, i.e. 0, 1, ..., 4 + imageid * 5 implicit indexing"
+			}
+		},
 		"em_lab":
 		{
 			"@class": "NXinstrument",
@@ -84,19 +121,19 @@
 			"electron_gun":
 			{
 				"@class": "NXsource",
-				"minOccurs": "1",
-				"maxOccurs": "1",
-				"doc": "The source creating an electron beam"
+				"@minOccurs": "1",
+				"@maxOccurs": "1",
+				"doc": "The source creating an electron beam",
 				"voltage": { "@minOccurs": "1", "@type": "NX_FLOAT", "@units": "NX_VOLTAGE", "doc": "Voltage relevant to compute the energy of the electrons immediately after they left the gun." },
 				"probe": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "electron" },
 				"wavelength": { "@minOccurs": "1", "@type": "NX_FLOAT", "@units": "NX_WAVELENGTH", "doc": "to be discussed" },
-				"emitter_type": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Emitter type used to create the beam in the first place. Possible values: thermionic, schottky, feg." },
+				"emitter_type": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Emitter type used to create the beam in the first place. Possible values: thermionic, schottky, feg" },
 				"description": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Ideally reference to (another) file via link, name, or a unique identifier (e.g.) that gives further details about the electron gun." }
 			},
 			"condenser_lens_1":
 			{
 				"@class": "NXemlens",
-				"minOccurs": "1"
+				"@minOccurs": "1"
 			},
 			"condenser_lens_1_aperture":
 			{
@@ -154,7 +191,8 @@
 				"@minOccurs": "1",
 				"@maxOccurs": "1",
 				"name": { "@minOccurs": "1", "@type": "NX_CHAR" },
-				"description": { "@minOccurs": "1", "@type": "NX_CHAR" }
+				"description": { "@minOccurs": "1", "@type": "NX_CHAR" },
+				"value": { "@minOccurs": "1", "@type": "NX_NUMBER", "doc": "Stage position" }
 			},
 			"objective_lens":
 			{
@@ -164,7 +202,7 @@
 			"objective_mini_lens":
 			{
 				"@class": "NXemlens",
-				"@minOccurs": "0",
+				"@minOccurs": "0"
 			},						
 			"selected_area_aperture":
 			{
@@ -201,7 +239,7 @@
 				"@class": "NXem_omega_filter",
 			 	"@minOccurs": "0"
 			},
-			"energy_filter_1_aperture:"
+			"energy_filter_1_aperture":
 			{
 				"@class": "NXaperture",
 				"@minOccurs": "0",
@@ -229,7 +267,7 @@
 			"projector_lens_2":
 			{
 				"@class": "NXemlens",
-				"minOccurs": "0"
+				"@minOccurs": "0"
 			},
 			"projector_lens_3":
 			{
@@ -249,12 +287,50 @@
 			"ccd_camera_1":
 			{
 				"@class": "NXdetector",
-				"@minOccurs": "0"
+				"@minOccurs": "0",
+				"type": { "@minOccurs": "1", "@type": "NX_CHAR", "doc": "Description of type sch as CCD, scintillator, direct electron, image plate, CMOS, ..." },
+				"manufacturer_name": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Name of the manufacturer who built/constructed the detector" },
+				"manufacturer_model": { "@recommended": "true", "@type": "NX_CHAR", "doc": "Hardware name or hash identifier or serial number given by the manufacturer to identify the detector." },
+				"sensor_material": { "@recommended": "true", "@type": "NX_CHAR" },
+				"bit_depth_readout": { "@recommended": "true", "@type": "NX_INT" },
+				"number_of_cycles": { "@recommended": "true", "@type": "NX_INT" },
+				"x_pixel_size": { "@recommended": "true", "@type": "NX_FLOAT", "@units": "NX_LENGTH" },
+				"y_pixel_size": { "@recommended": "true", "@type": "NX_FLOAT", "@units": "NX_LENGTH" },
+				"flatfield_applied": { "@recommended": "true", "@type": "NX_BOOLEAN" },
+				"flatfield": { "@recommended": "true", "@type": "NX_FLOAT" },
+				"exposure": { "@recommended": "true", "@type": "NX_NUMBER", "@units": "NX_TIME" },
+				"description": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "Free text option to write further details about the detector." },
+				"misc":
+				{
+					"@class": "NXcollection",
+					"@recommended": "true",
+					"@maxOccurs": "1",
+					"darkfield_applied": { "@minOccurs": "0", "@type": "NX_BOOLEAN", "doc": "what is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to eigen noise of the detector without illumination" },
+					"darkfield": { "@minOccurs": "0", "@type": "NX_FLOAT", "doc": "what is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to eigen noise of the detector without illumination" },
+					"pixel_size_x": { "@minOccurs": "0", "@type": "NX_FLOAT", "@units": "NX_PER_LENGTH" },
+					"pixel_size_y": { "@minOccurs": "0", "@type": "NX_FLOAT", "@units": "NX_PER_LENGTH" },
+					"cartesian_scan_dimensions": { "@minOccurs": "0", "@type": "NX_UINT", "doc": "to be defined" },
+					"cartesian_scan_dimension_1_count": { "@minOccurs": "0", "@type": "NX_UINT", "doc": "to be defined" },
+					"cartesian_scan_dimension_2_count": { "@minOccurs": "0", "@type": "NX_UINT", "doc": "to be defined" },
+					"cartesian_scan_dimension_3_count": { "@minOccurs": "0", "@type": "NX_UINT", "doc": "to be defined" },
+					"scan_properties":
+					{
+						"@class": "NXcollection",
+						"@minOccurs": "0",
+						"scan_system_name": { "@minOccurs": "0", "@type": "NX_CHAR", "doc": "to be defined" },
+						"x_points_step_width": { "@minOccurs": "0", "@type": "NX_INT", "doc": "to_be_defined" },
+						"y_points_step_width": { "@minOccurs": "0", "@type": "NX_INT", "doc": "to_be_defined" }
+					}
+				},
+				"raw_data":
+				{
+					"@class": "NXdata"
+				}
 			},
 			"dark_field_detector":
 			{
 				"@class": "NXdetector",
-				"minOccurs": "0"
+				"@minOccurs": "0"
 			},
 			"bright_field_detector":
 			{
