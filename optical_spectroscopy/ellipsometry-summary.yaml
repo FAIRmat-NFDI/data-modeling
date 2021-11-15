@@ -39,14 +39,13 @@ experimental procedure:
       values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
 
   rotation:
-    Euler angles:
-      description: angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D.
-      type: numeric
-      unit: angle
-      length: 3
-      alternative:
-        type: text
-        values: parallel, perpendicular, diagonal
+    description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D.
+    type: numeric
+    unit: angle
+    length: 3
+    alternative:
+      type: text
+      values: parallel, perpendicular, diagonal
 
   angle of incidence:
       description: incident angle of the beam on the measured surface; one or more values, usually length < 10
