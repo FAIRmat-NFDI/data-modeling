@@ -15,7 +15,7 @@ experimental procedure:
       - gas cell
     required: one
 
-  coordinates:
+  translation:
     description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam.
     position:
       description:
@@ -41,19 +41,20 @@ experimental procedure:
         type: text
         values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
 
-    orientation:
-      angle of incidence:
-        type: numeric
-        unit: angle
+  rotation:
+    Euler angles:
+      description: angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
+      type: numeric
+      unit: angle
+      length: 3
+      alternative:
+        type: text
+        values: parallel, perpendicular, diagonal
 
-      Euler angles:
-        description: angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
-        type: numeric
-        unit: angle
-        length: 3
-        alternative:
-          type: text
-          values: parallel, perpendicular, diagonal
+  angle of incidence:
+      description: incident angle of the beam on the measured surface; one or more values, usually length < 10
+      type: numeric
+      unit: angle
 
   wavelength range:
     description: define the range of light used as minimum and maximum values
