@@ -58,14 +58,18 @@ nx_entry: #alternatively entry
        units: nx_temperature
   nx_instrument:
     name:
-#      type: nx_char
+#     type: nx_char
       doc: name of instrument
       \@short_name:
         doc: short name
     time_zone:
-       type: nx_date_time
-       doc: iso8601 time zone
-       exists: recommended
+      type: nx_date_time
+      doc: iso8601 time zone
+      exists: recommended
+    nx_attenuator:
+       attenuator_transmission:
+         type: nx_number
+         units: nx_unitless
     nx_detector_group:
       exists: recommended
       doc: optional logic det grouping
@@ -79,194 +83,195 @@ nx_entry: #alternatively entry
         type: nx_int
         doc: array hierarchy levels
         dimensions: [[1, groupIndex]]
-     nx_detector:
-        doc: normally detector group
-        depends_on:
-          doc: nexus path detector positioner
-        nx_transformations:
-          doc: localtion of axes
-        nx_collection:
-          doc: suggested container
-        data:
+    nx_detector:
+      doc: normally detector group
+      depends_on:
+        doc: nexus path detector positioner
+      nx_transformations:
+        doc: localtion of axes
+      nx_collection:
+        doc: suggested container
+      data:
+        type: nx_number
+        exists: recommended
+        doc: for a dimension 2 detector
+        dimensions: [[1, nP], [2, i], [3, j], [4, k, optional]]
+      description:
+        exists: recommended
+        doc: manufacturer/model/etc
+      time_per_channel:
+        units: nx_time
+        doc: time-of-flight
+      nx_detector_module:
+        doc: many detectors
+        data_origin:
+          type: nx_int
+          doc: hyperslab data 0 based
+        data_size:
+          type: nx_int
+          doc: two or three values for the size
+        data_stride:
+          type: nx_int
+          doc: two or three values for the stride
+        module_offset:
+          units: nx_length
           type: nx_number
-          exists: recommended
-          doc: for a dimension 2 detector
-          dimensions: [[1, nP], [2, i], [3, j], [4, k, optional]]
-          description:
-            exists: recommended
-            doc: manufacturer/model/etc
-          time_per_channel:
-            units: nx_time
-             doc: time-of-flight
-          nx_detector_module:
-             doc: many detectors
-             data_origin:
-               type: nx_int
-               doc: hyperslab data 0 based
-             data_size:
-               type: nx_int
-               doc: two or three values for the size
-             data_stride:
-               type: nx_int
-               doc: two or three values for the stride
-             module_offset:
-               units: nx_length
-               type: nx_number
-               doc: offset of the module
-               \@transformation_type:
-                 enumeration: [translation]
-               \@vector:
-	         type: nx_number
-               \@offset:
-                 type: nx_number
-               \@depends_on:
-             fast_pixel_direction:
-               type: nx_number
-               units: nx_length
-               doc: values along the fastest varying direction
-               \@transformation_type:
-                 enumeration: [translation]
-               \@vector:
-	         type: nx_number
-               \@offset:
-                 type: nx_number
-               \@depends_on:
-             slow_pixel_direction:
-               type: nx_number
-               units: nx_length
-               doc: values along the slowest varying direction
-               \@transformation_type:
-                 enumeration: [translation]
-               \@vector:
-	         type: nx_number
-               \@offset:
-                 type: nx_number
-               \@depends_on:
-              distance:
-                exists: recommended
-                type: nx_number
-                units: nx_length
-                doc: distance from the sample
-              distance_derived:
-                exists: recommended
-                type: nx_boolean
-                doc: boolean to indicate distance
-              dead_time:
-                type: nx_float
-                units: nx_time
-                doc: det dead time
-              count_time:
-                exists: recommended
-                type: nx_float
-                units: nx_time
-                doc: det dead time
-              beam_center_derived:
-                type: nx_boolean
-                doc: boolean to indicate distance derived
-              beam_center_x:
-                type: nx_float
-                units: nx_length
-                exists: recommended
-                doc: this is x position
-              beam_center_y:
-                type: nx_float
-                units: nx_length
-                exists: recommended
-                doc: this is y position
-              angular_calibration_applied:
-                type: nx_boolean
-                doc: true when angular calibration
-              angular_calibration:
-                doc: calibration data
-                dimensions: [[1, i], [2, j], [3, k, optional]] #is optional equivalent to required = false?
-              flatfield_applied:
-                type: nx_boolean
-                doc: true when flat field
-              flatfield:
-                type: nx_number
-                doc: flat field correction data
-                dimensions: [[1, i], [2, j], [3, k, optional]]
-#              flatfield_error: is deprecated
-              pixel_mask_applied:
-                type: nx_boolean
-                doc: true when pixel mask
-              pixel_mask:
-                type: nx_int
-                exists: recommended
-                doc: the 32bit pixel mask
-                dimensions: [[1, i], [2, j]]
-              countrate_correction_applied:
-                type: nx_boolean
-                doc: true when count rate
-              bit_depth_readout:
-                type: nx_int
-                exists: recommended
-                doc: how many bits
-              detector_readout_time:
-                type: nx_float
-                units: nx_time
-                doc: time it takes to read out det
-              frame_time:
-                type: nx_float
-                units: nx_time
-                doc: time for each frame
-              gain_setting:
-                doc: gain settings of det
-              saturation_value:
-                type: nx_int
-                doc: saturation
-              underload_value:
-                type: nx_int
-                doc: lowest value
-              sensor_material:
-                doc: material
-              sensor_thickness:
-                type: nx_float
-                units: nx_length
-              threshold_energy:
-                 type: nx_float
-                 units: nx_energy
-                 doc: photon counter
-              type:
-                 doc: descriptio of type such as scintillatior
-     nx_beam:
-       incident_wavelength:
-          type: nx_float
-          units: nx_wavelength
-          doc: monochromatic beam wavelength
-#       incident_wavelength_weight: deprecated
-       incident_wavelength_weights:
-         type: nx_float
-         doc: array of length polychromatic beam
-       incident_wavelength_spread:
-         type: nx_float
-         units: nx_wavelength
-         doc: spread of wavelength
-       incident_wavelength_spectrum:
-         type: nx_data
-         doc: spectrum
-       flux:
-         type: nx_float
-         units: nx_flux
-         doc: flux
-       total_flux:
-         type: nx_float
-         units: nx_frequency
-         doc: flux incident
-       incident_beam_size:
-         type: nx_float
-         units: nx_length
-         doc: two-element array
+          doc: offset of the module
+          \@transformation_type:
+            enumeration: [translation]
+          \@vector:
+            type: nx_number
+          \@offset:
+            type: nx_number
+          \@depends_on:
+        fast_pixel_direction:
+          type: nx_number
+          units: nx_length
+          doc: values along the fastest varying direction
+          \@transformation_type:
+            enumeration: [translation]
+          \@vector:
+            type: nx_number
+          \@offset:
+            type: nx_number
+          \@depends_on:
+        slow_pixel_direction:
+          type: nx_number
+          units: nx_length
+          doc: values along the slowest varying direction
+          \@transformation_type:
+            enumeration: [translation]
+          \@vector:
+            type: nx_number
+          \@offset:
+            type: nx_number
+          \@depends_on:
+      distance:
+        exists: recommended
+        type: nx_number
+        units: nx_length
+        doc: distance from the sample
+      distance_derived:
          exists: recommended
-       profile:
-         exists: recommended
-         enumeration: [Gaussian, Airy, top-hat, rectangular]
-       indicent_polarisation_stokes:
-         dimensions: [[1, nP], [2, 4]]        
-     nx_source:
-       doc: neutron source
-       name:
-         doc: name of source
-         \@short_name:
-           doc: short name for source
+        type: nx_boolean
+        doc: boolean to indicate distance
+      dead_time:
+        type: nx_float
+        units: nx_time
+        doc: det dead time
+      count_time:
+        exists: recommended
+        type: nx_float
+        units: nx_time
+        doc: det dead time
+      beam_center_derived:
+        type: nx_boolean
+        doc: boolean to indicate distance derived
+      beam_center_x:
+        type: nx_float
+        units: nx_length
+        exists: recommended
+        doc: this is x position
+      beam_center_y:
+        type: nx_float
+        units: nx_length
+        exists: recommended
+        doc: this is y position
+      angular_calibration_applied:
+        type: nx_boolean
+        doc: true when angular calibration
+      angular_calibration:
+        doc: calibration data
+        dimensions: [[1, i], [2, j], [3, k, optional]] #is optional equivalent to required = false?
+      flatfield_applied:
+        type: nx_boolean
+        doc: true when flat field
+      flatfield:
+        type: nx_number
+        doc: flat field correction data
+        dimensions: [[1, i], [2, j], [3, k, optional]]
+#     flatfield_error: is deprecated
+      pixel_mask_applied:
+        type: nx_boolean
+        doc: true when pixel mask
+      pixel_mask:
+        type: nx_int
+        exists: recommended
+        doc: the 32bit pixel mask
+        dimensions: [[1, i], [2, j]]
+      countrate_correction_applied:
+        type: nx_boolean
+        doc: true when count rate
+      bit_depth_readout:
+        type: nx_int
+        exists: recommended
+        doc: how many bits
+      detector_readout_time:
+        type: nx_float
+        units: nx_time
+        doc: time it takes to read out det
+      frame_time:
+        type: nx_float
+        units: nx_time
+        doc: time for each frame
+      gain_setting:
+        doc: gain settings of det
+      saturation_value:
+        type: nx_int
+        doc: saturation
+      underload_value:
+        type: nx_int
+        doc: lowest value
+      sensor_material:
+        doc: material
+      sensor_thickness:
+        type: nx_float
+        units: nx_length
+      threshold_energy:
+        type: nx_float
+        units: nx_energy
+        doc: photon counter
+      type:
+        doc: description of type such as scintillatior
+##############
+    nx_beam:
+      incident_wavelength:
+        type: nx_float
+        units: nx_wavelength
+        doc: monochromatic beam wavelength
+#     incident_wavelength_weight: deprecated
+      incident_wavelength_weights:
+        type: nx_float
+        doc: array of length polychromatic beam
+      incident_wavelength_spread:
+        type: nx_float
+        units: nx_wavelength
+        doc: spread of wavelength
+      incident_wavelength_spectrum:
+        type: nx_data
+        doc: spectrum
+      flux:
+        type: nx_float
+        units: nx_flux
+        doc: flux
+      total_flux:
+        type: nx_float
+        units: nx_frequency
+        doc: flux incident
+      incident_beam_size:
+        type: nx_float
+        units: nx_length
+        doc: two-element array
+        exists: recommended
+      profile:
+        exists: recommended
+        enumeration: [Gaussian, Airy, top-hat, rectangular]
+      indicent_polarisation_stokes:
+        dimensions: [[1, nP], [2, 4]]
+    nx_source:
+      doc: neutron source
+      name:
+        doc: name of source
+        \@short_name:
+          doc: short name for source
 # implementation to be continued and then applied to NXarpes
