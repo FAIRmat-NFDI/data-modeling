@@ -1,0 +1,83 @@
+#exemplifying how to use the translation for the following NXDL application definition
+#https://github.com/nexusformat/definitions/blob/main/applications/NXarpes.nxdl.xml
+name: NXarpes
+type: nx_object
+doc: This is an application definition for angular resolved photo electron spectroscopy. It has been drawn up with hemispherical electron analysers in mind. 
+#draft the application definition
+nx_entry:
+  \@name:
+    name: entry
+    doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
+  title:
+  start_time:
+    type: nx_date_time
+  definition:
+    doc: Official NeXus NXDL schema to which this file conforms.
+    enumeration: [NXarpes]
+  nx_instrument:
+    nx_source:
+      type:
+      name:
+      probe:
+        enumeration: [x-ray]
+    nx_monochromator:
+      name: monochromator
+      energy:
+        type: nx_number
+        units: nx_energy
+    nx_detector:
+      name: analyser
+      data:
+        type: nx_number
+      lens_mode:
+        doc: Setting for the electron analyser lens
+      acquisition_mode:
+        enumeration: [swept, fixed]
+      entrance_slit_shape:
+        enumeration: [curved, straight]
+      entrance_slit_setting:
+        type: nx_number
+        units: nx_any
+        doc: dial setting of the entrance slit
+      entrance_slit_size:
+        units: nx_length
+        doc: size of the entrance slit
+      pass_energy:
+        units: nx_energy
+        doc: energy of the electrons on the mean path of the analyser
+      time_per_channel:
+         units: nx_time
+         doc: 'todo: define more clearly'
+      angles:
+        type: nx_number
+        units: nx_angle
+        doc: Angular axis of the analyser data which dimension the axis applies to is defined using the normal NXdata methods.
+      energies:
+        type: nx_number
+        units: nx_energy
+        doc: Energy axis of the analyser data which dimension the axis applies to is defined using the normal NXdata methods.
+      sensor_size:
+        type: nx_int
+        doc: number of raw active element in each dimension
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+      region_origin:
+        type: nx_int
+        doc: origin of rectangular region selected for readout
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+      region_size:
+        type: nx_int
+        doc: size of rectangular region selected for readout
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+  nx_sample:
+    name:
+      doc: descriptive name of sample
+    temperature:
+      type: nx_number
+      units: nx_temperature
+  nx_data:
