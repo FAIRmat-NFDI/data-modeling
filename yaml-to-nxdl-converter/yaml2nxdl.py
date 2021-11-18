@@ -7,9 +7,11 @@ Created on Fri Nov 12 10:20:52 2021
 
 import os, sys
 import yaml
-#import punx
-#import json
+##import punx
+##import json
 from lxml import etree
+#import lxml.etree.ElementTree as ET
+
 
 def nx_base_clss_string_mangling(tmp):
     if tmp[0:3] == 'nx_':
@@ -19,7 +21,7 @@ def nx_base_clss_string_mangling(tmp):
         #raise ValueError(tmp+' is not a properly formatted nexus keyword which this parser knows!')
 
 fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXmx.yml'
-fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXarpes.yml'
+#fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXarpes.yml'
 
 with open(fnm) as stream:
     try:
@@ -59,7 +61,7 @@ def recursive_build(obj, dict_value):
         if not isinstance(v, dict): #if value v is not a dictionary, we should be in the definitions part of the NXDL schema, or a field 
             if k[0:2] == nx_attr_idnt: #if we have an attribute
                 attr = etree.SubElement(obj, 'attribute')
-                attr.set('name', k[1:])
+                attr.set('name', k[2:])
                 ###MK::start a new recursion ??
             elif v == None:
                 print('Dangling entry '+k) #this could be an individually dangling item, maybe a field such as <field name="title" type="NX_CHAR"/> or a group, maybe a base class
@@ -93,14 +95,24 @@ def recursive_build(obj, dict_value):
                 elif k == nx_unit_idnt:
                     obj.set('units', v.upper())
                 elif k == 'exists':
-                    if v == 'optional':
-                        obj.set('optional', 'true')
-                    elif v == 'recommended':
-                        obj.set('recommended', 'true')
-                    elif v == 'required':
-                        obj.set('required', 'true')
+                    #make a function call
+                    if isinstance(v,list):
+                        if len(v) == 2:
+                            if v[0] == 'min':
+                                obj.set('minOccurs', str(v[1]))
+                            if v[0] == 'max':
+                                obj.set('maxOccurs', str(v[1]))
+                        else:
+                            raise ValueError('exists keyword needs to go either with optional, recommended, required, or a list with two entries either [min, <uint>] or [max, <uint>] !')
                     else:
-                        obj.set('minOccurs', '0')
+                        if v == 'optional':
+                            obj.set('optional', 'true')
+                        elif v == 'recommended':
+                            obj.set('recommended', 'true')
+                        elif v == 'required':
+                            obj.set('required', 'true')
+                        else:
+                            obj.set('minOccurs', '0') #print('Unknown exists case !')
                 elif k == 'enumeration': #if we face an enumeration
                     enum = etree.SubElement(obj, 'enumeration')
                     print('Processing enumeration')
@@ -134,12 +146,16 @@ def recursive_build(obj, dict_value):
                     obj.set('name', k)
                 elif v == None:
                     obj.set('name', k)
+                #elif k == 'xmlns_xsi':
+                #    obj.set('xmlns\:xsi', v)
+                #elif k == 'xsi_schemaLocation':
+                #    obj.set('xsi:schemaLocation', v)
                 else:
                     print('WARNING: '+k+' we found an unexpected case !')
         else: #dictionary value is again a dictionary, we can face am attribute, symbols, a base class or a field
             if k[0:2] == nx_attr_idnt: #if we have an attribute
                 attr = etree.SubElement(obj, 'attribute')
-                attr.set('name', k[1:])
+                attr.set('name', k[2:])
                 recursive_build(attr, v)
             elif k == 'symbols': #if we face symbols
                 syms = etree.SubElement(obj, 'symbols')
@@ -167,14 +183,24 @@ def recursive_build(obj, dict_value):
                     fld = etree.SubElement(obj, 'field')
                     fld.set('name', k)
                     if 'exists' in v:
-                        if v['exists'] == 'optional':
-                            fld.set('optional', 'true')
-                        elif v['exists'] == 'recommended':
-                            fld.set('recommended', 'true')
-                        elif v['exists'] == 'required':
-                            fld.set('required', 'true')
+                        #make a function call
+                        if isinstance(v,list):
+                            if len(v) == 2:
+                                if v[0] == 'min':
+                                    fld.set('minOccurs', str(v[1]))
+                                if v[0] == 'max':
+                                    fld.set('maxOccurs', str(v[1]))
+                            else:
+                                raise ValueError('exists keyword needs to go either with optional, recommended, required, or a list with two entries either [min, <uint>] or [max, <uint>] !')
                         else:
-                            fld.set('minOccurs', '0') #print('Unknown exists case !')
+                            if v['exists'] == 'optional':
+                                fld.set('optional', 'true')
+                            elif v['exists'] == 'recommended':
+                                fld.set('recommended', 'true')
+                            elif v['exists'] == 'required':
+                                fld.set('required', 'true')
+                            else:
+                                fld.set('minOccurs', '0') #print('Unknown exists case !')
                     ###MK::set minOccurs = 0 by default
                     #else:
                     #    addition.set('minOccurs', '0') #print('Unknown exists case !')
@@ -182,7 +208,15 @@ def recursive_build(obj, dict_value):
             #recursive_build(obj, v)
 
 
-rt = etree.Element('definition')
+attr_qname = etree.QName("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation")
+rt = etree.Element('definition', 
+                   {attr_qname: 'http://definition.nexusformat.org/nxdl/nxdl.xsd' }, 
+                   nsmap = {None: 'http://definition.nexusformat.org/nxdl/3.1', 
+                            'xsi': 'http://www.w3.org/2001/XMLSchema-instance'})
+rt.set('category', 'application')
+pi = etree.ProcessingInstruction("xml-stylesheet", text='type="text/xsl" href="nxdlformat.xsl"')
+rt.addprevious(pi)
+
 recursive_build(rt, yml)
 
 nxdl = etree.ElementTree(rt)
