@@ -189,6 +189,7 @@ nx_entry: #alternatively entry
         type: nx_boolean
         doc: true when angular calibration
       angular_calibration:
+        type: nx_float
         doc: calibration data
         dimensions:
           rank: dataRank
