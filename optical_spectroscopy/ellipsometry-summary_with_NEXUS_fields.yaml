@@ -8,7 +8,7 @@ doc: metadata definition for ellipsometry measurements, including complex system
 experimental procedure:
   stage:
     doc:  where and how is the sample mounted
-    types:
+    enumeration:
       - manual stage
       - scanning stage
       - liquid stage
@@ -48,7 +48,7 @@ experimental procedure:
       alternative:
         doc: if there is no motorized stage, we have a vague idea where the beam hits the sample
         type: nx_char
-        values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
+        enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
 
     rotation:
       doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
@@ -59,7 +59,7 @@ experimental procedure:
 
       alternative:
         type: nx_char
-        values: parallel, perpendicular, diagonal
+        enumeration: [parallel, perpendicular, diagonal]
 
 
   angle of incidence:
@@ -106,7 +106,7 @@ experimental procedure:
 
       excitation type:
         doc: cw or pulsed excitation
-        values: cw, pulsed
+        enumeration: [cw, pulsed]
 
       pulse length:
         type: nx_number
@@ -134,14 +134,14 @@ experimental procedure:
       unit: nx_temperature
       alternative:
         type: nx_char
-        value: room temperature, RT
+        enumeration: [room temperature, RT]
 
     pH:
       type: nx_number
       unit: none
       alternative:
         type: nx_char
-        value: neutral, undefined
+        enumeration: [neutral, undefined]
       default: undefined
 
     stress:
@@ -202,7 +202,7 @@ instrument:
   ellipsometry type:
     doc: what type of ellipsometry was used? See Fujiwara Table 4.2.
     type: nx_char
-    value:
+    enumeration:
       - rotating analyzer,
       - rotating analyzer with analyzer compensator,
       - rotating analyzer with polarizer compensator,
@@ -225,18 +225,18 @@ instrument:
       type: nx_date_time
       alternative:
         type: nx_char
-        values: no calibration, within 1 hour, within 1 day, within 1 week
+        enumeration: [no calibration, within 1 hour, within 1 day, within 1 week]
 
     calibration provided:
       doc: is the measured data provided?
       type: nx_boolean
-      values: yes, no
+      # values: yes, no
 
     calibration data:
       doc: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
       data type:
         type: nx_char
-        values: psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix
+        enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix]
 
       angle of incidence:
         type: nx_number
@@ -289,7 +289,7 @@ instrument:
     doc: define how many rotations of the rotating element were taken into account for one spectra
     rotating element:
       doc: define which elements rotates
-      type:
+      enumeration:
         - polarizer (source side)
         - polarizer (detector side)
         - compensator (source side)
@@ -338,7 +338,7 @@ measured data:
 
   data type:
     type: nx_char
-    value: psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data
+    enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
     required: yes
 
   wavelength:
