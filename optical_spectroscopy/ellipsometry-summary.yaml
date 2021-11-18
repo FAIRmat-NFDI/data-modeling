@@ -90,11 +90,11 @@ experimental procedure:
         type: numeric
         unit: length
 
-      type:
+      excitation type:
         description: cw or pulsed excitation
         values: cw, pulsed
 
-      pulsed length:
+      pulse length:
         type: numeric
         unit: time
 
@@ -183,7 +183,7 @@ instrument:
     angular spread:
       description: specify the angular spread caused by the focussing probes
       type: numeric
-      unit: radiant
+      unit: radian
 
   ellipsometry type:
     description: what type of ellipsometry was used? See Fujiwara Table 4.2.
@@ -309,7 +309,7 @@ measured data:
       description: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
       type: numeric
       length: 3
-      unit: radiant
+      unit: radian
 
     position:
       description: specifiy the position (e.g. in a line scan) with respect to a reference point
