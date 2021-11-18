@@ -1,4 +1,4 @@
-description: metadata definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
+doc: metadata definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
 # the document has the following main elements:
 # experimental procedure
 # instrument used and is characteristics
@@ -7,7 +7,7 @@ description: metadata definition for ellipsometry measurements, including comple
 
 experimental procedure:
   stage:
-    description:  where and how is the sample mounted
+    doc:  where and how is the sample mounted
     types:
       - manual stage
       - scanning stage
@@ -16,14 +16,14 @@ experimental procedure:
     required: one
 
     translation:
-      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
       required:  yes
       NEXUS:
         NEXUStype: NXtransformations
         \@transformation_type: translation
 
       X:
-        description: direction of the beam along the stage towards the detector
+        doc: direction of the beam along the stage towards the detector
         type: numeric
         NEXUS:
           AXISNAME: X
@@ -31,7 +31,7 @@ experimental procedure:
           \@depends_on: .
 
       Y:
-        description: perpendicular to the plane of incidence, to the right hand side from X
+        doc: perpendicular to the plane of incidence, to the right hand side from X
         type: numeric
         unit: length
         NEXUS:
@@ -40,7 +40,7 @@ experimental procedure:
           \@depends_on: X
 
       Z:
-        description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
+        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
         type: numeric
         unit: distance
         NEXUS:
@@ -56,7 +56,7 @@ experimental procedure:
         values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
 
     rotation:
-        description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
+        doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
         type: numeric
         unit: angle
         length: 3
@@ -71,7 +71,7 @@ experimental procedure:
 
 
   angle of incidence:
-    description: the incident angle of the beam
+    doc: the incident angle of the beam
     type: numeric
     unit: angle
     NEXUS:
@@ -79,7 +79,7 @@ experimental procedure:
       unit: angle
 
   wavelength range:
-    description: define the range of light used as minimum and maximum values
+    doc: define the range of light used as minimum and maximum values
     type: numeric
     unit: length
     length: 2
@@ -90,37 +90,37 @@ experimental procedure:
       unit: length
 
   medium:
-    description: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
+    doc: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
     type: text
     required: yes
     alternative:
-      description: or provide the complex refractive index of the medium for every measured wavelength.
+      doc: or provide the complex refractive index of the medium for every measured wavelength.
       type: numeric
       unit: none
 
   environment conditions:
-    description: external parameters that have influenced the sample
+    doc: external parameters that have influenced the sample
     required: no
 
     optical excitation:
-      description: describe if the spectra where taken under optical excitation
+      doc: describe if the spectra where taken under optical excitation
 
       excitation source:
-        description: specify the source for the external excitation
+        doc: specify the source for the external excitation
         type: text
 
       wavelength:
-        description: range
+        doc: range
         type: numeric
         unit: length
 
       broadening:
-        description: specify the FWHM of the excitation
+        doc: specify the FWHM of the excitation
         type: numeric
         unit: length
 
       type:
-        description: cw or pulsed excitation
+        doc: cw or pulsed excitation
         values: cw, pulsed
 
       pulsed length:
@@ -140,7 +140,7 @@ experimental procedure:
         unit: W
 
     voltage:
-      description: if the spectra were taken under bias
+      doc: if the spectra were taken under bias
       type: numeric
       unit: voltage
 
@@ -165,7 +165,7 @@ experimental procedure:
       unit: pressure
 
       orientation:
-        description: Euler angles of stress relative to sample
+        doc: Euler angles of stress relative to sample
         type: numeric
         length: 3
         unit: angle
@@ -173,49 +173,49 @@ experimental procedure:
 instrument:
   required: yes
   model:
-    description: the name and type number of the instrument
+    doc: the name and type number of the instrument
     type: string
 
   company:
-    description: name of the company
+    doc: name of the company
     type: string
 
   construction year:
     type: numeric
 
   hardware version:
-    description: the used version of the hardware if available
+    doc: the used version of the hardware if available
     required: no
     type: string
 
   software version:
-    description: software name and version used for measurement
+    doc: software name and version used for measurement
     type: string
 
   bandwidth:
-    description: specify the bandwidth of the light
+    doc: specify the bandwidth of the light
     type: numeric
     length: number of wavelength
 
   light source:
-    description: specify the used light source
+    doc: specify the used light source
     type: text
 
   focussing probes:
-    description: specify if focussing probes (lenses) were used
+    doc: specify if focussing probes (lenses) were used
     type: bool
 
     data_correction:
-      description: specify of the recorded data are corrected by the window effects of the lenses
+      doc: specify of the recorded data are corrected by the window effects of the lenses
       type: bool
 
     angular spread:
-      description: specify the angular spread caused by the focussing probes
+      doc: specify the angular spread caused by the focussing probes
       type: numeric
       unit: radiant
 
   ellipsometry type:
-    description: what type of ellipsometry was used? See Fujiwara Table 4.2.
+    doc: what type of ellipsometry was used? See Fujiwara Table 4.2.
     type: string
     value:
       - rotating analyzer,
@@ -232,22 +232,22 @@ instrument:
       - null ellipsometry
 
   calibration:
-    description: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
+    doc: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
 
     calibration time:
-      description: when calibration was last performed before this measurement
+      doc: when calibration was last performed before this measurement
       type: date and time
       alternative:
         type: text
         values: no calibration, within 1 hour, within 1 day, within 1 week
 
     calibration provided:
-      description: is the measured data provided?
+      doc: is the measured data provided?
       type: bool
       values: yes, no
 
     calibration data:
-      description: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
+      doc: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
       data type:
         type: string
         values: psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix
@@ -257,7 +257,7 @@ instrument:
         unit: angle
 
       wavelength:
-        description: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
+        doc: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
         type: numeric
         unit: length
 
@@ -266,18 +266,18 @@ instrument:
         unit: none
 
       calibration sample:
-        description: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
+        doc: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
         type: string
 
   window:
-    description:
+    doc:
       for environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties
     thickness:
       type: numeric
       unit: length
 
     orientation angle:
-      description: angle in the plane of incidence
+      doc: angle in the plane of incidence
       type: numeric
       unit: angle
 
@@ -291,18 +291,18 @@ instrument:
         unit: none
 
       calibration sample:
-        description: what sample was used to callibrate the window effect?
+        doc: what sample was used to callibrate the window effect?
         type: string
 
   duration:
-    description: integration time for the measurement. Single number or array if it was varied.
+    doc: integration time for the measurement. Single number or array if it was varied.
     type: numeric
     unit: time
 
   revolution:
-    description: define how many rotations of the rotating element were taken into account for one spectra
+    doc: define how many rotations of the rotating element were taken into account for one spectra
     rotating element:
-      description: define which elements rotates
+      doc: define which elements rotates
       type:
         - polarizer (source side)
         - polarizer (detector side)
@@ -310,11 +310,11 @@ instrument:
         - compensator (detector side)
 
       fixed revolution:
-        description: if the revolution does not change during the measurement
+        doc: if the revolution does not change during the measurement
         type: numeric
 
       variable revolution:
-        description: specify maximum and minimum values for the revolution
+        doc: specify maximum and minimum values for the revolution
         type: numeric
         length: 2
 
@@ -322,32 +322,32 @@ measured data:
   required: yes
 
   sample:
-    description: specification of the sample (invlved materials and layer structure)
+    doc: specification of the sample (invlved materials and layer structure)
 
     ID:
-      description: unique ID for the sample
+      doc: unique ID for the sample
       type: text
       unit: dimensionless
 
     layer structure:
-      description: specification of the layer structure
+      doc: specification of the layer structure
       type: text
       unit: dimensionless
 
     orientation:
-      description: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
+      doc: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
       type: numeric
       length: 3
       unit: radiant
 
     position:
-      description: specifiy the position (e.g. in a line scan) with respect to a reference point
+      doc: specifiy the position (e.g. in a line scan) with respect to a reference point
       type: numeric
       length: 3
       unit: length
 
   data ID:
-    description: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
+    doc: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
     type: numeric
 
   data type:
@@ -364,19 +364,19 @@ measured data:
     units: none
 
   angle of incidence:
-    description: the angle of incidence on the sample, defined as in standard optics
+    doc: the angle of incidence on the sample, defined as in standard optics
     type: numeric
     unit: angle
 
   time points:
-    description: an array of relative time points if a time series was recorded
+    doc: an array of relative time points if a time series was recorded
     type: numeric
     unit: time
     required: no
 
 # derived parameters
 derived parameters:
-  description: what parameters are derived from the above data
+  doc: what parameters are derived from the above data
   depolarization:
     type: numeric
     unit: none

@@ -22,15 +22,18 @@ def disp_dict(d, level=0):
 
     firstLine= True
     for k,v in d.items():
+        if firstLine:
+            spacer= f'\u251C{mtabs}>'
+            firstLine= False
+
+        else:
+            spacer = f'\u2502{tabs} '
+
         if type(v) == dict:
+            print(f'{spacer} {k}:')
             disp_dict(v, level= level+1)
         else:
-            if firstLine:
-                print(f'\u251C{mtabs}> {k}: ({type(v).__name__}) {v}')
-                firstLine= False
-
-            else:
-                print(f'\u2502{tabs}  {k}: ({type(v).__name__}) {v}')
+            print(f'{spacer} {k}: ({type(v).__name__}) {v}')
 
     if level > 0:
         print('\u2502')
@@ -42,12 +45,13 @@ def disp_dict(d, level=0):
 import pyaml as yam
 import os
 filepath = '../optical_spectroscopy'
-with open(os.path.join(filepath, 'ellipsometry-summary.yaml')) as fp:
+# with open(os.path.join(filepath, 'ellipsometry-summary.yaml')) as fp:
+with open(os.path.join(filepath, 'ellipsometry-summary_with_NEXUS_fields.yaml')) as fp:
     ydict = yam.yaml.safe_load(fp)
     disp_dict(ydict)
 
 # export to json:
 import json
-with open(os.path.join(filepath, 'ellipsometry-summary.json'), 'wt') as fp:
+with open(os.path.join(filepath, 'ellipsometry-summary_with_NEXUS_fields.json'), 'wt') as fp:
     json.dump(ydict, fp, sort_keys=True, indent=2)
 # end writing json file
