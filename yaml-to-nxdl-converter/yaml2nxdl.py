@@ -20,8 +20,10 @@ def nx_base_clss_string_mangling(tmp):
         return tmp
         #raise ValueError(tmp+' is not a properly formatted nexus keyword which this parser knows!')
 
-fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXmx.yml'
+#fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXmx.yml'
 #fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXarpes.yml'
+fnm = '/home/kuehbach/HU_HU_HU/FAIRmatSoftwareDevelopment/Sprint03_EmApplicationDefinition/issue_72_yaml2nxdl/NXem_base_draft.yml'
+
 
 with open(fnm) as stream:
     try:
@@ -40,6 +42,7 @@ nx_base_clss = ['nx_aperture', 'nx_attenuator', 'nx_beam', 'nx_beam_stop', 'nx_b
     'nx_positioner', 'nx_process', 'nx_reflections', 'nx_root', 'nx_sample', 'nx_sample_component', 'nx_sensor', 'nx_shape', 
     'nx_slit', 'nx_source', 'nx_subentry', 'nx_transformations', 'nx_translation', 'nx_user', 'nx_velocity_selector',
     'nx_xraylens']
+nx_cand_clss = ['nx_em_lens', 'nx_em_cs_corr','nx_em_deflector','nx_em_stage']
 nx_type_keys = ['nx_binary', 'nx_boolean', 'nx_char', 'nx_date_time', 
                 'nx_float', 'nx_int', 'nx_number', 'nx_posint', 'nx_uint']
 nx_attr_idnt = '\@'
@@ -58,43 +61,51 @@ def recursive_build(obj, dict_value):
     """
     for k, v in iter(dict_value.items()):
         print('Processing key '+k+' value v is a dictionary '+str(isinstance(v,dict)))
+        #base class prefix tag removal
+        key = k
+        if '__' in k:
+            tmp = k.split('__')
+            if len(tmp) == 2:
+                key = tmp[1]
+            else:
+                raise ValueError('Key '+k+' was prefixed with a name tag but contains no suffix that indicates an nx_base_class !')        
         if not isinstance(v, dict): #if value v is not a dictionary, we should be in the definitions part of the NXDL schema, or a field 
-            if k[0:2] == nx_attr_idnt: #if we have an attribute
+            if key[0:2] == nx_attr_idnt: #if we have an attribute
                 attr = etree.SubElement(obj, 'attribute')
-                attr.set('name', k[2:])
+                attr.set('name', key[2:])
                 ###MK::start a new recursion ??
             elif v == None:
                 print('Dangling entry '+k) #this could be an individually dangling item, maybe a field such as <field name="title" type="NX_CHAR"/> or a group, maybe a base class
-                if k in nx_base_clss:
+                if key in nx_base_clss or key in nx_cand_clss:
                     grp = etree.SubElement(obj, 'group')
-                    grp.set('name', nx_base_clss_string_mangling(k))
+                    grp.set('name', nx_base_clss_string_mangling(key))
                 else: ###MK::assume it is a field
                     fld = etree.SubElement(obj, 'field')
-                    fld.set('name', k)
+                    fld.set('name', key)
                 #either way, do not start a new recursion because there are no associated nested pieces of information
             else: #is not an attribute
-                if k == 'name': #is key a name?
+                if key == 'name': #is key a name?
                     if v != None:
                         obj.set('name', v)
                     else:
-                        obj.set('name', k)
-                elif k == 'type': #is key a type?
+                        obj.set('name', key)
+                elif key == 'type': #is key a type?
                     if v in nx_type_keys:
-                        obj.set(k, v.upper())
-                    elif v in nx_base_clss:
-                        obj.set(k, nx_base_clss_string_mangling(v))
+                        obj.set(key, v.upper())
+                    elif v in nx_base_clss or v in nx_cand_clss:
+                        obj.set(key, nx_base_clss_string_mangling(v))
                     else:
                         print('WARNING: key: '+k+' value: '+str(v)+' is not one of predefined type keys')
-                elif k == 'doc': #key is a documentation string specifier
+                elif key == 'doc': #key is a documentation string specifier
                     #child = obj.SubElement('doc', v)
                     #child.set('doc', v)
                     obj.set('doc', v)
-                elif k in nx_base_clss: #is key an instance of an nx_base_clss?
+                elif key in nx_base_clss  or key in nx_cand_clss: #is key an instance of an nx_base_clss or candidate proposal class?
                     print('WARNING: '+k+' is a base class but value v is not a dictionary !')
                     print('WARNING: '+k+' this indicates there is eventually an inconsistence in your specification, please inspect it further')
-                elif k == nx_unit_idnt:
+                elif key == nx_unit_idnt:
                     obj.set('units', v.upper())
-                elif k == 'exists':
+                elif key == 'exists':
                     #make a function call
                     if isinstance(v,list):
                         if len(v) == 2:
@@ -113,7 +124,7 @@ def recursive_build(obj, dict_value):
                             obj.set('required', 'true')
                         else:
                             obj.set('minOccurs', '0') #print('Unknown exists case !')
-                elif k == 'enumeration': #if we face an enumeration
+                elif key == 'enumeration': #if we face an enumeration
                     enum = etree.SubElement(obj, 'enumeration')
                     print('Processing enumeration')
                     #assume we get a list as the value argument
@@ -123,9 +134,9 @@ def recursive_build(obj, dict_value):
                             itm.set('value', str(m))
                     else:
                         raise ValueError('ERROR: '+k+' we found an enumeration key-value pair but the value is not an ordinary Python list !')
-                elif k == 'rank':
+                elif key == 'rank':
                     obj.set('rank', str(v))
-                elif k == 'dim':
+                elif key == 'dim':
                     if isinstance(v,list):
                         for m in v:
                             if isinstance(m, list):
@@ -142,22 +153,18 @@ def recursive_build(obj, dict_value):
                                     raise ValueError('WARNING: '+k+' dimensions list item needs to have at least two members !' )
                     else:
                         raise ValueError('ERROR: '+k+' we found an dimensions key-value pair but the value is not an ordinary Python list of list !')
-                elif k == None:
-                    obj.set('name', k)
+                elif key == None:
+                    obj.set('name', key)
                 elif v == None:
-                    obj.set('name', k)
-                #elif k == 'xmlns_xsi':
-                #    obj.set('xmlns\:xsi', v)
-                #elif k == 'xsi_schemaLocation':
-                #    obj.set('xsi:schemaLocation', v)
+                    obj.set('name', key)
                 else:
                     print('WARNING: '+k+' we found an unexpected case !')
         else: #dictionary value is again a dictionary, we can face am attribute, symbols, a base class or a field
-            if k[0:2] == nx_attr_idnt: #if we have an attribute
+            if key[0:2] == nx_attr_idnt: #if we have an attribute
                 attr = etree.SubElement(obj, 'attribute')
-                attr.set('name', k[2:])
+                attr.set('name', key[2:])
                 recursive_build(attr, v)
-            elif k == 'symbols': #if we face symbols
+            elif key == 'symbols': #if we face symbols
                 syms = etree.SubElement(obj, 'symbols')
                 print('Processing symbols')
                 for kk, vv in iter(v.items()):
@@ -167,21 +174,21 @@ def recursive_build(obj, dict_value):
                         sym = etree.SubElement(syms, 'sym')
                         sym.set('name', kk)
                         sym.set('doc', vv)
-            elif k == 'dimensions': #if we face a dimensions
+            elif key == 'dimensions': #if we face a dimensions
                 dims = etree.SubElement(obj, 'dimensions')
                 recursive_build(dims, v)
-            elif k in nx_base_clss: ##if we have a base class ##MK::suggestion for the future, invert logic list of type keys check if k in nx_type_key (type keys only attribute or fields)
+            elif key in nx_base_clss or key in nx_cand_clss: ##if we have a base class ##MK::suggestion for the future, invert logic list of type keys check if k in nx_type_key (type keys only attribute or fields)
                 grp = etree.SubElement(obj, 'group')
-                grp.set('type', nx_base_clss_string_mangling(k))
+                grp.set('type', nx_base_clss_string_mangling(key))
                 recursive_build(grp, v)
             else: #if we have a field
-                if k[0:2] == nx_attr_idnt: #if we have an attribute of a field)
+                if key[0:2] == nx_attr_idnt: #if we have an attribute of a field)
                     attr = etree.SubElement(obj, 'attribute')
-                    attr.set('name', k[1:])
+                    attr.set('name', key[1:])
                     recursive_build(attr, v)
                 else: #not an attribute, so an ordinary field
                     fld = etree.SubElement(obj, 'field')
-                    fld.set('name', k)
+                    fld.set('name', key)
                     if 'exists' in v:
                         #make a function call
                         if isinstance(v,list):
@@ -220,5 +227,5 @@ rt.addprevious(pi)
 recursive_build(rt, yml)
 
 nxdl = etree.ElementTree(rt)
-nxdl.write( fnm + '.nxdl', pretty_print=True, xml_declaration=True, encoding="utf-8" )
+nxdl.write( fnm + '.nxdl.xml', pretty_print=True, xml_declaration=True, encoding="utf-8" )
 print('Parsed YAML to NXDL')
