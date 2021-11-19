@@ -1,0 +1,56 @@
+#kuehbacm at hu-berlin.de, 11/2021
+#the application cases in mind are that this class can be used to describe how the specimen
+#is mounted and placed in the electron beam and how external stimuli can be applied
+#micromanipulators are used primarily for sample preparation in an SEM/FIB instruments
+#this application case is excluded here
+#the draft was inspired by commercial products and (transmission) electron microscopy literature
+#https://www.nanotechnik.com/e5as.html
+#https://www.protochips.com/products/fusion/fusion-select-components/
+#L. Reimer's book on transmission electron microscopy, 1997, page 103, table 4.2
+#D. B. Williams and C. B. Carter's book on TEM, 1996, page 124
+#
+nx_em_stage:
+  doc: Candidate class for hardware which can hold the specimen in an electron microscope and be used to apply stimuli on it. Having an own candidate class is justified as contemporary specimen/sample stages are multi-purpose/-functional tools for not only holding the specimen in place, aligning and rotating it but also to make possible e.g. in-situ heating or cooling or in-situ mechanical testing.
+  name:
+    doc: Colloquial or short name for the component.
+#  stage_location:
+#    doc: location relative to the objective lens
+#    enumeration: [top, bottom, inside]
+  stage_design:
+    doc: Historical design choice how the specimen is inserted into the microscope.
+    enumeration: [side-entry, top-entry]
+  stage_manufacturer:
+    doc: Name of the manufacturer who built the stage.
+  stage_model:
+    doc: Commercial name of the stage given by the manufacturer.
+  stage_identifier:
+    doc: Persistent identifier like hash value or serial number of the manufacturer which specifies the stage.
+  stage_description:
+    doc: Ideally a link to a (globally persistent) unique identifier document or link where further details to the component can be found. If not available use free text to give further details to the stage.
+  stage_ref_csys__nx_transformations:
+    doc: The reference coordinate system in which all affine transformations are defined at the level of the stage. If the holder enables additional degrees of freedom, use holder_ref_csys
+  holder_design:
+    doc: Type of holder which carries the specimen.
+    enumeration: [single-tilt, quick-change, multiple-specimen, bulk specimen, double-tilt, tilt-rotate, heating chip, atmosphere chip, electrical biasing chip, liquid cell chip]
+  holder_manufacturer:
+    doc: Name of the manufacturer who built the holder.
+  holder_model:
+    doc:C ommercial name of the holder given by the manufacturer.
+  holder_identifier:
+    doc: Persistent identifier like hash value or serial number of the manufacturer which specifies the holder.
+  holder_description:
+    doc: Ideally a link to a (globally persistent) unique identifier document or link where further details to the component can be found. If not available use free text to give further details to the holder.
+  holder_cup_material:
+    exists: optional
+    doc: In the case of a side-entry stage design, the material of the cup which holds the specimen.
+  holder_ref_csys__nx_transformations:
+    doc: The reference coordinate system in which all affine transformations are defined at the level of the holder.
+#exemplified here how to describe and deal with complicated positioning tools like an eucentric five axis table stage in an SEM
+#https://www.nanotechnik.com/e5as.html
+  holder_ref_csys_nx_transformations:
+  holder_shipswing_tilt__nx_positioner:
+  holder_normal_rotate__nx_positioner:
+  holder_normal_height__nx_positioner:
+  holder_inplane_translate_1__nx_positioner:
+  holder_inplane_translate_2__nx_positioner:
+
