@@ -6,69 +6,6 @@ description: metadata definition for ellipsometry measurements, including comple
 # derived parameters: extra parameters derived in the measurement software
 
 experimental procedure:
-  stage:
-    description:  where and how is the sample mounted
-    types:
-      - manual stage
-      - scanning stage
-      - liquid stage
-      - gas cell
-    required: one
-
-  translation:
-    description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
-    required:  yes
-
-    X:
-      description: direction of the beam along the stage towards the detector
-      type: numeric
-      unit: length
-
-    Y:
-      description: perpendicular to the plane of incidence, to the right hand side from X
-      type: numeric
-      unit: length
-
-    Z:
-      description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
-      type: numeric
-      unit: distance
-
-    alternative:
-      type: text
-      values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
-
-  rotation:
-    description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D.
-    type: numeric
-    unit: angle
-    length: 3
-    alternative:
-      type: text
-      values: parallel, perpendicular, diagonal
-
-  angle of incidence:
-      description: incident angle of the beam on the measured surface; one or more values, usually length < 10
-      type: numeric
-      unit: angle
-      required: yes
-
-  wavelength range:
-    description: define the range of light used as minimum and maximum values
-    type: numeric
-    unit: length
-    length: 2
-    required: yes
-
-  medium:
-    description: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
-    type: text
-    required: yes
-    alternative:
-      description: or provide the complex refractive index of the medium for every measured wavelength.
-      type: numeric
-      unit: none
-
   environment conditions:
     description: external parameters that have influenced the sample
     required: no
@@ -152,7 +89,7 @@ instrument:
     type: string
 
   construction year:
-    type: numeric
+    type: date and time
 
   hardware version:
     description: the used version of the hardware if available
@@ -240,6 +177,72 @@ instrument:
         description: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
         type: string
 
+  angle_of_incidence:
+    description: incident angle of the beam on the measured surface; one or more values, usually length < 10
+    required: yes
+    type: numeric
+    unit: angle
+
+  stage:
+    description:  where and how is the sample mounted
+    types:
+      - manual stage
+      - scanning stage
+      - liquid stage
+      - gas cell
+    required: one
+
+    translation:
+      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+      required:  yes
+
+      X:
+        value: numeric
+        unit: length
+        description: direction of the beam along the stage towards the detector
+        vector: [1, 0, 0]
+
+      Y:
+        value: numeric
+        unit: length
+        description: perpendicular to the plane of incidence, to the right hand side from X
+        vector: [0, cos(angle_of_incidence), sin(angle_of_incidence)]
+
+      Z:
+        value: numeric
+        unit: length
+        description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
+        vector: [0, sin(angle_of_incidence), -cos(angle_of_incidence)]
+
+      alternative:
+        type: text
+        values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
+
+    sample_rotation:
+      description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D. These are defined in relation to the X,Y,Z axis of the stage.
+      alpha:
+        type: numeric
+        unit: angle
+        vector: [0, 0, 1]
+        description: first rotation is around the Z-axis
+
+
+      beta:
+        type: numeric
+        unit: angle
+        vector: [cos(alpha), sin(alpha), 1]
+        description: second is around the rotated x' axis
+
+      gamma:
+        type: numeric
+        unit: angle
+        vector: [-sin(alpha), -cos(alpha), cos(beta)]
+        description: rotate around the last Z-axis: z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
+
+      alternative:
+        type: text
+        values: parallel, perpendicular, diagonal
+
   window:
     description:
       for environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties
@@ -290,6 +293,7 @@ instrument:
         length: 2
 
 measured data:
+  type: nx_data
   required: yes
 
   sample:
@@ -336,14 +340,23 @@ measured data:
 
   angle of incidence:
     description: the angle of incidence on the sample, defined as in standard optics
-    type: numeric
-    unit: angle
+    link: instrument/angle of incidence
 
   time points:
     description: an array of relative time points if a time series was recorded
     type: numeric
     unit: time
     required: no
+
+  medium:
+    description: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
+    type: text
+    required: yes
+    alternative:
+      description: or provide the complex refractive index of the medium for every measured wavelength.
+      type: numeric
+      unit: none
+
 
 # derived parameters
 derived parameters:

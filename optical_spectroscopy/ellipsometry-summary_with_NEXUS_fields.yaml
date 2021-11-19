@@ -6,83 +6,6 @@ doc: metadata definition for ellipsometry measurements, including complex system
 # derived parameters: extra parameters derived in the measurement software
 
 experimental procedure:
-  stage:
-    doc:  where and how is the sample mounted
-    enumeration:
-      - manual stage
-      - scanning stage
-      - liquid stage
-      - gas cell
-    required: one
-
-    translation:
-      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
-      required:  yes
-      type: nx_transformations:
-      AXISNAME: X
-        doc: direction of the beam along the stage towards the detector
-        type: nx_number
-        \@transformation_type: translation
-        \@vector: 1,0,0
-        \@depends_on: .
-
-      AXISNAME: Y
-        doc: perpendicular to the plane of incidence, to the right hand side from X
-        type: nx_number
-        unit: length
-        \@transformation_type: translation
-        \@vector: 0,1,0
-        \@depends_on: X
-
-      AXISNAME: Z
-        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
-        type: nx_number
-        unit: distance
-        \@transformation_type: translation
-        \@vector: 0,0,1
-        \@depends_on: Y
-
-    # the full transformation is the end of Z, described as:
-    # depends_on: translation/Z
-
-      alternative:
-        doc: if there is no motorized stage, we have a vague idea where the beam hits the sample
-        type: nx_char
-        enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
-
-    rotation:
-      doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
-      type: nx_transformations
-      unit: nx_angle
-      length: 3
-      \@transformation_type: rotation
-
-      alternative:
-        type: nx_char
-        enumeration: [parallel, perpendicular, diagonal]
-
-
-  angle of incidence:
-    doc: the incident angle of the beam
-    type: nx_number
-    unit: nx_angle
-
-  wavelength range:
-    doc: define the range of light used as minimum and maximum values
-    type: nx_number
-    unit: nx_length
-    length: 2
-    required: yes
-
-  medium:
-    doc: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
-    type: nx_char
-    required: yes
-    alternative:
-      doc: or provide the complex refractive index of the medium for every measured wavelength.
-      type: nx_number
-      unit: none
-
   environment conditions:
     doc: external parameters that have influenced the sample
     required: no
@@ -92,116 +15,118 @@ experimental procedure:
 
       excitation source:
         doc: specify the source for the external excitation
-        type: nx_char
+        \@nx_class: nx_char
 
       wavelength:
         doc: range
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_length
 
       broadening:
         doc: specify the FWHM of the excitation
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_length
 
-      excitation type:
+      excitation \@nx_class:
         doc: cw or pulsed excitation
         enumeration: [cw, pulsed]
 
       pulse length:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_time
 
       repetition rate:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_frequency
 
       pulse energy:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_energy
 
       excitation power:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_energy
 
     voltage:
       doc: if the spectra were taken under bias
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_voltage
 
     temperature:
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_temperature
       alternative:
-        type: nx_char
+        \@nx_class: nx_char
         enumeration: [room temperature, RT]
 
     pH:
-      type: nx_number
-      unit: none
+      \@nx_class: nx_number
+      unit: nx_unitless
       alternative:
-        type: nx_char
+        \@nx_class: nx_char
         enumeration: [neutral, undefined]
       default: undefined
 
     stress:
       required: no
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_pressure
 
       orientation:
         doc: Euler angles of stress relative to sample
-        type: nx_number
+        \@nx_class: nx_number
         length: 3
         unit: nx_angle
 
 instrument:
   required: yes
+  \@nx_class: nx_instrument
+
   model:
-    doc: the name and type number of the instrument
-    type: nx_char
+    doc: the name and \@nx_class number of the instrument
+    \@nx_class: nx_char
 
   company:
     doc: name of the company
-    type: nx_char
+    \@nx_class: nx_char
 
   construction year:
-    type: nx_number
+    \@nx_class: nx_number
 
   hardware version:
     doc: the used version of the hardware if available
     required: no
-    type: nx_char
+    \@nx_class: nx_char
 
   software version:
     doc: software name and version used for measurement
-    type: nx_char
+    \@nx_class: nx_char
 
   bandwidth:
     doc: specify the bandwidth of the light
-    type: nx_number
+    \@nx_class: nx_number
     length: number of wavelength
 
   light source:
     doc: specify the used light source
-    type: nx_char
+    \@nx_class: nx_char
 
   focussing probes:
     doc: specify if focussing probes (lenses) were used
-    type: nx_boolean
+    \@nx_class: nx_boolean
 
     data_correction:
       doc: specify of the recorded data are corrected by the window effects of the lenses
-      type: nx_boolean
+      \@nx_class: nx_boolean
 
     angular spread:
       doc: specify the angular spread caused by the focussing probes
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_angle
 
-  ellipsometry type:
-    doc: what type of ellipsometry was used? See Fujiwara Table 4.2.
-    type: nx_char
+  ellipsometry \@nx_class:
+    doc: what \@nx_class of ellipsometry was used? See Fujiwara Table 4.2.
+    \@nx_class: nx_char
     enumeration:
       - rotating analyzer,
       - rotating analyzer with analyzer compensator,
@@ -222,67 +147,146 @@ instrument:
     calibration time:
       doc: when calibration was last performed before this measurement
       # NX_DATE_TIME is the ISO8601 format, possibly with time zone
-      type: nx_date_time
+      \@nx_class: nx_date_time
       alternative:
-        type: nx_char
+        \@nx_class: nx_char
         enumeration: [no calibration, within 1 hour, within 1 day, within 1 week]
 
     calibration provided:
       doc: is the measured data provided?
-      type: nx_boolean
+      \@nx_class: nx_boolean
       # values: yes, no
 
     calibration data:
       doc: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
-      data type:
-        type: nx_char
+      data \@nx_class:
+        \@nx_class: nx_char
         enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix]
 
       angle of incidence:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_angle
 
       wavelength:
         doc: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_length
 
       calibration data:
-        type: nx_number
-        # unit: none --> leave it undefined
+        \@nx_class: nx_number
+        unit: nx_unitless
 
       calibration sample:
         doc: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
-        type: nx_char
+        \@nx_class: nx_char
+
+  angle_of_incidence:
+    doc: the incident angle of the beam
+    \@nx_class: nx_number
+    unit: nx_angle
+    \@target: "/instrument/angle_of_incidence"
+
+  stage:
+    doc:  where and how is the sample mounted
+    enumeration:
+      - manual stage
+      - scanning stage
+      - liquid stage
+      - gas cell
+    required: one
+
+    translation:
+      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+      required:  yes
+      \@nx_class: nx_transformations
+
+      X__AXISNAME:
+        # its value is the actual shift in this direction
+        # unit is defined by the transformation type below
+        doc: direction of the beam along the stage towards the detector
+        \@nx_class: nx_number
+        \@transformation_type: translation
+        \@vector: [1, 0, 0]
+        \@depends_on: .
+
+      Y__AXISNAME:
+        doc: perpendicular to the plane of incidence, to the right hand side from X
+        \@nx_class: nx_number
+        \@transformation_type: translation
+        \@vector: [0, cos(angle_of_incidence), sin(angle_of_incidence)]
+        \@depends_on: X
+
+      Z__AXISNAME:
+        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
+        \@nx_class: nx_number
+        \@transformation_type: translation
+        \@vector: [0, sin(angle_of_incidence), -cos(angle_of_incidence)]
+        \@depends_on: Y
+
+    # the full transformation is the end of Z, described as:
+    # depends_on: translation/Z
+
+      alternative:
+        doc: if there is no motorized stage, we have a vague idea where the beam hits the sample
+        \@nx_class: nx_char
+        enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
+
+    sample_rotation:
+      doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
+      \@nx_class: nx_transformations
+      alpha:
+        \@nx_class: nx_number
+        \@transformation_type: rotation
+        \@vector: [0, 0, 1]
+        doc: first rotation is around the Z-axis
+        \@depends_on: Z
+
+      beta:
+        \@nx_class: nx_number
+        \@transformation_type: rotation
+        \@vector: [cos(alpha), sin(alpha), 1]
+        doc: second is around the rotated x' axis
+        \@depends_on: alpha
+
+      gamma:
+        \@nx_class: nx_number
+        \@transformation_type: rotation
+        \@vector: [-sin(alpha), -cos(alpha), cos(beta)]
+        doc: rotate around the last Z-axis: z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
+        \@depends_on: beta
+
+      alternative:
+        \@nx_class: nx_char
+        enumeration: [parallel, perpendicular, diagonal]
 
   window:
     doc:
       for environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties
     thickness:
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_length
 
     orientation angle:
       doc: angle in the plane of incidence
-      type: nx_number
+      \@nx_class: nx_number
       unit: nx_angle
 
     calibration data:
       wavelength:
-        type: nx_number
+        \@nx_class: nx_number
         unit: nx_length
 
       data array:
-        type: nx_number
-          # unit: none
+        \@nx_class: nx_number
+        unit: nx_unitless
 
       calibration sample:
         doc: what sample was used to callibrate the window effect?
-        type: nx_char
+        \@nx_class: nx_char
 
   duration:
     doc: integration time for the measurement. Single number or array if it was varied.
-    type: nx_number
+    \@nx_class: nx_number
     unit: nx_time
 
   revolution:
@@ -297,11 +301,11 @@ instrument:
 
       fixed revolution:
         doc: if the revolution does not change during the measurement
-        type: nx_number
+        \@nx_class: nx_number
 
       variable revolution:
         doc: specify maximum and minimum values for the revolution
-        type: nx_number
+        \@nx_class: nx_number
         length: 2
 
 measured data:
@@ -312,57 +316,66 @@ measured data:
 
     ID:
       doc: unique ID for the sample
-      type: nx_char
+      \@nx_class: nx_char
       # unit: dimensionless
 
     layer structure:
       doc: specification of the layer structure
-      type: nx_char
+      \@nx_class: nx_char
       # unit: dimensionless
 
     orientation:
       doc: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
-      type: nx_number
+      \@nx_class: nx_number
       length: 3
       unit: nx_angle
 
     position:
       doc: specifiy the position (e.g. in a line scan) with respect to a reference point
-      type: nx_number
+      \@nx_class: nx_number
       length: 3
       unit: nx_length
 
   data ID:
     doc: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
-    type: nx_number
+    \@nx_class: nx_number
 
   data type:
-    type: nx_char
+    \@nx_class: nx_char
     enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
     required: yes
 
   wavelength:
-    type: nx_number
+    \@nx_class: nx_number
     unit: nx_length
 
   data:
-    type: nx_number
-    # units: none
+    \@nx_class: nx_number
+    units: nx_unitless
 
-  angle of incidence:
+  angle_of_incidence:
     doc: the angle of incidence on the sample, defined as in standard optics
-    type: nx_number
-    unit: nx_angle
+    # I use @nx_link instead of the --> nexus syntax
+    \@nx_link: "/instrument/angle_of_incidence"
 
   time points:
     doc: an array of relative time points if a time series was recorded
-    type: nx_number
+    \@nx_class: nx_number
     unit: nx_time
     required: no
+  medium:
+    doc: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
+    \@nx_class: nx_char
+    required: yes
+    alternative:
+      doc: or provide the complex refractive index of the medium for every measured wavelength.
+      \@nx_class: nx_number
+      unit: nx_unitless
+
 
 # derived parameters
 derived parameters:
   doc: what parameters are derived from the above data
   depolarization:
-    type: nx_number
-    # unit: none
+    \@nx_class: nx_number
+    unit: nx_unitless
