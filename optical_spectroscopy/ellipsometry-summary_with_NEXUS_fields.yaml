@@ -5,87 +5,6 @@ doc: metadata definition for ellipsometry measurements, including complex system
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
 
-experimental procedure:
-  environment conditions:
-    doc: external parameters that have influenced the sample
-    required: no
-    number_of_runs:
-      \@nx_class: nx_integer
-      doc: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
-    varied_parameters:
-      doc: this is to indicate which parameter was changed. Its definition must exist below.
-The specified variable has to be number_of_runs long, providing the parameters for each data set.
-
-      enumeration: [optical excitation, voltage, temperature, pH, stress]
-
-    optical excitation:
-      doc: describe if the spectra where taken under optical excitation
-
-      excitation source:
-        doc: specify the source for the external excitation
-        \@nx_class: nx_char
-
-      wavelength:
-        doc: range
-        \@nx_class: nx_number
-        unit: nx_length
-
-      broadening:
-        doc: specify the FWHM of the excitation
-        \@nx_class: nx_number
-        unit: nx_length
-
-      excitation type:
-        doc: cw or pulsed excitation
-        enumeration: [cw, pulsed]
-
-      pulse length:
-        \@nx_class: nx_number
-        unit: nx_time
-
-      repetition rate:
-        \@nx_class: nx_number
-        unit: nx_frequency
-
-      pulse energy:
-        \@nx_class: nx_number
-        unit: nx_energy
-
-      excitation power:
-        \@nx_class: nx_number
-        unit: nx_energy
-
-    voltage:
-      doc: if the spectra were taken under bias
-      \@nx_class: nx_number
-      unit: nx_voltage
-
-    temperature:
-      \@nx_class: nx_number
-      unit: nx_temperature
-      alternative:
-        \@nx_class: nx_char
-        enumeration: [room temperature, RT]
-
-    pH:
-      \@nx_class: nx_number
-      unit: nx_unitless
-      alternative:
-        \@nx_class: nx_char
-        enumeration: [neutral, undefined]
-      default: undefined
-
-    stress:
-      required: no
-      \@nx_class: nx_number
-      unit: nx_pressure
-
-      orientation:
-        doc: Euler angles of stress relative to sample
-        \@nx_class: nx_number
-        length: 3
-        unit: nx_angle
-
 instrument:
   required: yes
   \@nx_class: nx_instrument
@@ -394,6 +313,87 @@ measured data:
       doc: or provide the complex refractive index of the medium for every measured wavelength.
       \@nx_class: nx_number
       unit: nx_unitless
+
+  environment conditions:
+    doc: external parameters that have influenced the sample
+    required: no
+    number_of_runs:
+      \@nx_class: nx_integer
+      doc: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
+    varied_parameters:
+      doc: this is to indicate which parameter was changed. Its definition must exist below.
+The specified variable has to be number_of_runs long, providing the parameters for each data set.
+
+      enumeration: [optical excitation, voltage, temperature, pH, stress]
+
+    optical excitation:
+      doc: describe if the spectra where taken under optical excitation
+
+      excitation source:
+        doc: specify the source for the external excitation
+        \@nx_class: nx_char
+
+      wavelength:
+        doc: range
+        \@nx_class: nx_number
+        unit: nx_length
+
+      broadening:
+        doc: specify the FWHM of the excitation
+        \@nx_class: nx_number
+        unit: nx_length
+
+      excitation type:
+        doc: cw or pulsed excitation
+        enumeration: [cw, pulsed]
+
+      pulse length:
+        \@nx_class: nx_number
+        unit: nx_time
+
+      repetition rate:
+        \@nx_class: nx_number
+        unit: nx_frequency
+
+      pulse energy:
+        \@nx_class: nx_number
+        unit: nx_energy
+
+      excitation power:
+        \@nx_class: nx_number
+        unit: nx_energy
+
+    voltage:
+      doc: if the spectra were taken under bias
+      \@nx_class: nx_number
+      unit: nx_voltage
+
+    temperature:
+      \@nx_class: nx_number
+      unit: nx_temperature
+      alternative:
+        \@nx_class: nx_char
+        enumeration: [room temperature, RT]
+
+    pH:
+      \@nx_class: nx_number
+      unit: nx_unitless
+      alternative:
+        \@nx_class: nx_char
+        enumeration: [neutral, undefined]
+      default: undefined
+
+    stress:
+      required: no
+      \@nx_class: nx_number
+      unit: nx_pressure
+
+      orientation:
+        doc: Euler angles of stress relative to sample
+        \@nx_class: nx_number
+        length: 3
+        unit: nx_angle
+
 
 
 # derived parameters

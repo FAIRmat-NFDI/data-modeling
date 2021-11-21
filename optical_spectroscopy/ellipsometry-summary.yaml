@@ -5,91 +5,6 @@ description: metadata definition for ellipsometry measurements, including comple
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
 
-experimental procedure:
-  environment conditions:
-    description: external parameters that have influenced the sample
-    required: no
-    number_of_runs:
-      type: integer
-      description: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
-    varied_parameters:
-      description: this is to indicate which parameter was changed. Its definition must exist below.The specified variable has to be number_of_runs long, providing the parameters for each data set.
-      type: enum
-      values:
-        - optical excitation
-        - voltage
-        - temperature
-        - pH
-        - stress
-
-    optical excitation:
-      description: describe if the spectra where taken under optical excitation
-
-      excitation source:
-        description: specify the source for the external excitation
-        type: text
-
-      wavelength:
-        description: range
-        type: numeric
-        unit: length
-
-      broadening:
-        description: specify the FWHM of the excitation
-        type: numeric
-        unit: length
-
-      excitation type:
-        description: cw or pulsed excitation
-        values: cw, pulsed
-
-      pulse length:
-        type: numeric
-        unit: time
-
-      repetition rate:
-        type: numeric
-        unit: frequency
-
-      pulse energy:
-        type: numeric
-        unit: energy
-
-      excitation power:
-        type: numeric
-        unit: W
-
-    voltage:
-      description: if the spectra were taken under bias
-      type: numeric
-      unit: voltage
-
-    temperature:
-      type: numeric
-      unit: temperature
-      alternative:
-        type: text
-        value: room temperature, RT
-
-    pH:
-      type: numeric
-      unit: none
-      alternative:
-        type: text
-        value: neutral, undefined
-      default: undefined
-
-    stress:
-      required: no
-      type: numeric
-      unit: pressure
-
-      orientation:
-        description: Euler angles of stress relative to sample
-        type: numeric
-        length: 3
-        unit: angle
-
 instrument:
   required: yes
   model:
@@ -205,7 +120,7 @@ instrument:
     required: one
 
     stage_orientation:
-      description: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction.
+      description: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees).
 
       value: numeric
       link: 180 - angle_of_incidence
@@ -374,6 +289,91 @@ measured data:
       description: or provide the complex refractive index of the medium for every measured wavelength.
       type: numeric
       unit: none
+
+  environment conditions:
+    description: external parameters that have influenced the sample
+    required: no
+    number_of_runs:
+      type: integer
+      description: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
+    varied_parameters:
+      description: this is to indicate which parameter was changed. Its definition must exist below.The specified variable has to be number_of_runs long, providing the parameters for each data set.
+      type: enum
+      values:
+        - optical excitation
+        - voltage
+        - temperature
+        - pH
+        - stress
+        - stage positions
+
+    optical excitation:
+      description: describe if the spectra where taken under optical excitation
+
+      excitation source:
+        description: specify the source for the external excitation
+        type: text
+
+      wavelength:
+        description: range
+        type: numeric
+        unit: length
+
+      broadening:
+        description: specify the FWHM of the excitation
+        type: numeric
+        unit: length
+
+      excitation type:
+        description: cw or pulsed excitation
+        values: cw, pulsed
+
+      pulse length:
+        type: numeric
+        unit: time
+
+      repetition rate:
+        type: numeric
+        unit: frequency
+
+      pulse energy:
+        type: numeric
+        unit: energy
+
+      excitation power:
+        type: numeric
+        unit: W
+
+    voltage:
+      description: if the spectra were taken under bias
+      type: numeric
+      unit: voltage
+
+    temperature:
+      type: numeric
+      unit: temperature
+      alternative:
+        type: text
+        value: room temperature, RT
+
+    pH:
+      type: numeric
+      unit: none
+      alternative:
+        type: text
+        value: neutral, undefined
+      default: undefined
+
+    stress:
+      required: no
+      type: numeric
+      unit: pressure
+
+      orientation:
+        description: Euler angles of stress relative to sample
+        type: numeric
+        length: 3
+        unit: angle
 
 
 # derived parameters
