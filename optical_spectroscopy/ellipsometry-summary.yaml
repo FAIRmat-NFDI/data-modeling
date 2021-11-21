@@ -9,6 +9,18 @@ experimental procedure:
   environment conditions:
     description: external parameters that have influenced the sample
     required: no
+    number_of_runs:
+      type: integer
+      description: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
+    varied_parameters:
+      description: this is to indicate which parameter was changed. Its definition must exist below.The specified variable has to be number_of_runs long, providing the parameters for each data set.
+      type: enum
+      values:
+        - optical excitation
+        - voltage
+        - temperature
+        - pH
+        - stress
 
     optical excitation:
       description: describe if the spectra where taken under optical excitation
@@ -192,8 +204,14 @@ instrument:
       - gas cell
     required: one
 
+    stage_orientation:
+      description: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction.
+
+      value: numeric
+      link: 180 - angle_of_incidence
+
     translation:
-      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at: https://manual.nexusformat.org/design.html#tb-table-transform
       required:  yes
 
       X:

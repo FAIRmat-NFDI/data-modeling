@@ -9,6 +9,14 @@ experimental procedure:
   environment conditions:
     doc: external parameters that have influenced the sample
     required: no
+    number_of_runs:
+      \@nx_class: nx_integer
+      doc: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
+    varied_parameters:
+      doc: this is to indicate which parameter was changed. Its definition must exist below.
+The specified variable has to be number_of_runs long, providing the parameters for each data set.
+
+      enumeration: [optical excitation, voltage, temperature, pH, stress]
 
     optical excitation:
       doc: describe if the spectra where taken under optical excitation
@@ -27,7 +35,7 @@ experimental procedure:
         \@nx_class: nx_number
         unit: nx_length
 
-      excitation \@nx_class:
+      excitation type:
         doc: cw or pulsed excitation
         enumeration: [cw, pulsed]
 
@@ -195,8 +203,22 @@ instrument:
       - gas cell
     required: one
 
+    stage_orientation:
+      doc: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the s
+ample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal o
+f the substrate. The beam comes with angle of incidence but opposite direction, thus they are connec
+ted with a rotation of 180 - angle of incidence (in degrees). This transformation brings us from the NEXUS coordinates to the stage coordinates.
+
+      value: 180 - angle_of_incidence
+      \@nx_class: nx_number
+      \@nx_transformation_type: rotation
+      \@vector: [1, 0, 0]
+      \@depends_on: .
+
+
     translation:
-      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner)
+      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at: https://manual.nexusformat.org/design.html#tb-table-transform
+
       required:  yes
       \@nx_class: nx_transformations
 
@@ -207,20 +229,20 @@ instrument:
         \@nx_class: nx_number
         \@transformation_type: translation
         \@vector: [1, 0, 0]
-        \@depends_on: .
+        \@depends_on: stage_orientation
 
       Y__AXISNAME:
         doc: perpendicular to the plane of incidence, to the right hand side from X
         \@nx_class: nx_number
         \@transformation_type: translation
-        \@vector: [0, cos(angle_of_incidence), sin(angle_of_incidence)]
+        \@vector: [0, 1, 0]
         \@depends_on: X
 
       Z__AXISNAME:
         doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
         \@nx_class: nx_number
         \@transformation_type: translation
-        \@vector: [0, sin(angle_of_incidence), -cos(angle_of_incidence)]
+        \@vector: [0, 0, 1]
         \@depends_on: Y
 
     # the full transformation is the end of Z, described as:
@@ -232,7 +254,7 @@ instrument:
         enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
 
     sample_rotation:
-      doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector)
+      doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); According to documentaiton, the axis definition is always from the referred system (https://manual.nexusformat.org/design.html#tb-table-transform).
       \@nx_class: nx_transformations
       alpha:
         \@nx_class: nx_number
@@ -244,14 +266,15 @@ instrument:
       beta:
         \@nx_class: nx_number
         \@transformation_type: rotation
-        \@vector: [cos(alpha), sin(alpha), 1]
+        \@vector: [1, 0, 0]
         doc: second is around the rotated x' axis
         \@depends_on: alpha
+
 
       gamma:
         \@nx_class: nx_number
         \@transformation_type: rotation
-        \@vector: [-sin(alpha), -cos(alpha), cos(beta)]
+        \@vector: [0, 0, 1]
         doc: rotate around the last Z-axis: z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
         \@depends_on: beta
 
