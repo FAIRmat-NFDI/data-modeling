@@ -4,8 +4,18 @@ description: metadata definition for ellipsometry measurements, including comple
 # instrument used and is characteristics
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
+symbols:
+  description: variables used throughout the document, e.g. dimensions and important parameters
+  angle_of_incidence: the angle of incidence to the surface normal (stage normal) of the sample
+  N_wavelength: size of the energy / wavelength vector used
+  N_variables: how many variables are saved in a measurement (e.g. Psi and delta, Mueller matrix
+  N_angles: number of incident angles used
+  N_p1: number of first sample parameters scanned
+  # we can go on, but this is already an at least 4 dimensional data set to work with
+  N_time: number of time points measured
 
 instrument:
+  description: general properties of the ellipsometry equipment
   required: yes
   model:
     description: the name and type number of the instrument
@@ -53,17 +63,17 @@ instrument:
     description: what type of ellipsometry was used? See Fujiwara Table 4.2.
     type: string
     value:
-      - rotating analyzer,
-      - rotating analyzer with analyzer compensator,
-      - rotating analyzer with polarizer compensator,
-      - rotating polarizer,
-      - rotating compensator on polarizer side,
-      - rotating compensator on analyzer side,
-      - modulator on polarizer side,
-      - modulator on analyzer side,
-      - dual compensator,
-      - phase modulation,
-      - imaging ellipsometry,
+      - rotating analyzer
+      - rotating analyzer with analyzer compensator
+      - rotating analyzer with polarizer compensator
+      - rotating polarizer
+      - rotating compensator on polarizer side
+      - rotating compensator on analyzer side
+      - modulator on polarizer side
+      - modulator on analyzer side
+      - dual compensator
+      - phase modulation
+      - imaging ellipsometry
       - null ellipsometry
 
   calibration:
@@ -87,7 +97,8 @@ instrument:
         type: string
         values: psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix
 
-      angle of incidence:
+      angle_of_incidence:
+        description: angle(s) of incidence used during the calibration measurement
         type: numeric
         unit: angle
 
@@ -109,6 +120,7 @@ instrument:
     required: yes
     type: numeric
     unit: angle
+    dim: [N_angles]
 
   stage:
     description:  where and how is the sample mounted
@@ -122,30 +134,38 @@ instrument:
     stage_orientation:
       description: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees).
 
-      value: numeric
-      link: 180 - angle_of_incidence
+      value: 180 - angle_of_incidence
+      type: numeric
+      transformation_type: rotation
+      depends_on: .
 
     translation:
-      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at: https://manual.nexusformat.org/design.html#tb-table-transform
+      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform
       required:  yes
 
       X:
-        value: numeric
+        type: numeric
+        transformation_type: translation
         unit: length
         description: direction of the beam along the stage towards the detector
         vector: [1, 0, 0]
+        depends_on: stage_orientation
 
       Y:
-        value: numeric
+        type: numeric
+        transformation_type: translation
         unit: length
         description: perpendicular to the plane of incidence, to the right hand side from X
-        vector: [0, cos(angle_of_incidence), sin(angle_of_incidence)]
+        vector: [0, 1, 0]
+        depends_on: X
 
       Z:
-        value: numeric
+        type: numeric
         unit: length
+        transformation_type: translation
         description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
-        vector: [0, sin(angle_of_incidence), -cos(angle_of_incidence)]
+        vector: [0, 0, 1]
+        depends_on: Y
 
       alternative:
         type: text
@@ -155,22 +175,27 @@ instrument:
       description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D. These are defined in relation to the X,Y,Z axis of the stage.
       alpha:
         type: numeric
+        transformation_type: rotation
         unit: angle
         vector: [0, 0, 1]
         description: first rotation is around the Z-axis
-
+        depends_on: Z
 
       beta:
         type: numeric
+        transformation_type: rotation
         unit: angle
-        vector: [cos(alpha), sin(alpha), 1]
+        vector: [1, 0, 0]
         description: second is around the rotated x' axis
+        depends_on: alpha
 
       gamma:
         type: numeric
+        transformation_type: rotation
         unit: angle
-        vector: [-sin(alpha), -cos(alpha), cos(beta)]
-        description: rotate around the last Z-axis: z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
+        vector: [0, 0, 1]
+        depends_on: beta
+        description: rotate around the last Z-axis, z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
 
       alternative:
         type: text
@@ -201,36 +226,45 @@ instrument:
         description: what sample was used to callibrate the window effect?
         type: string
 
-  duration:
-    description: integration time for the measurement. Single number or array if it was varied.
-    type: numeric
-    unit: time
+  detector:
+    description: what type of detector was used, and what is known about it? A detector can be a PMT, a CCD in a camera, an array in a spectrometer. If so, the whole unit goes in here
+    detector_type:
+      type: text
+      description: what kind of detector module is used, e.g. CCD-spectrometer, CCD camera, PMT, photodiode, etc.
 
-  revolution:
-    description: define how many rotations of the rotating element were taken into account for one spectra
-    rotating element:
-      description: define which elements rotates
-      type:
-        - polarizer (source side)
-        - polarizer (detector side)
-        - compensator (source side)
-        - compensator (detector side)
+    duration:
+      description: integration time for the measurement. Single number or array if it was varied.
+      type: numeric
+      unit: time
 
-      fixed revolution:
-        description: if the revolution does not change during the measurement
-        type: numeric
+    revolution:
+      description: define how many rotations of the rotating element were taken into account for one spectra
+      rotating element:
+        description: define which elements rotates
+        type:
+          - polarizer (source side)
+          - polarizer (detector side)
+          - compensator (source side)
+          - compensator (detector side)
 
-      variable revolution:
-        description: specify maximum and minimum values for the revolution
-        type: numeric
-        length: 2
+        fixed revolution:
+          description: if the revolution does not change during the measurement
+          type: numeric
 
-measured data:
+        variable revolution:
+          description: specify maximum and minimum values for the revolution
+          type: numeric
+          length: 2
+
+sample:
   type: nx_data
   required: yes
 
-  sample:
+  sample_description:
     description: specification of the sample (invlved materials and layer structure)
+    name:
+      type: text
+      description: human readable sample name
 
     ID:
       description: unique ID for the sample
@@ -260,20 +294,37 @@ measured data:
 
   data type:
     type: text
-    value: psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data
+    value:
+      - psi / delta
+      - tan(psi)/cos(delta)
+      - Mueller matrix
+      - Jones matrix
+      - raw data
     required: yes
 
+  number_of_variables:
+    type: number
+    description: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
+
   wavelength:
+    description: wavelength of light measured. An array of 1 or more elements. Length defines N_wavelengt
     type: numeric
     unit: length
+    dim: [N_wavelength]
 
   data:
+    description: resulted data from the measurement, described by data type. Minimum two columns, if errors are available twice as much. For a Mueller matrix, it may be 9 (1,1 is all 1, the rest is symmetric)
     type: numeric
     units: none
+    dim: [N_time, N_p1, N_angles, N_variables, N_wavelength]
 
-  angle of incidence:
-    description: the angle of incidence on the sample, defined as in standard optics
-    link: instrument/angle of incidence
+  stage:
+    doc: a link to the already existing information about sample position
+    link: /instrument/stage
+
+  angle_of_incidence:
+    description: the incident angle of the beam vs. the normal of the sample surface
+    link: instrument/angle_of_incidence
 
   time points:
     description: an array of relative time points if a time series was recorded
@@ -306,6 +357,11 @@ measured data:
         - pH
         - stress
         - stage positions
+
+    length_of_runs:
+      description: provide number of parameters used, N_p1
+      type: number
+      value: N_p1
 
     optical excitation:
       description: describe if the spectra where taken under optical excitation
@@ -374,7 +430,6 @@ measured data:
         type: numeric
         length: 3
         unit: angle
-
 
 # derived parameters
 derived parameters:

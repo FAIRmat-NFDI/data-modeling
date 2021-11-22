@@ -4,8 +4,18 @@ doc: metadata definition for ellipsometry measurements, including complex system
 # instrument used and is characteristics
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
+symbols:
+  doc: variables used throughout the document, e.g. dimensions and important parameters
+  angle_of_incidence: the angle of incidence to the surface normal (stage normal) of the sample
+  N_wavelength: size of the energy / wavelength vector used
+  N_variables: how many variables are saved in a measurement (e.g. Psi and delta, Mueller matrix)
+  N_angles: number of incident angles used
+  N_p1: number of first sample parameters scanned
+  N_time: number of time points measured
+  # we can go on, but this is already an at least 4 dimensional data set to work with
 
 instrument:
+  doc: general properties of the ellipsometry equipment
   required: yes
   \@nx_class: nx_instrument
 
@@ -51,22 +61,10 @@ instrument:
       \@nx_class: nx_number
       unit: nx_angle
 
-  ellipsometry \@nx_class:
+  ellipsometry type:
     doc: what \@nx_class of ellipsometry was used? See Fujiwara Table 4.2.
     \@nx_class: nx_char
-    enumeration:
-      - rotating analyzer,
-      - rotating analyzer with analyzer compensator,
-      - rotating analyzer with polarizer compensator,
-      - rotating polarizer,
-      - rotating compensator on polarizer side,
-      - rotating compensator on analyzer side,
-      - modulator on polarizer side,
-      - modulator on analyzer side,
-      - dual compensator,
-      - phase modulation,
-      - imaging ellipsometry,
-      - null ellipsometry
+    enumeration: [rotating analyzer,rotating analyzer with analyzer compensator, rotating analyzer with polarizer compensator, rotating polarizer, rotating compensator on polarizer side, rotating compensator on analyzer side, modulator on polarizer side, modulator on analyzer side, dual compensator, phase modulation, imaging ellipsometry, null ellipsometry]
 
   calibration:
     doc: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
@@ -91,6 +89,7 @@ instrument:
         enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix]
 
       angle of incidence:
+        doc: angle(s) of incidence used during the calibration measurement
         \@nx_class: nx_number
         unit: nx_angle
 
@@ -108,25 +107,19 @@ instrument:
         \@nx_class: nx_char
 
   angle_of_incidence:
-    doc: the incident angle of the beam
+    doc: the incident angle of the beam vs. the normal of the sample surface
     \@nx_class: nx_number
     unit: nx_angle
     \@target: "/instrument/angle_of_incidence"
+    \@dim: [[1, N_angles]]
 
   stage:
     doc:  where and how is the sample mounted
-    enumeration:
-      - manual stage
-      - scanning stage
-      - liquid stage
-      - gas cell
+    enumeration: [manual stage, scanning stage, liquid stage, gas cell]
     required: one
 
     stage_orientation:
-      doc: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the s
-ample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal o
-f the substrate. The beam comes with angle of incidence but opposite direction, thus they are connec
-ted with a rotation of 180 - angle of incidence (in degrees). This transformation brings us from the NEXUS coordinates to the stage coordinates.
+      doc: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees). This transformation brings us from the NEXUS coordinates to the stage coordinates.
 
       value: 180 - angle_of_incidence
       \@nx_class: nx_number
@@ -136,7 +129,7 @@ ted with a rotation of 180 - angle of incidence (in degrees). This transformatio
 
 
     translation:
-      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at: https://manual.nexusformat.org/design.html#tb-table-transform
+      doc: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform
 
       required:  yes
       \@nx_class: nx_transformations
@@ -194,7 +187,7 @@ ted with a rotation of 180 - angle of incidence (in degrees). This transformatio
         \@nx_class: nx_number
         \@transformation_type: rotation
         \@vector: [0, 0, 1]
-        doc: rotate around the last Z-axis: z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
+        doc: rotate around the last Z-axis, z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
         \@depends_on: beta
 
       alternative:
@@ -226,35 +219,44 @@ ted with a rotation of 180 - angle of incidence (in degrees). This transformatio
         doc: what sample was used to callibrate the window effect?
         \@nx_class: nx_char
 
-  duration:
-    doc: integration time for the measurement. Single number or array if it was varied.
-    \@nx_class: nx_number
-    unit: nx_time
+  detector:
+    doc: what type of detector was used, and what is known about it? A detector can be a PMT, a CCD in a camera, an array in a spectrometer. If so, the whole unit goes in here
 
-  revolution:
-    doc: define how many rotations of the rotating element were taken into account for one spectra
-    rotating element:
-      doc: define which elements rotates
-      enumeration:
-        - polarizer (source side)
-        - polarizer (detector side)
-        - compensator (source side)
-        - compensator (detector side)
+    detector_type:
+      \@nx_class: nx_char
+      doc: what kind of detector module is used, e.g. CCD-spectrometer, CCD camera, PMT, photodiode, etc.
+      required: yes
 
-      fixed revolution:
-        doc: if the revolution does not change during the measurement
-        \@nx_class: nx_number
+    duration:
+      doc: integration time for the measurement. Single number or array if it was varied.
+      \@nx_class: nx_number
+      unit: nx_time
 
-      variable revolution:
-        doc: specify maximum and minimum values for the revolution
-        \@nx_class: nx_number
-        length: 2
+    revolution:
+      doc: define how many rotations of the rotating element were taken into account for one spectra
+      rotating element:
+        doc: define which elements rotates
+        enumeration: [polarizer (source side), polarizer (detector side), compensator (source side), ccompensator (detector side)]
 
-measured data:
+        fixed revolution:
+          doc: if the revolution does not change during the measurement
+          \@nx_class: nx_number
+
+        variable revolution:
+          doc: specify maximum and minimum values for the revolution
+          \@nx_class: nx_number
+          length: 2
+
+sample:
+  \@nx_class: nx_sample
   required: yes
 
-  sample:
+  sample_description:
     doc: specification of the sample (invlved materials and layer structure)
+
+    name:
+      doc: human readable sample name
+      \@nx_class: nx_char
 
     ID:
       doc: unique ID for the sample
@@ -287,28 +289,43 @@ measured data:
     enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
     required: yes
 
+  number_of_variables:
+    \@nc_class: nx_integer
+    doc: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
+
   wavelength:
+    doc: wavelength of light measured. An array of 1 or more elements. Length defines N_wavelength
     \@nx_class: nx_number
     unit: nx_length
+    \@dim: [[1, N_wavelength]]
 
   data:
+    doc: resulted data from the measurement, described by data type. Minimum two columns, if errors are available twice as much. For a Mueller matrix, it may be 9 (1,1 is all 1, the rest is sysymmetric
     \@nx_class: nx_number
     units: nx_unitless
+    rank: 5
+    dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+
+  stage:
+    doc: a link to the already existing information about sample position
+    \@nx_link: /instrument/stage
 
   angle_of_incidence:
-    doc: the angle of incidence on the sample, defined as in standard optics
+    doc: the incident angle of the beam vs. the normal of the sample surface
     # I use @nx_link instead of the --> nexus syntax
-    \@nx_link: "/instrument/angle_of_incidence"
+    \@nx_link: /instrument/angle_of_incidence
 
   time points:
     doc: an array of relative time points if a time series was recorded
     \@nx_class: nx_number
     unit: nx_time
     required: no
+
   medium:
     doc: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
     \@nx_class: nx_char
     required: yes
+
     alternative:
       doc: or provide the complex refractive index of the medium for every measured wavelength.
       \@nx_class: nx_number
@@ -320,11 +337,16 @@ measured data:
     number_of_runs:
       \@nx_class: nx_integer
       doc: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
-    varied_parameters:
-      doc: this is to indicate which parameter was changed. Its definition must exist below.
-The specified variable has to be number_of_runs long, providing the parameters for each data set.
 
-      enumeration: [optical excitation, voltage, temperature, pH, stress]
+    varied_parameters:
+      doc: this is to indicate which parameter was changed. Its definition must exist below. The specified variable has to be number_of_runs long, providing the parameters for each data set.
+
+      enumeration: [optical excitation, voltage, temperature, pH, stress, stage positions]
+
+    length_of_runs:
+      doc: provide the number of parameters used, N_p1
+      \@nx_class: nx_integer
+      value: N_p1
 
     optical excitation:
       doc: describe if the spectra where taken under optical excitation
@@ -393,8 +415,6 @@ The specified variable has to be number_of_runs long, providing the parameters f
         \@nx_class: nx_number
         length: 3
         unit: nx_angle
-
-
 
 # derived parameters
 derived parameters:
