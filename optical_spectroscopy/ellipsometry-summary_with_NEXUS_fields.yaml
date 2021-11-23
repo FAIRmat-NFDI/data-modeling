@@ -1,4 +1,7 @@
-doc: metadata definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
+#11/2021
+#a draft version of a NeXus application definition for ellipsometry
+name: NXellipsometry_base_draft
+doc: draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
 # the document has the following main elements:
 # experimental procedure
 # instrument used and is characteristics
