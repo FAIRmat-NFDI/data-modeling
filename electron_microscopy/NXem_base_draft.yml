@@ -9,7 +9,6 @@
 #the application definition can be made so specific that it enables a digital setting up of the components for e.g.
 #ray-tracing based simulation tools of the entire instrument
 name: NXem_base_draft
-type: nx_object
 doc: draft set of components for application definitions for electron microscopy, here exemplified with scanning nanobeam diffraction in transmission electron microscopes in mind
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
@@ -19,9 +18,9 @@ symbols:
   nimages: Total of images in the imagestack
   ny: Pixel counts in the slow-changing direction
   nx: Pixel counts in the fast-changing direction
-entry1__nx_entry:
+entry1___nx_entry:
 # if exists keyword is not specified, we assume exists: optional
-  exists: required
+  exists: [min, 1]
   experiment_identifier:
     doc: Unique identifier of the experiment, such as a (globally persistent) unique identifier. The identifier is usually defined by the facility or principle investigator. The identifier enables to link experiments to e.g. proposals.
   experiment_description:
@@ -41,14 +40,14 @@ entry1__nx_entry:
     doc: Commercial or otherwise defined given name to the program that was used to generate the results files with measurements and metadata.
   program_version:
     doc: Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured in such a way that result files can be created ideally in a deterministic manner.
-  application_def__nx_subentry:
-    definition_local:
-      doc: FAIRmat-specific candidate proposal for an application definition exemplifying for scanning nanobeam diffraction
-      version:
-        doc: Ideally version with build number are commit hash of the application definition. If not available a free-text description.
-      url:
-        doc: URL where to find further material (documentation, examples) relevant to the application definition
-  operator__nx_user:
+#  application_def___nx_subentry: #nx_subentry for now not supported
+  definition_local:
+    doc: FAIRmat-specific candidate proposal for an application definition exemplifying for scanning nanobeam diffraction
+    \@version:
+#        doc: Ideally version with build number are commit hash of the application definition. If not available a free-text description.
+    \@url:
+#        doc: URL where to find further material (documentation, examples) relevant to the application definition
+  operator___nx_user:
     exists: [min, 1]
     doc: Contact information of at least the user of the instrument or the principal investigator who created the file. Adding multiple users is recommended.
     name:
@@ -58,7 +57,7 @@ entry1__nx_entry:
     email:
     orcid:
     telephone_number:
-  specimen__nx_sample:
+  specimen___nx_sample:
     exists: [min, 1]
     name:
     sample_history:
@@ -74,31 +73,31 @@ entry1__nx_entry:
       type: nx_float
       units: nx_temperature
     atom_types:
-      exists: required
+      exists: [min, 1]
       doc: "Use Hill's system for listing elements of the periodic table which are inside or attached to the surface of the specimen and thus relevant from a scientific point. The purpose of this field is to allow materials database to parse the relevant elements without having to interpret the sample history."
   nx_monitor:
     exists:recommended
-  data__nx_data:
+  data___nx_data:
     link:
     doc: Hard link to a location in the hierarchy of the NeXus file where the data are stored
-  scan_align__nx_process:
+  scan_align___nx_process:
     program_name:
       doc: Commercial or otherwise defined given name to the program that was used to process the data on-the-fly.
     program_version:
       doc: Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured in such a way that result files can be created ideally in a deterministic manner.
     description:
       doc: Ideally, a reference to the location or a unique (globally persistent) identifier (e.g.) of e.g. another file which gives as many as possible details of this processing steps. In the case that such a detailed history of the processing (steps) is not available, use this field as a free-text description of this processing.
-    misc__nx_collection:
+    misc___nx_collection:
       cartesian_scan_dimensions:
         type: nx_uint
         doc: to be defined I need to double check with Christoph Koch what this is, but I think the member names for this and the next two members are not nice. I consider these three more like a dummy like the WONI experiment to understand how to store n-dimensional data using NeXus.
-      cartesian_scan_dimension_1_count:
+      cartesian_scan_dimension1_count:
         type: nx_uint
         doc: to be defined
-      cartesian_scan_dimension_2_count:
+      cartesian_scan_dimension2_count:
         type: nx_uint
         doc: to be defined
-      acquired_data__nx_data:
+      acquired_data___nx_data:
         \@signal: imagestack
         \@axes: [imageid, ypos, xpos]
         \@imageid_indices: 2
@@ -131,21 +130,21 @@ entry1__nx_entry:
           \@long_name:
             doc: Label for the x axis
         doc: A stack of two-dimensional images with imageid changing slowest, ypos changing faster, and xpos changing fastest, i.e. xpos + ypos * nx + imageid * nx*ny implicit C-style indexing.
-      series_params__nx_data:
+      series_params___nx_data:
         doc: to be defined, series_params, A collection of parameter pairs for each image, i.e. 0 or 1 + imageid * 2 implicit indexing
         data:
         type: nx_number
         dimensions:
           rank: 2
           dim: [[1, nimages], [0, 2]]
-      aligned_positions__nx_data:
+      aligned_positions___nx_data:
         data:
         type: nx_number
         dimensions:
             rank: 2
             dim: [[1, nimages], [0, 5]]
         doc: A collection of alignment position quintets for each image, i.e. 0, 1, ..., 4 + imageid * 5 implicit indexing
-  em_lab__nx_instrument:
+  em_lab___nx_instrument:
     exists: [min, 1]
     name:
       doc: Name of the microscope.
@@ -158,8 +157,8 @@ entry1__nx_entry:
       doc: Manufacturer brand/model to enable e.g. queries about microscope models. See comments on instrument_manufacturer on how to provide further specification.
     instrument_capability:
       doc: "Free-text list of controlled EM-community vocabulary terms of functional components. If provided, compose the list from the following terms: Feg, Astar, OmegaFilter."
-    gun__nx_source:
-      exists: required
+    gun___nx_source:
+      exists: [min, 1]
       doc: The source creating the electron beam.
       voltage:
         type: nx_float
@@ -177,10 +176,10 @@ entry1__nx_entry:
       description:
         doc: Ideally a reference to (another) file (ideally formatted using also an application definition) via a link, name, or a (globally unique) persistent identifier to give further details about the electron gun.
     gun_aperture_nx_aperture:
-    condenser_lens_1__nx_em_lens:
-    condenser_lens_2__nx_em_lens:
-    condenser_lens_1_aperture__nx_aperture:
-    condenser_lens_2_aperture__nx_aperture:
+    condenser_lens1___nx_em_lens:
+    condenser_lens2___nx_em_lens:
+    condenser_lens1_aperture___nx_aperture:
+    condenser_lens2_aperture___nx_aperture:
       doc: An aperture (to be discussed or diaphragm) for the electron beam.
       name:
       manufacturer_name:
@@ -190,34 +189,34 @@ entry1__nx_entry:
       description:
         doc: An (ideally globally unique) persistent identifier, link, or text which gives further details.
       nx_transformations:
-    cs_corrector__nx_em_cs_corr:
-    prefield_or_mini_lens__nx_em_lens:
-    scanning_coils__nx_em_deflector:
-    specimen_stage__nx_em_stage:
+    cs_corrector___nx_em_cs_corr:
+    prefield_or_mini_lens___nx_em_lens:
+    scanning_coils___nx_em_deflector:
+    specimen_stage___nx_em_stage:
 #      type: nx_positioner
 #     name:
 #     description:
 #     value:
 #       type: nx_number
 #       doc: stage position
-    objective_lens__nx_em_lens:
-    objective_mini_lens__nx_em_lens:
-    selected_area_aperture__nx_aperture:
-    intermediate_lens_1__nx_em_lens:
-    intermediate_lens_2__nx_em_lens:
-    intermediate_lens_3__nx_em_lens:
-    intermediate_lens_4__nx_em_lens:
-    haadf_detector__nx_detector:
-#   omega_filter__nx_em_omega_filter:
-    energy_filter_1_aperture__nx_aperture:
-    energy_filter_1__nx_filter:
-    projector_lens_1__nx_em_lens:
-    projector_lens_2__nx_em_lens:
-    projector_lens_3__nx_em_lens:
-    projector_lens_4__nx_em_lens:
-    fluorescent_screen_detector__nx_detector:
-#    mirror_1__nx_em_mirror:
-    ccd_camera_1__nx_detector:
+    objective_lens___nx_em_lens:
+    objective_mini_lens___nx_em_lens:
+    selected_area_aperture___nx_aperture:
+    intermediate_lens1___nx_em_lens:
+    intermediate_lens2___nx_em_lens:
+    intermediate_lens3___nx_em_lens:
+    intermediate_lens4___nx_em_lens:
+    haadf_detector___nx_detector:
+#   omega_filter___nx_em_omega_filter:
+    energy_filter1_aperture___nx_aperture:
+    energy_filter1___nx_filter:
+    projector_lens1___nx_em_lens:
+    projector_lens2___nx_em_lens:
+    projector_lens3___nx_em_lens:
+    projector_lens4___nx_em_lens:
+    fluorescent_screen_detector___nx_detector:
+#    mirror1___nx_em_mirror:
+    ccd_camera1___nx_detector:
       doc: Description of the type of the detector e.g. CCD, scintillator, direct electron, image plate, CMOS
       manufacturer_name:
         doc: Name of the manufacturer who built/constructed the detector
@@ -259,16 +258,16 @@ entry1__nx_entry:
         cartesian_scan_dimensions:
           type: nx_uint
           doc: to be defined
-        cartesian_scan_dimension_1_count:
+        cartesian_scan_dimension1_count:
           type: nx_uint
           doc: to be defined
-        cartesian_scan_dimension_2_count:
+        cartesian_scan_dimension2_count:
           type: nx_uint
           doc: to be defined
-        cartesian_scan_dimension_3_count:
+        cartesian_scan_dimension3_count:
           type: nx_uint
           doc: to be defined
-        scan_properties__nx_collection:
+        scan_properties___nx_collection:
         scan_system_name:
           doc: to be defined
         x_points_step_width:
@@ -281,6 +280,6 @@ entry1__nx_entry:
 #          doc: raw data
     dark_field_detector__nx_detector:
     bright_field_detector__nx_detector:
-    ccd_camera_2__nx_detector:
+    ccd_camera2__nx_detector:
     eels_aperture__nx_aperture:
     eels_detector__nx_detector:
