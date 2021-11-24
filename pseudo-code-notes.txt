@@ -1,0 +1,35 @@
+def YAML_to_template_data_dict(yaml_file):
+    ``` 
+    Creates a template dict object for the reader func with all the paths
+    generated using the working YAML definition file. This will help by just
+    having a list to fill in rather than expecting the author of reader func
+    to figure it out
+    ```
+    return template_data_dict
+
+def reader(filename, template_data_dict):
+    ```
+        template_data_dict is all the paths in the working YAML file with already populated keys. The data needs to be added by this function
+    ```
+    template_data_dict["/path/to/an/entry/in/the/yaml"] = [data_object]
+    return template_data_dict
+
+def nxdl_to_attr_obj(path):
+    ```
+    Finds the path entry in NXDL file
+    Grabs all the attrs in NXDL entry
+    Checks Nexus base application defs for missing attrs and adds them as well
+    returns attr as a Python obj that can be directly placed into the h5py library
+    ```
+    attrs['@class'] = 'nxentry'
+    attrs['unit'] = 'km'
+    return attrs
+
+
+
+def writer(data_dict, output_path):
+    Goes through the data_dict
+        Takes every key
+        looks it up in the NXDL - nxdl_to_attr_obj(path)
+        Sets up the Nexus object with attrs
+        Goes back to the data_dict and copy out the actual data and write it to Nexus
