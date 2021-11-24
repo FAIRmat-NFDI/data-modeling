@@ -1,14 +1,13 @@
 #11/2021
 #a draft version of a NeXus application definition for ellipsometry
-name: NXellipsometry_base_draft
-doc: draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
+
 # the document has the following main elements:
 # experimental procedure
 # instrument used and is characteristics
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
 
-# Markus comment:
+# Markus comment to the draft for FAIRmat AreaB Sprint3:
 # angle_of_incidence: outer or inner surface normal?
 # instrument/company: suggesting "Name of the company which build the instrument"
 # instrument/hardware_version: you mean serial number
@@ -22,7 +21,11 @@ doc: draft application definition for ellipsometry measurements, including compl
 # instrument/angle_of_incidence: How to you define positive rotations, I assume right-handed, counter-clockwise?
 # dunno about the target syntax?
 # instrument/window: "its" in the last sentence is unclear, to what does it refer?
+# should further fields from NXentry on timing (end_time, duration, etc.) be included?
+# wavelength doc string: "make the others accessible", you mean others = values ?
 
+name: NXellipsometry_base_draft
+doc: draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
 symbols:
   doc: Variables used throughout the document, e.g. dimensions and important parameters
   angle_of_incidence: The angle of incidence to the surface normal (stage normal) of the sample
@@ -32,106 +35,110 @@ symbols:
   N_p1: Number of first sample parameters scanned
   N_time: Number of time points measured
   # we can go on, but this is already an at least 4 dimensional data set to work with
-
-# MK::here the usual nx_entry header is missing
-
-instrument___nx_instrument:
-  doc: General properties of the ellipsometry equipment
-  exists: [min, 1]
-#  \@nx_class: nx_instrument
-
-  model:
-    doc: The name of the instrument
-#    type: nx_char
-# if the nx_class or type is nx_char, it does not have to be specified because nx_char is the default type
-
-  company:
-    doc: Name of the company
-
-  construction_year:
-    doc: ISO8601 date when the instrument was constructed
-    type: nx_time
-    units: nx_date_time
-
-  hardware_version:
-    doc: The used version of the hardware if available
-#    required: no
-# if required is no that could map to either exists: recommended or exists: [min, 0] which is equivalent to exists: optional, but optional is the default if nothing is specified further
-#    type: nx_char
-
-  software_version:
-    doc: Software name and version used for measurement
-#   type: nx_char
-
-  bandwidth:
-    doc: Specify the bandwidth of the light
-    type: nx_number
-    units: nx_wavelength
-
-  light_source:
-    doc: Specify the used light source
-#    type: nx_char
-
-  focussing_probes:
-    doc: Specify if focussing probes (lenses) were used
-    type: nx_boolean
-
-  data_correction:
-    doc: Specify if the recorded data are corrected by the window effects of the lenses
-    type: nx_boolean
-
-  angular_spread:
-    doc: Specify the angular spread caused by the focussing probes
-    type: nx_number
-    units: nx_angle
-
-  ellipsometry_type:
-    doc: What type of ellipsometry was used? See Fujiwara Table 4.2.
-    enumeration: [rotating analyzer, rotating analyzer with analyzer compensator, rotating analyzer with polarizer compensator, rotating polarizer, rotating compensator on polarizer side, rotating compensator on analyzer side, modulator on polarizer side, modulator on analyzer side, dual compensator, phase modulation, imaging ellipsometry, null ellipsometry]
-
-  calibration___nx_process:
+(NXentry):
+  exists: required
+  #if the exists keyword is not used the default is exists optional
+  doc: to be defined
+  experiment_identifier:
+    exists: required
+    doc: Unique identifier of the experiment, such as a (globally persistent) unique identifier. The identifier is usually defined by the facility or principle investigator. The identifier enables to link experiments to e.g. proposals.
+  experiment_description:
+    exists: required
+  start_time(NX_DATE_TIME):
+    exists: required
+    unit:  NX_TIME
+  program_name:
+    doc: Commercial or otherwise defined given name to the program that was used to generate the results file(s) with measured data and metadata.
+  program_version:
+    doc: Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured in such a way that result files can be created ideally in a deterministic manner.
+  time_zone(NX_DATE_TIME):
+    exists: required
+    doc: ISO 8601 time_zone offset from UTC.
+  definition_local:
+    doc: FAIRmat-specific candidate proposal for an application definition exemplifying ellipsometry.
+    \@version:
+        doc: Ideally version with build number are commit hash of the application definition. If not available a free-text description.
+    \@url:
+        doc: URL where to find further material (documentation, examples) relevant to the application definition
+  operator(NXuser):
+    exists: [min, 1, max, infty]
+    doc: Contact information of at least the user of the instrument or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended.
+    name:
+      exists: required
+    affiliation:
+      exists: recommended
+      doc: Name of the affiliation of the user at the point in time when the experiment was performed.
+    address:
+      exists: recommended
+    email:
+      exists: required
+    orcid:
+      exists: recommended
+    telephone_number:
+      exists: recommended
+  (NXmonitor):
+  instrument(NXinstrument):
+    doc: General properties of the ellipsometry equipment
+    exists: required
+    model:
+      doc: The name of the instrument
+# if the nx_class or type is nx_char i.e. model(NX_CHAR) we do not have to specify because this is the NeXus default type
+# if the exists argument is optional, i.e. minOccurs = "0" we also do not have to specify
+    company:
+      doc: Name of the company
+    construction_year(NX_DATE_TIME):
+      doc: ISO8601 date when the instrument was constructed
+      unit: NX_TIME
+    hardware_version:
+      doc: The used version of the hardware if available
+    software_name:
+      doc: Name (e.g. commercial) of the software that was used for the measurement
+    software_version:
+      doc: Version and build number or commit hash of the software source code
+    bandwidth(NX_NUMBER):
+      doc: Specify the bandwidth of the light
+      unit: NX_WAVELENGTH
+    light_source:
+      doc: Specify the used light source
+    focussing_probes(NX_BOOLEAN):
+      doc: Were focussing probes (lenses) used or not?
+    data_correction(NX_BOOLEAN):
+      doc: Were the recorded data corrected by the window effects of the lenses or not?
+    angular_spread(NX_NUMBER):
+      doc: Specify the angular spread caused by the focussing probes
+      unit: NX_ANGLE
+    ellipsometry_type:
+      doc: What type of ellipsometry was used? See Fujiwara Table 4.2.
+      enumeration: [rotating analyzer, rotating analyzer with analyzer compensator, rotating analyzer with polarizer compensator, rotating polarizer, rotating compensator on polarizer side, rotating compensator on analyzer side, modulator on polarizer side, modulator on analyzer side, dual compensator, phase modulation, imaging ellipsometry, null ellipsometry]
+  calibration(NXprocess):
     doc: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
-
-    calibration_time:
+    calibration_time(NX_DATE_TIME):
       doc: ISO8601 datum when calibration was last performed before this measurement
       # NX_DATE_TIME is the ISO8601 format, possibly with time zone
-      type: nx_date_time
-      #alternative:
-      #  \@nx_class: nx_char
-      #  enumeration: [no calibration, within 1 hour, within 1 day, within 1 week]
-
-    calibration_provided:
-      doc: Is the measured data provided?
-      type: nx_boolean
-
-    calibration_data___nx_data:
-      doc: Arrays which provide the measued calibration data. Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data.
-      data:
-        type: nx_char
-        enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix]
-
-      angle_of_incidence:
-        doc: angle(s) of incidence used during the calibration measurement
-        type: nx_number
-        units: nx_angle
-
-      wavelength:
-        doc: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically, energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
-        type: nx_number
-        units: nx_length
-
-      calibration_data:
+      #unit: NX_TIME
+      #alternative (NX_CHAR) and then add
+      #enumeration: [no calibration, within 1 hour, within 1 day, within 1 week]
+    calibration_provided(NX_BOOLEAN):
+      doc: Are the measured data provided?
+    calibration_data(NXdata):
+      doc: Arrays which provide the measured calibration data. Multiple sets are possible, e.g. Psi and delta measured on an e.g. silicon calibration waver, and the straight-through data.
+      data(NX_CHAR):
         doc: to be defined
-        type: nx_number
-        units: nx_unitless
-
+        enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix]
+      angle_of_incidence(NX_NUMBER):
+        doc: angle(s) of incidence used during the calibration measurement
+        unit: NX_ANGLE
+      wavelength(NX_NUMBER):
+        doc: The wavelength or equivalent values (, which are inter-convertible). The importer should convert all to one unit, and make the others accessible. Historically, energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
+        unit: NX_LENGTH
+      calibration_data(NX_NUMBER):
+        doc: to be defined
+        unit: NX_UNITLESS
       calibration_sample:
         doc: Free-text to describe which sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
-
-  angle_of_incidence:
+  angle_of_incidence(NX_NUMBER):
     doc: the incident angle of the beam vs. the normal of the sample surface
-    type: nx_number
-    units: nx_angle
+    unit: nx_angle
     \@target: "/instrument/angle_of_incidence"
     \@dim: [[1, N_angles]]
 
@@ -148,7 +155,7 @@ instrument___nx_instrument:
       #is does the beam illumination direction vector always be coupled to the stage or can you transform the stage, beam and sample?
       # I thought sample is fixed on stage but stage can (move?) rotate relative to the beam? We should try to be even more clear here
       #value: 180 - angle_of_incidence
-      type: nx_number
+      type: NX_NUMBER
       \@transformation_type: rotation
       \@vector: [1, 0, 0]
       \@depends_on: .
@@ -164,21 +171,21 @@ instrument___nx_instrument:
         # its value is the actual shift in this direction
         # unit is defined by the transformation type below
         doc: direction of the beam along the stage towards the detector
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: translation
         \@vector: [1, 0, 0]
         \@depends_on: stage_orientation
 
       Y__AXISNAME:
         doc: perpendicular to the plane of incidence, to the right hand side from X
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: translation
         \@vector: [0, 1, 0]
         \@depends_on: X
 
       Z__AXISNAME:
         doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: translation
         \@vector: [0, 0, 1]
         \@depends_on: Y
@@ -195,14 +202,14 @@ instrument___nx_instrument:
       doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); According to documentaiton, the axis definition is always from the referred system (https://manual.nexusformat.org/design.html#tb-table-transform).
       \@nx_class: nx_transformations
       alpha:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: rotation
         \@vector: [0, 0, 1]
         doc: first rotation is around the Z-axis
         \@depends_on: Z
 
       beta:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: rotation
         \@vector: [1, 0, 0]
         doc: second is around the rotated x' axis
@@ -210,7 +217,7 @@ instrument___nx_instrument:
 
 
       gamma:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         \@transformation_type: rotation
         \@vector: [0, 0, 1]
         doc: rotate around the last Z-axis, z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
@@ -225,24 +232,24 @@ instrument___nx_instrument:
       For environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties.
     thickness:
       doc: Thickness of the window
-      type: nx_number
-      units: nx_length
+      type: NX_NUMBER
+      unit: nx_length
 
     orientation_angle:
       doc: Angle in the plane of incidence
-      type: nx_number
-      units: nx_angle
+      type: NX_NUMBER
+      unit: nx_angle
 
     calibration_data___nx_data:
       doc: to be defined
       wavelength:
         doc: to be defined
-        type: nx_number
-        units: nx_length
+        type: NX_NUMBER
+        unit: nx_length
 
       data array:
-        type: nx_number
-        units: nx_unitless
+        type: NX_NUMBER
+        unit: NX_UNITLESS
         #can one specify the dimensions of these calibration data?
 
       calibration_sample:
@@ -260,8 +267,8 @@ instrument___nx_instrument:
 
     duration:
       doc: Integration time for the measurement. Single number or array if it was varied.
-      type: nx_number
-      units: nx_time
+      type: NX_NUMBER
+      unit: nx_time
 
     revolution:
       doc: Define how many rotations of the rotating element were taken into account for one spectra. #"one" does this imply "for each" ?
@@ -271,12 +278,12 @@ instrument___nx_instrument:
 
         fixed_revolution:
           doc: if the revolution does not change during the measurement. #what should then be communicated the revolution rate?
-          type: nx_number
-          units: nx_per_time #but this does not exist as an NXDL field type
+          type: NX_NUMBER
+          unit: nx_per_time #but this does not exist as an NXDL field type
 
         variable revolution:
           doc: Specify maximum and minimum values for the revolution. #is  it safe to assume that the exact time history of the revolution is not documented/accessible/relevant?
-          \@nx_class: nx_number
+          \@nx_class: NX_NUMBER
           length: 2 #can we use e.g. the below suggestion?
           #dimensions: 
           #  rank: 2
@@ -305,19 +312,19 @@ sample:
 
     orientation:
       doc: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
-      \@nx_class: nx_number
+      \@nx_class: NX_NUMBER
       length: 3
       unit: nx_angle
 
     position:
       doc: specifiy the position (e.g. in a line scan) with respect to a reference point
-      \@nx_class: nx_number
+      \@nx_class: NX_NUMBER
       length: 3
       unit: nx_length
 
   data ID:
     doc: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
-    \@nx_class: nx_number
+    \@nx_class: NX_NUMBER
 
   data type:
     \@nx_class: nx_char
@@ -330,14 +337,14 @@ sample:
 
   wavelength:
     doc: wavelength of light measured. An array of 1 or more elements. Length defines N_wavelength
-    \@nx_class: nx_number
+    \@nx_class: NX_NUMBER
     unit: nx_length
     \@dim: [[1, N_wavelength]]
 
   data:
     doc: resulted data from the measurement, described by data type. Minimum two columns, if errors are available twice as much. For a Mueller matrix, it may be 9 (1,1 is all 1, the rest is sysymmetric
-    \@nx_class: nx_number
-    units: nx_unitless
+    \@nx_class: NX_NUMBER
+    unit: NX_UNITLESS
     rank: 5
     dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
@@ -352,7 +359,7 @@ sample:
 
   time points:
     doc: an array of relative time points if a time series was recorded
-    \@nx_class: nx_number
+    \@nx_class: NX_NUMBER
     unit: nx_time
     required: no
 
@@ -363,8 +370,8 @@ sample:
 
     alternative:
       doc: or provide the complex refractive index of the medium for every measured wavelength.
-      \@nx_class: nx_number
-      unit: nx_unitless
+      \@nx_class: NX_NUMBER
+      unit: NX_UNITLESS
 
   environment conditions:
     doc: external parameters that have influenced the sample
@@ -392,12 +399,12 @@ sample:
 
       wavelength:
         doc: range
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_length
 
       broadening:
         doc: specify the FWHM of the excitation
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_length
 
       excitation type:
@@ -405,36 +412,36 @@ sample:
         enumeration: [cw, pulsed]
 
       pulse length:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_time
 
       repetition rate:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_frequency
 
       pulse energy:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_energy
 
       excitation power:
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         unit: nx_energy
 
     voltage:
       doc: if the spectra were taken under bias
-      \@nx_class: nx_number
+      \@nx_class: NX_NUMBER
       unit: nx_voltage
 
     temperature:
-      \@nx_class: nx_number
+      \@nx_class: NX_NUMBER
       unit: nx_temperature
       alternative:
         \@nx_class: nx_char
         enumeration: [room temperature, RT]
 
     pH:
-      \@nx_class: nx_number
-      unit: nx_unitless
+      \@nx_class: NX_NUMBER
+      unit: NX_UNITLESS
       alternative:
         \@nx_class: nx_char
         enumeration: [neutral, undefined]
@@ -442,12 +449,12 @@ sample:
 
     stress:
       required: no
-      \@nx_class: nx_number
+      \@nx_class: NX_NUMBER
       unit: nx_pressure
 
       orientation:
         doc: Euler angles of stress relative to sample
-        \@nx_class: nx_number
+        \@nx_class: NX_NUMBER
         length: 3
         unit: nx_angle
 
@@ -455,5 +462,5 @@ sample:
 derived parameters:
   doc: what parameters are derived from the above data
   depolarization:
-    \@nx_class: nx_number
-    unit: nx_unitless
+    \@nx_class: NX_NUMBER
+    unit: NX_UNITLESS
