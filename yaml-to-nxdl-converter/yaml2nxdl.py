@@ -9,17 +9,17 @@ import os, sys
 import yaml
 from lxml import etree
 from yaml2nxdl_utils import nx_base_clss_string_mangling
-from yaml2nxdl_utils import nx_base_clss, nx_cand_clss, nx_unit_idnt, nx_unit_catg
-from yaml2nxdl_utils import nx_type_keys, nx_grpnm_tag, nx_attr_idnt
+from yaml2nxdl_utils import nx_base_clss, nx_cand_clss, nx_unit_idnt, nx_unit_typs
+from yaml2nxdl_utils import nx_type_keys, nx_attr_idnt
 from yaml2nxdl_read_user_yml_appdef import read_user_appdef
 from yaml2nxdl_recursive_build import recursive_build
 
-#fnm = 'NXmx.yml'
+
 #fnm = 'NXarpes.yml'
-fnm = 'NXem_base_draft.yml'
+#fnm = 'NXmx.yml'
+#fnm = 'NXem_base_draft.yml'
+fnm = 'NXellipsometry_base_draft.yml'
 
-
-#def write_nxdl(fnm):
 #step1: read the user-specific application definition which was written as a yml file
 yml = read_user_appdef(fnm)
 
