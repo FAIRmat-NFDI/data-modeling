@@ -8,13 +8,19 @@ Created on Mon Nov 22 17:48:21 2021
 import os, sys
 import yaml
 from lxml import etree
-from yaml2nxdl_utils import nx_base_clss_string_mangling
-from yaml2nxdl_utils import nx_base_clss, nx_cand_clss, nx_unit_idnt, nx_unit_catg
-from yaml2nxdl_utils import nx_type_keys, nx_grpnm_tag, nx_attr_idnt
+from yaml2nxdl_utils import nx_base_clss_string_mangling, nx_name_type_resolving
+from yaml2nxdl_utils import nx_base_clss, nx_cand_clss, nx_unit_idnt, nx_unit_typs
+from yaml2nxdl_utils import nx_type_keys, nx_attr_idnt
+
+def xml_handle_docstring(obj, k, v):
+    obj.set('doc', str(v))
+
+def xml_handle_units(obj, k, v):
+    obj.set('units', v)
 
 def xml_handle_exists(obj, k, v):
     if v != None:
-        if isinstance(v,list):
+        if isinstance(v,list): #handle []
             if len(v) == 2:
                 if v[0] == 'min':
                     obj.set('minOccurs', str(v[1]))
@@ -36,8 +42,8 @@ def xml_handle_exists(obj, k, v):
                 obj.set('optional', 'true')
             elif v == 'recommended':
                 obj.set('recommended', 'true')
-            #elif v == 'required':
-            #    obj.set('required', 'true')
+            elif v == 'required':
+                obj.set('minOccurs', '1')
             else:
                 obj.set('minOccurs', '0')
     else:
@@ -90,27 +96,27 @@ def recursive_build(obj, dct):
     for k, v in iter(dct.items()):
         print('Processing key '+k+' value v is a dictionary '+str(isinstance(v,dict)))
         #base class prefix tag removal
-        if nx_grpnm_tag in k: #k is a group for sure because only groups may get tagged !
-            grpnm, grptyp = k.split(nx_grpnm_tag)
-            #create a group, set its type and name, and recurse
+        #k = '(NXentry)'
+        #k = 'sensor_size(NX_INT)'
+        kName, kType = nx_name_type_resolving(k)
+        print('kName: '+kName+' kType: '+kType)
+        if kName == '' and kType == '':
+            raise ValueError('ERROR: Found an improper YML key !')
+        elif kType.replace('NX','nx_') in nx_base_clss or kType.replace('NX','nx_') in nx_cand_clss:
+            #we can be sure we need to instantiate a new group
             grp = etree.SubElement(obj, 'group')
-            grp.set('name', grpnm)
-            grp.set('type', nx_base_clss_string_mangling(grptyp))
+            if kName != '': #use the custom name for the group
+                grp.set('name', kName) #because we are a base or cand clss kName is a NX<str>
+            #else: #use the NeXus default to infer the name from the base/cand class name stripping the 'NX' decorator prefix
+            #    grp.set('name', kName[2:])
+            grp.set('type', kType)
             if v != None:
                 if isinstance(v,dict):
                     if v != {}:
                         recursive_build(grp, v)
-        elif k in nx_base_clss or k in nx_cand_clss: #k is also a group for sure
-            grp = etree.SubElement(obj, 'group')
-            #grp.set('name', '') ###MK::??
-            grp.set('type', nx_base_clss_string_mangling(k))
-            if v != None:
-                if isinstance(v,dict):
-                    if v != {}:
-                        recursive_build(grp, v)
-        elif k[0:2] == nx_attr_idnt: #k tells us we have an attribute
+        elif kName[0:2] == nx_attr_idnt: #check if obj qualifies as an attribute, do not impose a constraint on kType
             attr = etree.SubElement(obj, 'attribute')
-            attr.set('name', k[2:])
+            attr.set('name', kName[2:])
             if v != None:
                 if isinstance(v,dict):
                     for kk, vv in iter(v.items()):
@@ -123,79 +129,84 @@ def recursive_build(obj, dct):
                         elif kk == 'enumeration':
                             xml_handle_enumeration(attr,kk, vv)
                         else:
-                            raise ValueError('ERROR: '+kk+' faced unknown situation when processing attributes of an attribute !')
+                            raise ValueError(kk+' facing an unknown situation while processing attributes of an attribute !')
             #else: #e.g. for case like \@depends_on:
             #    attr.set('name', k[2:])
+        #handle special keywords, ###MK::add handling of symbols!
         elif k == 'doc':
-            obj.set('doc', v)
-        elif k == 'enumeration': #if we face an enumeration
+            xml_handle_docstring(obj, k, v)
+        elif k == 'enumeration':
             xml_handle_enumeration(obj, k, v)
         elif k == 'dimensions':
             xml_handle_dimensions(obj, k, v)
         elif k == 'exists':
             xml_handle_exists(obj, k, v)
-        else: #k is for a field
+        #elif k == 'link': ##MK:check handling of links for
+        #base/cand classes, attributes, and special keywords handled, so only members remain
+        elif kName != '': #dealing with a field because classes and attributes already ruled out
+            typ = 'NX_CHAR'
+            if kType.replace('NX','nx').lower() in nx_type_keys:
+                typ = kType
+            #else:
+            #    raise valueError(kk+' facing an unknown kType !')
+            #assume type is NX_CHAR, a NeXus default assumption if in doubt
             fld = etree.SubElement(obj, 'field')
-            fld.set('name', k)
-            if v != None:
-                #the field may have subordinated field XML attributes
+            fld.set('name', kName)
+            fld.set('type', typ)
+            if v != None: #a field may have subordinated attributes
                 if isinstance(v,dict):
                     for kk, vv in iter(v.items()):
-                        print('field-attribute handling'+kk)
+                        #print(kk+' field-attribute handling')
                         #if vv != None:
                         #    print('field-attribute handling'+kk+' is taken!')
-                        if kk == 'type':
-                            if vv in nx_type_keys:
-                                fld.set('type', vv.upper())
-                            #elif v in nx_base_clss or v in nx_cand_clss:
-                            #    obj.set(key, nx_base_clss_string_mangling(v))
-                            else:
-                                print('WARNING: key: '+k+' value: '+str(v)+' is not one of predefined type keys')
-                        elif kk == 'doc': #key is a documentation string specifier
-                            fld.set('doc', str(vv))
-                        elif kk == nx_unit_idnt:
-                            fld.set('units', vv.upper())
-                        elif kk[0:2] == nx_attr_idnt: #attribute of a field
+                        if kk[0:2] == nx_attr_idnt:
                             attr = etree.SubElement(fld, 'attribute')
-                            attr.set('name', kk[2:])
+                            #attributes may also come with an nx_type specifier which we need to decipher first
+                            kkName, kkType = nx_name_type_resolving(kk[2:]) #strip the nx_attr_idnt prefix
+                            attr.set('name', kkName)
+                            typ = 'NX_CHAR'
+                            if kkType.replace('NX','nx').lower() in nx_type_keys:
+                                typ = kkType
+                            attr.set('type', typ)
                             if vv != None:
                                 if isinstance(vv,dict):
                                     for kkk, vvv in iter(vv.items()):
-                                        if kkk == 'name':
-                                            attr.set('name', vvv)
-                                        elif kkk == 'doc':
+                                        if kkk == 'doc':
                                             attr.set('doc', vvv)
-                                        elif kkk == 'type':
-                                            attr.set('type', vvv.upper())
+                                        elif kkk == 'exists':
+                                            xml_handle_exists(attr, kkk, vvv)
                                         elif kkk == 'enumeration':
                                             xml_handle_enumeration(attr, kkk, vvv)
                                         else:
-                                            raise ValueError('ERROR: '+kkk+' faced unknown situation when processing attributes of an attribute !')
-                            #else: #e.g. for case like \@depends_on:
-                            #    attr.set('name', kk[2:])
-                            #recursive_build(attr, vv)
+                                            raise ValueError(k+' '+kk+' '+kkk+' attribute handling !')
+                        elif kk == 'doc':
+                            fld.set('doc', str(vv))
+                        elif kk == nx_unit_idnt:
+                            xml_handle_units(fld, kk, vv)
                         elif kk == 'exists':
                             xml_handle_exists(fld, kk, vv)
                         elif kk == 'dimensions':
                             xml_handle_dimensions(fld, kk, vv)
                         elif kk == 'enumeration':
                             xml_handle_enumeration(fld, kk, vv)
+                        elif kk == 'link':
+                            fld.set('link', '')
                         else:
-                            raise ValueError('ERROR: '+kk+' faced unknown situation !')
-                        #else:
-                        #    print('field-attribute handling'+kk+' is forgotten !')
+                            raise ValueError(k+' '+kk+' faced unknown situation !')
+            else:
+                if k == 'type':
+                    print(k+' facing a type where we would not expect it!')
+                elif k == 'doc': #key is a documentation string specifier
+                    xml_handle_docstring(fld, k, v)
+                elif k == nx_unit_idnt:
+                    xml_handle_units(fld, k, v)
+                elif k[0:2] == nx_attr_idnt: #attribute of a field
+                    raise ValueError(k+' unknown attribute of a field case coming from no dict !')
+                elif k == 'exists':
+                    xml_handle_exists(fld, k, v)
+                elif k == 'dimensions':
+                    raise ValueError(k+' unknown dimensions of a field case coming from no dict !')
                 else:
-                    if k == 'type':
-                        print('')
-                    elif k == 'doc': #key is a documentation string specifier
-                        fld.set('doc', str(v))
-                    elif k == nx_unit_idnt:
-                        fld.set('units', v.upper())
-                    elif k[0:2] == nx_attr_idnt: #attribute of a field
-                        raise ValueError('Unknown attribute of a field case coming from no dict !')
-                    elif k == 'exists':
-                        xml_handle_exists(fld, k, v)
-                    elif k == 'dimensions':
-                        raise ValueError('Unknown dimensions of a field case coming from no dict !')
-                    else:
-                        raise ValueError('ERROR: '+k+' faced unknown situation !')
+                    pass
+                #else:
+                #    raise ValueError(k+' faces a completely unexpected situation !')
