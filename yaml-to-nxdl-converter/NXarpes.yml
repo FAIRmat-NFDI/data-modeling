@@ -1,83 +1,98 @@
 #exemplifying how to use the translation for the following NXDL application definition
 #https://github.com/nexusformat/definitions/blob/main/applications/NXarpes.nxdl.xml
 name: NXarpes
-type: nx_object
 doc: This is an application definition for angular resolved photo electron spectroscopy. It has been drawn up with hemispherical electron analysers in mind. 
+#symbols
 #draft the application definition
-nx_entry:
-  \@name:
-    name: entry
+(NXentry):
+  exists: required
+  \@entry:
     doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
   title:
-  start_time:
-    type: nx_date_time
+    exists: required
+  start_time(NX_DATE_TIME):
+    exists: required
   definition:
+    exists: required
     doc: Official NeXus NXDL schema to which this file conforms.
     enumeration: [NXarpes]
-  nx_instrument:
-    nx_source:
+  (NXinstrument):
+    exists: required
+    (NXsource):
+      exists: required
       type:
+        exists: required
       name:
+        exists: required
       probe:
+        exists: required
         enumeration: [x-ray]
-    nx_monochromator:
-      name: monochromator
-      energy:
-        type: nx_number
-        units: nx_energy
-    nx_detector:
-      name: analyser
-      data:
-        type: nx_number
+    monochromator(NXmonochromator):
+      exists: required
+      energy(NX_NUMBER):
+        exists: required
+        unit: NX_ENERGY
+    analyser(NXdetector):
+      exists: required
+      data(NX_NUMBER):
+        exists: required
       lens_mode:
+        exists: required
         doc: Setting for the electron analyser lens
       acquisition_mode:
+        exists: required
         enumeration: [swept, fixed]
       entrance_slit_shape:
+        exists: required
         enumeration: [curved, straight]
-      entrance_slit_setting:
-        type: nx_number
-        units: nx_any
+      entrance_slit_setting(NX_NUMBER):
+        exists: required
+        unit: NX_any
         doc: dial setting of the entrance slit
       entrance_slit_size:
-        units: nx_length
+        exists: required
+        unit: NX_LENGTH
         doc: size of the entrance slit
       pass_energy:
-        units: nx_energy
+        exists: required
+        unit: NX_ENERGY
         doc: energy of the electrons on the mean path of the analyser
       time_per_channel:
-         units: nx_time
-         doc: 'todo: define more clearly'
-      angles:
-        type: nx_number
-        units: nx_angle
+        exists: required
+        unit: NX_TIME
+        doc: "todo define more clearly"
+      angles(NX_NUMBER):
+        exists: required
+        unit: NX_ANGLE
         doc: Angular axis of the analyser data which dimension the axis applies to is defined using the normal NXdata methods.
-      energies:
-        type: nx_number
-        units: nx_energy
+      energies(NX_NUMBER):
+        exists: required
+        unit: NX_ENERGY
         doc: Energy axis of the analyser data which dimension the axis applies to is defined using the normal NXdata methods.
-      sensor_size:
-        type: nx_int
+      sensor_size(NX_INT):
+        exists: required
         doc: number of raw active element in each dimension
         dimensions:
           rank: 1
           dim: [[1, 2]]
-      region_origin:
-        type: nx_int
+      region_origin(NX_INT):
+        exists: required
         doc: origin of rectangular region selected for readout
         dimensions:
           rank: 1
           dim: [[1, 2]]
-      region_size:
-        type: nx_int
+      region_size(NX_INT):
+        exists: required
         doc: size of rectangular region selected for readout
         dimensions:
           rank: 1
           dim: [[1, 2]]
-  nx_sample:
+  (NXsample):
+    exists: required
     name:
+      exists: required
       doc: descriptive name of sample
-    temperature:
-      type: nx_number
-      units: nx_temperature
-  nx_data:
+    temperature(NX_NUMBER):
+      unit: NX_TEMPERATURE
+  (NXdata):
+    exists: required
