@@ -1,4 +1,4 @@
-nx_em_lens:
+(NXem_lens):
   doc: An electro-magnetic lens that is e.g. a component of an electron microscope.
   name:
     doc: Colloquial or short name for the lens. For manufacturer names and identifiers use respective manufacturer fields.
@@ -8,13 +8,12 @@ nx_em_lens:
     doc: Hardware name, hash identifier, or serial number that was given by the manufacturer to identify the lens.
   description:
     doc: "Ideally an identifier, persistent link, or free text which gives further details about the lens.
-  nx_transformations:
-    doc: "Collection of axis-based translations and rotations to describe the location and geometry of the lens as a component in e.g. a microscope. We follow the conventions in the NXtransformations base class. Therefore, consult NXtransformations for further details. This implies that we use in principle the McSTAS coordinate system. We make two key modifications though: The origin of the coordinate system is placed in the center of the gun pinhole as this is an identifiable component of the electron gun whose detailed component geometry of the gun component itself. Furthermore, a right-handed coordinate system is assumed whose z-axis is parallel to the optical axis and positive means in the direction of the propagating electrons, i.e. towards the specimen."
+  (NXtransformations):
+    doc: "Collection of axis-based translations and rotations to describe the location and geometry of the lens as a component in e.g. a microscope. We follow the conventions in the NXtransformations base class. Therefore, consult NXtransformations for further details. This implies that we use in principle the McSTAS coordinate system. We make two key modifications. The origin of the coordinate system is placed in the center of the gun pinhole as this is an identifiable component of the electron gun whose detailed component geometry of the gun component itself. Furthermore, a right-handed coordinate system is assumed whose z-axis is parallel to the optical axis and positive means in the direction of the propagating electrons, i.e. towards the specimen."
     position:
       \@transformation_type:
         doc: Following transformation_type argument of NXtranslations but allowed value is only translation.
-      \@vector:
-        type: nx_number
+      \@vector(NX_NUMBER):
         doc:  Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with a coordinate system in the center of the lens.
       \@depends_on:
-        doc: Enter the path where the reference coordinate system for the microscope is defined.
+        doc: Enter the path where the reference coordinate system for the instrument is defined.
