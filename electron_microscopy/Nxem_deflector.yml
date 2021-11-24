@@ -1,4 +1,4 @@
-nx_em_deflector:
+(NXem_deflector):
   doc: Candidate class for hardware which can deflect electrons in a controlled manner. Examples are scan box.
   name:
     doc: Colloquial or short name for the component. For manufacturer names and identifiers use identifier field.
@@ -6,4 +6,4 @@ nx_em_deflector:
     doc: Name of the manufacturer who built/constructed the scanning coil.
   identifier:
     doc: Detailed hardware name, hash identifier, or serial number which e.g. the manufacturer uses. This field can also be used to specify where we can find further pieces of information for the lens.
-  nx_transformations:
+  (NXtransformations):
