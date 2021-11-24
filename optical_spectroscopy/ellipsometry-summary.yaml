@@ -1,0 +1,439 @@
+description: metadata definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
+# the document has the following main elements:
+# experimental procedure
+# instrument used and is characteristics
+# measured data, the discription of the sample and what was measured about it
+# derived parameters: extra parameters derived in the measurement software
+symbols:
+  description: variables used throughout the document, e.g. dimensions and important parameters
+  angle_of_incidence: the angle of incidence to the surface normal (stage normal) of the sample
+  N_wavelength: size of the energy / wavelength vector used
+  N_variables: how many variables are saved in a measurement (e.g. Psi and delta, Mueller matrix
+  N_angles: number of incident angles used
+  N_p1: number of first sample parameters scanned
+  # we can go on, but this is already an at least 4 dimensional data set to work with
+  N_time: number of time points measured
+
+instrument:
+  description: general properties of the ellipsometry equipment
+  required: yes
+  model:
+    description: the name and type number of the instrument
+    type: string
+
+  company:
+    description: name of the company
+    type: string
+
+  construction year:
+    type: date and time
+
+  hardware version:
+    description: the used version of the hardware if available
+    required: no
+    type: string
+
+  software version:
+    description: software name and version used for measurement
+    type: string
+
+  bandwidth:
+    description: specify the bandwidth of the light
+    type: numeric
+    length: number of wavelength
+
+  light source:
+    description: specify the used light source
+    type: text
+
+  focussing probes:
+    description: specify if focussing probes (lenses) were used
+    type: bool
+
+    data_correction:
+      description: specify of the recorded data are corrected by the window effects of the lenses
+      type: bool
+
+    angular spread:
+      description: specify the angular spread caused by the focussing probes
+      type: numeric
+      unit: radian
+
+  ellipsometry type:
+    description: what type of ellipsometry was used? See Fujiwara Table 4.2.
+    type: string
+    value:
+      - rotating analyzer
+      - rotating analyzer with analyzer compensator
+      - rotating analyzer with polarizer compensator
+      - rotating polarizer
+      - rotating compensator on polarizer side
+      - rotating compensator on analyzer side
+      - modulator on polarizer side
+      - modulator on analyzer side
+      - dual compensator
+      - phase modulation
+      - imaging ellipsometry
+      - null ellipsometry
+
+  calibration:
+    description: ellipsometers require regular calibration to adjust the hardware parameters for proper zero values and background light compensation
+
+    calibration time:
+      description: when calibration was last performed before this measurement
+      type: date and time
+      alternative:
+        type: text
+        values: no calibration, within 1 hour, within 1 day, within 1 week
+
+    calibration provided:
+      description: is the measured data provided?
+      type: bool
+      values: yes, no
+
+    calibration data:
+      description: arrays of providing the measued calibration data; Multiple sets are possible, e.g. Psi and delta measured on a silicon calibration waver, and the straight-through data
+      data type:
+        type: string
+        values: psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix
+
+      angle_of_incidence:
+        description: angle(s) of incidence used during the calibration measurement
+        type: numeric
+        unit: angle
+
+      wavelength:
+        description: the wavelength or equivalent values can be provided, because these are inter-convertible values. The importer should convert all to one unit, and make the others accessible. Historically energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
+        type: numeric
+        unit: length
+
+      calibration data:
+        type: numeric
+        unit: none
+
+      calibration sample:
+        description: what sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
+        type: string
+
+  angle_of_incidence:
+    description: incident angle of the beam on the measured surface; one or more values, usually length < 10
+    required: yes
+    type: numeric
+    unit: angle
+    dim: [N_angles]
+
+  stage:
+    description:  where and how is the sample mounted
+    types:
+      - manual stage
+      - scanning stage
+      - liquid stage
+      - gas cell
+    required: one
+
+    stage_orientation:
+      description: the stage coordinate sysetm vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the sufrace normal of the substrate. The beam comes with angle of incidence but opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees).
+
+      value: 180 - angle_of_incidence
+      type: numeric
+      transformation_type: rotation
+      depends_on: .
+
+    translation:
+      description: to identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform
+      required:  yes
+
+      X:
+        type: numeric
+        transformation_type: translation
+        unit: length
+        description: direction of the beam along the stage towards the detector
+        vector: [1, 0, 0]
+        depends_on: stage_orientation
+
+      Y:
+        type: numeric
+        transformation_type: translation
+        unit: length
+        description: perpendicular to the plane of incidence, to the right hand side from X
+        vector: [0, 1, 0]
+        depends_on: X
+
+      Z:
+        type: numeric
+        unit: length
+        transformation_type: translation
+        description: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
+        vector: [0, 0, 1]
+        depends_on: Y
+
+      alternative:
+        type: text
+        values: top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left
+
+    sample_rotation:
+      description: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); These angles describe a rotation matrix in 3D. These are defined in relation to the X,Y,Z axis of the stage.
+      alpha:
+        type: numeric
+        transformation_type: rotation
+        unit: angle
+        vector: [0, 0, 1]
+        description: first rotation is around the Z-axis
+        depends_on: Z
+
+      beta:
+        type: numeric
+        transformation_type: rotation
+        unit: angle
+        vector: [1, 0, 0]
+        description: second is around the rotated x' axis
+        depends_on: alpha
+
+      gamma:
+        type: numeric
+        transformation_type: rotation
+        unit: angle
+        vector: [0, 0, 1]
+        depends_on: beta
+        description: rotate around the last Z-axis, z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
+
+      alternative:
+        type: text
+        values: parallel, perpendicular, diagonal
+
+  window:
+    description:
+      for environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties
+    thickness:
+      type: numeric
+      unit: length
+
+    orientation angle:
+      description: angle in the plane of incidence
+      type: numeric
+      unit: angle
+
+    calibration data:
+      wavelength:
+        type: numeric
+        unit: length
+
+      data array:
+        type: numeric
+        unit: none
+
+      calibration sample:
+        description: what sample was used to callibrate the window effect?
+        type: string
+
+  detector:
+    description: what type of detector was used, and what is known about it? A detector can be a PMT, a CCD in a camera, an array in a spectrometer. If so, the whole unit goes in here
+    detector_type:
+      type: text
+      description: what kind of detector module is used, e.g. CCD-spectrometer, CCD camera, PMT, photodiode, etc.
+
+    duration:
+      description: integration time for the measurement. Single number or array if it was varied.
+      type: numeric
+      unit: time
+
+    revolution:
+      description: define how many rotations of the rotating element were taken into account for one spectra
+      rotating element:
+        description: define which elements rotates
+        type:
+          - polarizer (source side)
+          - polarizer (detector side)
+          - compensator (source side)
+          - compensator (detector side)
+
+        fixed revolution:
+          description: if the revolution does not change during the measurement
+          type: numeric
+
+        variable revolution:
+          description: specify maximum and minimum values for the revolution
+          type: numeric
+          length: 2
+
+sample:
+  type: nx_data
+  required: yes
+
+  sample_description:
+    description: specification of the sample (invlved materials and layer structure)
+    name:
+      type: text
+      description: human readable sample name
+
+    ID:
+      description: unique ID for the sample
+      type: text
+      unit: dimensionless
+
+    layer structure:
+      description: specification of the layer structure
+      type: text
+      unit: dimensionless
+
+    orientation:
+      description: specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation)
+      type: numeric
+      length: 3
+      unit: radian
+
+    position:
+      description: specifiy the position (e.g. in a line scan) with respect to a reference point
+      type: numeric
+      length: 3
+      unit: length
+
+  data ID:
+    description: an ID to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
+    type: numeric
+
+  data type:
+    type: text
+    value:
+      - psi / delta
+      - tan(psi)/cos(delta)
+      - Mueller matrix
+      - Jones matrix
+      - raw data
+    required: yes
+
+  number_of_variables:
+    type: number
+    description: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
+
+  wavelength:
+    description: wavelength of light measured. An array of 1 or more elements. Length defines N_wavelengt
+    type: numeric
+    unit: length
+    dim: [N_wavelength]
+
+  data:
+    description: resulted data from the measurement, described by data type. Minimum two columns, if errors are available twice as much. For a Mueller matrix, it may be 9 (1,1 is all 1, the rest is symmetric)
+    type: numeric
+    units: none
+    dim: [N_time, N_p1, N_angles, N_variables, N_wavelength]
+
+  stage:
+    doc: a link to the already existing information about sample position
+    link: /instrument/stage
+
+  angle_of_incidence:
+    description: the incident angle of the beam vs. the normal of the sample surface
+    link: instrument/angle_of_incidence
+
+  time points:
+    description: an array of relative time points if a time series was recorded
+    type: numeric
+    unit: time
+    required: no
+
+  medium:
+    description: describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)
+    type: text
+    required: yes
+    alternative:
+      description: or provide the complex refractive index of the medium for every measured wavelength.
+      type: numeric
+      unit: none
+
+  environment conditions:
+    description: external parameters that have influenced the sample
+    required: no
+    number_of_runs:
+      type: integer
+      description: how many measurements were done varying the parameters? This forms an extra dimension beyond incident angle and energy / wavelength.
+    varied_parameters:
+      description: this is to indicate which parameter was changed. Its definition must exist below.The specified variable has to be number_of_runs long, providing the parameters for each data set.
+      type: enum
+      values:
+        - optical excitation
+        - voltage
+        - temperature
+        - pH
+        - stress
+        - stage positions
+
+    length_of_runs:
+      description: provide number of parameters used, N_p1
+      type: number
+      value: N_p1
+
+    optical excitation:
+      description: describe if the spectra where taken under optical excitation
+
+      excitation source:
+        description: specify the source for the external excitation
+        type: text
+
+      wavelength:
+        description: range
+        type: numeric
+        unit: length
+
+      broadening:
+        description: specify the FWHM of the excitation
+        type: numeric
+        unit: length
+
+      excitation type:
+        description: cw or pulsed excitation
+        values: cw, pulsed
+
+      pulse length:
+        type: numeric
+        unit: time
+
+      repetition rate:
+        type: numeric
+        unit: frequency
+
+      pulse energy:
+        type: numeric
+        unit: energy
+
+      excitation power:
+        type: numeric
+        unit: W
+
+    voltage:
+      description: if the spectra were taken under bias
+      type: numeric
+      unit: voltage
+
+    temperature:
+      type: numeric
+      unit: temperature
+      alternative:
+        type: text
+        value: room temperature, RT
+
+    pH:
+      type: numeric
+      unit: none
+      alternative:
+        type: text
+        value: neutral, undefined
+      default: undefined
+
+    stress:
+      required: no
+      type: numeric
+      unit: pressure
+
+      orientation:
+        description: Euler angles of stress relative to sample
+        type: numeric
+        length: 3
+        unit: angle
+
+# derived parameters
+derived parameters:
+  description: what parameters are derived from the above data
+  depolarization:
+    type: numeric
+    unit: none
