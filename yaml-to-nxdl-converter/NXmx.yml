@@ -1,0 +1,279 @@
+#exemplifying how to use the translation for the following NXDL application definition
+#https://github.com/nexusformat/definitions/blob/main/applications/NXmx.nxdl.xml
+#in this example here the text for the doc has been stripped as it is not relevant for the functioning of the translation
+name: NXmx
+doc: functional application definition for macromolecular crystallography
+symbols:
+  doc: These symbols
+  dataRank: rank of the ``data`` field
+  np: Number of scan points
+  i: Number of detector pixels in the slowest direction
+  j: Number of detector pixels in the second slowest direction
+  k: Number of detector pixels in the third slowest direction
+  m: Number of channels in the incident beam spectrum, if known
+  groupIndex: An array of the hierarchical levels of the parents of detector of detector elements or groupings of detector elements. A top-level element or grouping has parent level -1.
+#draft the application definition
+(NXentry): #alternatively entry
+  exists: required
+  doc: "Note, it is recommended that ``file_name`` and ``file_time`` are included as attributes at the root of a file that includes  :ref:`NXmx`. See :ref:`NXroot`."
+  \@version: #when an entry should be an attribute mark it with a suffixed at character _a
+    doc: test
+    enumeration: [1.0]
+  title:
+  start_time(NX_DATE_TIME):
+    exists: required
+    doc: iso8601
+  end_time(NX_DATE_TIME):
+    doc: iso8601
+  end_time_estimated(NX_DATE_TIME):
+    exists: required
+    doc: iso8601 last point
+  definition:
+    exists: required
+    enumeration: [NXmx]
+    doc: nxdl schema
+  (NXdata):
+    exists: required
+    data(NX_NUMBER):
+      exists: recommended
+      doc: dim2 det
+      dimensions:
+        rank: dataRank
+        dim: [[1, nP], [2, i], [3, j], [4, k, optional]] #optional is this equivalent to required="false"
+  (NXsample):
+    exists: required
+    name:
+      exists: required
+      doc: descriptive name sample
+    depends_on:
+      exists: required
+      doc: scan experiment
+    temperature(NX_NUMBER):
+      unit: NX_TEMPERATURE
+    (NXtransformations):
+      doc: sample goniometer
+  (NXinstrument):
+    exists: required
+    name:
+      exists: required
+      doc: name of instrument
+      \@short_name:
+        exists: required
+        doc: short name
+    time_zone(NX_DATE_TIME):
+      doc: iso8601 time zone
+      exists: recommended
+    (NXattenuator):
+      attenuator_transmission(NX_NUMBER):
+        unit: NX_UNITLESS
+    (NXdetector_group):
+      exists: recommended
+      doc: optional logic det grouping
+      group_names:
+        exists: required
+        doc: array of names
+      group_index(NX_INT):
+        exists: required
+        doc: array of unique identifiers
+        dimensions:
+          rank: 1
+          dim: [[1, i]]
+      group_parent(NX_INT):
+        exists: required
+        doc: array hierarchy levels
+        dimensions:
+            rank: 1
+            dim: [[1, groupIndex]]
+    (NXdetector):
+      exists: required
+      doc: normally detector group
+      depends_on:
+        doc: nexus path detector positioner
+      data(NX_NUMBER):
+        exists: recommended
+        doc: for a dimension 2 detector
+        dimensions:
+            rank: dataRank
+            dim: [[1, nP], [2, i], [3, j], [4, k, optional]]
+      description:
+        exists: recommended
+        doc: manufacturer/model/etc
+      time_per_channel:
+        unit: NX_TIME
+        doc: time-of-flight
+      distance(NX_FLOAT):
+        exists: recommended
+        unit: NX_LENGTH
+        doc: distance from the sample
+      distance_derived(NX_BOOLEAN):
+        exists: recommended
+        doc: boolean to indicate distance
+      dead_time(NX_FLOAT):
+        unit: NX_TIME
+        doc: det dead time
+      count_time(NX_NUMBER):
+        exists: recommended
+        unit: NX_TIME
+        doc: det dead time
+      beam_center_derived(NX_BOOLEAN):
+        doc: boolean to indicate distance derived
+      beam_center_x(NX_FLOAT):
+        exists: recommended
+        unit: NX_LENGTH
+        doc: this is x position
+      beam_center_y(NX_FLOAT):
+        exists: recommended
+        unit: NX_LENGTH
+        doc: this is y position
+      angular_calibration_applied(NX_BOOLEAN):
+        doc: true when angular calibration
+      angular_calibration(NX_FLOAT):
+        doc: calibration data
+        dimensions:
+          rank: dataRank
+          dim: [[1, i], [2, j], [3, k, optional]]
+      flatfield_applied(NX_BOOLEAN):
+        doc: true when flat field
+      flatfield(NX_NUMBER):
+        doc: flat field correction data
+        dimensions:
+          rank: dataRank
+          dim: [[1, i], [2, j], [3, k, optional]]
+      flatfield_errors(NX_NUMBER):
+        doc: errors of the flat field
+        dimensions:
+          rank: dataRank
+          dim: [[1, i], [2, j], [3, k, optional]]
+      pixel_mask_applied(NX_BOOLEAN):
+        doc: true when pixel mask
+      pixel_mask(NX_INT):
+        exists: recommended
+        doc: the 32bit pixel mask
+        dimensions:
+          rank: 2
+          dim: [[1, i], [2, j]]
+      countrate_correction_applied(NX_BOOLEAN):
+        doc: true when count rate
+      bit_depth_readout(NX_INT):
+        exists: recommended
+        doc: how many bits
+      detector_readout_time(NX_FLOAT):
+        unit: NX_TIME
+        doc: time it takes to read out det
+      frame_time(NX_FLOAT):
+        unit: NX_TIME
+        doc: time for each frame
+      gain_setting:
+        doc: gain settings of det
+      saturation_value(NX_INT):
+        doc: saturation
+      underload_value(NX_INT):
+        doc: lowest value
+      sensor_material:
+        exists: required
+        doc: material
+      sensor_thickness(NX_FLOAT):
+        exists: required
+        unit: NX_LENGTH
+        doc: thickness
+      threshold_energy(NX_FLOAT):
+        unit: NX_ENERGY
+        doc: photon counter
+      type:
+        doc: description of type such as scintillatior
+      (NXtransformations):
+        doc: location of axes
+      (NXcollection):
+        doc: suggested container
+      (NXdetector_module):
+        exists: [min, 1, max, infty]
+        doc: many detectors
+        data_origin(NX_INT):
+          exists: required
+          doc: hyperslab data 0 based
+        data_size(NX_INT):
+          exists: required
+          doc: two or three values for the size
+        data_stride(NX_INT):
+          doc: two or three values for the stride
+        module_offset(NX_NUMBER):
+          unit: NX_LENGTH
+          doc: offset of the module
+          \@transformation_type:
+            exists: required
+            enumeration: [translation]
+          \@vector(NX_NUMBER):
+            exists: required
+          \@offset(NX_NUMBER):
+            exists: required
+          \@depends_on:
+            exists: required
+        fast_pixel_direction(NX_NUMBER):
+          exists: required
+          unit: NX_LENGTH
+          doc: values along the fastest varying direction
+          \@transformation_type:
+            exists: required
+            enumeration: [translation]
+          \@vector(NX_NUMBER):
+            exists: required
+          \@offset(NX_NUMBER):
+            exists: required
+          \@depends_on:
+            exists: required
+        slow_pixel_direction(NX_NUMBER):
+          exists: required
+          unit: NX_LENGTH
+          doc: values along the slowest varying direction
+          \@transformation_type:
+            exists: required
+            enumeration: [translation]
+          \@vector(NX_NUMBER):
+            exists: required
+          \@offset(NX_NUMBER):
+            exists: required
+          \@depends_on:
+            exists: required
+    (NXbeam):
+      exists: required
+      incident_wavelength(NX_FLOAT):
+        exists: required
+        unit: NX_WAVELENGTH
+        doc: monochromatic beam wavelength
+#      incident_wavelength_weight: deprecated
+      incident_wavelength_weights(NX_FLOAT):
+        doc: array of length polychromatic beam
+      incident_wavelength_spread(NX_FLOAT):
+        unit: NX_WAVELENGTH
+        doc: spread of wavelength
+      flux(NX_FLOAT):
+        unit: NX_FLUX
+        doc: flux
+      total_flux(NX_FLOAT):
+        exists: required
+        unit: NX_FREQUENCY
+        doc: flux incident
+      incident_beam_size(NX_FLOAT):
+        exists: recommended
+        unit: NX_LENGTH
+        doc: two-element array
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+      profile:
+        exists: recommended
+        enumeration: [Gaussian, Airy, top-hat, rectangular]
+      indicent_polarisation_stokes:
+        exists: recommended
+        dimensions:
+          rank: 2
+          dim: [[1, nP], [2, 4]]
+      incident_wavelength_spectrum(NXdata):
+        doc: spectrum
+  (NXsource):
+    exists: required
+    doc: neutron source
+    name:
+      doc: name of source
+      \@short_name:
+        doc: short name for source
