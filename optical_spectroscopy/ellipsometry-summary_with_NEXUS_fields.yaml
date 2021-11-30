@@ -29,11 +29,21 @@
 #   -- only to those who ever calibrated an ellipsometer
 #
 # instrument/calibration/calibration_data/calibration_data: doc not defined what should be in there?
-# instrument/angle_of_incidence: How to you define positive rotations, I assume right-handed, counter-clockwise?
+#   -- added the doc, clarified a bit the definition
+# instrument/angle_of_incidence: How to you define positive rotations,
+# I assume right-handed, counter-clockwise?
+#   -- not needed. An angle of incidence is in the 0 - 90 degrees range, see any basic
+#      book about optics
 # dunno about the target syntax?
 # instrument/window: "its" in the last sentence is unclear, to what does it refer?
+#   -- the window; I tried rephrasing the doc
 # should further fields from NXentry on timing (end_time, duration, etc.) be included?
-# wavelength doc string: "make the others accessible", you mean others = values ?
+#   -- it may be necessary, for so called in-situ measurements (e.g. swelling of polymer films
+#      in vapor, or specific solvents.
+#
+# wavelength doc string: "make the others accessible", you mean others values?
+#   -- I think, the sentence meant exactly that.
+#
 # stage docstring reads too colloquial to me
 # sample_rotation/alternative is unclear
 # there is a dangling calibration field under window? where should this belong?
@@ -139,28 +149,40 @@ symbols:
       data_type:
         doc: to be defined
         enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix, not provided]
+      N_calibration_angles(NX_NUMBER):
+        doc: how many incident angles were used for the calibration?
+        uni: NX_UNITLESS
+
       angle_of_incidence(NX_NUMBER):
         doc: angle(s) of incidence used during the calibration measurement
         unit: NX_ANGLE
+
       wavelength(NX_NUMBER):
-        doc: The wavelength or equivalent values (, which are inter-convertible). The importer should convert all to one unit, and make the others accessible. Historically, energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
+        doc: The wavelength or equivalent values (which are inter-convertible). The importer should convert all to one unit, and make the others accessible. Historically, energy is used in eV, but for visible spectroscopy wavelength is more common, for IR wave numbers in 1/cm units.
         unit: NX_LENGTH
+
       calibration_data(NX_NUMBER):
-        doc: to be defined
+        doc: Calibration is performed on a reference surface (usually silicon wafer with well defined oxide layer) at a number of angles, then in a straight through mode (transmission in air).
         unit: NX_UNITLESS
-      calibration_sample:
+        dimensions:
+          rank: 2
+          dim: [[2, N_calibration_angles+1], [1, N_wavelength]]
+
+      calibration_sample(NX_CHAR):
         doc: Free-text to describe which sample was used for calibration, e.g. silicon wafer with 25 nm thermal oxide layer
-        angle_of_incidence(NX_NUMBER):
+
+      angle_of_incidence(NX_NUMBER):
         doc: the incident angle of the beam vs. the normal of the bottom reflective (substrate) surface in the sample
         unit: NX_ANGLE
         \@target: "/instrument/angle_of_incidence"
         \@dimensions:
           rank: 1
           dim: [[1, N_angles]]
+
   stage(NXstage):
-  #this needs at least a contributed class where you collect the members we could generalize NXem_stage to NXstage
+  # this needs at least a contributed class where you collect the members we could generalize NXem_stage to NXstage
     exists: required
-    doc:  Where and how is the sample mounted
+    doc:  Sample stage, holding the sample at a specific position in X,Y,Z (Cartesian) coordinate system and at an orientation defined by three Euler angles (alpha, beta, gamma). The stage may be motorized or manual, special for liquids or gas environment.
     enumeration: [manual stage, scanning stage, liquid stage, gas cell]
     stage_orientation(NXtransformations):
       # maybe it is useful here to start with which coordinate system you start with,
@@ -169,9 +191,18 @@ symbols:
       # admittedly one - the one pointing into the sample - is not intuitive but here
       # we better be verbose, i.e. outer surface unit normal.
       # -- fixed in doc of angle_of_incidence (T.H.)
-      doc: The stage coordinate system vs. the incident beam. The stage is parallel to the sample, and the sample is considered flat. The Z-axis points to the direction of the surface normal of the substrate. The beam comes with angle of incidence but opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees). --> UNCLEAR! <-- This transformation brings us from the NEXUS coordinates to the stage coordinates.
-      #is does the beam illumination direction vector always be coupled to the stage or can you transform the stage, beam and sample?
-      # I thought sample is fixed on stage but stage can (move?) rotate relative to the beam? We should try to be even more clear here
+      # -- we usually use a normal pointing out from a material, if the rest is
+      #    the 'environment'
+      doc: The stage coordinate system vs. the incident beam. The Z-axis of the stage is considered to point along the normal of the substrate (bottom reflecting surface) from the stage towards the general direction of the light source. The beam comes with angle of incidence towards this Z-axis, but in opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees). This transformation brings us from the NEXUS coordinates to the stage coordinates.
+      # does the beam illumination direction vector always be coupled to the stage or
+      # can you transform the stage, beam and sample?
+      # I thought sample is fixed on stage but stage can (move?) rotate relative to the beam?
+      # We should try to be even more clear here
+      # -- yes, there are stages that can rotate and samples which may have multiple surfaces
+      #   (e.g. crystals)
+      # -- the process of reflection fixes the source / sample / detector triangle
+      # -- in transmission, the source / detector direction is fixed only
+      #
       #value: 180 - angle_of_incidence
       type(NX_NUMBER):
       \@transformation_type: rotation
@@ -202,6 +233,7 @@ symbols:
       alternative:
         doc: If there is no motorized stage, we should at least qualify where the beam hits the sample.
         enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
+
     sample_rotation(NX_transformations):
       doc: Euler angles; the angle between a preferred direction on the sample to the direction of the beam along the stage surface (projected; source to detector); According to documentaiton, the axis definition is always from the referred system (https://manual.nexusformat.org/design.html#tb-table-transform).
       alpha(NX_NUMBER):
@@ -217,16 +249,19 @@ symbols:
       gamma(NX_NUMBER):
         doc: rotate around the last Z-axis, z''; see wikipedia Proper Euler Angles image, Z1,Z2,Z3
         \@transformation_type: rotation
-        \@vector: [0, 0, 1]        
+        \@vector: [0, 0, 1]
         \@depends_on: beta
       #nice that you disentangled here the ZXZ Euler angle convention, alternatively
       #we could give the combined rotation matrix and specify the rotation convention from an enum of all the possible ones XYZ, ZXZ, ...
+      #  -- if you look into the NEXUS definition, you always have an axis of rotation defined,
+      #     thus the rotation matrix is not suiteable; (I tried them earlier as well...)
       alternative:
         doc: to be defined
         enumeration: [parallel, perpendicular, diagonal]
+
   window:
     #which class does it belong to? We cannot just start a nesting here or how does it connect to the above nodes?
-    doc: For environmental measurements, if a window is between the sample and the optics of the ellipsometer, describe its properties.
+    doc: For environmental measurements, the environment (liquid, vapor, etc.) is enclosed in a cell, which has windows both in the direction of the source and the detector (looking from the sample). These winwows also add a phase shift to the light altering the measured signal. This shift has to be corrected based on measuring a known sample in the environmental cell.
     thickness(NX_NUMBER):
       doc: Thickness of the window
       unit: NX_LENGTH
@@ -234,16 +269,23 @@ symbols:
       doc: Angle in the plane of incidence
       unit: NX_ANGLE
 
-    calibration_data(NXdata):
-      doc: please include here the recorded calibration data for compensating the window effect
+    reference_data(NXdata):
+      doc: please include here the recorded data that can be used to calculate the window effect. Typically this is the substrate (e.g. silicon with thermal oxide layer) in air without window and in a known liquid with the window.
 
       wavelength(NX_NUMBER):
         doc: array of wavelength
         unit: NX_LENGTH
-      data array(NX_NUMBER):
+        \@dimensions:
+          rank: 1
+          dim: [[1, N_wavelength]]
+
+      data(NX_NUMBER):
         doc: to be defined
         unit: NX_UNITLESS
         #can one specify the dimensions of these calibration data?
+        \@dimensions:
+          rank: 3
+          dim: [[3,2], [2, N_angles], [1, N_wavelength]]
 
   calibration_sample:
         doc: Which sample was used to calibrate the window effect? #how should people specify samples, identifiers, we have an issue for this in sprint 03
@@ -266,12 +308,12 @@ symbols:
         doc: Define which elements rotates #this is unclear elements of the detector?
         enumeration: [polarizer (source side), polarizer (detector side), compensator (source side), ccompensator (detector side)]
       fixed_revolution(NX_NUMBER):
-        doc: if the revolution does not change during the measurement. 
+        doc: if the revolution does not change during the measurement.
         unit: NX_PER_TIME #but this does not exist as an NXDL field type, yeah, see the above comment
       variable revolution(NX_NUMBER):
         doc: Specify maximum and minimum values for the revolution. #is  it safe to assume that the exact time history of the revolution is not documented/accessible/relevant?
         #length: 2 #instead, does the following work?
-        dimensions: 
+        dimensions:
           rank: 1
           dim: [[1, 2]]
   sample(NXsample):
