@@ -106,8 +106,8 @@ symbols:
     exists: required
     model:
       doc: The name of the instrument
-# if the nx_class or type is nx_char i.e. model(NX_CHAR) we do not have to specify because this is the NeXus default type
-# if the exists argument is optional, i.e. minOccurs = "0" we also do not have to specify
+      # if the nx_class or type is nx_char i.e. model(NX_CHAR) we do not have to specify because this is the NeXus default type
+      # if the exists argument is optional, i.e. minOccurs = "0" we also do not have to specify
     company:
       doc: Name of the company which build the instrument"
     construction_year(NX_DATE_TIME):
@@ -119,7 +119,7 @@ symbols:
       doc: Name (e.g. commercial) of the software that was used for the measurement
     software_version:
       doc: Version and build number or commit hash of the software source code
-    bandwidth(NX_NUMBER):
+    bandwidth(NX_NUMBER): # This should be a vector with the length of the number of used wavelength 
       doc: Specify the bandwidth of the light
       unit: NX_WAVELENGTH
     light_source:
@@ -180,7 +180,7 @@ symbols:
           dim: [[1, N_angles]]
 
   stage(NXstage):
-  # this needs at least a contributed class where you collect the members we could generalize NXem_stage to NXstage
+    # this needs at least a contributed class where you collect the members we could generalize NXem_stage to NXstage
     exists: required
     doc:  Sample stage, holding the sample at a specific position in X,Y,Z (Cartesian) coordinate system and at an orientation defined by three Euler angles (alpha, beta, gamma). The stage may be motorized or manual, special for liquids or gas environment.
     enumeration: [manual stage, scanning stage, liquid stage, gas cell]
@@ -208,7 +208,7 @@ symbols:
       \@transformation_type: rotation
       \@vector: [1, 0, 0]
       \@depends_on:
-    translation(NXtransformations):
+    translation(NXtransformations):# we need also a reference point with respect to the sample
       doc: "To identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform"
       exists: required
       X__AXISNAME(NX_NUMBER):
@@ -224,7 +224,7 @@ symbols:
         \@vector: [0, 1, 0]
         \@depends_on: X
       Z__AXISNAME(NX_NUMBER):
-        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards.
+        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards. # not really cleary for me, is the z direction not defined by the surfce normal?
         \@transformation_type: translation
         \@vector: [0, 0, 1]
         \@depends_on: Y
@@ -259,15 +259,15 @@ symbols:
         doc: to be defined
         enumeration: [parallel, perpendicular, diagonal]
 
-  window:
-    #which class does it belong to? We cannot just start a nesting here or how does it connect to the above nodes?
-    doc: For environmental measurements, the environment (liquid, vapor, etc.) is enclosed in a cell, which has windows both in the direction of the source and the detector (looking from the sample). These winwows also add a phase shift to the light altering the measured signal. This shift has to be corrected based on measuring a known sample in the environmental cell.
-    thickness(NX_NUMBER):
-      doc: Thickness of the window
-      unit: NX_LENGTH
-    orientation_angle(NX_NUMBER):
-      doc: Angle in the plane of incidence
-      unit: NX_ANGLE
+    window:
+      #which class does it belong to? We cannot just start a nesting here or how does it connect to the above nodes?
+      doc: For environmental measurements, the environment (liquid, vapor, etc.) is enclosed in a cell, which has windows both in the direction of the source and the detector (looking from the sample). These winwows also add a phase shift to the light altering the measured signal. This shift has to be corrected based on measuring a known sample in the environmental cell.
+      thickness(NX_NUMBER):
+        doc: Thickness of the window
+        unit: NX_LENGTH
+      orientation_angle(NX_NUMBER):
+        doc: Angle in the plane of incidence
+        unit: NX_ANGLE
 
     reference_data(NXdata):
       doc: please include here the recorded data that can be used to calculate the window effect. Typically this is the substrate (e.g. silicon with thermal oxide layer) in air without window and in a known liquid with the window.
@@ -356,8 +356,8 @@ symbols:
       dimensions:
         rank: 1
         dim: [[1, 3]]
-    #so this is the macroscopic orientation of the sample i.e. how a sample-affixed Cartesian coordinate system is oriented wrt to the McSTAS? I think I need to think longer about this. We should never give Wikipedia as a reference when dealing with rotations there is too much inconsistent material on in particular these conventions choices circulating in the inet.
-    position(NX_NUMBER):
+      #so this is the macroscopic orientation of the sample i.e. how a sample-affixed Cartesian coordinate system is oriented wrt to the McSTAS? I think I need to think longer about this. We should never give Wikipedia as a reference when dealing with rotations there is too much inconsistent material on in particular these conventions choices circulating in the inet.
+    position(NX_NUMBER): # what is the difference to the definition in stage section? Is there reference system defined?
       doc: Specifiy the position (e.g. in a line scan) with respect to a reference point
       dimensions:
         rank: 1
@@ -370,7 +370,7 @@ symbols:
     data type:
       exists: required
       doc: to be defined
-      enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
+      enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data] # I would remove tan(psi) / cos(delta) otherwise we should add much more options)
     number_of_variables(NX_INT):
       doc: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
       #we should use maybe in the future again the concepts of symbols
@@ -382,6 +382,8 @@ symbols:
         dim: [[1, N_wavelength]]
     (NXdata):
       doc: Resulting data from the measurement, described by data type. Minimum two columns, if errors are available twice as many. For a Mueller matrix, it may be nine (1,1 is all 1, the rest is symmetric). #nine what? entries?
+      # for RC2 m11 represents intensity which is not 1
+      # full Mueller matrix should be stored, 
       #\@nx_class: NX_NUMBER better transform this data field into an NXdata
       data(NX_NUMBER):
         dimensions:
@@ -398,7 +400,7 @@ symbols:
     link:
       #/instrument/angle_of_incidence
 
-  time points(NX_NUMBER):
+  time points(NX_NUMBER): # can this also be shifted to varied parameters?
     doc: An array of relative time points if a time series was recorded
     unit: NX_TIME
   medium:
