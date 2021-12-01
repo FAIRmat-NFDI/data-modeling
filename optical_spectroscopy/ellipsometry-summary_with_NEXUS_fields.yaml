@@ -38,6 +38,7 @@
 # dunno about the target syntax?
 # instrument/window: "its" in the last sentence is unclear, to what does it refer?
 #   -- the window; I tried rephrasing the doc
+#  CS: Woollam devices sometimes mentioned the delta offset parameters? Should we open a field for that?
 # should further fields from NXentry on timing (end_time, duration, etc.) be included?
 #   -- it may be necessary, for so called in-situ measurements (e.g. swelling of polymer films
 #      in vapor, or specific solvents.
