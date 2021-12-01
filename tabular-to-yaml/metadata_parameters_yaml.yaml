@@ -1,0 +1,165 @@
+average_power:
+  Description: Source power
+  NX variable: NX_FLOAT:NX_POWER
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:average_power
+  Unit: W
+bunch_distance:
+  Description: Time between bunches
+  NX variable: NX_FLOAT:NX_TIME
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:bunch_distance
+  Unit: ns
+bunch_length:
+  Description: Temporal length of the bunch
+  NX variable: NX_FLOAT:NX_TIME
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:bunch_length
+  Unit: ps
+bunch_number_end:
+  Description: Last bunch of the  measurement
+  NX variable: NX_INT
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:bunch_number_end
+  Unit: None
+bunch_number_start:
+  Description: Some facilities tag each bunch. First bunch of the  measurement
+  NX variable: NX_INT
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:bunch_number_start
+  Unit: None
+bunch_structure:
+  Description: Description of the bunch pattern
+  NX variable: NX_FLOAT:NXdata
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:bunch_pattern
+  Unit: s-1
+center_wavelength:
+  Description: The center wavelength of the source, before it is monochromatized or
+    converted
+  NX variable: NX_FLOAT:NX_WAVELENGTH
+  NXarpes: X
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:center_wavelength
+  Unit: nm
+current:
+  Description: Storage ring current/X-ray tube current
+  NX variable: NX_FLOAT:NX_CURRENT
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:current
+  Unit: A
+emittance_x:
+  Description: Horizontal emittance
+  NX variable: NX_FLOAT:NX_EMITTANCE
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:emittance_x
+  Unit: nm-rad
+emittance_y:
+  Description: Vertical emittance
+  NX variable: NX_FLOAT:NX_ EMITTANCE
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:emittance_y
+  Unit: nm-rad
+energy:
+  Description: Particle beam energy/excitation voltage
+  NX variable: NX_FLOAT:NX_ENERGY
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:energy
+  Unit: J
+flux:
+  Description: Photon flux of the source
+  NX variable: NX_FLOAT:NX_FLUX
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:flux
+  Unit: s-1cm-2
+mode:
+  Description: Source operating mode (single or multi bunch)
+  NX variable: NX_CHAR
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:mode
+  Unit: None
+name:
+  Description: Name of the source
+  NX variable: NX_CHAR
+  NXarpes: v
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:name (@short_name)
+  Unit: None
+number_of_bunches:
+  Description: Number of bunches in the storage ring
+  NX variable: NX_INT
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:number_of_bunches
+  Unit: None
+peak_power:
+  Description: For pulsed sources, the pulse energy divided by the pulse duration
+  NX variable: NX_FLOAT:NX_POWER
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:peak_power
+  Unit: W
+photon_energy:
+  Description: The center photon energy of the source, before it is monochromatized
+    or converted
+  NX variable: NX_FLOAT:NX_ENERGY
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:photon_energy
+  Unit: eV
+probe:
+  Description: Type of radiation used as probe
+  NX variable: NX_CHAR
+  NXarpes: v
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:probe[2]
+  Unit: None
+pulse_duration:
+  Description: Duration of the source pulses
+  NX variable: NX_FLOAT:NX_TIME
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:pulse_width
+  Unit: ps
+pulse_energy:
+  Description: For pulsed sources, the energy of a single pulse
+  NX variable: NX_FLOAT:NX_ENERGY
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:pulse_energy
+  Unit: uJ
+repetition_rate:
+  Description: Pulsed source frequency (repetition rate)
+  NX variable: NX_FLOAT:NX_FREQUENCY
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:frequency
+  Unit: Hz
+rms_jitter:
+  Description: For pump-probe experiments, the synchronization error between pump
+    and probe.
+  NX variable: NX_FLOAT:NX_TIME
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:rms_jitter
+  Unit: fs
+size_x:
+  Description: horizontal beam size
+  NX variable: NX_FLOAT:NX_LENGTH
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:sigma_x
+  Unit: um
+size_y:
+  Description: vertical beam size
+  NX variable: NX_FLOAT:NX_LENGTH
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:sigma_y
+  Unit: um
+spectrum:
+  Description: Energy/wavelength spectrum of the source
+  NX variable: NX_FLOAT:NXdata
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:distribution
+  Unit: nm-1 or eV-1
+top_up:
+  Description: Is the storage ring in top up?
+  NX variable: NX_BOOLEAN
+  NXarpes: x
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:top_up
+  Unit: Bool
+type:
+  Description: Type of radiation source
+  NX variable: NX_CHAR
+  NXarpes: v
+  Nexus hierarchy: NXentry:NXinstrument:NXsource:type[1]
+  Unit: None

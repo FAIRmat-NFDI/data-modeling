@@ -1,0 +1,29 @@
+﻿Name,Unit,Description,Nexus hierarchy,NX variable,NXarpes
+name,None,Name of the source,NXentry:NXinstrument:NXsource:name (@short_name),NX_CHAR,v
+type,None,Type of radiation source,NXentry:NXinstrument:NXsource:type[1],NX_CHAR,v
+probe,None,Type of radiation used as probe,NXentry:NXinstrument:NXsource:probe[2],NX_CHAR,v
+,,,,,
+photon_energy,eV,"The center photon energy of the source, before it is monochromatized or converted",NXentry:NXinstrument:NXsource:photon_energy,NX_FLOAT:NX_ENERGY,x
+center_wavelength,nm,"The center wavelength of the source, before it is monochromatized or converted",NXentry:NXinstrument:NXsource:center_wavelength,NX_FLOAT:NX_WAVELENGTH,X
+pulse_energy,uJ,"For pulsed sources, the energy of a single pulse",NXentry:NXinstrument:NXsource:pulse_energy,NX_FLOAT:NX_ENERGY,x
+peak_power,W,"For pulsed sources, the pulse energy divided by the pulse duration",NXentry:NXinstrument:NXsource:peak_power,NX_FLOAT:NX_POWER,x
+average_power,W,Source power,NXentry:NXinstrument:NXsource:average_power,NX_FLOAT:NX_POWER,x
+emittance_x,nm-rad,Horizontal emittance,NXentry:NXinstrument:NXsource:emittance_x,NX_FLOAT:NX_EMITTANCE,x
+emittance_y,nm-rad,Vertical emittance,NXentry:NXinstrument:NXsource:emittance_y,NX_FLOAT:NX_ EMITTANCE,x
+size_x,um,horizontal beam size,NXentry:NXinstrument:NXsource:sigma_x,NX_FLOAT:NX_LENGTH,x
+size_y,um,vertical beam size,NXentry:NXinstrument:NXsource:sigma_y,NX_FLOAT:NX_LENGTH,x
+flux,s-1cm-2,Photon flux of the source,NXentry:NXinstrument:NXsource:flux,NX_FLOAT:NX_FLUX,x
+energy,J,Particle beam energy/excitation voltage,NXentry:NXinstrument:NXsource:energy,NX_FLOAT:NX_ENERGY,x
+current,A,Storage ring current/X-ray tube current,NXentry:NXinstrument:NXsource:current,NX_FLOAT:NX_CURRENT,x
+repetition_rate,Hz,Pulsed source frequency (repetition rate),NXentry:NXinstrument:NXsource:frequency,NX_FLOAT:NX_FREQUENCY,x
+pulse_duration,ps,Duration of the source pulses,NXentry:NXinstrument:NXsource:pulse_width,NX_FLOAT:NX_TIME,x
+spectrum,nm-1 or eV-1,Energy/wavelength spectrum of the source,NXentry:NXinstrument:NXsource:distribution,NX_FLOAT:NXdata,x
+number_of_bunches,None,Number of bunches in the storage ring,NXentry:NXinstrument:NXsource:number_of_bunches,NX_INT,x
+bunch_length,ps,Temporal length of the bunch,NXentry:NXinstrument:NXsource:bunch_length,NX_FLOAT:NX_TIME,x
+bunch_distance,ns,Time between bunches,NXentry:NXinstrument:NXsource:bunch_distance,NX_FLOAT:NX_TIME,x
+mode,None,Source operating mode (single or multi bunch),NXentry:NXinstrument:NXsource:mode,NX_CHAR,x
+top_up,Bool,Is the storage ring in top up?,NXentry:NXinstrument:NXsource:top_up,NX_BOOLEAN,x
+bunch_structure,s-1,Description of the bunch pattern,NXentry:NXinstrument:NXsource:bunch_pattern,NX_FLOAT:NXdata,x
+rms_jitter,fs,"For pump-probe experiments, the synchronization error between pump and probe.",NXentry:NXinstrument:NXsource:rms_jitter,NX_FLOAT:NX_TIME,x
+bunch_number_start,None,Some facilities tag each bunch. First bunch of the  measurement,NXentry:NXinstrument:NXsource:bunch_number_start,NX_INT,x
+bunch_number_end,None,Last bunch of the  measurement,NXentry:NXinstrument:NXsource:bunch_number_end,NX_INT,x
