@@ -123,12 +123,6 @@ Calibration:
     Nexus hierarchy: NXentry:NXprocess:NXcalibration:scaling
     Unit: Not specified
 Collection:
-  contrast aperture:
-    Description: Size of contrast aperture inserted in the column
-    NX variable: NX_FLOAT:NX_LENGTH
-    NXarpes: x
-    Nexus hierarchy: NXentry:NXinstrument:NXdetector:contrast_aperture
-    Unit: um
   contrast_aperture_x:
     Description: Horizontal position of contrast aperture
     NX variable: NX_FLOAT:NX_LENGTH
@@ -141,6 +135,12 @@ Collection:
     NXarpes: x
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:contrast_aperture_y
     Unit: mm
+  contrastaperture:
+    Description: Size of contrast aperture inserted in the column
+    NX variable: NX_FLOAT:NX_LENGTH
+    NXarpes: x
+    Nexus hierarchy: NXentry:NXinstrument:NXdetector:contrast_aperture
+    Unit: um
   extractor_current:
     Description: Indicating leakage, field emission or arc currents to the extractor
       lens
@@ -214,39 +214,39 @@ Detection:
   amplifier_type:
     Description: "Type of electron amplifier: \u201CMCP\u201D, \u201Cchanneltron\u201D\
       , etc."
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:amplifier_type
     Unit: None
   detector_type:
     Description: "Description of the detector type: \u201CDLD\u201D, \u201CPhosphor+CCD\u201D\
       , \u201CCMOS\u201D."
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:detector_type
     Unit: None
   detector_voltage:
     Description: Voltage applied to detector.
+    NX variable: NX_FLOAT:NX_VOLTAGE
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_VOLTAGE
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:detector_voltage
     Unit: V
   sensor_count:
     Description: Number of imaging sensor chips on the detector.
+    NX variable: NX_INT:NX_UNITLESS
     NXarpes: x
-    NXvariable: NX_INT:NX_UNITLESS
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:sensor_count
     Unit: Unitless
   sensor_pixel_size:
     Description: Physical size of the pixels of the imaging chip on the detector.
+    NX variable: NX_FLOAT:NX_LENGTH
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_LENGTH
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:sensor_pixel_size
     Unit: um
   sensor_size:
     Description: Size of each imaging sensor chip on the detector.
+    NX variable: NX_FLOAT:NX_LENGTH
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_LENGTH
     Nexus hierarchy: NXentry:NXinstrument:NXdetector:sensor_size
     Unit: mm
 Distortion:
@@ -415,13 +415,13 @@ General:
   experiment_start_date:
     Description: Start date and time of ex. in ISO 8601 format, ideally including
       UTC offset.
-    NX variable: "NX\__DATE_TIME"
+    NX variable: NX_DATE_TIME
     NXarpes: x
     Nexus hierarchy: NXentry:experiment_start_date
     Unit: None
   experiment_start_date_timestamp:
     Description: Machine readable, absolute timestamp using UNIX epoch.
-    NX variable: "NX_\_FLOAT:NX_TIME"
+    NX variable: NX_FLOAT:NX_TIME
     NXarpes: x
     Nexus hierarchy: NXentry:experiment_start_date_timestamp
     Unit: Seconds
@@ -514,13 +514,13 @@ Manipulator:
     Unit: deg
   pos_polar:
     Description: Angular position in the polar direction
-    NX variable: NX_FLOAT:NX_ ANGLE
+    NX variable: NX_FLOAT:NX_ANGLE
     NXarpes: x
     Nexus hierarchy: NXentry:NXinstrument:NXpositioner:pos_polar
     Unit: deg
   pos_tilt:
     Description: Angular position in the tilt direction
-    NX variable: NX_FLOAT:NX_ ANGLE
+    NX variable: NX_FLOAT:NX_ANGLE
     NXarpes: x
     Nexus hierarchy: NXentry:NXinstrument:NXpositioner:pos_tilt
     Unit: deg
@@ -704,192 +704,192 @@ Registration:
 Sample:
   B_field:
     Description: Magnetic field applied to the sample during the measurement.
+    NX variable: NX_FLOAT:NX_ANY
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_ANY
     Nexus hierarchy: NXentry:NXsample:emagnetic_field
     Unit: T
   E_field:
     Description: Electric field applied across the sample. Different from sample_bias.
+    NX variable: NX_FLOAT:NX_VOLTAGE
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_VOLTAGE
     Nexus hierarchy: NXentry:NXsample:electric_field
     Unit: V
   bias*:
     Description: Voltage applied to sample and sample holder.
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:bias
     Unit: V
   chem_id_cas:
     Description: "CAS registry number of the sample\u2019s chemical content."
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: chem_id_cas'
     Unit: None
   chemical_formula:
     Description: Chemical formula of the sample
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: chemical_formula'
     Unit: None
   chemical_name:
     Description: Full chemical name of the sample
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: chemical_name'
     Unit: None
   drain_current:
     Description: Current to neutralize the photoemission current
+    NX variable: NX_FLOAT:NX_CURRENT
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_CURRENT
     Nexus hierarchy: NXentry:NXinstrument:NXpositioner:drain_current
     Unit: pA
   gas:
     Description: "Gases might be fluxed on the surface for various reasons. Chemical\
       \ designation, or \u201Cresidual\u201D."
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: gas'
     Unit: None
   growth_method:
     Description: Sample growth method (e. g. molecular beam epitaxy, chemical vapor
       deposition etc.)
+    NX variable: NX_FLOAT:NX_CURRENT
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_CURRENT
     Nexus hierarchy: NXentry:NXsample:growth_method
     Unit: None
   layer:
     Description: "Number of layers of the sample (e.g. \u201Cbulk\u201D, \u201Cmonolayer\u201D\
       , \u201Cpentalayer\u201D, etc.)"
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: layer'
     Unit: None
   name:
     Description: Simple and descriptive name of the sample
+    NX variable: NX_CHAR
     NXarpes: v
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:name
     Unit: None
   preparation_date:
     Description: Date of sample preparation
+    NX variable: NX_DATE_TIME
     NXarpes: x
-    NXvariable: NX_DATE_TIME
     Nexus hierarchy: NXentry:NXsample:preparation_date
     Unit: Date
   preparation_date_timestamp:
     Description: UNIX timestamp of sample preparation
+    NX variable: NX_FLOAT:NX_TIME
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_TIME
     Nexus hierarchy: NXentry:NXsample:preparation_date_timestamp
     Unit: s
   preparation_method:
     Description: "E.g. \u201CUHV cleave\u201D, \u201Csputtering and annealing\u201D\
       , etc."
+    NX variable: NX_FLOAT:NX_CURRENT
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_CURRENT
     Nexus hierarchy: NXentry:NXsample:preparation_method
     Unit: None
   pressure:
     Description: Pressure of gas surrounding the sample at time of measurement.
+    NX variable: NX_FLOAT:NX_PRESSURE
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_PRESSURE
     Nexus hierarchy: 'NXentry:NXsample: pressure'
     Unit: Pa
   purity:
     Description: Chemical purity of the sample
+    NX variable: NX_FLOAT:NX_UNITLESS
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_UNITLESS
     Nexus hierarchy: 'NXentry:NXsample: purity'
     Unit: None
   sample_bias:
     Description: Possible bias of the sample with trespect to analyser ground
+    NX variable: NX_FLOAT:NX_CURRENT
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_CURRENT
     Nexus hierarchy: NXentry:NXinstrument:NXpositioner:sample_bias
     Unit: V
   sample_id:
     Description: Identification number or signatures of the sample used.
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:sample_id
     Unit: None
   sample_notes:
     Description: Further notes.
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:notes
     Unit: None
   sample_space_group:
     Description: Space group of the sample (if crystalline)
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: space_group'
     Unit: None
   state:
     Description: Physical state of the sample[1]
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: state'
     Unit: None
   stress_field:
     Description: Stress field applied to the sample during the measurement.
+    NX variable: NX_FLOAT:NX_PRESSURE
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_PRESSURE
     Nexus hierarchy: NXentry:NXsample:stress_field
     Unit: Pa
   substrate_material:
     Description: Material of the substrate in direct contact with the sample.
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:substrate_material
     Unit: None
   substrate_state:
     Description: Physical state of the substrate, similar options to sample_state
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:substrate_state
     Unit: None
   substrate_vendor:
     Description: Vendor of the substrate material
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:substrate_material
     Unit: None
   surface_dopant:
     Description: Element of evaporated surface dopant such as alkali or other
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:surface_dopant
     Unit: None
   surface_dopant_coverage:
     Description: Nominal thickness of the evaporated dopant
+    NX variable: NX_FLOAT:NX_LENGTH
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_LENGTH
     Nexus hierarchy: NXentry:NXsample:surface_dopant_coverage
     Unit: "\xC5"
   surface_orientation:
     Description: Surface termination of the sample (if crystalline)
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: 'NXentry:NXsample: orientation'
     Unit: None
   temperature:
     Description: Temperature of the sample during the measurement.
+    NX variable: NX_FLOAT:NX_TEMPERATURE
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_TEMPERATURE
     Nexus hierarchy: NXentry:NXinstrument:NXpositioner:sample_temperature
     Unit: K
   thickness:
     Description: Sample thickness
+    NX variable: NX_FLOAT:NX_LENGTH
     NXarpes: x
-    NXvariable: NX_FLOAT:NX_LENGTH
     Nexus hierarchy: NXentry:NXsample:thickness
     Unit: "\xC5"
   vendor:
     Description: Name of the sample vendor (company or research group)
+    NX variable: NX_CHAR
     NXarpes: x
-    NXvariable: NX_CHAR
     Nexus hierarchy: NXentry:NXsample:vendor
     Unit: None
 Source:
@@ -950,7 +950,7 @@ Source:
     Unit: nm-rad
   emittance_y:
     Description: Vertical emittance
-    NX variable: NX_FLOAT:NX_ EMITTANCE
+    NX variable: NX_FLOAT:NX_EMITTANCE
     NXarpes: x
     Nexus hierarchy: NXentry:NXinstrument:NXsource:emittance_y
     Unit: nm-rad

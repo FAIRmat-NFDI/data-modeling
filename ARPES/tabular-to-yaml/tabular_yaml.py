@@ -1,4 +1,5 @@
-import pandas as pd, numpy as np, yaml, pprint, argparse
+import pandas as pd, numpy as np, yaml, pprint, argparse, re
+from pandas import ExcelWriter
 
 # filename = 'mpes-nexus_metadata_parameters.xlsx'
 def csv_to_yaml(filename):
@@ -17,9 +18,14 @@ def csv_to_yaml(filename):
     with open(yaml_filename, "w") as f:
         yaml.dump(sheet_dict, f)
 
+def stripspaces(string):
+    return re.sub(r"\s+", "", str(string), flags=re.UNICODE)
+
 
 def xlsx_to_yaml(filename):
-    yaml_filename = filename.replace(filename.split(".", 1)[1], 'yaml')
+    yaml_filename = filename.split(".", 1)[0]+"_converted.yaml"
+    print(yaml_filename)
+    # yaml_filename = filename.replace(filename, 'yaml')
     xls = pd.ExcelFile(filename)
     names = xls.sheet_names
     # names = ["General"]
@@ -35,10 +41,11 @@ def xlsx_to_yaml(filename):
             print("     Sheet:" + sheet)
             print("     Number of rows dropped:" + str(diff))
 
+        df['Name'] = df['Name'].apply(stripspaces)
+        df['NX variable'] = df['NX variable'].apply(stripspaces)
         df.set_index('Name', inplace=True)
         df.dropna(axis=0,thresh=3,inplace=True)
         df.dropna(axis=1,thresh=3,inplace=True)
-        df.replace(["\n","\"],["","])
         sheet_dict = df.to_dict('index')
         master[sheet] = sheet_dict
 
@@ -50,24 +57,35 @@ def xlsx_to_yaml(filename):
     print("The new file has been saved as " + yaml_filename)
 
 def to_xlsx(filename):
-    print("to be done")
-    
+    # print("to be done")
+    xlsx_filename = filename.split(".", 1)[0]+"_converted.xlsx"
     with open(filename, 'r') as stream:
         try:
             parsed_yaml=yaml.safe_load(stream)
+            writer = ExcelWriter(xlsx_filename)
             # pprint.pprint(parsed_yaml)
             for key in parsed_yaml:
+                print(key)
                 one_sheet = parsed_yaml[key]
-                pprint.pprint(one_sheet)
-                df = pd.DataFrame(data=one_sheet, index=[0])
-                print("asdfasdf")
-                print(df)
+                holder = []
+                names = []
+                for row in one_sheet:
+                    values = one_sheet[row]
+                    df = pd.DataFrame(data=values,index = [0])
+                    # print("asdfasdf")
+                    # print(df)
+                    holder.append(df)
+                    names.append(str(row))
+                output = pd.concat(holder)
+                output.insert(loc=0, column='Name', value=names)
+                output.to_excel(writer,key,index=False)
+
+            writer.save()
         except yaml.YAMLError as exc:
             print(exc)
 
 
 def main(args):
-    """ Main entry point of the app """
     print("Parameter file yaml-xlsx parser.")
     if args.filename.split(".", 1)[1] == "xlsx":
         xlsx_to_yaml(args.filename)
