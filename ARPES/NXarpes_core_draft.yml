@@ -21,6 +21,7 @@ category: application # Defaults "exists" to "required"
 (NXentry):
   \@entry:
     doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
+  \@version:
   title:
   start_time(NX_DATE_TIME):
   definition:
