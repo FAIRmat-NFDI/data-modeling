@@ -47,8 +47,10 @@
 #   -- I think, the sentence meant exactly that.
 #
 # stage docstring reads too colloquial to me
+#   -- fixed
 # sample_rotation/alternative is unclear
 # there is a dangling calibration field under window? where should this belong?
+#   -- I think it is more clear now
 
 name: NXellipsometry_base_draft
 doc: draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry.
@@ -80,17 +82,20 @@ symbols:
   time_zone(NX_DATE_TIME):
     exists: required
     doc: ISO 8601 time_zone offset from UTC.
+
   definition_local:
     doc: FAIRmat-specific candidate proposal for an application definition exemplifying ellipsometry.
     \@version:
-        doc: Ideally version with build number are commit hash of the application definition. If not available a free-text description.
+      doc: Ideally version with build number are commit hash of the application definition. If not available a free-text description.
     \@url:
-        doc: URL where to find further material (documentation, examples) relevant to the application definition
+      doc: URL where to find further material (documentation, examples) relevant to the application definition
+
   operator(NXuser):
     exists: [min, 1, max, infty]
     doc: Contact information of at least the user of the instrument or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended.
     name:
       exists: required
+
     affiliation:
       exists: recommended
       doc: Name of the affiliation of the user at the point in time when the experiment was performed.
@@ -102,7 +107,11 @@ symbols:
       exists: recommended
     telephone_number:
       exists: recommended
-  (NXmonitor):
+
+  #(NXmonitor):
+  # -- commented it out, because it makes no sense... If we have a monitor, it is
+  #    within the instrument; pls. check the documentation!
+  #
   instrument(NXinstrument):
     doc: General properties of the ellipsometry equipment
     exists: required
@@ -121,7 +130,8 @@ symbols:
       doc: Name (e.g. commercial) of the software that was used for the measurement
     software_version:
       doc: Version and build number or commit hash of the software source code
-    bandwidth(NX_NUMBER): # This should be a vector with the length of the number of used wavelength 
+    bandwidth(NX_NUMBER): # This should be a vector with the length of the number of used wavelength
+      #  -- then it is equivalent to the wavelength in sample... should we just link that?
       doc: Specify the bandwidth of the light
       unit: NX_WAVELENGTH
     light_source:
@@ -210,28 +220,31 @@ symbols:
       \@transformation_type: rotation
       \@vector: [1, 0, 0]
       \@depends_on:
-    translation(NXtransformations):# we need also a reference point with respect to the sample
-      doc: "To identify what is measured and how, we have to define the sample relative to the instrument. The basic coordinate  system is defined by the beam. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform"
+
+    translation(NXtransformations):
+      # we need also a reference point with respect to the sample
+      doc: "To identify what is measured and how, we have to define the sample relative to the instrument. Translation defines the shift along a vector provided by X,Y,Z. This identifies the position where the beam hits the sample relative to a predefined position on the sample (e.g. bottom left corner). The transformation method is described at https://manual.nexusformat.org/design.html#tb-table-transform"
       exists: required
       X__AXISNAME(NX_NUMBER):
         # its value is the actual shift in this direction
         # unit is defined by the transformation type below
-        doc: direction of the beam along the stage towards the detector
+        doc: perpendicular to the plane of incidence, to the right hand side from the direction of the beam
         \@transformation_type: translation
         \@vector: [1, 0, 0]
         \@depends_on: stage_orientation
       Y__AXISNAME(NX_NUMBER):
-        doc: perpendicular to the plane of incidence, to the right hand side from X
+        doc: direction of the beam along the stage towards the detector
         \@transformation_type: translation
         \@vector: [0, 1, 0]
         \@depends_on: X
       Z__AXISNAME(NX_NUMBER):
-        doc: Z position is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. However, if the instrument is not built vertically, we need this. Positive downwards. # not really cleary for me, is the z direction not defined by the surfce normal?
+        doc: Z defined by the normal of the top reflective surface in the general direction of the light source. Its value is defined by maximizing the reflected intensity of the beam in reflection mode. Then it is fixed. In transmission mode it is variable.
+        # not really cleary for me, is the z direction not defined by the surfce normal?
+        #   -- fixed the doc.
         \@transformation_type: translation
         \@vector: [0, 0, 1]
         \@depends_on: Y
-      # the full transformation is the end of Z, described as:
-      # depends_on: translation/Z
+
       alternative:
         doc: If there is no motorized stage, we should at least qualify where the beam hits the sample.
         enumeration: [top, bottom, middle, top right, top left, bottom right, bottom left, middle right, middle left]
@@ -256,19 +269,25 @@ symbols:
       #nice that you disentangled here the ZXZ Euler angle convention, alternatively
       #we could give the combined rotation matrix and specify the rotation convention from an enum of all the possible ones XYZ, ZXZ, ...
       #  -- if you look into the NEXUS definition, you always have an axis of rotation defined,
-      #     thus the rotation matrix is not suiteable; (I tried them earlier as well...)
+      #     thus the rotation matrix is not suitable; (I tried them earlier as well...)
       alternative:
-        doc: to be defined
+        doc: a describe the sample orientation relative to the plane of incidence (reflection mode)
         enumeration: [parallel, perpendicular, diagonal]
 
-    window:
+    window(NXaperture):
       #which class does it belong to? We cannot just start a nesting here or how does it connect to the above nodes?
+      #  -- it belongs to the instrument, if the experiment is done in an environment other than air
+      #  -- we can derive it from the NXaperture
       doc: For environmental measurements, the environment (liquid, vapor, etc.) is enclosed in a cell, which has windows both in the direction of the source and the detector (looking from the sample). These winwows also add a phase shift to the light altering the measured signal. This shift has to be corrected based on measuring a known sample in the environmental cell.
+      material(NX_CHAR):
+        doc: the material of the window
+
       thickness(NX_NUMBER):
         doc: Thickness of the window
         unit: NX_LENGTH
+
       orientation_angle(NX_NUMBER):
-        doc: Angle in the plane of incidence
+        doc: Angle of the window normal (outer) vs. the substrate normal (similar to the angle of incidence).
         unit: NX_ANGLE
 
     reference_data(NXdata):
@@ -290,34 +309,54 @@ symbols:
           dim: [[3,2], [2, N_angles], [1, N_wavelength]]
 
   calibration_sample:
-        doc: Which sample was used to calibrate the window effect? #how should people specify samples, identifiers, we have an issue for this in sprint 03
+        doc: Which sample was used to calibrate the window effect? Provide a sample identifier if possible.
+        #how should people specify samples, identifiers, we have an issue for this in sprint 03
         #would it make sense to store all calibration data in a specific (set) of properties rather than on in a group above and then another one here for the window?
+        #  -- possible. In this grouping, it is here, because it belongs to the window,
+        #     and only needed if window was used. No window, no calibration of its effect...
+
     detector(NXdetector):
       doc: Which type of detector was used, and what is known about it? A detector can be a photomultiplier (PMT), a CCD in a camera, an array in a spectrometer. If so, the whole unit goes in here.
-    #"whole unit" as a term is this clear enough what we mean here?   
+    #"whole unit" as a term is this clear enough what we mean here?
+    #  -- like I do not want to know the amplifier within the camera,
+    #     the grating within the spectrograph, etc.
+
       detector_type:
         exists: required
         doc: What kind of detector module is used, e.g. CCD-spectrometer, CCD camera, PMT, photodiode, etc.
         #enumeration: would this make sense?
+        #  -- yes, but I am afraid I may not know them all
+        enumeration: [PMT, photodiode, avalanche diode, CCD camera, CCD spectrometer]
+
       duration(NX_NUMBER):
         doc: Integration time for the measurement. Single number or array if it was varied.
         unit: NX_TIME
       revolution(NX_NUMBER):
-        doc: Define how many rotations of the rotating element were taken into account for one spectra. #"one" does this imply "for each" ?
+        doc: Define how many rotations of the rotating element were taken into account per spectrum.
+        #"one" does this imply "for each" ?
+        #  -- fixed
         unit: NX_ANY
-        #what should here be communicated the revolution rate?
+        # what should here be communicated the revolution rate?
+        # -- no
       rotating_element:
         doc: Define which elements rotates #this is unclear elements of the detector?
         enumeration: [polarizer (source side), polarizer (detector side), compensator (source side), ccompensator (detector side)]
       fixed_revolution(NX_NUMBER):
-        doc: if the revolution does not change during the measurement.
-        unit: NX_PER_TIME #but this does not exist as an NXDL field type, yeah, see the above comment
+        doc: rotation rate, if the revolution does not change during the measurement.
+        unit: NX_FREQUENCY
+        # but this does not exist as an NXDL field type, yeah, see the above comment
+        #   -- fixed it, but RPM may be better
       variable revolution(NX_NUMBER):
-        doc: Specify maximum and minimum values for the revolution. #is  it safe to assume that the exact time history of the revolution is not documented/accessible/relevant?
+        doc: Specify maximum and minimum values for the revolution.
+        #is  it safe to assume that the exact time history of the revolution is not
+        #documented/accessible/relevant?
+        #  -- yes, except if it was a home built instrument
         #length: 2 #instead, does the following work?
+        #  -- thanks
         dimensions:
           rank: 1
           dim: [[1, 2]]
+
   sample(NXsample):
     exists: required
     atom_types:
@@ -325,21 +364,26 @@ symbols:
       doc: "Use Hill's system for listing elements of the periodic table which are inside or attached to the surface of the specimen and thus relevant from a scientific point. The purpose of this field is to allow materials database to parse the relevant elements without having to interpret the sample history or other fields."
     name:
       exists: required
-      #doc: human readable sample name #I feel the default docstring from NXsample for this member suffices.
-    #Tamas: I thought the same name and identifier can be different we should allow for such flexibility
+      #doc: human readable sample name
+      ##I feel the default docstring from NXsample for this member suffices.
+      #  -- looks fine
+      #Tamas: I thought the same name and identifier can be different we should allow for such flexibility
+      #  -- I am not sure I understand the question...
+
     sample_history:
       exists: required
       doc: Ideally, a reference to the location or a unique (globally persistent) identifier (e.g.) of e.g. another file which gives as many as possible details of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample is not available, use this field as a free-text description to specify details of the sample and its preparation.
     preparation_date(NX_DATE_TIME):
       exists: required
-      unit: NX_TIME
+      unit: NX_DATE_TIME
     preparation_time_zone(NX_DATE_TIME):
       exists: required
       doc: ISO 8601 time_zone offset from UTC. The time zone can be different to the time zone of this experiment description because maybe the sample was prepared by one international group and is then measured in a different time zone.
       #interesting that for synchrotron samples this is not already inside NeXus these sample typically travel the most in-between labs and countries.
-      unit: NX_TIME
+      #  -- it may be meant to be part of the ISO date time for preparation_date
+      unit: NX_DATE_TIME
 #    preparation_description:
-#      doc: Ideally reference to another application definition that gives details for the preparation of the sample. If such an application definition is not available, use this field to give preparation details." },
+#      doc: Ideally reference to another application definition that gives details for the preparation of the sample. If such an application definition is not available, use this field to give preparation details.
     description:
       doc: Specimen/sample preparation and previous processing steps is the history which the sample carries when it is mounted in the electron microscope. Therefore, preparation details and other points of this history should be stored in sample_history.
     #alternatively
@@ -351,28 +395,43 @@ symbols:
     #  unit: NX_DIMENSIONLESS, NX_CHARs are dimensionless by nature
     layer structure:
       #is my interpretation of this member, reflected in the docstring, following your idea Tamas/Chris?
-      doc: Qualitative description of the layer structure for the sample in cases where a detailed geometrical description is not available or desired/required. 
-    orientation(NX_NUMBER):
-      doc: Specify the orientation of the sample in the laboratory system with respect to the sample system in terms of the Euler angles in z-x-z notation (non-rotating transformation) #the last comment in the bracket is unclear
+      doc: Qualitative description of the layer structure for the sample in cases where a detailed geometrical description is not available or desired/required.
+    orientation_matrix(n_comp, 3, 3):
+      #the last comment in the bracket is unclear
+      #  -- I changed it to the existing field in NX_sample, because this makes sense
+      #     other orientation is described by instrument/stage.
       unit: NX_ANGLE
       dimensions:
         rank: 1
         dim: [[1, 3]]
       #so this is the macroscopic orientation of the sample i.e. how a sample-affixed Cartesian coordinate system is oriented wrt to the McSTAS? I think I need to think longer about this. We should never give Wikipedia as a reference when dealing with rotations there is too much inconsistent material on in particular these conventions choices circulating in the inet.
-    position(NX_NUMBER): # what is the difference to the definition in stage section? Is there reference system defined?
-      doc: Specifiy the position (e.g. in a line scan) with respect to a reference point
-      dimensions:
-        rank: 1
-        dim: [[1, 3]]
-      unit: NX_LENGTH
+      #  -- that is why my original comment contained the link to a specific section, with
+      #     a well defined case...
+      # position(NX_NUMBER): # what is the difference to the definition in stage section? Is there reference system defined?
+      #  -- this is the one I said before that it is not needed, because it is merged into
+      #     instrument / stage
+      # doc: Specifiy the position (e.g. in a line scan) with respect to a reference point
+      # dimensions:
+      #  rank: 1
+      #  dim: [[1, 3]]
+      # unit: NX_LENGTH
+
     #do you want to keep track of this reference point in the laboratory coordinate system?
     #where should this be placed in the hierarchy?
+    #  -- it is in the instrument / stage
+
     data_identifier(NX_NUMBER):
-      doc: A identifier to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N #what about uniqueness of the identifier?
+      doc: A identifier to correlate data to the experimental conditions, if several were used in this measurement; typically an index of 0 - N
+      #what about uniqueness of the identifier?
+      #  -- append it to the experiment identifier...
+
     data type:
       exists: required
       doc: to be defined
-      enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data] # I would remove tan(psi) / cos(delta) otherwise we should add much more options)
+      enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
+      # I would remove tan(psi) / cos(delta) otherwise we should add much more options)
+      #   -- in our rotating analyzer system, this is what you get...
+
     number_of_variables(NX_INT):
       doc: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
       #we should use maybe in the future again the concepts of symbols
@@ -385,36 +444,42 @@ symbols:
     (NXdata):
       doc: Resulting data from the measurement, described by data type. Minimum two columns, if errors are available twice as many. For a Mueller matrix, it may be nine (1,1 is all 1, the rest is symmetric). #nine what? entries?
       # for RC2 m11 represents intensity which is not 1
-      # full Mueller matrix should be stored, 
+      # full Mueller matrix should be stored,
       #\@nx_class: NX_NUMBER better transform this data field into an NXdata
       data(NX_NUMBER):
         dimensions:
           rank: 5
           dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
-  #Having a stage here is confusing, what is again the need for this?
-  stage:
-    doc: A link to the already existing information about sample position. #which type of link?
-    link:
-    #/instrument/stage #I think the specific value is not a part of the schema definition
-  angle_of_incidence:
-    doc: The incident angle of the beam vs. the normal of the sample surface. #see discussions of normals above
-    # I use @nx_link instead of the --> nexus syntax
-    link:
+
+    #Having a stage here is confusing, what is again the need for this?
+    #  -- only if you are looking at the data but not the instrument...
+    stage:
+      doc: A link to the already existing information about sample position. #which type of link?
+      link:
+      #/instrument/stage #I think the specific value is not a part of the schema definition
+    angle_of_incidence:
+      doc: The incident angle of the beam vs. the normal of the sample surface. #see discussions of normals above
+      # I use @nx_link instead of the --> nexus syntax
+      link:
       #/instrument/angle_of_incidence
 
-  time points(NX_NUMBER): # can this also be shifted to varied parameters?
-    doc: An array of relative time points if a time series was recorded
-    unit: NX_TIME
-  medium:
-    exists: required
-    #I feel this should better go to the sample description
-    doc: Describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.). #"built up (from the upper atmosphere/substrate phase boundary to ..." ?
-    alternative(NX_NUMBER):
-      doc: Array of pairs of complex refractive indices of the medium for every measured wavelength.
-      unit: NX_UNITLESS
-      dimensions:
-        rank: 2
-        dim: [[1, N_wavelength], [2, 2]] #Tamas/Chris whats your opinion about this?
+    time points(NX_NUMBER): # can this also be shifted to varied parameters?
+      doc: An array of relative time points if a time series was recorded
+      unit: NX_TIME
+    medium:
+      exists: required
+      #I feel this should better go to the sample description
+      #  -- this is the sample description...
+      doc: Describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.). #"built up (from the upper atmosphere/substrate phase boundary to ..." ?
+      alternative(NX_NUMBER):
+        doc: Array of pairs of complex refractive indices of the medium for every measured wavelength.
+        unit: NX_UNITLESS
+        dimensions:
+          rank: 2
+          dim: [[1, N_wavelength], [2, 2]]
+          #Tamas/Chris whats your opinion about this?
+          #  -- looks o.k. at the first glance
+
     environment conditions:
       doc: External parameters that have influenced the sample.
     number_of_runs(NX_UINT):
@@ -449,7 +514,8 @@ symbols:
     excitation power(NX_NUMBER):
       unit: NX_ENERGY
     voltage(NX_NUMBER):
-      doc: If the spectra were taken under bias # ... continue to explain what is the user should do then
+      doc: Specify the voltage if the spectra were taken under bias
+      # ... continue to explain what is the user should do then
       unit: NX_VOLTAGE
     temperature(NX_NUMBER):
       doc: to be defined #Temperature of what? how measured
@@ -464,19 +530,21 @@ symbols:
       #  \@nx_class: nx_char
       #  enumeration: [neutral, undefined]
     stress(NX_NUMBER):
+      #  -- for this, we can take the original stress_field from NX_sample...
       doc: to be defined, only qualitative (atmospheric) pressure or really the applied continuum stress/strain tensor on the sample?
       unit: NX_PRESSURE
-    orientation(NX_NUMBER):
+    stress_orientation(NX_NUMBER):
       doc: Euler angles of stress relative to sample
       unit: NX_ANGLE
       dimensions:
         rank: 1
         dim: [[1, 3]]
-    # UNCLEAR, which Euler angles, i.e. according to which convention how mapping to reference coordinate system, why not use stress or strain tensor applied on sample?
+      # UNCLEAR, which Euler angles, i.e. according to which convention how mapping to reference coordinate system, why not use stress or strain tensor applied on sample?
 # derived parameters
+
     derived_parameters(NXcollection):
       #my argument against using such mere collection of things is that derived parameters follow from a process or at least a set of rules and recipes applied how to derive them. Why not make this an NXprocess ?
       doc: What parameters are derived from the above data
       depolarization(NX_NUMBER):
-        doc: to be defined
+        doc: light loss due to depolarization as a value in [0-1]
         unit: NX_UNITLESS
