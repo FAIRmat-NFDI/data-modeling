@@ -1,0 +1,26 @@
+#kuehbacm at hu-berlin.de, 12/2021
+name: NXapm_pulser
+category: contributed
+doc: Draft for a class which can be used for representing a coarsed description of those components of an atom probe microscope which trigger the pulsing whether it be a laser or high voltage pulsing unit.
+(NXobject):
+  laser_pulser(NXsource):
+    exists: optional
+    doc: Atom probe microscopes use controlled either voltage or laser pulsing to trigger a sequence of field evaporation events. Many microscopes have a laser installed enabling measurements of poorly conductive specimens.
+    name:
+    manufacturer_name:
+      doc: Name of the manufacturer who built/constructed the laser unit.
+    manufacturer_model:
+      doc: Hardware name/serial number or hash identifier given by the manufacturer to identify the laser unit.
+    wavelength(NX_FLOAT):
+      doc: Wavelength of the radiation.
+      unit: NX_WAVELENGTH
+    power(NX_FLOAT)
+      doc: Source power
+      unit: NX_POWER
+    pinhole_to_specimen(NXtransformations):
+      doc: Geometrical description how the laser focusing optics/pinhole-attached coordinate system has to be transformed to align with the specimen coordinate system. A right-handed Cartesian coordinate system is assumed whose positive z-axis points into the direction of the laser beam, i.e. towards the specimen.
+  beam(NXbeam):
+    doc: Optional place for describing details about the focused laser beam with which the specimen is illuminated to trigger field evaporation events.
+#laser pulsing unit make this an own base class or use NXbeam and NXsource, discuss eventually in consolidation workshop
+  hv_pulser(NXapm_hv_pulser):
+    doc: Optionally installed voltage system for inducing field evaporation via high-voltage electric pulsing.

@@ -1,0 +1,29 @@
+#kuehbacm at hu-berlin.de, 12/2021
+name: NXapm_electrode
+category: contributed
+doc: Draft proposal for a NXobject class for representing electrostatic lens-type components in an atom probe microscope which can be used for accelerating ions towards something while allowing for an aperture. For atom probe microscopes following the local electrode design pioneered by
+AMETEK/Cameca among others (the majority) of the instruments this class could represent details about counter electrodes.
+#or should we have the these details and an NXaperture directly inside NXapm_draft ?
+(NXobject):
+  doc: The counter electrode towards which the ions are accelerated.
+  (NXtransformations):
+    doc: Geometrical description how the counter electrode is spatially arranged (relative to the specimen).
+  #should standing and bias voltage (in the case of pulsing) be placed here or should we not propose to bring up such this NXobject class but instead have an NXcollection added to NXapm_draft ?
+  aperture(NXaperture):
+    doc: A counter electrode for atom probe also contains an electrostatic bending device/aperture which blocks, modifies the flight paht of ions approaching the counter electrode.
+    name:
+    manufacturer_name:
+      doc: Name of the manufacturer who built/constructed the aperture.
+    manufacturer_model:
+      doc: Hardware name/serial number or hash identifier given by the manufacturer to identify the aperture.
+    description:
+      doc: An ideally (globally persistent unique identifier, link, or text which gives further details.
+# the two next entries should be worked out in more details.
+    type:
+      doc: Qualitative description which type of aperture.
+      enumeration: [circular]
+    diameter(NX_FLOAT):
+      doc: Relevant diameter in the case of circular aperture.
+      unit: NX_LENGTH
+    (NXtransformations):
+      doc: Geometrical description how the aperture is spatially arranged (relative to the counter electrode).
