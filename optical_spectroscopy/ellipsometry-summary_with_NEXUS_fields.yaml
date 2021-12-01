@@ -11,6 +11,7 @@
 #   -- top, reflective surface of the substrate (T.H.)
 # instrument/company: suggesting "Name of the company which build the instrument" -- o.k.
 # instrument/hardware_version: you mean serial number -- no, version of the hardware
+# --- CS: Hardware can also have different version version: revision numbers
 # instrument/software_version: I would split name and version+buildnumber -- done
 # instrument/light_source: Would it make sense to have an enum or a free-text?
 #   -- not yet, because this can get complex. Many systems have multiple light sources.
