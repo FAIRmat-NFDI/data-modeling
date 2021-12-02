@@ -88,6 +88,18 @@ def xml_handle_enumeration(obj, k, v):
     else:
         raise ValueError('ERROR: '+k+' we found an enumeration key-value pair but the value is None !')
 
+def xml_handle_links(obj, k, v):
+    #if we have a link we decode the name attribute from <optional string>(link)[:-6]
+    if len(k[:-6]) >= 1 and isinstance(v,dict) and 'target' in v.keys():
+        if isinstance(v['target'],str) and len(v['target']) >= 1:
+            lnk = etree.SubElement(obj, 'link')
+            lnk.set('name', k[:-6])
+            lnk.set('target', v['target'])
+        else:
+            raise ValueError(k+' value for target member of a link is invalid !')
+    else:
+        raise ValueError(k+' the formatting of what seems to be a link is invalid in the yml file !')
+
 
 def recursive_build(obj, dct):
     """
@@ -143,6 +155,8 @@ def recursive_build(obj, dct):
             xml_handle_exists(obj, k, v)
         #elif k == 'link': ##MK:check handling of links for
         #base/cand classes, attributes, and special keywords handled, so only members remain
+        elif k[-6:] == '(link)':
+            xml_handle_links(obj, k, v)
         elif kName != '': #dealing with a field because classes and attributes already ruled out
             typ = 'NX_CHAR'
             if kType.replace('NX','nx').lower() in nx_type_keys:
