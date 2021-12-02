@@ -1,0 +1,43 @@
+(NXpositioner):
+  cryostat_temperature (NX_FLOAT):
+    Documentation: Temperature of the cryostat (coldest point)
+    unit: NX_TEMPERATURE
+  description (NX_CHAR):
+    Documentation: Description
+    unit: NX_CHAR
+  drain_current (NX_FLOAT):
+    Documentation: Current to neutralize the photoemission current
+    unit: NX_CURRENT
+  heater_power (NX_FLOAT):
+    Documentation: Power in the heater for temperature control.
+    unit: NX_POWER
+  name (NX_CHAR):
+    Documentation: Name
+    unit: NX_CHAR
+  pos_azimuth (NX_FLOAT):
+    Documentation: Angular position in the azimuthal direction
+    unit: NX_ANGLE
+  pos_polar (NX_FLOAT):
+    Documentation: Angular position in the polar direction
+    unit: NX_ANGLE
+  pos_tilt (NX_FLOAT):
+    Documentation: Angular position in the tilt direction
+    unit: NX_ANGLE
+  pos_x (NX_FLOAT):
+    Documentation: Position in the x direction
+    unit: NX_LENGTH
+  pos_y (NX_FLOAT):
+    Documentation: Position in the y direction
+    unit: NX_LENGTH
+  pos_z (NX_FLOAT):
+    Documentation: Position in the z direction
+    unit: NX_LENGTH
+  sample_bias (NX_FLOAT):
+    Documentation: Possible bias of the sample with trespect to analyser ground
+    unit: NX_CURRENT
+  sample_temperature (NX_FLOAT):
+    Documentation: Temperature at the closest point to the sample
+    unit: NX_TEMPERATURE
+  type (NX_CHAR):
+    Documentation: "Type of manipulator: \u201CHexapod\u201D, \u201CRod\u201D, etc. "
+    unit: NX_CHAR
