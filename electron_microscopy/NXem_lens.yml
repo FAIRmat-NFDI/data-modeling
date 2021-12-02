@@ -1,3 +1,7 @@
+#kuehbacm at hu-berlin.de, 11/2021
+name: NXem_lens
+category: contributed
+doc: Draft class definition for electro-magnetic lenses as a key component of an electron microscope.
 (NXem_lens):
   doc: An electro-magnetic lens that is e.g. a component of an electron microscope.
   name:
