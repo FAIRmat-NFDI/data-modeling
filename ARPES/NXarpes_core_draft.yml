@@ -50,6 +50,9 @@ category: application # Defaults "exists" to "required"
         dimensions:
           rank: 1
           dim: [[1, 2]]
+    # Big issue here, detector is used improperly
+    # detector refers only to the actual particle sensor.
+    # In the bag of words, the approach is different
     analyser(NXdetector):
       type:
         doc: type of detector (Standard hemispherical, Double hemispherical, Momentum microscope etc.)
