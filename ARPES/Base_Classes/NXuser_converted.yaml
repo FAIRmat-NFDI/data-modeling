@@ -1,0 +1,22 @@
+(NXuser):
+  address (NX_CHAR):
+    Documentation: Address of user
+    unit: NX_CHAR
+  affiliation (NX_CHAR):
+    Documentation: Affiliation of user
+    unit: NX_CHAR
+  email (NX_CHAR):
+    Documentation: E-mail address of user
+    unit: NX_CHAR
+  facility_user_id (NX_CHAR):
+    Documentation: User identifier defined by the facility
+    unit: NX_CHAR
+  name (NX_CHAR):
+    Documentation: Name of user responsible for this entry
+    unit: NX_CHAR
+  role (NX_CHAR):
+    Documentation: Role of user (local contact, principal investigator, etc.)
+    unit: NX_CHAR
+  telephone_number (NX_CHAR):
+    Documentation: Telephone number of user
+    unit: NX_CHAR
