@@ -1,6 +1,15 @@
 import pandas as pd, numpy as np, yaml, pprint, argparse, re, os
 from pandas import ExcelWriter
 
+class Dictlist(dict):
+    def __setitem__(self, key, value):
+        try:
+            self[key]
+        except KeyError:
+            super(Dictlist, self).__setitem__(key, [])
+        self[key].append(value)
+
+
 # filename = 'mpes-nexus_metadata_parameters.xlsx'
 def csv_to_yaml(args):
     yaml_filename = args.filename.replace(args.filename.split(".", 1)[1], 'yaml')
@@ -25,18 +34,35 @@ def cleanDF(df):
     df = df.fillna('') 
     df['Nexus hierarchy'] = df['Nexus hierarchy'].str.split(':').str[-1]
     MergedTypeClass = df['type:units'].str.split(':').str[0].apply(stripspaces) + df['NX class'].astype(str).apply(stripspaces)
-    # print(df['Nexus hierarchy'])
-    # df['Name'] = df['Name'].apply(stripspaces)
-    # df['Nexus hierarchy'] = df['Nexus hierarchy'].apply(stripspaces)
     df['Name'] = df['Nexus hierarchy'].apply(stripspaces) + " (" + MergedTypeClass + ")"
     df['unit'] = df['type:units'].str.split(':').str[-1].apply(stripspaces)
-    # df["Documentation"] = df["Documentation"].astype(str) + ""
     df.drop(columns=["Nexus hierarchy","type:units","NX class"], inplace = True)
-    # df['NX variable'] = df['NX variable'].apply(stripspaces)
     df.set_index('Name', inplace=True)
     df.dropna(axis=0,thresh=3,inplace=True)
     df.dropna(axis=1,thresh=3,inplace=True)
+    df['Documentation'].replace('', np.nan, inplace=True)
+    df.dropna(subset=['Documentation'], inplace=True)
+    check_dupes = df.index.duplicated(keep='first')
+    num = 0
+    while any(check_dupes):
+        new_indices = [str(s) if check_dupes[ind] == False else (str(s) + "_dupe" + str(num)) for ind, s in enumerate(df.index)]
+        num+=1
+        df.index = new_indices
+        check_dupes = df.index.duplicated(keep='first')
+    
     return df
+
+
+def clean_duplicate_handler(filepath):
+    with open(filepath, "r") as text_file:
+        data = text_file.read()
+        # print(re.findall(r'_dupe\w+',data))
+        data = re.sub(r'_dupe\w+', "", data)
+
+    with open(filepath, "w") as text_file:
+        text_file.write(data)
+
+    text_file.close()
 
 def xlsx_to_yaml(args):
     # yaml_filename = filename.split(".", 1)[0]+"_converted.yaml"
@@ -44,7 +70,7 @@ def xlsx_to_yaml(args):
     # yaml_filename = filename.replace(filename, 'yaml')
     xls = pd.ExcelFile(args.filename)
     names = xls.sheet_names
-    # names = ["NXentry"] 
+    names = ["NXsample"] 
     if not os.path.exists(args.destination):
         os.makedirs(args.destination)
     
@@ -74,17 +100,16 @@ def xlsx_to_yaml(args):
             } 
             for outer_k, outer_v in sheet_dict.items()
         }
-        # {x:y for x,y in sheet_dict.items() if y!=0}
-        # print(sheet_dict.get('experiment_start_date (NX_DATE_TIME)', {}).get('Documentation'))
-        # pprint.pprint(sheet_dict)
+
+        pprint.pprint(sheet_dict)
         file_path = os.path.join(folder_path,yaml_filename)
-        # print(file_path)
-        # pprint.pprint(sheet_dict)
         output={}
         tempstring = "(" + sheet + ")"
         output[tempstring] = sheet_dict
         with open(file_path, "w") as f:
             yaml.dump(output, f)
+
+        clean_duplicate_handler(file_path)
         # master[sheet] = sheet_dict
 
     # pprint.pprint(master)
