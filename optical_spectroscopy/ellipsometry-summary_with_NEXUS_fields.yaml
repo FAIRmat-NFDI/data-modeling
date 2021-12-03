@@ -6,6 +6,8 @@
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
 
+# one would need a Class/ separate entry for the sample description which can link to and should contain a full description of the composition. A free description as text might be not enough or unclear. Especially if one deals with many layer structured samples and optically anisotropic samples, like triclinic one 
+
 # Comments of Markus K. to the draft for FAIRmat AreaB Sprint3:
 # angle_of_incidence: outer or inner surface normal?
 #   -- top, reflective surface of the substrate (T.H.)
@@ -315,11 +317,12 @@ symbols:
         #  -- possible. In this grouping, it is here, because it belongs to the window,
         #     and only needed if window was used. No window, no calibration of its effect...
 
+    # from the indenting, this looks like that it belongs to calibration, shall we shift it to instrument?
     detector(NXdetector):
       doc: Which type of detector was used, and what is known about it? A detector can be a photomultiplier (PMT), a CCD in a camera, an array in a spectrometer. If so, the whole unit goes in here.
-    #"whole unit" as a term is this clear enough what we mean here?
-    #  -- like I do not want to know the amplifier within the camera,
-    #     the grating within the spectrograph, etc.
+      #"whole unit" as a term is this clear enough what we mean here?
+      #  -- like I do not want to know the amplifier within the camera,
+      #     the grating within the spectrograph, etc.
 
       detector_type:
         exists: required
@@ -425,12 +428,10 @@ symbols:
       #what about uniqueness of the identifier?
       #  -- append it to the experiment identifier...
 
-    data type:
+    data_type:
       exists: required
       doc: to be defined
-      enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, raw data]
-      # I would remove tan(psi) / cos(delta) otherwise we should add much more options)
-      #   -- in our rotating analyzer system, this is what you get...
+      enumeration: [psi / delta, tan(psi)/cos(delta), NCS, Mueller matrix, Jones matrix, raw data]
 
     number_of_variables(NX_INT):
       doc: specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)
@@ -442,7 +443,7 @@ symbols:
         rank: 1
         dim: [[1, N_wavelength]]
     (NXdata):
-      doc: Resulting data from the measurement, described by data type. Minimum two columns, if errors are available twice as many. For a Mueller matrix, it may be nine (1,1 is all 1, the rest is symmetric). #nine what? entries?
+      doc: Resulting data from the measurement, described by data type. Minimum two columns. For the normalized Mueller matrix, it may be 15 (1,1 is all 1).
       # for RC2 m11 represents intensity which is not 1
       # full Mueller matrix should be stored,
       #\@nx_class: NX_NUMBER better transform this data field into an NXdata
@@ -450,6 +451,14 @@ symbols:
         dimensions:
           rank: 5
           dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+
+    uncertainty(NXdata):
+      doc: Specified uncertainties of the data described by data type. The structure is the same as for (NXdata)
+      exists: recommend
+      dimensions:
+        rank: 5
+        dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+
 
     #Having a stage here is confusing, what is again the need for this?
     #  -- only if you are looking at the data but not the instrument...
