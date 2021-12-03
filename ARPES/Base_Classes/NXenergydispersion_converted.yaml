@@ -1,0 +1,31 @@
+(NXenergydispersion):
+  ' ()':
+    Dim: ''
+    Documentation: ''
+    Rank: ''
+    unit: ''
+  acquisition_mode (NX_CHAR):
+    Documentation: "\u201Cfixed\u201D or \u201Csweep\u201D"
+    unit: NX_CHAR
+  center_energy (NX_FLOAT):
+    Documentation: Center of the energy window
+    unit: NX_ENERGY
+  diameter (NX_FLOAT):
+    Documentation: Diameter of the dispersive orbit
+    unit: NX_LENGTH
+  entrance_slit (NXaperture):
+    Documentation: Size, position and shape of the entrance slits in dispersive analyzers
+    unit: ''
+  exit_slit (NXaperture):
+    Documentation: Size, position and shape of the exit slits in dispersive analyzer
+    unit: ''
+  pass_energy (NX_FLOAT):
+    Documentation: Pass energy in dispersive electrodes
+    unit: NX_ENERGY
+  scheme (NX_CHAR):
+    Documentation: "\u201Ctof\u201D, \u201Chemispherical\u201D, \u201Ccylindrical\u201D\
+      , \u201Cmirror\u201D, \u201Cretarding grid\u201D, etc."
+    unit: NX_CHAR
+  tof_distance (NX_FLOAT):
+    Documentation: Length of the tof drift electrode
+    unit: NX_LENGTH
