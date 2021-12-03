@@ -1,9 +1,4 @@
 (NXdetector):
-  ' ()':
-    Dim: ''
-    Documentation: ''
-    Rank: ''
-    unit: ''
   amplifier_type (NX_CHAR):
     Documentation: "Type of electron amplifier: \u201CMCP\u201D, \u201Cchanneltron\u201D\
       , etc."

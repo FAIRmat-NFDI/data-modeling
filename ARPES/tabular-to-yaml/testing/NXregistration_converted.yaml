@@ -1,0 +1,28 @@
+(NXregistration):
+  applied (NX_BOOL):
+    Documentation: Has the registration been applied?
+    unit: NX_BOOL
+  new_centre (NX_FLOAT):
+    Dim: '[1,2]'
+    Documentation: Coordinates of the new symmetry centre point.
+    Rank: 1
+    unit: NX_FLOAT
+  rotation_angle (NX_FLOAT):
+    Documentation: Angle of rotation
+    unit: NX_ANGLE
+  rotation_centre (NX_FLOAT):
+    Dim: '[1,2]'
+    Documentation: Coordinates of the rotation centre.
+    Rank: 1
+    unit: NX_FLOAT
+  scaling (NX_FLOAT):
+    Dim: '[1,2]'
+    Documentation: Scaling factor to compensate shrinking from distortion correction.
+    Rank: 1
+    unit: NX_FLOAT
+  x_translation (NX_FLOAT):
+    Documentation: Horizontal translation
+    unit: NX_FLOAT
+  y_translation (NX_FLOAT):
+    Documentation: Vertical translation
+    unit: NX_FLOAT

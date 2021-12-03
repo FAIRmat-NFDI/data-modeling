@@ -1,9 +1,4 @@
 (NXcollectionlens):
-  ' ()':
-    Dim: ''
-    Documentation: ''
-    Rank: ''
-    unit: ''
   contrast_aperture (NXaperture):
     Documentation: The size and postion of the contrast aperture inserted in the column.
     unit: ''

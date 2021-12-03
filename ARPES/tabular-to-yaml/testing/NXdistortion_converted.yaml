@@ -1,0 +1,26 @@
+(NXdistortion):
+  applied (NX_BOOL):
+    Documentation: Has the distortion correction been applied?
+    unit: NX_BOOL
+  field (NX_FLOAT):
+    Dim: '[ndx,ndy]'
+    Documentation: 2D matrix mapping the original distorted field in the undistorted
+      one.
+    Rank: 1.0
+    unit: NX_FLOAT
+  original_centre (NX_FLOAT):
+    Dim: '[1,2]'
+    Documentation: Coordinates of the symmetry centre point.
+    Rank: 1.0
+    unit: NX_FLOAT
+  original_points (NX_FLOAT):
+    Dim: '[2,nsym]'
+    Documentation: Coordinates of the relevant symmetry points.
+    Rank: 1.0
+    unit: NX_FLOAT
+  symmetry (NX_INT):
+    Documentation: Number of elementary symmetry operations.
+    unit: NX_INT
+  symmetry_angle (NX_FLOAT):
+    Documentation: Degrees of rotation for a symmetry operation.
+    unit: NX_INT

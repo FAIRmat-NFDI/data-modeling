@@ -1,9 +1,4 @@
 (NXelectronanalyser):
-  ' ()':
-    Dim: ''
-    Documentation: ''
-    Rank: ''
-    unit: ''
   \@short_name (NX_CHAR):
     Documentation: Acronym or other shorthand name
     unit: NX_CHAR

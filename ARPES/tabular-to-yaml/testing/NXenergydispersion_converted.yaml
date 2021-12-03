@@ -1,9 +1,4 @@
 (NXenergydispersion):
-  ' ()':
-    Dim: ''
-    Documentation: ''
-    Rank: ''
-    unit: ''
   acquisition_mode (NX_CHAR):
     Documentation: "\u201Cfixed\u201D or \u201Csweep\u201D"
     unit: NX_CHAR
