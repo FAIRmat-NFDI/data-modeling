@@ -18,16 +18,17 @@ from yaml2nxdl_recursive_build import recursive_build
 #fnm = 'NXarpes.yml'
 #fnm = 'NXmx.yml'
 #fnm = 'NXem_base_draft.yml'
-fnm = 'NXellipsometry_base_draft.yml'
+#fnm = 'NXellipsometry_base_draft.yml'
+fnm = './ARPES/Application_Definitions/NXmpes_core_draft.yml'
 
 #step1: read the user-specific application definition which was written as a yml file
 yml = read_user_appdef(fnm)
 
 #step2a: create an instantiated NXDL schema XML tree, begin with the header, XML schema and namespaces
 attr_qname = etree.QName("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation")
-rt = etree.Element('definition', 
+rt = etree.Element('definition',
                    {attr_qname: 'http://definition.nexusformat.org/nxdl/nxdl.xsd' },
-                   nsmap = {None: 'http://definition.nexusformat.org/nxdl/3.1', 
+                   nsmap = {None: 'http://definition.nexusformat.org/nxdl/3.1',
                             'xsi': 'http://www.w3.org/2001/XMLSchema-instance'})
 
 
