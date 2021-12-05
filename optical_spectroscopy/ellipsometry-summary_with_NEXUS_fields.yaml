@@ -6,7 +6,7 @@
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
 
-# one would need a Class/ separate entry for the sample description which can link to and should contain a full description of the composition. A free description as text might be not enough or unclear. Especially if one deals with many layer structured samples and optically anisotropic samples, like triclinic one 
+# one would need a Class/ separate entry for the sample description which can link to and should contain a full description of the composition. A free description as text might be not enough or unclear. Especially if one deals with many layer structured samples and optically anisotropic samples, like triclinic one
 
 # Comments of Markus K. to the draft for FAIRmat AreaB Sprint3:
 # angle_of_incidence: outer or inner surface normal?
