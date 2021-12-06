@@ -34,7 +34,7 @@ category: application # Defaults "exists" to "required"
         enumeration: [x-ray,ultraviolet]
     (NXbeam): # Describes the beam at the sample.
       doc: Properties of the beam at the sample.
-      distance(NX_NUMBER): 0.0
+      distance(NX_NUMBER):
         doc: Distance of the point of evaluation of the beam from the sample.
         unit: NX_LENGTH
       incident_energy(NX_NUMBER):
@@ -93,7 +93,7 @@ category: application # Defaults "exists" to "required"
           exists: recommended
           doc: Labelling of a standard lens setting
         projection:
-          doc: The space projected in the angularly dispersive directions: “real” or “reciprocal”
+          doc: The space projected in the angularly dispersive directions, i.e. real or reciprocal
           enumeration: [real, reciprocal]
         (NXaperture): # Ahead of base class
           exists: recommended
@@ -106,7 +106,7 @@ category: application # Defaults "exists" to "required"
             enumeration: [curved, straight, circle, square, hexagon, octagon, bladed]
           size(NX_NUMBER):
             doc: The relevant dimension for the aperture (slit width, pinhole diameter etc.)
-            units: NX_LENGTH
+            unit: NX_LENGTH
       (NXenergydispersion):
         scheme:
           doc: Energy dispersion scheme employed.
@@ -137,14 +137,14 @@ category: application # Defaults "exists" to "required"
       calculated_kx(NX_FLOAT):
         exists: recommended
         doc: calibrated kx momentum axis
-        units: NX_WAVENUMBER
+        unit: NX_WAVENUMBER
         dimensions:
           rank: 1
           dim: [[1, nx]]
       calculated_energy(NX_FLOAT):
         exists: recommended
         doc: calibrated energy axis
-        units: NX_ENERGY
+        unit: NX_ENERGY
         dimensions:
           rank: 1
           dim: [[1, ne]]
@@ -154,10 +154,10 @@ category: application # Defaults "exists" to "required"
       (NXregistration):
         applied(NX_BOOLEAN):
           doc: Has an image registration been applied?
-      energy_calibration(NXcalibration):
+      (NXcalibration):
         applied(NX_BOOLEAN):
           doc: Has an energy calibration been applied?
-      momentum_calibration(NXcalibration):
+      (NXcalibration):
         applied(NX_BOOLEAN):
           doc: Has a momentum calibration been applied?
   (NXsample):
@@ -173,7 +173,7 @@ category: application # Defaults "exists" to "required"
       doc: ISO 8601 date of preparation of the sample for the ARPES experiment (i.e. cleaving, last annealing).
       unit: NX_TIME
     description:
-      doc: Free-text surface preparation technique for the ARPES experiment: UHV cleaving, in-situ growth, sputtering/annealing etc.
+      doc: Free-text surface preparation technique for the ARPES experiment, i.e. UHV cleaving, in-situ growth, sputtering/annealing etc.
     temperature(NX_NUMBER):
       doc: Temperature of the sample
       unit: NX_TEMPERATURE
