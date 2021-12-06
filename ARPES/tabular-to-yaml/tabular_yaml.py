@@ -37,14 +37,15 @@ def cleanDF(df):
     df = df.fillna('') 
     df['Nexus hierarchy'] = df['Nexus hierarchy'].str.split(':').str[-1]
     MergedTypeClass = df['type:units'].str.split(':').str[0].apply(stripspaces) + df['NX class'].astype(str).apply(stripspaces)
-    df['Name'] = df['Nexus hierarchy'].apply(stripspaces) + " (" + MergedTypeClass + ")"
+    df['Name'] = df['Nexus hierarchy'].apply(stripspaces) + "(" + MergedTypeClass + ")"
     df['unit'] = df['type:units'].str.split(':').str[-1].apply(stripspaces)
-    df.drop(columns=["Nexus hierarchy","type:units","NX class"], inplace = True)
+    df['doc'] = df['Documentation'].replace('', np.nan, inplace=True)
+    print(df)
+    df.drop(columns=["Nexus hierarchy","type:units","NX class","Documentation"], inplace = True)
     df.set_index('Name', inplace=True)
     df.dropna(axis=0,thresh=3,inplace=True)
     df.dropna(axis=1,thresh=3,inplace=True)
-    df['Documentation'].replace('', np.nan, inplace=True)
-    df.dropna(subset=['Documentation'], inplace=True)
+    df.dropna(subset=['doc'], inplace=True)
     check_dupes = df.index.duplicated(keep='first')
     num = 0
     while any(check_dupes):
@@ -90,6 +91,15 @@ def xlsx_to_yaml():
                 inner_k: inner_v
                 for inner_k, inner_v in outer_v.items()
                 if inner_v != 0 and inner_k != "Exists"
+            } 
+            for outer_k, outer_v in sheet_dict.items()
+        }
+
+        sheet_dict = {
+            outer_k: {
+                outer_v["dimensions"]: {"rank":outer_v.pop("Rank"), "dim":outer_v.pop("Dim")}
+                for inner_k, inner_v in outer_v.items()
+                if inner_k == "dim"
             } 
             for outer_k, outer_v in sheet_dict.items()
         }
