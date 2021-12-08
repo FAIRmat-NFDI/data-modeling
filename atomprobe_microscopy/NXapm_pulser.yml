@@ -1,8 +1,10 @@
 #kuehbacm at hu-berlin.de, 12/2021
 name: NXapm_pulser
 category: contributed
-doc: Draft for a class which can be used for representing a coarsed description of those components of an atom probe microscope which trigger the pulsing whether it be a laser or high voltage pulsing unit.
+doc: Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing for laser or high voltage pulsing.
 (NXobject):
+  symbols:
+    Ntlogs: Number of individual measurements
   laser_pulser(NXsource):
     exists: optional
     doc: Atom probe microscopes use controlled either voltage or laser pulsing to trigger a sequence of field evaporation events. Many microscopes have a laser installed enabling measurements of poorly conductive specimens.
@@ -12,15 +14,45 @@ doc: Draft for a class which can be used for representing a coarsed description 
     manufacturer_model:
       doc: Hardware name/serial number or hash identifier given by the manufacturer to identify the laser unit.
     wavelength(NX_FLOAT):
-      doc: Wavelength of the radiation.
+      doc: Wavelength of the laser radiation.
       unit: NX_WAVELENGTH
-    power(NX_FLOAT)
+    power(NX_FLOAT):
       doc: Source power
       unit: NX_POWER
+    #why is the laser energy often a range because the laser energy is time-dependently adjusted?
     pinhole_to_specimen(NXtransformations):
-      doc: Geometrical description how the laser focusing optics/pinhole-attached coordinate system has to be transformed to align with the specimen coordinate system. A right-handed Cartesian coordinate system is assumed whose positive z-axis points into the direction of the laser beam, i.e. towards the specimen.
+      doc: Geometrical description how the laser focusing optics/pinhole-attached coordinate system has to be transformed to align with the specimen coordinate system. A right-handed Cartesian coordinate system, the so-called laser space, is assumed whose positive z-axis points into the direction of the propagating laser beam, i.e. towards the specimen.
   beam(NXbeam):
-    doc: Optional place for describing details about the focused laser beam with which the specimen is illuminated to trigger field evaporation events.
-#laser pulsing unit make this an own base class or use NXbeam and NXsource, discuss eventually in consolidation workshop
-  hv_pulser(NXapm_hv_pulser):
-    doc: Optionally installed voltage system for inducing field evaporation via high-voltage electric pulsing.
+    doc: Optional place for describing details about the focused laser beam with which the specimen is illuminated.
+    #laser pulsing unit make this an own base class or use NXbeam and NXsource, discuss eventually in consolidation workshop
+    laser_pinhole_position(NXcollection):
+      doc: Track time-dependent settings over the course of the measurement where the laser beam exits the focusing optics.
+    laser_impact_position(NXcollection):
+      doc: Track time-dependent settings over the course of the measurement where the laser hits the specimen.
+  pulse_frequency(NX_NUMBER):
+    doc: recommended
+    unit: NX_FREQUENCY
+  #how can one store a spatio-temporal profile, own class for this?
+  pulse_fraction(NX_NUMBER):
+    doc: recommended
+    unit: NX_UNITLESS #how else to specify percent, there is not NX_PERCENT
+  pulsed_voltage(NX_FLOAT):
+    exists: required
+    doc: to be defined
+    unit: NX_VOLTAGE
+    dimensions:
+      rank: 1
+      dim: [[1, Nions]]
+  standing_voltage(NX_FLOAT):
+    exists: required
+    doc: Direct current voltage between the specimen and the (local electrode) in the case of a LEAP instrument.
+    unit: NX_VOLTAGE
+    dimensions:
+      rank: 1
+      dim: [[1, Nions]]
+  laser_pulse_time_profile(NX_FLOAT):
+    doc: Spatio-temporal profile of the laser energy as a function of time since the first pulse.
+    unit: NX_ENERGY
+    dimensions:
+      rank: 2
+      dim: [[2, Ntlogs]]

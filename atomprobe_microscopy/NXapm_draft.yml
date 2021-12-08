@@ -1,50 +1,53 @@
-#kuehbacm at hu-berlin.de, 11/2021
+#kuehbacm at hu-berlin.de, 12/2021
 #a draft version of a NeXus application definition for atom probe microscopy
-#the draft uses the application example of atom probe tomography experiments as realized with 
-#AMETEK/local electrode atom probe (LEAP) instrument designs, but takes into account also the demands forield ion microscopy
+#the draft uses the application example of atom probe tomography and field ion microscopy experiments
+#the draft is strongly inspired by the instrument use case of AMETEK's, so-called local electrode atom probe (LEAP)
+#instrument design
 name: NXapm_draft
-category: application #or better a contributed class #what is the practical consequence
-doc: Draft application definition for atom probe tomography and related field ion microscopy, all summarized as atom probe microscopy experiments
+category: contributed
+doc: Draft application definition for atom probe tomography and related field ion microscopy, all summarized as atom probe microscopy experiments.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   Nions: Total number of ions collected
-  Ndldwires: Total number of independented delay-line detector wires
   #32 is a reasonable large default value to cover even the most complicated fragments hitherto reported in the atom probe literature
-(NXentry):
+entry(NXentry):
   exists: required
-  #if the exists keyword is not used the default is exists optional
   definition:
     exists: required
     doc: Official NeXus NXDL schema to which this entry conforms.
     \@version:
-      doc: Version specifier enabling to document modification of the schema.  
+      doc: Version specifier enabling to document modification of the schema.
   experiment_identifier:
     exists: required
     doc: Ideally, a (globally persistent) unique identifier for referring to this experiment. The identifier is usually defined/issued by the facility, laboratory, or the principle investigator. The identifier enables to link experiments to e.g. proposals.
-  experiment_description: 
+  experiment_description:
   start_time(NX_DATE_TIME):
     exists: recommended
   end_time(NX_DATE_TIME):
     exists: recommended
-  program_name:
-    exists: recommended
-    doc: Commercial or otherwise given name to the program that was used to acquire/measure the dataset. Atom probe microscopy experiments are nowadays still in most cases operated/performed with commercial integrated acquisition and instrument control software solutions. In the case of a commercial atom probe microscope the least processed numerical results and metadata are stored in so-called RHIT and HITS files. These are proprietary binary file formats whose content must legally not be accessed. In effect, RHIT and HITS store the experiment in a closed manner that is practically useless without having the commercial software. To arrive at a state that atom probe microscopy delivers a dataset with which one can study atomic position and composition analyses these raw data have to be processed. In summary, a useful application definition stores details about the physical acquisition of the raw data and all its processing steps to arrive at ion hit positions, time-of-flight data, and from these the computed tomographically reconstructed atomic position and mass-to-charge state values. In most cases an APM dataset is useful only if post-processed with ranging, where a mapping is established between tof data and ion types. All these steps are in most cases performed using commercial software. Frequently, though ranging is also performed in alternative research software. Therefore, there is strictly speaking not a single program used in atom probe to arrive at a useful dataset. Hence, the reason to design the application definition with the acquisition and key post-processing steps.
-    \@version:
-      exists: recommended
-      doc: Program version number. Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured ideally such that the result file is recreatable in the same deterministic manner numerically.
   time_zone(NX_DATE_TIME):
     exists: required
     doc: ISO 8601 time_zone offset from UTC.
-  #the following two will be inherited as we are in an NXentry
-  #experiment_documentation(NXnote):
-  #thumbnail(NXnote):
+  program_name:
+    exists: recommended
+    doc: Commercial or otherwise given name to the program that was used to acquire/measure the dataset. Atom probe microscopy experiments are nowadays still in most cases operated/performed via commercial integrated acquisition and instrument control software. For AMETEK LEAP instruments the least processed (rawest) numerical results and metadata are stored in so-called RHIT and HITS files and supplementary metadata in the database that is connected to the control software. RHIT and HITS are proprietary binary file formats whose content must not be accessed with software other than of AMETEK (IVAS/APSuite). In effect, RHIT and HITS store the experiment in a closed manner that is practically useless without having the commercial software. To arrive at a state that atom probe microscopy delivers a dataset with which one can study atomic position and do composition analyses, these raw data have to be processed. Therefore, for an application definition to be useful it needs to store details about the physical acquisition of the raw data and all its processing steps to arrive at derived quantities like ion hit positions (on the detector), calibrated time-of-flight data, and from calibrated mass-to-charge-state ratios, and tomographically reconstructed computed atomic positions. In many cases cases an APM dataset is useful only if its post-processed via so-called ranging. Ranging defines a set of rules how to map between tof and mass-to-charge data on ion types to decode elemental identities. All these steps are in most cases performed using commercial software. Frequently, though, ranging is also performed in (open-source) research software. Therefore, there is strictly speaking not a single program used in atom probe to arrive at a useful reconstructed and ranged dataset. Hence, the reason to design the application definition with the acquisition and key post-processing steps.
+    \@version:
+      exists: recommended
+      doc: Program version i.e. build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result file is numerically recreatable in the same deterministic manner.
+  experiment_documentation(NXnote):
+    exists: optional
+    doc: Binary container for a file which can be used to add a description of additional details to the experiment. The container can hold e.g. a ppt, pdf, latex, txt, image, ...).
+  thumbnail(NXnote):
+    exists: recommended
+    doc: A small image that is representative of the entry. For reconstructed datasets it is recommended to display the reconstruction with a scale bar as a 640x480 pixel jpeg image.
+    \@type:
   operation_mode(NX_CHAR):
     exists: required
       doc: What type of atom probe microscope experiment is performed. This field can be used e.g. by materials database systems to qualitatively filter experiments.
-      enumeration: [apt, fim, afim]
+      enumeration: [leap, apt, fim, apt+fim]
   operator(NXuser):
     exists: [min, 1, max, infty]
-    doc: Contact information of at least the user of the instrument or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended.
+    doc: Contact information of at least the user of the instrument who measured this specimen or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended.
     name:
       exists: required
     affiliation:
@@ -58,187 +61,161 @@ symbols:
       exists: recommended
     telephone_number:
       exists: recommended
+    role(NX_CHAR):
+      exists: optional
+      doc: Which role does the person have (e.g. technician operating the microscope, student, postdoc, principal investigator, ...)
   specimen(NXsample):
     exists: required
     name:
       exists: required
-      doc: Descriptive name of sample
+      doc: Descriptive name or identifier with which to distinguish the specimen from all others. In cases where the specimen were e.g. site-specifically cut from samples or for instrument sessions where multiple specimens are loaded the name has to be descriptive enough to resolve which specimen on e.g. the microtip array was taken. The user is advised to store the details how specimens are cut from samples in the sample history.
     sample_history:
       exists: required
-      doc: Ideally, a reference to the location or a (globally persistent) unique identifier of e.g. another file, which is ideally formatted according to another NeXus application definition. This other file should document ideally as many details as possible of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample/specimen is not available, use this field as a free-text description to specify a sub-set of the entire sample history, i.e. what you would consider being the key steps of the preparation.
+      doc: Ideally, a reference to the location of or a (globally persistent) unique identifier of e.g. another file which should document ideally as many details as possible of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample/specimen is not available, use this field as a free-text description to specify a sub-set of the entire sample history, i.e. what you would consider being the key steps of the preparation.
     preparation_date(NX_DATE_TIME):
       exists: required
-      doc: ISO8601 date and time when the specimen was prepared. This is especially required for environmentally sensitive samples such as hydrogen-charged specimens or tracer experiments with a short half-time.
+      doc: ISO8601 date and time when the specimen was prepared. This is especially required for environmentally sensitive samples such as hydrogen-charged specimens or experiments including tracers with a short half-time.
     preparation_time_zone(NX_DATE_TIME):
       exists: required
-      doc: ISO 8601 time_zone offset from UTC. Required, as it is possible that the specimen was prepared in a different place/laboratory than where the experiment is performed.
+      doc: ISO 8601 time_zone offset from UTC. Required, as it is possible that the specimen was prepared in a different place/laboratory than where the experiment/measurement is performed.
     short_title:
     atom_types:
       exists: required
       doc: "Use Hill's system for listing elements of the periodic table which are inside or attached to the surface of the specimen and thus relevant from a scientific point. This field can be used by materials database systems to parse the relevant elements without having to interpret these from the sample history."
-  (NXmonitor):
-####
   (NXdata):
-    link:
-    doc: Hard link to a location/locations in the hierarchy of the NeXus file where the data for default plotting are stored
-  scan_align(NXprocess):
-    program_name:
-      exists: required
-      doc: Commercial or otherwise defined given name to the program that was used to process the data on-the-fly.
-    program_version:
-      exists: required
-      doc: Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured in such a way that result files can be created ideally in a deterministic manner.
-    description:
-      exists: required
-      doc: Ideally, a reference to the location or a unique (globally persistent) identifier (e.g.) of e.g. another file which gives as many as possible details of this processing steps. In the case that such a detailed history of the processing (steps) is not available, use this field as a free-text description of this processing.
-    misc(NXcollection):
-      cartesian_scan_dimensions(NX_UINT):
-        doc: to be defined I need to double check with Christoph Koch what this is, but I think the member names for this and the next two members are not nice. I consider these three more like a dummy like the WONI experiment to understand how to store n-dimensional data using NeXus.
-      cartesian_scan_dimension1_count(NX_UINT):
-        doc: to be defined
-      cartesian_scan_dimension2_count(NX_UINT):
-        doc: to be defined
-      acquired_data(NXdata):
-        \@signal: imagestack
-        \@axes: [imageid, ypos, xpos]
-        \@imageid_indices: 2
-        \@ypos_indices: 1
-        \@xpos_indices: 0
-        data(NX_FLOAT):
-          dimensions:
-            rank: 3
-            dim: [[2, nimages], [1, ny], [0, nx]]
-        imageid(NX_UINT):
-          dimensions:
-            rank: 1
-            dim: [[2,nimages]]
-          \@long_name:
-            doc: Label for the image axis
-        ypos(NX_NUMBER):
-          dimensions:
-            rank: 1
-            dim: [[1,ny]]
-          \@long_name:
-            doc: Label for the y axis
-        xpos(NX_NUMBER):
-          dimensions:
-            rank: 1
-            dim: [[0,nx]]
-          \@long_name:
-            doc: Label for the x axis
-        title:
-        doc: A stack of two-dimensional images with imageid changing slowest, ypos changing faster, and xpos changing fastest, i.e. xpos + ypos * nx + imageid * nx*ny implicit C-style indexing.
-        link:
-          name: ??
-          target: ??
-        # to be continued with further links
-#########
+    exists: required
+    doc: Hard link to a location/locations in the hierarchy of the NeXus file where the data for default plotting are stored.
+    detector_stack(link):
+      target: /entry/atom_probe/ion_impact_positions/hit_positions
+      #handle default plotting
+    tomographic_reconstruction(link):
+      target: /entry/atom_probe/reconstruction/reconstructed_positions
+    #how to allow for either or? namely when users upload a POS file only, we have only access to the tomographic_reconstruction, if they upload an EPOS file then we have the tomographic_reconstruction and the hit_positions
   atom_probe(NXinstrument):
     exists: required
-    doc: An atom probe microscope is fundamentally different to an accelerator or electron microscope because the ions from the specimen creates not only create the beam, i.e. the specimen is the ion source but also the specimen is the lens of the microscope. Therefore, we modify the reference coordinate system. In NeXus this is the McSTAS coordinate system. We call this reference coordinate system the specimen coordinate system ?? maybe better align to instrument ?? but specimen is beam so more consistent with em, and spectroscopy ??. The positive z-axis points outwards from the apex of the specimen into the vacuum towards the detector. The coordinate system remains/is a right-handed one. Positive rotations are counted counter-clockwise. ?? How does McSTAS define this ??
+    doc: An atom probe microscope is fundamentally different to a large-scale facility accelerator or electron microscope in at least two ways: First, ionized atoms and molecular ions ions and/or the imaging gas ions (in the case of field ion microscopy) are accelerated towards a position-sensitive and time-of-flight taking detector system. Hence, there is no real beam. This also causes that second the specimen is the lens of the an atom probe microscope. Therefore, we modify the reference coordinate system that is usually referred to in NeXus - the McStas coordinate system. We call the reference coordinate system the specimen coordinate system. To be consistent with accelerator and microscopy techniques we define that the positive z-axis points outwards from the apex of the specimen into the vacuum towards the detector. The coordinate system remains/is a right-handed one. We define clockwise rotations to be positive.
     name:
       doc: Name of the microscope.
     location(NX_CHAR):
-      doc: Geographical position of the lab or the place where the instrument is installed. #Is it useful to add a NeXus base class for geographical positions?
+      doc: Geographic coordinates of the lab or the place where the instrument is installed.
     instrument_manufacturer:
       exists: required
-      doc: Manufacturer of the entire instrument (e.g. AMETEK/Cameca) to enable e.g. queries in materials database systems for instrument manufacturers. Usually more technical details are needed to specify the instrument. Therefore, it is recommended to fill as many of the individual components of the instrument as required also for contextualization.
+      doc: Manufacturer of the entire instrument (e.g. AMETEK/Cameca) to enable e.g. queries in materials database systems for instrument manufacturers. Usually more technical details are needed though to specify the instrument.
     instrument_model:
       exists: recommended
-      doc: Manufacturer brand/model to enable e.g. queries about microscope models (e.g. LEAP4000). See comments on instrument_manufacturer on how to provide further specification. Here also 
+      doc: Manufacturer brand/model to enable e.g. queries about microscope models (e.g. LEAP3000XS).
     instrument_capability:
-      doc: Free-text list possibly multiple terms of functionalities which the instrument provides. The values are to be picked from a bag of controlled words. #better make an enumeration
-    counter_electrode(NXapm_electrode):
+      doc: Free-text list possibly multiple terms of functionalities which the instrument provides. The values are to be picked from a bag of controlled words.
+    flight_path_length(NX_FLOAT):
+      doc: to be defined
+      unit: NX_LENGTH
+    counter_electrode(NXem_lens):
+    #what about flat tests? electrode identifier?
+    counter_electrode_aperture(NXaperture):
     ion_detector(NXdetector):
-      doc: In atom probe the detector is a unit comprising a multi-channel plate detector and a delay line detector unit with usually three wires.
-      #can this combination of detectors be handled or should we place (better) two detectors one "measuring" DLD wire timing data, the other one time-of-flight instead? #check again how this is working exactly ?
+      doc: In atom probe the detector is a delay line detector.
       type:
         exists: recommended
         doc: Description of the detector type.
-        enumeration: [mcp]
+        enumeration: [mcp/dld, phosphor/ccd]
       manufacturer_name:
         doc: Name of the manufacturer who built/constructed the detector.
       manufacturer_model:
         doc: Hardware name/serial number or hash identifier given by the manufacturer to identify the detector.
       (NXtransformations):
-        doc: Geometrical description how the detector coordinate system is spatially arranged (relative to the specimen). In atom probe microscopy a frequently used habit is to discuss the so-called detector space image (stack). This is a stack of two-dimensional histograms. Typically the set of ion evaporation sequence IDs is grouped into chunks. For each chunk a histogram of the ion hit positions on the detector is computed. This leaves the possibility for inconsistency between the so-called detector coordinate system and a specimen-affixed coordinate system. The transformation here can resolve the ambiguity by clarifying that how the positive z-axes of either coordinate systems are to be made parallel by specifying which rotation aligns the detector space coordinate system to point along the specimen coordinate system.
-      data(NXdata):
-        doc: to be defined
+        doc: Affine transformation which aligns the Cartesian right-handed coordinate system which defines the detector space with the specimen space. In atom probe microscopy a frequently used choice is to discuss the so-called detector space image (stack). This is a stack of two-dimensional histograms of detected ions within a predefined evaporation ID interval. Typically, the set of ion evaporation sequence IDs is grouped into chunks. For each chunk a histogram of the ion hit positions on the detector is computed. This leaves the possibility for inconsistency between the so-called detector coordinate system and a specimen-affixed coordinate system. The transformation here can resolve this ambiguity as it clarifies how the positive z-axes of either coordinate systems can be oriented.
+      signal_amplitude(NX_FLOAT):
+        exists: optional
+        doc: Amplitude of the signal detected on the MCP as used historically in ATO files.
+        unit: NX_CURRENT
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
     laser_or_high_voltage_pulser(NXapm_pulser):
-    stage(NXem_stage):
+    stage(NXstage):
       ##cryo controller holder, type of holder, material for pucks makes a difference for e.g. hydrogen contamination, equally dwell time in buffer and load lock chamber and environmental transfer, the application definition does not account for this at the moment, would need a class representing stage and specimen holder hierarchy of the entire sample loading and transfer system and the contributions or not these components make wrt to contamination
+      base_temperature_time_profile(NX_FLOAT):
+        symbols:
+          Ntlogs: Number of time logs
+        doc: Base temperature (time) profile for the specimen starting the measurement. Write a single value pair when only a nominal/average value is required. In this case, set the time value to zero.
+        exists: recommended
+        dimensions:
+          rank: 2
+          dim: [[2, Ntlogs]]
     control_software(NXcollection):
-      doc: The majority of atom probe microscopes comes from a single commercial manufacturer. In the case of instruments from AMETEK (formerly Cameca) their operation is controlled via an-a set of integrated instrument control system(s) (APSuite/IVAS/Davis). By contrast, instruments which were built by individual research groups such as of the French (GPM, Rouen, France), the Schmitz (Inspico, Stuttgart, Germany), the Felfer (Oxcart, Erlangen, Germany), or the PNNL group (Pacific Northwest National Laborary, Portland, Oregon, U.S.) have individual solutions to control the instrument some of which modularized and open, some of which also as integrated control units with undisclosed source code and lacking open APIs. This lack of finely granularized access to control settings via APIs motivates the current design of the application definition via a collection. Holding heterogeneous, not yet standardized pieces of information is the purpose of this collection.
+      doc: The majority of atom probe microscopes comes from a single commercial manufacturer AMETEK (formerly Cameca). Their instruments are controlled via an(/a set) of integrated instrument control system(s) (APSuite/IVAS/Davis). By contrast, instruments which were built by individual research groups such as of the French (GPM, Rouen, France), the Schmitz (Inspico, Stuttgart, Germany), the Felfer (Oxcart, Erlangen, Germany), or the PNNL group (Pacific Northwest National Laborary, Portland, Oregon, U.S.) have individual solutions to control the instrument. Some of which are modularized and open, some of which realize also integrated control units with portions of eventually undisclosed source code and lacking open APIs. Currently, the is no community-specific API for getting finely granularized access to such control settings. This motivates the current design of the application definition via a collection. Holding heterogeneous, not yet standardized pieces of information is the purpose of this collection.
       #is nesting of collections allowed ?
       analysis_chamber(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement about the environment in the analysis chamber.
+        symbols:
+          Ntlogs: Number of time logs
+        doc: Track time-dependent settings over the course of the measurement about the environment in the analysis chamber such as gas pressure values etc.
+        pressure_time_profile(NX_FLOAT):
+          exists: recommended
+          dimensions:
+            rank: 2
+            dim: [[2, Ntlogs]]
       buffer_chamber(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement and loading about the environment in the buffer chamber.
+        doc: Track time-dependent settings over the course of the measurement and loading about the environment in the buffer chamber such as gas pressure values etc..
       load_lock_chamber(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement and loading about the environment in the load-lock chamber.
-      laser_pinhole_position(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement where the laser beam exits the focusing optics.
-      laser_impact_position(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement where the laser hits the specimen.
-      reflectron_voltage(NXcollection):
-        doc: Track time-dependent settings over the course of the measurement of the reflectron voltage.
-#get opinion where to place pulsing either inside the laser/hv component or as an own class?
-      pulsing_control(NXcollection):
-        doc: Track spatio-temporalFor AMETEK instruments the pulsing control is part of the acquisition software and thus proprietary in most cases so far. Nevertheless, this group in the hierarchy should be used to store collected data related to voltage curve and the pulsing history if available.
-        #software
-        pulse_frequency(NX_NUMBER):
-          doc: to be defined
-          unit: NX_FREQUENCY
-          #spatio-temporal profile
-        pulse_fraction(NX_NUMBER):
-          doc: to be defined
-          unit: NX_UNITLESS #how else to specify percent, there is not NX_PERCENT
-        bias_voltage(NX_FLOAT): #how can one store a spatio-temporal profile, own class for this
-          exists: required
-          doc: to be defined
-          unit: NX_VOLTAGE
-          dimensions:
-            rank: 1
-            dim: [[1, Nions]]
-        standing_voltage(NX_FLOAT):
-          exists: required
-          doc: Direct current voltage also known as ??? bias voltage ##also here how to store spatio-temporal profile
-          unit: NX_VOLTAGE
-          dimensions:
-            rank: 1
-            dim: [[1, Nions]]
-        #laser_pulse_profile(NXdata):
-        #  doc: Describes the time profile when pulses were fired.
-        #laser_power_profile(NXdata):
-        #  doc: Describes the time profile of the laser power.
-        hit_multiplicity(NX_UINT):
-          exists: optional
-          doc: Simplified placing for results from the hit multiplicity analysis.
-          dimensions:
-            rank: 1
-            dim: [[1, Nions]]
-    hit_position_algorithm(NXprocess):
-      ###software model, type, settings what not
+        doc: Track time-dependent settings over the course of the measurement and loading about the environment in the load-lock chamber such as gas pressure values etc.
+    specimen_monitoring(NXcollection):
+      doc: A place where details about the initial shape of the specimen can be stored. Ideally, here also data about the shape evolution of the specimen can be stored.
+      initial_radius(NX_FLOAT):
+        doc: Initial radius of the specimen
+        unit: NX_LENGTH
+      shank_angle(NX_FLOAT):
+        doc: to be defined
+        unit: NX_ANGLE
+    ion_impact_positions(NXprocess):
+      #program and version are inherited from NXprocess
+      symbols:
+        doc: Symbols used in the schema to specify e.g. dimensions of arrays
+        Ndldwires: Total number of independent wires in the delay-line detector
       exists: optional
-      doc: Required data post-processing step of analog-to-digital conversion of the detector signals into ion hit positions. This processing takes place partly in the control unit of the detector and instructed and monitored by the acquisition/instrument control software. However, the exact details are at least for AMETEK instruments (the large majority of installations worldwide) kept proprietary and inaccessible. Nevertheless, this group in the hierarchy should be used to store the ion hit positions.
+      doc: Data post-processing step of analog-to-digital conversion of the detector signals into ion hit positions. This processing takes place partly in the control unit of the detector and is instructed and monitored by the acquisition/instrument control software. Therefore, the exact details are, at least in the case of AMETEK instruments (the large majority of installations worldwide) kept proprietary and inaccessible. Nevertheless, this group in the hierarchy should be used to store the ion hit positions.
       arrival_time_pairs(NX_NUMBER):
         exists: optional
         doc: Raw readings from the analog-to-digital-converter timing circuits of the detector wires.
         unit: NX_TIME
         dimensions:
           rank: 3
-          dim: [[1, 2], [2, Nions], [3, Ndldwires]]
+          dim: [[1, 2], [2, Ndldwires], [3, Nions]]
       hit_positions(NX_FLOAT):
         exists: required
-        doc: Computed raw ?? to be defined or processed ?? detector hit positions as read-out from the acquisition software as these are available. 
-        unit: NX_LENGTH #NX_POSITION #does not exist as a NXDL unit category
+        doc: Evaluated ion impact coordinates at the detector (either as computed from the arrival time pairs or reported as the result of a not further specified processing).
+        unit: NX_LENGTH
         dimensions:
           rank: 2
           dim: [[1, 2], [2, Nions]]
-    ion_filtering(NXprocess):
-      #software name and type, version, etc
+      detection_rate_time_profile(NX_FLOAT):
+        doc: Spatio-temporal profile of the detection rate since the start of the measurement.
+        #how to handle cases when we would like to store ideally an array where one dimensions is NX_TIME and the other one is e.g. NX_PERCENT 
+    hit_multiplicity(NXprocess):
+      #program and version are inherited from NXprocess
       exists: optional
-      doc: Optional data post-processing step to identify which of the detected ions should be included in the voltage-and-bowl correction.
+      doc: Data post-processing step that is usually executed in the integrated control software, yielding how many ions where detected in the pulse which yields the multiplicity of the ion.
+      pulses_since_last_ion(NX_UINT):
+        exists: optional
+        doc: Number of pulses since the last detected ion (pulses). For multi-hit records, after the first record, this is zero.
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
+      hit_multiplicity(NX_UINT):
+        exists: optional
+        doc: Hit multiplicity. For multi-hit records, after the first record, this is zero.
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
+      pulse_id(NX_UINT):
+        exists: optional
+        doc: Number of pulses since the start of the atom probe run
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
+    ion_filtering(NXprocess):
+      #program and version are inherited from NXprocess
+      exists: optional
+      doc: Data post-processing step to identify which of the detected ions should be included in the voltage-and-bowl correction.
       evaporation_id_included(NX_BOOLEAN):
         exists: required
         doc: Bitmask if ion is to be considered or not
@@ -246,9 +223,9 @@ symbols:
           rank: 1
           dim: [[1, Nions]]
     voltage_and_bowl_correction(NXprocess):
-      #software name and type, version, etc
+      #program and version are inherited from NXprocess
       exists: optional
-      doc: Recommended data post-processing step to correct for ion impact position flight path differences, detector biases, and nonlinearities.
+      doc: Data post-processing step to correct for ion impact position flight path differences, detector biases, and nonlinearities.
       raw_tof(NX_FLOAT):
         exists: required
         doc: Raw time-of-flight data as read-out from the acquisition software if these are available.
@@ -265,11 +242,11 @@ symbols:
           dim: [[1, Nions]]
       parameter(NXcollection):
         exists: optional
-        doc: The key idea and algorithm of the voltage-and-bowl correction is likely qualitatively similar for instruments of different manufacturers or research groups but different specific calibration models exists. In the first draft of the application definition we do not wish to resolve or generalize these differences. Rather the purpose of this collection is to provide a container where to store these parameters and eventually even calibration models used for the voltage-and-bowl correction. For AMETEK LEAP systems this should be the place for storing initial calibration values, which typically service engineers calibrate for the detector and instrument. Furthermore, one could then also store here the iteratively identified calibrations.
+        doc: The key idea and algorithm of the voltage-and-bowl correction is qualitatively similar for instruments of different manufacturers or research groups but different specific calibration models exists. In the first draft of the application definition we do not wish to resolve or generalize these differences. Rather the purpose of this collection is to provide a container where the model specific parameters and calibration models can be stored that define the voltage-and-bowl correction. For AMETEK LEAP systems this should be the place for storing initial calibration values, which typically (only) AMETEK service engineers calibrate for the detector and instrument. Furthermore, one could then also store here the iteratively identified calibrations which scientists will get displayed in e.g. APSuite while executing the voltage-and-bowl correction as part of the reconstruction pipeline.
     mass_to_charge_conversion(NXprocess):
-      #software
+      #program and version are inherited from NXprocess
       exists: optional
-      doc: Optional data post-processing step to convert calibrated tof into mass-to-charge state ratios.
+      doc: Data post-processing step in which calibrated time-of-flight data (tof) are interpreted into mass-to-charge state ratios.
       parameter(NXcollection):
         exists: optional
         doc: Like for the voltage-and-bowl correction this collection should be used for storing vendor-specific calibration models if available.
@@ -281,11 +258,11 @@ symbols:
           rank: 1
           dim: [[1, Nions]]
     reconstruction(NXprocess):
+      #program and version are inherited from NXprocess
       exists: optional
-      doc: Optional data post-processing step to create a tomographic reconstruction of the specimen based on selected calibrated ion hit positions, the evaporation sequence, and voltage curve data.
-      #software
+      doc: Data post-processing step to create a tomographic reconstruction of the specimen based on selected calibrated ion hit positions, the evaporation sequence, and voltage curve data.
       protocol:
-        doc: Qualitative statement about which algorithmic approach, i.e. protocol is used.
+        doc: Qualitative statement about which algorithmic approach, i.e. reconstruction protocol is used.
         enumeration: [Bas original, Bas modified, Geiser, Gault, IVAS, APSuite, Other]
       reconstructed_positions(NX_FLOAT):
         exists: required
@@ -295,27 +272,55 @@ symbols:
           rank: 2
           dim: [[1, 3], [2, Nions]]
       reconstruction_parameter(NXcollection):
-        doc: Different models and associated algorithms, i.e. (numerical) protocols exist to reconstruct atom probe data. Although these approaches are qualitatively similar each protocol uses different parameter. The source code to reconstruction protocols of the IVAS/APSuite software, which the large majority of experiments uses when analyzing atom probe experiments is not open. Therefore, it is difficult for now to generalize the meaning and idea behind all relevant reconstruction parameters. One could create a class for each reconstruction method, as these methods are de facto application definitions. For now we store the reconstruction parameter in a collection.
+        doc: Different models and associated algorithms, i.e. (numerical) protocols exist to reconstruct atom probe data. Although these approaches are qualitatively similar, each protocol uses different parameters (and interprets these differently). The source code to reconstruction protocols of the IVAS/APSuite software, which the large majority of experiments uses when analyzing atom probe experiments, is not open. Therefore, it is difficult for now to generalize the meaning and idea behind all relevant reconstruction parameters. One could create a class for each reconstruction method, as these methods are de facto application definitions. For now we store the reconstruction parameter in a collection.
         #for AMETEK, Bas, Geiser, and Gault protocol we know the parameters should they already be added here?
     ranging(NXprocess):
       exists: optional
-      doc: Optional data post-processing step to assign elemental, isotopic, or molecular identities to ions.
-      mass_to_charge_binning(NXprocess):
-      background_quantification(NXprocess):
-      peak_search_and_deconvolution(NXprocess):
-      peak_identification(NXprocess):
+      doc: Data post-processing step in which elemental, isotopic, and/or molecular identities are assigned to the ions. #based on ideas from M. K\"uhbach et al. 2021, Microsc. Microanal.
       number_of_iontypes(NX_UINT):
         exists: required
         doc: How many ion types are distinguished
         unit: NX_UNITLESS
-      #maybe we wish to store the peaks?
+      mass_to_charge_distribution(NXprocess):
+        exists: recommended
+        doc: Usually mass-to-charge values are studied as an ensemble quantity and binned so document here settings related to (eventual) binning.
+        range(NX_FLOAT):
+          exists: recommended
+          doc: Smallest and largest mass-to-charge value.
+          unit: NX_MASS
+          dimensions:
+            rank: 1
+            dim: [[1, 2]]
+        increment(NX_FLOAT):
+          exists: recommended
+          doc: Binning width
+          unit: NX_MASS
+      background_quantification(NXprocess):
+        exists: recommended
+        doc: Details of the background model
+      peak_search_and_deconvolution(NXprocess):
+        exists: recommended
+        doc: How where peaks in the background-corrected mass-to-charge histogram identified.
+        peaks(NXpeak):
+          exists: [min, 0, max, infty]
+          doc: List of peaks
+      peak_identification(NXprocess):
+        exists: recommended
+        doc: Details about how a peak, with taking into account error models, was interpreted as an iontype or not.
       iontypes(NXapm_ion):
         exists: [min, 1, max, infty]
         doc: The individual ions and their set of mass-to-charge intervals (ranges).
-####slide different methods for sorting the data
-####split measured and reconstructed and ranged, otherwise how to store multiple reconstructions or ranging results for the
-####same evaporation ID sequence, voltage curve and tof data ?
-#should we pair a minOccur>=1 always with a maxOccur?
-#carousel and lab-specific parking positions for the instrument, should these be stored?
-#store detailed wiring of the detector if accessible in NXcollection inside the detector
-#evaporation rate?
+    clustering(NXprocess):
+      exists: optional
+      doc: Often 
+      evaporation_id_included(NX_BOOLEAN):
+        exists: required
+        doc: Bitmask if ion is to be considered or not
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
+      feature_id(NX_UINT):
+        doc: In case of running a clustering analysis on the entire dataset we might add a label which specifies to which microstructural feature (e.g.) the ion belongs. The value zero is reserved to flag that an ion does not belong to a feature. Therefore, feature identifiers start at 1. #later we could add at some value.
+        dimensions:
+          rank: 1
+          dim: [[1, Nions]]
