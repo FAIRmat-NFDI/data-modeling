@@ -10,6 +10,7 @@
 #
 # Comments are moved to the Development_notes.md file
 
+category: application
 name: NXellipsometry_base_draft
 doc: "Draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
 symbols:
@@ -119,7 +120,7 @@ symbols:
           enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix, not provided]
         N_calibration_angles(NX_NUMBER):
           doc: how many incident angles were used for the calibration?
-          uni: NX_UNITLESS
+          unit: NX_UNITLESS
 
         angle_of_incidence(NX_NUMBER):
           doc: angle(s) of incidence used during the calibration measurement
@@ -133,7 +134,7 @@ symbols:
         calibration_data(NX_NUMBER):
           doc: "Calibration is performed on a reference surface (usually silicon wafer with well defined oxide layer) at a number of angles, then in a straight through mode (transmission in air)."
           unit: NX_UNITLESS
-          \@dimensions:
+          dimensions:
             rank: 2
             dim: [[2, N_calibration_angles+1], [1, N_wavelength]]
 
@@ -143,25 +144,25 @@ symbols:
     angle_of_incidence(NX_NUMBER):
       doc: "the incident angle of the beam vs. the normal of the bottom reflective (substrate) surface in the sample"
       unit: NX_ANGLE
-      target: "/instrument/angle_of_incidence"
-      \@dimensions:
+      \@target: "/instrument/angle_of_incidence"
+      dimensions:
         rank: 1
         dim: [[1, N_angles]]
 
     stage(NXstage):
       # this needs at least a contributed class where you collect the members we could generalize NXem_stage to NXstage
       exists: required
-      target: '/instrument/stage'
+      \@target: '/instrument/stage'
       doc:  "Sample stage, holding the sample at a specific position in X,Y,Z (Cartesian) coordinate system and at an orientation defined by three Euler angles (alpha, beta, gamma). The stage may be motorized or manual, special for liquids or gas environment."
       enumeration: [manual stage, scanning stage, liquid stage, gas cell]
       stage_orientation(NXtransformations):
         doc: "The stage coordinate system vs. the incident beam. The Z-axis of the stage is considered to point along the normal of the substrate (bottom reflecting surface) from the stage towards the general direction of the light source. The beam comes with angle of incidence towards this Z-axis, but in opposite direction, thus they are connected with a rotation of 180 - angle of incidence (in degrees). This transformation brings us from the NEXUS coordinates to the stage coordinates."
 
         #value: 180 - angle_of_incidence
-        type(NX_NUMBER):
+        # type(NX_NUMBER): -- does not apply
         \@transformation_type: rotation
         \@vector: [1, 0, 0]
-        \@depends_on:
+        \@depends_on: .
 
       translation(NXtransformations):
         # we need also a reference point with respect to the sample
@@ -235,7 +236,7 @@ symbols:
           doc: "Recorded data of a reference surface with and without window / medium."
           unit: NX_UNITLESS
           #can one specify the dimensions of these calibration data?
-          \@dimensions:
+          dimensions:
             rank: 3
             dim: [[3,2], [2, N_angles], [1, N_wavelength]]
 
@@ -265,7 +266,7 @@ symbols:
 
       variable_revolution(NX_NUMBER):
         doc: Specify maximum and minimum values for the revolution.
-        \@dimensions:
+        dimensions:
           rank: 1
           dim: [[1, 2]]
 
@@ -297,7 +298,7 @@ symbols:
     orientation_matrix(n_comp, 3, 3):
       # documentation is of the original NEXUS class
       unit: NX_ANGLE
-      \@dimensions:
+      dimensions:
         rank: 1
         dim: [[1, 3]]
 
@@ -319,8 +320,8 @@ symbols:
       doc: "Wavelength value(s) used for the measurement.\n
         An array of 1 or more elements. Length defines N_wavelength"
       unit: NX_LENGTH
-      target: '/instrument/wavelength'
-      \@dimensions:
+      \@target: '/instrument/wavelength'
+      dimensions:
         rank: 1
         dim: [[1, N_wavelength]]
 
@@ -328,15 +329,15 @@ symbols:
       doc: "Resulting data from the measurement, described by data type.\n
         Minimum two columns containing Psi and delta, or for the normalized Mueller matrix,
         it may be 16 (or 15 if 1,1 is all 1)."
-      data(NX_NUMBER):
-        \@dimensions:
-          rank: 5
-          dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+      #data(NX_NUMBER):
+      dimensions:
+        rank: 5
+        dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
     uncertainty(NXdata):
       doc: "Specified uncertainties (errors) of the data described by data type. The structure is the same as for (NXdata)"
       exists: recommend
-      \@dimensions:
+      dimensions:
         rank: 5
         dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
@@ -354,15 +355,17 @@ symbols:
       unit: NX_TIME
 
     medium:
+      # we need this or the next one
       exists: required
       doc: "Describe what was the medium above or around the sample. The common model is built up from substrate to the medium on the other side. Both boundaries are assumed infinite in the model. Here define the name of the material (e.g. water, air, etc.)."
         #"built up (from the upper atmosphere/substrate phase boundary to ..." ?
-      alternative(NX_NUMBER):
-        doc: Array of pairs of complex refractive indices of the medium for every measured wavelength.
-        unit: NX_UNITLESS
-        \@dimensions:
-          rank: 2
-          dim: [[1, N_wavelength], [2, 2]]
+
+    medium_refractive_indices(NX_NUMBER):
+      doc: Array of pairs of complex refractive indices of the medium for every measured wavelength.
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength], [2, 2]]
 
     environment_conditions:
       doc: External parameters that have influenced the sample.
@@ -430,7 +433,7 @@ symbols:
     stress_orientation(NX_NUMBER):
       doc: "Euler angles of stress relative to sample in the stage coordinate system, see instrument/stage translation part, axes X,Y,Z."
       unit: NX_ANGLE
-      \@dimensions:
+      dimensions:
         rank: 1
         dim: [[1, 3]]
       # UNCLEAR, which Euler angles, i.e. according to which convention how mapping to reference coordinate system, why not use stress or strain tensor applied on sample?
