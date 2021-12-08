@@ -1,21 +1,19 @@
 (NXdetector):
-  amplifier_type (NX_CHAR):
-    Documentation: "Type of electron amplifier: \u201CMCP\u201D, \u201Cchanneltron\u201D\
-      , etc."
+  amplifier_type(NX_CHAR):
+    doc: 'Type of electron amplifier: "MCP", "channeltron", etc.'
     unit: NX_CHAR
-  detector_type (NX_CHAR):
-    Documentation: "Description of the detector type: \u201CDLD\u201D, \u201CPhosphor+CCD\u201D\
-      , \u201CCMOS\u201D."
+  detector_type(NX_CHAR):
+    doc: 'Description of the detector type: "DLD", "Phosphor+CCD", "CMOS".'
     unit: NX_CHAR
-  detector_voltage (NX_FLOAT):
-    Documentation: Voltage applied to detector.
+  detector_voltage(NX_FLOAT):
+    doc: Voltage applied to detector.
     unit: NX_VOLTAGE
-  sensor_count (NX_INT):
-    Documentation: Number of imaging sensor chips on the detector.
+  sensor_count(NX_INT):
+    doc: Number of imaging sensor chips on the detector.
     unit: NX_UNITLESS
-  sensor_pixel_size (NX_FLOAT):
-    Documentation: Physical size of the pixels of the imaging chip on the detector.
+  sensor_pixel_size(NX_FLOAT):
+    doc: Physical size of the pixels of the imaging chip on the detector.
     unit: NX_LENGTH
-  sensor_size (NX_FLOAT):
-    Documentation: Size of each imaging sensor chip on the detector.
+  sensor_size(NX_FLOAT):
+    doc: Size of each imaging sensor chip on the detector.
     unit: NX_LENGTH

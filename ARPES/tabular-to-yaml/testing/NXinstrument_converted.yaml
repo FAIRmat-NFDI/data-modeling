@@ -1,11 +1,10 @@
 (NXinstrument):
-  \@short_name (NX_CHAR):
-    Documentation: Acronym or other shorthand name
+  \@short_name(NX_CHAR):
+    doc: Acronym or other shorthand name
     unit: NX_CHAR
-  description (NX_CHAR):
-    Documentation: Short description of the instrument, possibly reference to a technical
-      publication
+  description(NX_CHAR):
+    doc: Short description of the instrument, possibly reference to a technical publication
     unit: NX_CHAR
-  name (NX_CHAR):
-    Documentation: Name or model of the equipment
+  name(NX_CHAR):
+    doc: Name or model of the equipment
     unit: NX_CHAR

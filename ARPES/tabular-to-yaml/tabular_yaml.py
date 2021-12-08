@@ -1,5 +1,7 @@
 import pandas as pd, numpy as np, yaml, pprint, argparse, re, os
+from pandas.core.dtypes.missing import isnull
 from pandas import ExcelWriter
+from openpyxl import load_workbook
 
 """
 Tabular-YAML two-way conversion script for ARPES definitions
@@ -38,14 +40,13 @@ def cleanDF(df):
     df['Nexus hierarchy'] = df['Nexus hierarchy'].str.split(':').str[-1]
     MergedTypeClass = df['type:units'].str.split(':').str[0].apply(stripspaces) + df['NX class'].astype(str).apply(stripspaces)
     df['Name'] = df['Nexus hierarchy'].apply(stripspaces) + "(" + MergedTypeClass + ")"
+    df = df[df.Name != "()"]
     df['unit'] = df['type:units'].str.split(':').str[-1].apply(stripspaces)
-    df['doc'] = df['Documentation'].replace('', np.nan, inplace=True)
-    print(df)
+    df['doc'] = df['Documentation'].replace('', np.nan, inplace=False)
     df.drop(columns=["Nexus hierarchy","type:units","NX class","Documentation"], inplace = True)
     df.set_index('Name', inplace=True)
     df.dropna(axis=0,thresh=3,inplace=True)
     df.dropna(axis=1,thresh=3,inplace=True)
-    df.dropna(subset=['doc'], inplace=True)
     check_dupes = df.index.duplicated(keep='first')
     num = 0
     while any(check_dupes):
@@ -57,10 +58,12 @@ def cleanDF(df):
     return df
 
 def clean_duplicate_handler(filepath):
-    with open(filepath, "r") as text_file:
+    with open(filepath, "r",errors='ignore') as text_file:
         data = text_file.read()
         # print(re.findall(r'_dupe\w+',data))
         data = re.sub(r'_dupe\w+', "", data)
+        data = re.sub(r'\'\[\[', "[[", data)
+        data = re.sub(r'\]\]\'', "]]", data)
 
     with open(filepath, "w") as text_file:
         text_file.write(data)
@@ -68,15 +71,17 @@ def clean_duplicate_handler(filepath):
     text_file.close()
 
 def xlsx_to_yaml():
-    xls = pd.ExcelFile(file_path)
-    names = xls.sheet_names
+    # xls = pd.ExcelFile(file_path,engine='openpyxl')
+    xls = load_workbook(file_path,read_only=True,data_only=True)
+    names = xls.sheetnames
     # names = ["NXsample"] 
 
     for sheet in names:
         print("Processing sheet: " + sheet)
         yaml_filename = sheet + "_converted.yaml"
-        temp_df = pd.read_excel(args.filename, engine='openpyxl',sheet_name=sheet,encoding='utf8')
-        df = temp_df.drop_duplicates(subset=['Nexus hierarchy'],inplace=False)
+        ws = xls[sheet]
+        temp_df = pd.DataFrame(ws.values, columns = next(ws.values)[0:])
+        df = temp_df.drop_duplicates(subset=['Nexus hierarchy'],inplace=False).iloc[1: , :]
         diff = len(temp_df)-len(df)
 
         if(diff != 0):
@@ -90,29 +95,32 @@ def xlsx_to_yaml():
             outer_k: {
                 inner_k: inner_v
                 for inner_k, inner_v in outer_v.items()
-                if inner_v != 0 and inner_k != "Exists"
+                if inner_v != 0 and inner_v != "" and inner_k != "Exists"
             } 
             for outer_k, outer_v in sheet_dict.items()
         }
 
-        sheet_dict = {
-            outer_k: {
-                outer_v["dimensions"]: {"rank":outer_v.pop("Rank"), "dim":outer_v.pop("Dim")}
-                for inner_k, inner_v in outer_v.items()
-                if inner_k == "dim"
-            } 
-            for outer_k, outer_v in sheet_dict.items()
-        }
-
-        # file_path = os.path.join(folder_path,yaml_filename)
+        for key in sheet_dict:
+            if "Dim" in sheet_dict.get(key):
+                dim = sheet_dict.get(key).pop("Dim")
+                rank = sheet_dict.get(key).pop("Rank")
+                if dim != 0:
+                    dim = "[" + str(dim) + "]"
+                    newitem = {"dimensions": {"dim":dim, "rank":rank}}
+                    sheet_dict.get(key).update(newitem)
+                
+        # pprint.pprint(sheet_dict)
+        output_path = os.path.join(folder_path,yaml_filename)
         output={}
         tempstring = "(" + sheet + ")"
         output[tempstring] = sheet_dict
-        with open(file_path, "w") as f:
+        with open(output_path, "w") as f:
             yaml.dump(output, f)
+            f.close()
 
-        clean_duplicate_handler(file_path)
+        clean_duplicate_handler(output_path)
     
+    xls.close()
     print("The new file has been saved as " + yaml_filename)
 
 def to_xlsx():

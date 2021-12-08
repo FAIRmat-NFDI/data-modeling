@@ -1,43 +1,45 @@
 (NXbeam):
-  average_power (NX_FLOAT):
-    Documentation: Average power at the sample
+  average_power(NX_FLOAT):
+    doc: Average power at the sample
     unit: NX_POWER
-  chirp_GDD (NX_FLOAT):
-    Documentation: Group delay dispersion of the pulse for linear chirp
+  chirp_GDD(NX_FLOAT):
+    doc: Group delay dispersion of the pulse for linear chirp
     unit: NX_TIME
-  chirp_spectrum (NXdata):
-    Dim: '[1,nx],[1,nx]'
-    Documentation: Spectrum of pulse frequency vs time.
-    Rank: 2
-    unit: ''
-  chirp_type (NX_CHAR):
-    Documentation: The type of chirp implemented
+  chirp_spectrum(NXdata):
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2
+    doc: Spectrum of pulse frequency vs time.
+  chirp_type(NX_CHAR):
+    doc: The type of chirp implemented
     unit: NX_CHAR
-  distance (NX_FLOAT):
-    Documentation: Distance from the sample
+  distance(NX_FLOAT):
+    doc: Distance from the sample
     unit: NX_LENGTH
-  extent (NX_FLOAT):
-    Dim: '[1,2]'
-    Documentation: beam size vector
-    Rank: 1
+  extent(NX_FLOAT):
+    dimensions:
+      dim: [[1,2]]
+      rank: 1
+    doc: beam size vector
     unit: NX_LENGTH
-  fluence (NX_FLOAT):
-    Documentation: Incident fluence at the sample
+  fluence(NX_FLOAT):
+    doc: Incident fluence at the sample
     unit: NX_ANY
-  flux (NX_FLOAT):
-    Documentation: flux incident on beam plane area
+  flux(NX_FLOAT):
+    doc: flux incident on beam plane area
     unit: NX_FLUX
-  incident_energy (NX_FLOAT):
-    Documentation: The center photon energy at sample
+  incident_energy(NX_FLOAT):
+    doc: The center photon energy at sample
     unit: NX_ENERGY
-  incident_polarization (NX_FLOAT):
-    Dim: '[1,4]'
-    Documentation: Incident polarization as a Stokes vector
-    Rank: 1
+  incident_polarization(NX_FLOAT):
+    dimensions:
+      dim: [[1,4]]
+      rank: 1
+    doc: Incident polarization as a Stokes vector
     unit: NX_ANGLE
-  pulse_duration (NX_FLOAT):
-    Documentation: Duration of the pulses at the sample
+  pulse_duration(NX_FLOAT):
+    doc: Duration of the pulses at the sample
     unit: NX_TIME
-  pulse_energy (NX_FLOAT):
-    Documentation: Energy of a single pulse at the sample
+  pulse_energy(NX_FLOAT):
+    doc: Energy of a single pulse at the sample
     unit: NX_ENERGY

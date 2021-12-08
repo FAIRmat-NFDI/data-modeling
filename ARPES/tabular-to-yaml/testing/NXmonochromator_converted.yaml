@@ -1,12 +1,12 @@
 (NXmonochromator):
-  distribution (NXdata):
-    Dim: '[1,nx],[1,nx]'
-    Documentation: Spectrum or live diagnostic
-    Rank: 2
-    unit: ''
-  energy (NX_FLOAT):
-    Documentation: 'Central energy '
+  distribution(NXdata):
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2
+    doc: Spectrum or live diagnostic
+  energy(NX_FLOAT):
+    doc: 'Central energy '
     unit: NX_ENERGY
-  energy_error (NX_CHAR):
-    Documentation: Energy standard deviation
+  energy_error(NX_CHAR):
+    doc: Energy standard deviation
     unit: NX_CHAR

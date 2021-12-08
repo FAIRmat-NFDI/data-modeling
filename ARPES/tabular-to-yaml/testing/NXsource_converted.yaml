@@ -1,89 +1,86 @@
 (NXsource):
-  bunch_distance (NX_FLOAT):
-    Documentation: Time between bunches
+  bunch_distance(NX_FLOAT):
+    doc: Time between bunches
     unit: NX_TIME
-  bunch_length (NX_FLOAT):
-    Documentation: Temporal length of the bunch
+  bunch_length(NX_FLOAT):
+    doc: Temporal length of the bunch
     unit: NX_TIME
-  bunch_number_end (NX_INT):
-    Documentation: Last bunch of the  measurement
+  bunch_number_end(NX_INT):
+    doc: Last bunch of the  measurement
     unit: NX_INT
-  bunch_number_start (NX_INT):
-    Documentation: Some facilities tag each bunch. First bunch of the  measurement
+  bunch_number_start(NX_INT):
+    doc: Some facilities tag each bunch. First bunch of the  measurement
     unit: NX_INT
-  bunch_pattern (NXdata):
-    Dim: '[1,nx],[1,nx]'
-    Documentation: Description of the bunch pattern
-    Rank: 2
-    unit: ''
-  center_wavelength (NX_FLOAT):
-    Documentation: The center wavelength of the source, before it is monochromatized
-      or converted
+  bunch_pattern(NXdata):
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2
+    doc: Description of the bunch pattern
+  center_wavelength(NX_FLOAT):
+    doc: The center wavelength of the source, before it is monochromatized or converted
     unit: NX_WAVELENGTH
-  current (NX_FLOAT):
-    Documentation: Storage ring current/X-ray tube current
+  current(NX_FLOAT):
+    doc: Storage ring current/X-ray tube current
     unit: NX_CURRENT
-  distribution (NXdata):
-    Dim: '[1,nx],[1,nx]'
-    Documentation: Energy/wavelength spectrum of the source
-    Rank: 2
-    unit: ''
-  emittance_x (NX_FLOAT):
-    Documentation: Horizontal emittance
+  distribution(NXdata):
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2
+    doc: Energy/wavelength spectrum of the source
+  emittance_x(NX_FLOAT):
+    doc: Horizontal emittance
     unit: NX_EMITTANCE
-  emittance_y (NX_FLOAT):
-    Documentation: Vertical emittance
+  emittance_y(NX_FLOAT):
+    doc: Vertical emittance
     unit: NX_EMITTANCE
-  energy (NX_FLOAT):
-    Documentation: Particle beam energy/excitation voltage
+  energy(NX_FLOAT):
+    doc: Particle beam energy/excitation voltage
     unit: NX_ENERGY
-  flux (NX_FLOAT):
-    Documentation: Photon flux of the source
+  flux(NX_FLOAT):
+    doc: Photon flux of the source
     unit: NX_FLUX
-  frequency (NX_FLOAT):
-    Documentation: Pulsed source frequency (repetition rate)
+  frequency(NX_FLOAT):
+    doc: Pulsed source frequency (repetition rate)
     unit: NX_FREQUENCY
-  mode (NX_CHAR):
-    Documentation: Source operating mode (single or multi bunch)
+  mode(NX_CHAR):
+    doc: Source operating mode (single or multi bunch)
     unit: NX_CHAR
-  name(@short_name) (NX_CHAR):
-    Documentation: Name of the source
+  name(@short_name)(NX_CHAR):
+    doc: Name of the source
     unit: NX_CHAR
-  number_of_bunches (NX_INT):
-    Documentation: Number of bunches in the storage ring
+  number_of_bunches(NX_INT):
+    doc: Number of bunches in the storage ring
     unit: NX_INT
-  peak_power (NX_FLOAT):
-    Documentation: For pulsed sources, the pulse energy divided by the pulse duration
+  peak_power(NX_FLOAT):
+    doc: For pulsed sources, the pulse energy divided by the pulse duration
     unit: NX_POWER
-  photon_energy (NX_FLOAT):
-    Documentation: The center photon energy of the source, before it is monochromatized
-      or converted
+  photon_energy(NX_FLOAT):
+    doc: The center photon energy of the source, before it is monochromatized or converted
     unit: NX_ENERGY
-  power (NX_FLOAT):
-    Documentation: Average source power
+  power(NX_FLOAT):
+    doc: Average source power
     unit: NX_POWER
-  probe (NX_CHAR):
-    Documentation: Type of radiation used as probe
+  probe(NX_CHAR):
+    doc: Type of radiation used as probe
     unit: NX_CHAR
-  pulse_energy (NX_FLOAT):
-    Documentation: For pulsed sources, the energy of a single pulse
+  pulse_energy(NX_FLOAT):
+    doc: For pulsed sources, the energy of a single pulse
     unit: NX_ENERGY
-  pulse_width (NX_FLOAT):
-    Documentation: Duration of the source pulses
+  pulse_width(NX_FLOAT):
+    doc: Duration of the source pulses
     unit: NX_TIME
-  rms_jitter (NX_FLOAT):
-    Documentation: For pump-probe experiments, the synchronization error between pump
-      and probe.
+  rms_jitter(NX_FLOAT):
+    doc: For pump-probe experiments, the synchronization error between pump and probe.
     unit: NX_TIME
-  sigma_x (NX_FLOAT):
-    Documentation: horizontal beam size
+  sigma_x(NX_FLOAT):
+    doc: horizontal beam size
     unit: NX_LENGTH
-  sigma_y (NX_FLOAT):
-    Documentation: vertical beam size
+  sigma_y(NX_FLOAT):
+    doc: vertical beam size
     unit: NX_LENGTH
-  top_up (NX_BOOLEAN):
-    Documentation: Is the storage ring in top up?
+  top_up(NX_BOOLEAN):
+    doc: Is the storage ring in top up?
     unit: NX_BOOLEAN
-  type (NX_CHAR):
-    Documentation: Type of radiation source
+  type(NX_CHAR):
+    doc: Type of radiation source
     unit: NX_CHAR
