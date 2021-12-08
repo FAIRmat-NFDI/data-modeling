@@ -1,0 +1,26 @@
+name: NXenergydispersion
+category: contributed
+doc: Draft class definition for an energy dispersing element in an electron analyzer
+(NXenergydispersion):
+  acquisition_mode(NX_CHAR):
+    doc: "acquistion at fixed or sweep kinetic energy"
+    enumeration: [fixed,swept]
+  center_energy(NX_FLOAT):
+    doc: Center of the energy window
+    unit: NX_ENERGY
+  diameter(NX_FLOAT):
+    doc: Diameter of the dispersive orbit
+    unit: NX_LENGTH
+  entrance_slit(NXaperture):
+    doc: Size, position and shape of the entrance slits in dispersive analyzers
+  exit_slit(NXaperture):
+    doc: Size, position and shape of the exit slits in dispersive analyzer
+  pass_energy(NX_FLOAT):
+    doc: Pass energy in dispersive electrodes
+    unit: NX_ENERGY
+  scheme(NX_CHAR):
+    doc: "Energy dispersion scheme"
+    enumeration: [tof,hemispherical,cylindrical mirror,retarding grid]
+  tof_distance(NX_FLOAT):
+    doc: Length of the tof drift electrode
+    unit: NX_LENGTH
