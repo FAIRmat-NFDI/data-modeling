@@ -1,0 +1,59 @@
+(NXprocess):
+  calculated_delay(NX_FLOAT):
+    dimensions:
+      dim: [[1,ntpp]]
+      rank: 1
+    doc: Calibrated Delay stage position
+    unit: NX_TIME
+  calculated_energy(NX_FLOAT):
+    dimensions:
+      dim: [[1,ne]]
+      rank: 1
+    doc: Calibrated energy axis
+    unit: NX_ENERGY
+  calculated_kx(NX_FLOAT):
+    dimensions:
+      dim: [[1,nkx]]
+      rank: 1
+    doc: calibrated kx momentum axis
+    unit: NX_WAVENUMBER
+  calculated_ky(NX_FLOAT):
+    dimensions:
+      dim: [[1,nky]]
+      rank: 1
+    doc: calibrated ky momentum axis
+    unit: NX_WAVENUMBER
+  calculated_stage_to_delay(NXdata):
+    dimensions:
+      dim: [[1,ntpp],[1,ntpp]]
+      rank: 2
+    doc: Delay stage calibration
+  calculated_tof_to_energy(NXdata):
+    dimensions:
+      dim: [[1,ne],[1,ne]]
+      rank: 2
+    doc: Time_of_flight to energy calibration
+  calculated_x_to_kx(NXdata):
+    dimensions:
+      dim: [[1,nkx],[1,nkx]]
+      rank: 2
+    doc: Pixel x axis to kx momentum calibration
+  calculated_x_to_ky(NXdata):
+    dimensions:
+      dim: [[1,nky],[1,nky]]
+      rank: 2
+    doc: Pixel y axis to ky momentum calibration
+  other_converts(NXdata):
+    doc: Conversion factors between other measured and physical axes.
+  program_codebase(NX_CHAR):
+    doc: Set of libraries/tools used in the program/script
+    unit: NX_CHAR
+  program_name(NX_CHAR):
+    doc: 'Name of the processing program or script '
+    unit: NX_CHAR
+  program_sequence(NX_CHAR):
+    doc: Sequence of transformations applied to the data, as some are non-commutative
+    unit: NX_CHAR
+  program_version(NX_CHAR):
+    doc: Version of the program or script
+    unit: NX_CHAR
