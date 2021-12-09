@@ -1,0 +1,27 @@
+#kuehbacm at hu-berlin.de, 12/2021
+name: NXem_c3c5corr
+category: contributed
+doc: Draft class definition for a component in an electron microscope which corrects spherical aberration
+(NXem_c3c5corr):
+  doc: A device of multiple NXem_lenses and other components for correcting spherical aberrations in an electron microscope.
+  name:
+    doc: Colloquial (or short) name for the corrector. For manufacturer names and identifiers use respective manufacturer fields.
+  manufacturer_name:
+    exists: recommended
+    doc: Name of the manufacturer who built/constructed the corrector.
+  manufacturer_model:
+    exists: recommended
+    doc: Hardware name or hash identifier given by the manufacturer to identify the corrector.
+  description:
+    doc: Ideally an identifier, link, or free-text which gives further details about the component.
+  (NXtransformations):
+    doc: "Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam."
+    position:
+      \@transformation_type:
+        doc: Following transformation_type argument of NXtranslations but allowed value is only translation.
+        enumeration: [translation]
+      \@vector(NX_NUMBER):
+        doc: Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with the reference coordinate system in the gun.
+      \@depends_on:
+        doc: Enter the path where the reference coordinate system for the microscope is defined. Use "." if it is the root, i.e. the reference coordinate system of the instrument.
+  (NXem_lens):
