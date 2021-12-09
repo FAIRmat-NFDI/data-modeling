@@ -36,7 +36,7 @@ def stripspaces(string):
     return re.sub(r"\s+", "", str(string), flags=re.UNICODE)
 
 def cleanDF(df):
-    df = df.fillna('') 
+    df = df.fillna('')
     df['Nexus hierarchy'] = df['Nexus hierarchy'].str.split(':').str[-1]
     MergedTypeClass = df['type:units'].str.split(':').str[0].apply(stripspaces) + df['NX class'].astype(str).apply(stripspaces)
     df['Name'] = df['Nexus hierarchy'].apply(stripspaces) + "(" + MergedTypeClass + ")"
@@ -54,7 +54,7 @@ def cleanDF(df):
         num+=1
         df.index = new_indices
         check_dupes = df.index.duplicated(keep='first')
-    
+
     return df
 
 def clean_duplicate_handler(filepath):
@@ -74,11 +74,12 @@ def xlsx_to_yaml():
     # xls = pd.ExcelFile(file_path,engine='openpyxl')
     xls = load_workbook(file_path,read_only=True,data_only=True)
     names = xls.sheetnames
-    # names = ["NXsample"] 
+    # names = ["NXsample"]
 
     for sheet in names:
         print("Processing sheet: " + sheet)
-        yaml_filename = sheet + "_converted.yaml"
+        #yaml_filename = sheet + "_converted.yaml"
+        yaml_filename = sheet + ".yaml"
         ws = xls[sheet]
         temp_df = pd.DataFrame(ws.values, columns = next(ws.values)[0:])
         df = temp_df.drop_duplicates(subset=['Nexus hierarchy'],inplace=False).iloc[1: , :]
@@ -96,7 +97,7 @@ def xlsx_to_yaml():
                 inner_k: inner_v
                 for inner_k, inner_v in outer_v.items()
                 if inner_v != 0 and inner_v != "" and inner_k != "Exists"
-            } 
+            }
             for outer_k, outer_v in sheet_dict.items()
         }
 
@@ -108,7 +109,7 @@ def xlsx_to_yaml():
                     dim = "[" + str(dim) + "]"
                     newitem = {"dimensions": {"dim":dim, "rank":rank}}
                     sheet_dict.get(key).update(newitem)
-                
+
         # pprint.pprint(sheet_dict)
         output_path = os.path.join(folder_path,yaml_filename)
         output={}
@@ -119,7 +120,7 @@ def xlsx_to_yaml():
             f.close()
 
         clean_duplicate_handler(output_path)
-    
+
     xls.close()
     print("The new file has been saved as " + yaml_filename)
 
@@ -166,7 +167,7 @@ def main(args):
     print("Parameter file yaml-tabular parser.")
     if not os.path.exists(args.destination):
         os.makedirs(args.destination)
-    
+
     args.filename = os.path.join(*args.filename.split("/"))
     # dir_path = os.path.dirname(__file__)
     dir_path = os.path.dirname(os.path.realpath(__file__))
