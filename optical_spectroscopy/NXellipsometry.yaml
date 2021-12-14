@@ -11,7 +11,7 @@
 # Comments are moved to the Development_notes.md file
 
 category: application
-name: NXellipsometry_base_draft
+name: NXellipsometry
 doc: "Draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
 symbols:
   doc: Variables used throughout the document, e.g. dimensions and important parameters
