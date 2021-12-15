@@ -4,7 +4,7 @@
 #the draft is strongly inspired by the instrument use case of AMETEK's, so-called local electrode atom probe (LEAP)
 #instrument design
 name: NXapm_draft
-category: contributed
+category: application
 doc: Draft application definition for atom probe tomography and related field ion microscopy, all summarized as atom probe microscopy experiments.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
@@ -28,6 +28,10 @@ entry(NXentry):
   time_zone(NX_DATE_TIME):
     exists: required
     doc: ISO 8601 time_zone offset from UTC.
+  duration(NX_INT):
+    unit: NX_TIME
+  collection_time(NX_INT):
+    unit: NX_TIME  
   program_name:
     exists: recommended
     doc: Commercial or otherwise given name to the program that was used to acquire/measure the dataset. Atom probe microscopy experiments are nowadays still in most cases operated/performed via commercial integrated acquisition and instrument control software. For AMETEK LEAP instruments the least processed (rawest) numerical results and metadata are stored in so-called RHIT and HITS files and supplementary metadata in the database that is connected to the control software. RHIT and HITS are proprietary binary file formats whose content must not be accessed with software other than of AMETEK (IVAS/APSuite). In effect, RHIT and HITS store the experiment in a closed manner that is practically useless without having the commercial software. To arrive at a state that atom probe microscopy delivers a dataset with which one can study atomic position and do composition analyses, these raw data have to be processed. Therefore, for an application definition to be useful it needs to store details about the physical acquisition of the raw data and all its processing steps to arrive at derived quantities like ion hit positions (on the detector), calibrated time-of-flight data, and from calibrated mass-to-charge-state ratios, and tomographically reconstructed computed atomic positions. In many cases cases an APM dataset is useful only if its post-processed via so-called ranging. Ranging defines a set of rules how to map between tof and mass-to-charge data on ion types to decode elemental identities. All these steps are in most cases performed using commercial software. Frequently, though, ranging is also performed in (open-source) research software. Therefore, there is strictly speaking not a single program used in atom probe to arrive at a useful reconstructed and ranged dataset. Hence, the reason to design the application definition with the acquisition and key post-processing steps.
@@ -43,8 +47,8 @@ entry(NXentry):
     \@type:
   operation_mode(NX_CHAR):
     exists: required
-      doc: What type of atom probe microscope experiment is performed. This field can be used e.g. by materials database systems to qualitatively filter experiments.
-      enumeration: [leap, apt, fim, apt+fim]
+    doc: What type of atom probe microscope experiment is performed. This field can be used e.g. by materials database systems to qualitatively filter experiments.
+    enumeration: [leap, apt, fim, apt-fim]
   operator(NXuser):
     exists: [min, 1, max, infty]
     doc: Contact information of at least the user of the instrument who measured this specimen or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended.
@@ -68,7 +72,7 @@ entry(NXentry):
     exists: required
     name:
       exists: required
-      doc: Descriptive name or identifier with which to distinguish the specimen from all others. In cases where the specimen were e.g. site-specifically cut from samples or for instrument sessions where multiple specimens are loaded the name has to be descriptive enough to resolve which specimen on e.g. the microtip array was taken. The user is advised to store the details how specimens are cut from samples in the sample history.
+      doc: Descriptive name or identifier with which to distinguish the specimen from all others. In cases where the specimen was e.g. site-specifically cut from samples or in cases of an instrument session during which multiple specimens are loaded, the name has to be descriptive enough to resolve which specimen on e.g. the microtip array was taken. The user is advised to store the details how specimens were cut/prepared from samples in the sample history.
     sample_history:
       exists: required
       doc: Ideally, a reference to the location of or a (globally persistent) unique identifier of e.g. another file which should document ideally as many details as possible of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample/specimen is not available, use this field as a free-text description to specify a sub-set of the entire sample history, i.e. what you would consider being the key steps of the preparation.
@@ -93,7 +97,7 @@ entry(NXentry):
     #how to allow for either or? namely when users upload a POS file only, we have only access to the tomographic_reconstruction, if they upload an EPOS file then we have the tomographic_reconstruction and the hit_positions
   atom_probe(NXinstrument):
     exists: required
-    doc: An atom probe microscope is fundamentally different to a large-scale facility accelerator or electron microscope in at least two ways: First, ionized atoms and molecular ions ions and/or the imaging gas ions (in the case of field ion microscopy) are accelerated towards a position-sensitive and time-of-flight taking detector system. Hence, there is no real beam. This also causes that second the specimen is the lens of the an atom probe microscope. Therefore, we modify the reference coordinate system that is usually referred to in NeXus - the McStas coordinate system. We call the reference coordinate system the specimen coordinate system. To be consistent with accelerator and microscopy techniques we define that the positive z-axis points outwards from the apex of the specimen into the vacuum towards the detector. The coordinate system remains/is a right-handed one. We define clockwise rotations to be positive.
+    doc: An atom probe microscope is fundamentally different to a large-scale facility accelerator or electron microscope in at least two ways. First, ionized atoms and molecular ions ions and/or the imaging gas ions (in the case of field ion microscopy) are accelerated towards a position-sensitive and time-of-flight taking detector system. Hence, there is no real beam. This also causes that second the specimen is the lens of the an atom probe microscope. Therefore, we modify the reference coordinate system that is usually referred to in NeXus - the McStas coordinate system. We call the reference coordinate system the specimen coordinate system. To be consistent with accelerator and microscopy techniques we define that the positive z-axis points outwards from the apex of the specimen into the vacuum towards the detector. The coordinate system remains/is a right-handed one. We define clockwise rotations to be positive.
     name:
       doc: Name of the microscope.
     location(NX_CHAR):
@@ -131,20 +135,19 @@ entry(NXentry):
         dimensions:
           rank: 1
           dim: [[1, Nions]]
-    laser_or_high_voltage_pulser(NXapm_pulser):
+    laser_or_high_voltage_pulser(NXpulser_apm):
     stage(NXstage):
       ##cryo controller holder, type of holder, material for pucks makes a difference for e.g. hydrogen contamination, equally dwell time in buffer and load lock chamber and environmental transfer, the application definition does not account for this at the moment, would need a class representing stage and specimen holder hierarchy of the entire sample loading and transfer system and the contributions or not these components make wrt to contamination
-      base_temperature_time_profile(NX_FLOAT):
-        symbols:
+      symbols:
           Ntlogs: Number of time logs
-        doc: Base temperature (time) profile for the specimen starting the measurement. Write a single value pair when only a nominal/average value is required. In this case, set the time value to zero.
+      base_temperature_time_profile(NX_FLOAT):
         exists: recommended
+        doc: Base temperature (time) profile for the specimen starting the measurement. Write a single value pair when only a nominal/average value is required. In this case, set the time value to zero.
         dimensions:
           rank: 2
           dim: [[2, Ntlogs]]
     control_software(NXcollection):
       doc: The majority of atom probe microscopes comes from a single commercial manufacturer AMETEK (formerly Cameca). Their instruments are controlled via an(/a set) of integrated instrument control system(s) (APSuite/IVAS/Davis). By contrast, instruments which were built by individual research groups such as of the French (GPM, Rouen, France), the Schmitz (Inspico, Stuttgart, Germany), the Felfer (Oxcart, Erlangen, Germany), or the PNNL group (Pacific Northwest National Laborary, Portland, Oregon, U.S.) have individual solutions to control the instrument. Some of which are modularized and open, some of which realize also integrated control units with portions of eventually undisclosed source code and lacking open APIs. Currently, the is no community-specific API for getting finely granularized access to such control settings. This motivates the current design of the application definition via a collection. Holding heterogeneous, not yet standardized pieces of information is the purpose of this collection.
-      #is nesting of collections allowed ?
       analysis_chamber(NXcollection):
         symbols:
           Ntlogs: Number of time logs
@@ -307,7 +310,7 @@ entry(NXentry):
       peak_identification(NXprocess):
         exists: recommended
         doc: Details about how a peak, with taking into account error models, was interpreted as an iontype or not.
-      iontypes(NXapm_ion):
+      iontypes(NXion):
         exists: [min, 1, max, infty]
         doc: The individual ions and their set of mass-to-charge intervals (ranges).
     clustering(NXprocess):

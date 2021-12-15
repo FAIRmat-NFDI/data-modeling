@@ -1,7 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXapm_ion
-category: contributed
-doc: Proposal for a contributed class which specifies an ion type which can be used to label charged molecule ions within mass-to-charge data from time-resolved mass spectrometry
+name: NXion
+category: base
+doc: Proposal for a contributed class which specifies an ion type which can be used to label charged molecule ions within mass-to-charge data from e.g. time-resolved mass spectrometry
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   Nivecmax: Maximum number of allowed atoms per (molecular) ion (fragment)
@@ -15,7 +15,7 @@ symbols:
     unit: NX_UNITLESS
   isotope_vector(NX_UINT):
     exists: required
-    doc: A vector of ordered isotope hash values. The values have to be arranged in the array in decreasing order. The individual hash values are built with the following hash function: hashvalue = Z + N*256 where Z is the number of protons and N the number of neutrons of the isotope.
+    doc: A vector of ordered isotope hash values. The values have to be arranged in the array in decreasing order. The individual hash values are built with the following hash function. Hashvalue = Z + N*256 where Z is the number of protons and N the number of neutrons of the isotope.
     unit: NX_UNITLESS
     dimensions:
       rank: 1

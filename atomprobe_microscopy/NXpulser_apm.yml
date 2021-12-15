@@ -1,7 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXapm_pulser
-category: contributed
-doc: Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing for laser or high voltage pulsing.
+name: NXpulser_apm
+category: base
+doc: Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing capabilities, whether it be for the laser or the high-voltage pulsing to trigger ionization.
 (NXobject):
   symbols:
     Ntlogs: Number of individual measurements
