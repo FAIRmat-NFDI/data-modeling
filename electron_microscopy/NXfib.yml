@@ -3,12 +3,12 @@
 #for more details about the relevant physics the following studies can be a start:
 #https://link.springer.com/content/pdf/10.1557/s43578-020-00045-w.pdf
 #https://www.sciencedirect.com/science/article/pii/S0168583X10001862
-name: NXfib_draft
+name: NXfib
 category: contributed
-doc: Draft class for focused-ion beam capabilities of an instrument. The class is designed to be used as an additional component to e.g. an electron microscope to enable the collecting of data and metadata for (S)EM/FIB instruments.
+doc: Draft class for a focused-ion beam (FIB) (gun)/FIB capabilities of an instrument. The class is designed to be used as an additional component of e.g. an electron microscope to describe sample/specimen preparation and the collecting of data and metadata for (scanning) electron microscope/focused-ion beam, (S)EM/FIB instruments.
 symbols:
-  doc: The symbols used in the schema to specify e.g. d
-(NXfib_draft): #NXobject
+  doc: The symbols used in the schema to specify e.g. variables.
+(NXfib):
   exists: required
   doc: Class for describing focused-ion beam capabilities of an instrument.
   manufacturer_name:
@@ -37,7 +37,7 @@ symbols:
         doc: A right-handed Cartesian coordinate system is used whose positive z-axis points in the direction of the ion beam, i.e. towards the sample. For modelling ion milling it is relevant to document the illumination vector. NXtransformations offers a place to store how the ion gun coordinate system has to be rotated to align its positive z-axis with the positive z-axis of e.g. the electron beam. Check NXem_draft and NXtransformations for further details.
     #once the ion beam is created we can probe the beam and document these probes with NXbeam
     #but we need electro-magnetic lenses to shape the ion beam and a scan box to sputter material in a controlled manner
-    (NXem_lens):
+    (NXlens_em):
       exists: [min, 1, max, infty]
     (NXaperture):
       exists: [min, 0, max, infty]

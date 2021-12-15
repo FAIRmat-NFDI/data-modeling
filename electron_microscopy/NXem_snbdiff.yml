@@ -1,7 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
 #using NXem_draft class to instantiate an application definition for scanning nanobeam diffraction.
 name: NXem_snbdiff
-category: application definition
+category: application
 doc: Application definition for scanning nanobeam diffraction in a transmission electron microscope.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
@@ -15,10 +15,10 @@ symbols:
   exists: required
   doc: Application definition for storing data and metadata for experiments with (scanning and transmission) electron microscopy
   (NXdata):
-    exists; required
+    exists: required
     doc: Hard link to a location/locations in the hierarchy of the NeXus file where the data for default plotting are stored.
-      imagestack(link):
-        target:
+    imagestack(link):
+      target: entry/scan_align/acquired_data/data
   scan_align(NXprocess):
     #extending the scan_align(NXprocess) rest is inherited
     misc(NXcollection):

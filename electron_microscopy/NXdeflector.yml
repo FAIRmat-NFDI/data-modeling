@@ -1,0 +1,13 @@
+#kuehbacm at hu-berlin.de, 12/2021
+name: NXdeflector
+category: base
+doc: Draft class definition for a component which can be used deflect a radiation beam in a controlled manner such as realized for electrons in the scan box/scanning unit, or beam shift coils in an electron microscope.
+(NXdeflector):
+  doc: Component which can deflect radiation in a controlled manner. Examples are the scan box or beam shift coils.
+  name:
+    doc: Colloquial or short name for the component. For manufacturer names and identifiers use identifier field.
+  manufacturer_name:
+    doc: Name of the manufacturer who built/constructed the deflector.
+  manufacturer_model:
+    doc: Hardware name, hash identifier, or serial number which e.g. the manufacturer uses. This field can also be used to specify where we can find further pieces of information for the deflector.
+  (NXtransformations):

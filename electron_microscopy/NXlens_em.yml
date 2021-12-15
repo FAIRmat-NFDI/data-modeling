@@ -1,7 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXem_lens
-category: contributed
-doc: Draft class definition for electro-static /electro-magnetic lenses as they are used for instance as lenses in an electron microscope or reflectron devices in a local electrode atom probe instrument.
+name: NXlens_em
+category: base
+doc: Draft class definition for electro-magnetic lenses as they are used e.g. in an electron microscope or reflectron device in a local electrode atom probe microscope.
 (NXem_lens):
   doc: A component of an instrument that creates a controlled either electrostatic or electro-magnetic field to focus electrons or ions.
   type:
@@ -22,6 +22,6 @@ doc: Draft class definition for electro-static /electro-magnetic lenses as they 
       \@transformation_type:
         doc: Following transformation_type argument of NXtranslations but allowed value is only translation.
       \@vector(NX_NUMBER):
-        doc:  Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with a coordinate system in the center of the lens.
+        doc: Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with a coordinate system in the center of the lens.
       \@depends_on:
         doc: Enter the path where the reference coordinate system for the instrument is defined.
