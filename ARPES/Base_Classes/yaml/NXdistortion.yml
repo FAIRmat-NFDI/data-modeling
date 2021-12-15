@@ -1,0 +1,30 @@
+name: NXdistortion
+category: base
+doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
+(NXobject):
+  applied(NX_BOOL):
+    doc: "Has the distortion correction been applied?"
+  symmetry(NX_INT):
+    unit: NX_UNITLESS
+    doc: "Number of elementary symmetry operations."
+  symmetry_angle(NX_FLOAT):
+    unit: NX_ANGLE
+    doc: "Degrees of rotation for a symmetry operation."
+  original_centre(NX_FLOAT):
+    unit: NX_UNITLESS
+    doc: "Coordinates of the symmetry centre point."
+    dimensions:
+      dim: [[1,2]]
+      rank: 1
+  original_points(NX_FLOAT):
+    unit: NX_UNITLESS
+    doc: "Coordinates of the relevant symmetry points."
+    dimensions:
+      dim: [[2,nsym]]
+      rank: 1
+  field(NX_FLOAT):
+    unit: NX_UNITLESS
+    doc: "2D matrix mapping the original distorted field in the undistorted one."
+    dimensions:
+      dim: [[ndx,ndy]]
+      rank: 1

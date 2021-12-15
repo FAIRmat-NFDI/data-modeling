@@ -1,0 +1,57 @@
+name: NXbeam
+category: base
+doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
+  sources and details relevant for photoemission."
+(NXobject):
+  distance(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Distance from the sample"
+  pulse_energy(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "Energy of a single pulse at the sample"
+  average_power(NX_FLOAT):
+    unit: NX_POWER
+    doc: "Average power at the sample"
+  incident_energy(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "The center photon energy at sample"
+  incident_energy_spread(NX_NUMBER):
+    unit: NX_ENERGY
+    doc: "FWHM energy linewidth of the incident photons."
+  incident_wavelength(NX_FLOAT):
+    unit: NX_WAVELENGTH
+    doc: "The center wavelength energy at sample"
+  incident_wavelength_spread(NX_NUMBER):
+    unit: NX_WAVELENGTH
+    doc: "FWHM wavelength linewidth of the incident photons."
+  incident_polarization(NX_FLOAT):
+    unit: NX_ANGLE
+    doc: "Incident polarization as a Stokes vector"
+    dimensions:
+      dim: [[1,4]]
+      rank: 1
+  extent(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "beam size vector"
+    dimensions:
+      dim: [[1,2]]
+      rank: 1
+  fluence(NX_FLOAT):
+    unit: NX_ANY
+    doc: "Incident fluence at the sample"
+  pulse_duration(NX_FLOAT):
+    unit: NX_TIME
+    doc: "Duration of the pulses at the sample"
+  chirp_spectrum(NXdata):
+    doc: "Spectrum of pulse frequency vs time."
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2
+  chirp_type(NX_CHAR):
+    doc: "The type of chirp implemented"
+  chirp_GDD(NX_FLOAT):
+    unit: NX_TIME
+    doc: "Group delay dispersion of the pulse for linear chirp"
+  flux(NX_FLOAT):
+    unit: NX_FLUX
+    doc: "flux incident on beam plane area"

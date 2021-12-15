@@ -1,0 +1,86 @@
+# Book of headers
+NXaperture:
+  name: NXaperture
+  category: base
+  doc: "Draft extension of NXaperture to describe apertures in electron analysers."
+  (NXobject):
+NXbeam:
+  name: NXbeam
+  category: base
+  doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed sources and details relevant for photoemission."
+  (NXobject):
+NXcalibration:
+  name: NXcalibration
+  category: base
+  doc: "Draft subclass of NXprocess to describe post-processing calibrations."
+  (NXobject):
+NXcollectioncolumn:
+  name: NXcollectioncolumn
+  category: base
+  doc: "Draft subclass of NXelectronanalyser to describe the electron collection column of a photoelectron analyser."
+  (NXobject):
+NXdetector:
+  name: NXdetector
+  category: base
+  doc: "Draft extension of NXdetector to include fields to describe photoelectron detectors."
+  (NXobject):
+NXdistortion:
+  name: NXdistortion
+  category: base
+  doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
+  (NXobject):
+NXelectronanalyser:
+  name: NXelectronanalyser
+  category: base
+  doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
+  (NXobject):
+NXenergydispersion:
+  name: NXenergydispersion
+  category: base
+  doc: "Draft subclass of NXelectronanalyser to describe the energy dispersion section of a photoelectron analyser."
+  (NXobject):
+NXentry:
+  name: NXentry
+  category: base
+  doc: "Draft extension of NXentry to include fields to describe laboratory based experiments."
+  (NXobject):
+NXmonochromator:
+  name: NXmonochromator
+  category: base
+  doc: "Draft extension of NXmonochromator to include fields to describe the use of monochromators in photoemission experiments."
+  (NXobject):
+NXpositioner:
+  name: NXpositioner
+  category: base
+  doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators in photoemission experiments."
+  (NXobject):
+NXprocess:
+  name: NXprocess
+  category: base
+  doc: "Draft extension of NXprocess to include fields to describe the processing of photoemission data."
+  (NXobject):
+NXregistration:
+  name: NXregistration
+  category: base
+  doc: "Draft extension of NXobject to include fields to describe image registration procedures."
+  (NXobject):
+NXsample:
+  name: NXsample
+  category: base
+  doc: "Draft extension of NXobject to include fields to describe the use of monochromators in photoemission experiments."
+  (NXobject):
+NXsource:
+  name: NXsource
+  category: base
+  doc: "Draft extension of NXsource to include lasers and FELs."
+  (NXobject):
+NXspindispersion:
+  name: NXspindispersion
+  category: base
+  doc: "Draft subclass of NXelectronanalyser to describe the spin filters in photoemission experiments."
+  (NXobject):
+NXuser:
+  name: NXuser
+  category: base
+  doc: "Draft extension of NXuser to describe users of laboratory experiments."
+  (NXobject):

@@ -23,7 +23,7 @@ Example conversion from yaml to xlsx:
 
 def csv_to_yaml():
     print("Not fully tested")
-    yaml_filename = args.filename.replace(args.filename.split(".", 1)[1], 'yaml')
+    yaml_filename = args.filename.replace(args.filename.split(".", 1)[1], 'yml')
     temp_df = pd.read_csv(args.filename)
     temp_df.dropna(inplace=True)
     df = temp_df.drop_duplicates(subset=['Name'], inplace=False)
@@ -91,7 +91,7 @@ def xlsx_to_yaml():
     for sheet in names:
         print("Processing sheet: " + sheet)
         # yaml_filename = sheet + "_converted.yaml"
-        yaml_filename = sheet + ".yaml"
+        yaml_filename = sheet + ".yml"
         ws = xls[sheet]
         temp_df = pd.DataFrame(ws.values, columns=next(ws.values)[0:])
         df = temp_df.drop_duplicates(subset=['Nexus hierarchy'], inplace=False).iloc[1:, :]
@@ -125,7 +125,7 @@ def xlsx_to_yaml():
         # pprint.pprint(sheet_dict)
         output_path = os.path.join(folder_path, yaml_filename)
         output = {}
-        with open("Headers.yaml", 'r') as stream:
+        with open("Headers.yml", 'r') as stream:
             try:
                 parsed_yaml = yaml.safe_load(stream)
                 if(sheet in parsed_yaml):
@@ -134,7 +134,7 @@ def xlsx_to_yaml():
                     output.update(parsed_yaml[sheet])
                     output['(NXobject)'] = sheet_dict
                 else:
-                    print("ERROR: Not found in Headers.yaml; defaulting to no header information.")
+                    print("ERROR: Not found in Headers.yml; defaulting to no header information.")
                     tempstring = "(" + sheet + ")"
                     output[tempstring] = sheet_dict
             except yaml.YAMLError as exc:
@@ -209,6 +209,8 @@ def main(args):
     elif args.filename.split(".", 1)[1] == "csv":
         csv_to_yaml()
     elif args.filename.split(".", 1)[1] == "yaml":
+        to_xlsx()
+    elif args.filename.split(".", 1)[1] == "yml":
         to_xlsx()
 
 
