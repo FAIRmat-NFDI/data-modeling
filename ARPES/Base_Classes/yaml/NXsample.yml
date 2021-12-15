@@ -42,7 +42,7 @@ doc: "Draft extension of NXobject to include fields to describe the use of monoc
   electric_field(NX_FLOAT):
     unit: NX_VOLTAGE
     doc: "Electric field applied across the sample. Different from sample_bias."
-  \@direction(NX_FLOAT):
+    \@direction(NX_FLOAT):
     unit: NX_VOLTAGE
     doc: "Vector determining the direction of the electric field"
     dimensions:
@@ -51,7 +51,7 @@ doc: "Draft extension of NXobject to include fields to describe the use of monoc
   magnetic_field(NX_FLOAT):
     unit: NX_ANY
     doc: "Magnetic field applied to the sample during the measurement."
-  \@direction(NX_FLOAT):
+    \@direction(NX_FLOAT):
     unit: NX_ANY
     doc: "Vector determining the direction of the magnetic field"
     dimensions:
@@ -60,7 +60,7 @@ doc: "Draft extension of NXobject to include fields to describe the use of monoc
   stress_field(NX_FLOAT):
     unit: NX_PRESSURE
     doc: "Stress field applied to the sample during the measurement."
-  \@direction(NX_FLOAT):
+    \@direction(NX_FLOAT):
     unit: NX_PRESSURE
     doc: "Vector determining the direction of the stress field"
     dimensions:

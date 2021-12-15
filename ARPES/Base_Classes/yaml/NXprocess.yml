@@ -2,6 +2,11 @@ name: NXprocess
 category: base
 doc: "Draft extension of NXprocess to include fields to describe the processing of
   photoemission data."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nkx: Number of points in the kx axis
+  nky: Number of points in the ky axis
+  ne: Number of points in the energy axis
 (NXobject):
   program_name(NX_CHAR):
     doc: "Name of the processing program or script "

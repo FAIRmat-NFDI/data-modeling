@@ -47,7 +47,7 @@
 				<field name="distance" type="NX_NUMBER" doc="Distance of the point of evaluation of the beam from the sample." units="NX_LENGTH"/>
 				<field name="incident_energy" type="NX_NUMBER" doc="Incident photon energy." units="NX_ENERGY"/>
 				<field name="incident_energy_spread" type="NX_NUMBER" recommended="true" doc="FWHM energy linewidth of the incident photons." units="NX_ENERGY"/>
-				<field name="incident_polarization" type="NX_NUMBER" optional="true" doc="Incident polarization specified as a Stokes vector." units="NX_ANY">
+				<field name="incident_polarization" type="NX_NUMBER" recommended="true" doc="Incident polarization specified as a Stokes vector." units="NX_ANY">
 					<dimensions rank="1">
 						<dim index="1" value="4"/>
 					</dimensions>

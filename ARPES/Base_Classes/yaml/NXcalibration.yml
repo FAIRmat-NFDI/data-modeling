@@ -1,6 +1,10 @@
 name: NXcalibration
 category: base
 doc: "Draft subclass of NXprocess to describe post-processing calibrations."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  ncoeff: Number of coefficients of the calibration function
+  nfeat: Number of features used to fit the calibration function
 (NXobject):
   applied(NX_BOOL):
     doc: "Has the calibration been applied?"

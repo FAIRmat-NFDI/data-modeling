@@ -1,6 +1,9 @@
 name: NXsource
 category: base
 doc: "Draft extension of NXsource to include lasers and FELs."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nx: Number of points in a spectrum
 (NXobject):
   name(@short_name)(NX_CHAR):
     doc: "Name of the source"

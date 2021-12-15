@@ -3,6 +3,11 @@
 <definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft subclass of NXprocess to describe post-processing calibrations.">
 	<field name="name" type="NX_CHAR"/>
 	<field name="category" type="NX_CHAR"/>
+	<symbols doc="The symbols used in the schema to specify e.g. dimensions of arrays">
+		<sym name="doc" doc="The symbols used in the schema to specify e.g. dimensions of arrays"/>
+		<sym name="ncoeff" doc="Number of coefficients of the calibration function"/>
+		<sym name="nfeat" doc="Number of features used to fit the calibration function"/>
+	</symbols>
 	<group type="NXobject">
 		<group name="applied" type="NX_BOOL" doc="Has the calibration been applied?"/>
 		<field name="coefficients" type="NX_FLOAT" units="NX_ANY" doc="Array of coefficients of the calibration function for non linear calibration">

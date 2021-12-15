@@ -2,6 +2,9 @@ name: NXcollectioncolumn
 category: base
 doc: "Draft subclass of NXelectronanalyser to describe the electron collection column
   of a photoelectron analyser."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nl: Number of lenses in the collection column
 (NXobject):
   scheme(NX_CHAR):
     doc: "Scheme of the electron collection lens, i.e. standard, deflector, PEEM,

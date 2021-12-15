@@ -1,4 +1,7 @@
-(NXinstrument):
+name: NXinstrument
+category: base
+doc: "Draft extension of NXinstrument to include fields to describe laboratory based experiments."
+(NXobject):
   name(NX_CHAR):
     doc: "Name or model of the equipment"
   \@short_name(NX_CHAR):

@@ -2,6 +2,9 @@ name: NXbeam
 category: base
 doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
   sources and details relevant for photoemission."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nx: Number of pixels of the chirp spectrum
 (NXobject):
   distance(NX_FLOAT):
     unit: NX_LENGTH

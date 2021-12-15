@@ -1,6 +1,11 @@
 name: NXelectronanalyser
 category: base
 doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nfa: Number of fast axes (axes acquired symultaneously, without scanning a pysical
+    quantity)
+  nsa: Number of slow axes (axes acquired scanning a pysical quantity)
 (NXobject):
   description(NX_CHAR):
     doc: "Free text description of the type of the detector "

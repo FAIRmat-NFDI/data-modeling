@@ -64,7 +64,6 @@ category: application # Defaults "exists" to "required"
       incident_polarization(NX_NUMBER):
         exists: recommended
         doc: "Incident polarization specified as a Stokes vector."
-        exists: optional
         unit: NX_ANY # Should be NX_EFIELD_SQUARED (squared!)
         dimensions:
           rank: 1
