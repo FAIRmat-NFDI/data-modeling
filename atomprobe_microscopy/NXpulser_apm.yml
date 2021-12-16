@@ -1,8 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXpulser_apm
 category: base
 doc: Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing capabilities, whether it be for the laser or the high-voltage pulsing to trigger ionization.
-(NXobject):
+(NXpulser_apm):
   symbols:
     Ntlogs: Number of individual measurements
   laser_pulser(NXsource):
@@ -30,11 +29,13 @@ doc: Draft for a class which can be used for representing a coarse-grained descr
     laser_impact_position(NXcollection):
       doc: Track time-dependent settings over the course of the measurement where the laser hits the specimen.
   pulse_frequency(NX_NUMBER):
-    doc: recommended
+    exists: recommended
+    doc: to be defined
     unit: NX_FREQUENCY
   #how can one store a spatio-temporal profile, own class for this?
   pulse_fraction(NX_NUMBER):
-    doc: recommended
+    exists: recommended
+    doc: to be defined
     unit: NX_UNITLESS #how else to specify percent, there is not NX_PERCENT
   pulsed_voltage(NX_FLOAT):
     exists: required
@@ -50,9 +51,9 @@ doc: Draft for a class which can be used for representing a coarse-grained descr
     dimensions:
       rank: 1
       dim: [[1, Nions]]
-  laser_pulse_time_profile(NX_FLOAT):
-    doc: Spatio-temporal profile of the laser energy as a function of time since the first pulse.
-    unit: NX_ENERGY
-    dimensions:
-      rank: 2
-      dim: [[2, Ntlogs]]
+  #laser_pulse_time_profile(NX_FLOAT):
+  #  doc: Spatio-temporal profile of the laser energy as a function of time since the first pulse.
+  #  unit: NX_ENERGY
+  #  dimensions:
+  #    rank: 2
+  #    dim: [[2, Ntlogs]]

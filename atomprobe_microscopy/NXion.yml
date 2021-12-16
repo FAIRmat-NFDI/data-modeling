@@ -1,14 +1,11 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXion
 category: base
-doc: Proposal for a contributed class which specifies an ion type which can be used to label charged molecule ions within mass-to-charge data from e.g. time-resolved mass spectrometry
+doc: Atomic architecture of a (molecular) ion (fragment) which can be used for example to label charged molecule ions identified from mass-to-charge histogram data as in e.g. time-resolved mass spectrometry techniques like atom probe, secondary ion mass spectrometry.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   Nivecmax: Maximum number of allowed atoms per (molecular) ion (fragment)
   Nranges: Number of range intervals mapped on this ion type
-(NXobject):
-  exists: required
-  doc: Atomic architecture of a (molecular) ion (fragment)
+(NXion):
   ion_type(NX_UINT):
     exists: required
     doc: Identifier, e.g. ion type or ion species id

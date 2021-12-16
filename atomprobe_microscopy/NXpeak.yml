@@ -1,16 +1,14 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXpeak
-category: contributed
+category: base
 doc: Proposal for storing mathematical models of peaks, their functional form or at least support.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   Nsupport: Number of support points
-(NXobject):
-  exists: required
+(NXpeak):
   peak_model:
     exists: required
     doc: Is the peak described analytically or with data i.e. intensity as a function of independent variable.
-    enumeration: [empirical, gaussian, lorentz, ...]
+    enumeration: [empirical, gaussian, lorentzian]
   positions(NX_NUMBER):
     doc: In the case of only a data description of the peak and its shoulders, the positions were independent variable values were taken.
     unit: NX_ANY
