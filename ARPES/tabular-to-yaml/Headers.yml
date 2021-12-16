@@ -20,6 +20,7 @@ NXcalibration:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     ncoeff: "Number of coefficients of the calibration function"
     nfeat: "Number of features used to fit the calibration function"
+    ncal: "Number of points of the calibrated and uncalibrated axes"
   (NXobject):
 NXcollectioncolumn:
   name: NXcollectioncolumn
@@ -76,20 +77,20 @@ NXmonochromator:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nx: "Number of points in a spectrum"
   (NXobject):
-NXpositioner:
+NXmanipulator:
   name: NXpositioner
   category: base
   doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators in photoemission experiments."
+  symbols:
+    doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+    ncoords: "Number of linear coordinates used to describe the manipulator position"
+    nangles: "Number of angular coordinates used to describe the manipulator position"
+    npos: "Number of positions assumed by the manipulator during the measurement (differing even by just one coordinate or angle)"
   (NXobject):
 NXprocess:
   name: NXprocess
   category: base
   doc: "Draft extension of NXprocess to include fields to describe the processing of photoemission data."
-  symbols:
-    doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
-    nkx: "Number of points in the kx axis"
-    nky: "Number of points in the ky axis"
-    ne: "Number of points in the energy axis"
   (NXobject):
 NXregistration:
   name: NXregistration
