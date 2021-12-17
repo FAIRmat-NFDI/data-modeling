@@ -187,9 +187,12 @@
 		</group>
 		<group type="NXdata">
 			<attribute name="signal"/>
+			<attribute name="axes"/>
 			<attribute name="energy_indices"/>
-			<attribute name="kx_indices"/>
+			<attribute name="kpar_indices"/>
 			<field name="data" type="NX_NUMBER" doc="Processed plottable data."/>
+			<field name="energy" type="NX_NUMBER" doc="Data containing the energy axis"/>
+			<field name="kpar" type="NX_NUMBER" doc="Data containing the k parallel axis"/>
 		</group>
 	</group>
 </definition>

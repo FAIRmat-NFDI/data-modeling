@@ -203,10 +203,15 @@ category: application # Defaults "exists" to "required"
       unit: NX_PRESSURE
   (NXdata):
     \@signal: data # There is an object named data that contains the signal
+    \@axes: ['energy','kpar']
     \@energy_indices: # There is an axis (to be specified) that represents energy
-    \@kx_indices: # There is an axis (to be specified) that represents the first parallel momentum direction
+    \@kpar_indices: # There is an axis (to be specified) that represents the first parallel momentum direction
     data(NX_NUMBER): # There is a block of numbers named data.
       doc: "Processed plottable data."
+    energy(NX_NUMBER):
+      doc: "Data containing the energy axis"
+    kpar(NX_NUMBER):
+      doc: "Data containing the k parallel axis"
 # NXdata structure is extremely free here to provide a low entry barrier for data parsing in the core appdef.
 # Will be restricted further in extending appdefs.
 # If there is no rebinning between raw data and plottable data, one can use links
