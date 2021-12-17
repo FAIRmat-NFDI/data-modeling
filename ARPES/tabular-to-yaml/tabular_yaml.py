@@ -82,35 +82,62 @@ def clean_duplicate_handler(filepath):
     text_file.close()
 
 
+def appendDict(keys, value, dict):
+    if len(keys) == 1:
+        dict[keys[0].strip()] = value
+    else:
+        if keys[0] not in dict:
+            dict[keys[0]] = {}
+        appendDict(keys[1:], value, dict[keys[0]])
+
+
 def xlsx_to_yaml():
-    # xls = pd.ExcelFile(file_path,engine='openpyxl')
     xls = load_workbook(file_path, read_only=True, data_only=True)
     names = xls.sheetnames
     # names = ["NXsample"]
 
     for sheet in names:
         print("Processing sheet: " + sheet)
-        # yaml_filename = sheet + "_converted.yaml"
         yaml_filename = sheet + ".yml"
         ws = xls[sheet]
         temp_df = pd.DataFrame(ws.values, columns=next(ws.values)[0:])
         df = temp_df.drop_duplicates(subset=['Nexus hierarchy'], inplace=False).iloc[1:, :]
+        df = df.loc[df['Exists'] == "F"]
+        if(df.empty):
+            continue
         diff = len(temp_df)-len(df)
 
         if(diff != 0):
             print("WARNING: One or more column(s) had the same nexus hierarchy and only the first was kept.\nThis can happen if your file has merged rows.")
             print("     Sheet:" + sheet)
             print("     Number of rows dropped:" + str(diff))
+        
+        df = df.fillna('')
+        MergedTypeClass = df['type:units'].str.split(':').str[0].apply(stripspaces) + df['NX class'].astype(str).apply(stripspaces)
+        df = df[df.Name != ""]
+        df['Nexus hierarchy'] = df['Nexus hierarchy'].str.split(':')
+        df['Nexus hierarchy'] = [[str(s).strip() + "(" + MergedTypeClass.iloc[index] + ")" for s in temp] for index, temp in enumerate(df['Nexus hierarchy'])]
+        df['Count'] = [len(temp) if temp else np.nan for temp in df['Nexus hierarchy']]
+        units = [stripspaces(s.split(':')[-1]) if len(s.split(':')) > 1 else "" for s in df['type:units']]
+        df['unit'] = units
+        df['doc'] = "\"" + df['Documentation'].replace('', np.nan, inplace=False) + "\""
+        print(df['Count'].mode())
+        mode = int(df['Count'].mode())
+        output = {}
+        for index, row in df.iterrows():
+            data = {'doc': str(row['doc']),
+                    'unit': row['unit'],
+                    'Dim': row['Dim'],
+                    'Rank': row['Rank']}
+            appendDict(row['Nexus hierarchy'][mode-1:], data, output)
 
-        df = cleanDF(df)
-        sheet_dict = df.to_dict('index')
         sheet_dict = {
             outer_k: {
                 inner_k: inner_v
                 for inner_k, inner_v in outer_v.items()
-                if inner_v != 0 and inner_v != "" and inner_k != "Exists"
+                if inner_v != 0 and inner_v != ""
             }
-            for outer_k, outer_v in sheet_dict.items()
+            for outer_k, outer_v in output.items()
         }
 
         for key in sheet_dict:
@@ -122,7 +149,7 @@ def xlsx_to_yaml():
                     newitem = {"dimensions": {"dim": dim, "rank": rank}}
                     sheet_dict.get(key).update(newitem)
 
-        # pprint.pprint(sheet_dict)
+        pprint.pprint(sheet_dict)
         output_path = os.path.join(folder_path, yaml_filename)
         output = {}
         with open("Headers.yml", 'r') as stream:
@@ -147,6 +174,84 @@ def xlsx_to_yaml():
 
     xls.close()
     print("The new file has been saved as " + yaml_filename)
+
+            # count = int(mode)-1
+            # print(row['Count'])
+            # while count<int(row['Count']):
+            #     head = row['Nexus hierarchy'][count]
+            #     print(head)
+            #     # if count == int(row['Count'])-1:
+            #     #     head = {}
+            #     # else:
+            #     #     output[row['Nexus hierarchy'][count]]
+            #     count += 1
+
+
+# def xlsx_to_yaml():
+#     # xls = pd.ExcelFile(file_path,engine='openpyxl')
+#     xls = load_workbook(file_path, read_only=True, data_only=True)
+#     names = xls.sheetnames
+#     # names = ["NXsample"]
+
+#     for sheet in names:
+#         print("Processing sheet: " + sheet)
+#         # yaml_filename = sheet + "_converted.yaml"
+#         yaml_filename = sheet + ".yml"
+#         ws = xls[sheet]
+#         temp_df = pd.DataFrame(ws.values, columns=next(ws.values)[0:])
+#         df = temp_df.drop_duplicates(subset=['Nexus hierarchy'], inplace=False).iloc[1:, :]
+#         diff = len(temp_df)-len(df)
+
+#         if(diff != 0):
+#             print("WARNING: One or more column(s) had the same nexus hierarchy and only the first was kept.\nThis can happen if your file has merged rows.")
+#             print("     Sheet:" + sheet)
+#             print("     Number of rows dropped:" + str(diff))
+
+#         df = cleanDF(df)
+#         sheet_dict = df.to_dict('index')
+#         sheet_dict = {
+#             outer_k: {
+#                 inner_k: inner_v
+#                 for inner_k, inner_v in outer_v.items()
+#                 if inner_v != 0 and inner_v != "" and inner_k != "Exists"
+#             }
+#             for outer_k, outer_v in sheet_dict.items()
+#         }
+
+#         for key in sheet_dict:
+#             if "Dim" in sheet_dict.get(key):
+#                 dim = sheet_dict.get(key).pop("Dim")
+#                 rank = sheet_dict.get(key).pop("Rank")
+#                 if dim != 0:
+#                     dim = "[" + str(dim) + "]"
+#                     newitem = {"dimensions": {"dim": dim, "rank": rank}}
+#                     sheet_dict.get(key).update(newitem)
+
+#         # pprint.pprint(sheet_dict)
+#         output_path = os.path.join(folder_path, yaml_filename)
+#         output = {}
+#         with open("Headers.yml", 'r') as stream:
+#             try:
+#                 parsed_yaml = yaml.safe_load(stream)
+#                 if(sheet in parsed_yaml):
+#                     if 'doc' in parsed_yaml[sheet]:
+#                         parsed_yaml[sheet].update({'doc': "\"" + str(parsed_yaml[sheet]['doc']) + "\""})
+#                     output.update(parsed_yaml[sheet])
+#                     output['(NXobject)'] = sheet_dict
+#                 else:
+#                     print("ERROR: Not found in Headers.yml; defaulting to no header information.")
+#                     tempstring = "(" + sheet + ")"
+#                     output[tempstring] = sheet_dict
+#             except yaml.YAMLError as exc:
+#                 print(exc)
+#         with open(output_path, "w") as f:
+#             yaml.dump(output, f, sort_keys=False)
+#             f.close()
+
+#         clean_duplicate_handler(output_path)
+
+#     xls.close()
+#     print("The new file has been saved as " + yaml_filename)
 
 
 def to_xlsx():

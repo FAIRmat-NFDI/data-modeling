@@ -1,0 +1,24 @@
+name: NXsource
+category: base
+doc: "Draft extension of NXsource to include lasers and FELs."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nx: Number of points in a spectrum
+(NXobject):
+  photon_energy(NX_FLOAT):
+    doc: "The center photon energy of the source, before it is monochromatized or
+      converted"
+    unit: NX_ENERGY
+  center_wavelength(NX_FLOAT):
+    doc: "The center wavelength of the source, before it is monochromatized or converted"
+    unit: NX_WAVELENGTH
+  pulse_energy(NX_FLOAT):
+    doc: "For pulsed sources, the energy of a single pulse"
+    unit: NX_ENERGY
+  peak_power(NX_FLOAT):
+    doc: "For pulsed sources, the pulse energy divided by the pulse duration"
+    unit: NX_POWER
+  bunch_number_start(NX_INT):
+    doc: "Some facilities tag each bunch. First bunch of the  measurement"
+  bunch_number_end(NX_INT):
+    doc: "Last bunch of the  measurement"
