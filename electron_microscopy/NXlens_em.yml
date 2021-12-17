@@ -1,9 +1,7 @@
 #kuehbacm at hu-berlin.de, 12/2021
-name: NXlens_em
 category: base
 doc: Draft class definition for electro-magnetic lenses as they are used e.g. in an electron microscope or reflectron device in a local electrode atom probe microscope.
-(NXem_lens):
-  doc: A component of an instrument that creates a controlled either electrostatic or electro-magnetic field to focus electrons or ions.
+(NXlens_em):
   type:
     exists: required
     doc: Qualitative type of lens with respect to the number of pole pieces
@@ -15,9 +13,9 @@ doc: Draft class definition for electro-magnetic lenses as they are used e.g. in
   manufacturer_model:
     doc: Hardware name, hash identifier, or serial number that was given by the manufacturer to identify the lens.
   description:
-    doc: "Ideally an identifier, persistent link, or free text which gives further details about the lens.
+    doc: Ideally an identifier, persistent link, or free text which gives further details about the lens.
   (NXtransformations):
-    doc: "Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam."
+    doc: Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam.
     position:
       \@transformation_type:
         doc: Following transformation_type argument of NXtranslations but allowed value is only translation.
