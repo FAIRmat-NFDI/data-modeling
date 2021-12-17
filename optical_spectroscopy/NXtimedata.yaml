@@ -1,30 +1,29 @@
 # 2021-12-16
-name: NXtimedata
 category: base
-extends: NXobject
 doc: "Time dependent data array base class definition
     When describing any time dependent physical quantity recorded at
     common time points, use one instance of this base class"
 
 symbols:
   N_time: number of timepoints recorded
-  N_channel: number of channels of the same type recorded together
+  N_channels: number of channels of the same type recorded together
 
-start_time(NX_DATE_TIME):
-  doc: "the start time point of the experiment, every time point in time_array are
+(NXtimedata):
+  start_time(NX_DATE_TIME):
+    doc: "the start time point of the experiment, every time point in time_array are
       relative to this time point"
 
-time_array(NX_TIME):
-  doc: "An array containing the time spent since the start time point"
-  dimensions:
-    rank: 1
-    dim: [[1, N_time]]
+  time_array(NX_TIME):
+    doc: "An array containing the time spent since the start time point"
+    dimensions:
+      rank: 1
+      dim: [[1, N_time]]
 
-measured_data(NX_NUMERIC):
-  doc: "N_channels number of measured data"
-  dimensions:
-    rank: 2
-    dim: [[2, N_channels], [1, N_time]]
+  measured_data(NX_NUMBER):
+    doc: "N_channels number of measured data"
+    dimensions:
+      rank: 2
+      dim: [[2, N_channels], [1, N_time]]
 
-mesured_unit(NX_CHAR):
-  doc: "Physical unit belonging to the measured_data. Use possibly SI unit."
+  measured_unit(NX_CHAR):
+    doc: "Physical unit belonging to the measured_data. Use possibly SI unit."
