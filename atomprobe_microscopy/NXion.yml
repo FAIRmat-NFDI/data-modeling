@@ -1,0 +1,33 @@
+#kuehbacm at hu-berlin.de, 12/2021
+category: base
+doc: Atomic architecture of a (molecular) ion (fragment) which can be used for example to label charged molecule ions identified from mass-to-charge histogram data as in e.g. time-resolved mass spectrometry techniques like atom probe, secondary ion mass spectrometry.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  Nivecmax: Maximum number of allowed atoms per (molecular) ion (fragment)
+  Nranges: Number of range intervals mapped on this ion type
+(NXion):
+  ion_type(NX_UINT):
+    exists: required
+    doc: Identifier, e.g. ion type or ion species id
+    unit: NX_UNITLESS
+  isotope_vector(NX_UINT):
+    exists: required
+    doc: A vector of ordered isotope hash values. The values have to be arranged in the array in decreasing order. The individual hash values are built with the following hash function. Hashvalue = Z + N*256 where Z is the number of protons and N the number of neutrons of the isotope.
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, Nivecmax]]
+  charge_state(NX_FLOAT):
+    exists: required
+    doc: Signed charge of the ion. Only positive values will be measured in atom probe microscopy as the ions are accelerated by a negatively signed bias electric field. In the case the charge state is documented implicitly only, the value should be set to zero. This is for example the case when using classical range file formats (RNG, RRNG) because these files do not document the charge state explicitly but report just a integer fraction of the theoretical mass-to-charge.
+    unit: NX_CHARGE
+  name(NX_CHAR):
+    exists: optional
+    doc: Human-readable ion type name (e.g. Al3+), i.e. ASCII character array, ideally using LaTeX notation to specify the ion and charge state. Examples 12C+, Al3+ or H+. Although human-readable and intuitive, parsing such names becomes impractical for more complicated cases. Therefore, the isotope_vector is the preferred machine-readable format.
+  mass_to_charge_range(NX_FLOAT):
+    exists: optional
+    doc: Lower (mqmin) and upper (mqmax) bounds of a mass-to-charge interval [mqmin, mqmax] (inclusive or exclusive boundaries) where assigned signal for the respective ion is identified.
+    unit: NX_ATOMIC_MASS_UNIT #does not exist in NeXus
+    dimensions:
+      rank: 2
+      dim: [[1, 2], [2, Nranges]]
