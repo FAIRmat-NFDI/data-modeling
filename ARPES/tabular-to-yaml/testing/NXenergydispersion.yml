@@ -1,0 +1,29 @@
+name: NXenergydispersion
+category: base
+doc: "Draft subclass of NXelectronanalyser to describe the energy dispersion section
+  of a photoelectron analyser."
+(NXobject):
+  scheme(NX_CHAR):
+    doc: "tof, hemispherical, cylindrical, mirror, retarding grid, etc."
+  pass_energy(NX_FLOAT):
+    doc: "Pass energy in dispersive electrodes"
+    unit: NX_ENERGY
+  center_energy(NX_FLOAT):
+    doc: "Center of the energy window"
+    unit: NX_ENERGY
+  entrance_slit(NXaperture):
+    doc: "Size, position and shape of the entrance slits in dispersive analyzers"
+  exit_slit(NXaperture):
+    doc: "Size, position and shape of the exit slits in dispersive analyzer"
+  diameter(NX_FLOAT):
+    doc: "Diameter of the dispersive orbit"
+    unit: NX_LENGTH
+  energy_scan_mode(NX_CHAR):
+    doc: "fixed or sweep"
+  tof_distance(NX_FLOAT):
+    doc: "Length of the tof drift electrode"
+    unit: NX_LENGTH
+  DEFLECTOR(NXdeflector):
+    doc: "deflectors in the energy dispersive section"
+  LENS(NXlens):
+    doc: "Individual lenses in the energy dispersive section"

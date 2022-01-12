@@ -1,0 +1,98 @@
+name: NXsample
+category: base
+doc: "Draft extension of NXobject to include fields to describe the use of monochromators
+  in photoemission experiments."
+(NXobject):
+  name(NX_CHAR):
+    doc: "Simple and descriptive name of the sample"
+  sample_id(NX_CHAR):
+    doc: "Identification number or signatures of the sample used."
+  state(NX_CHAR):
+    doc: "Physical state of the sample"
+  purity(NX_FLOAT):
+    unit: NX_UNITLESS
+    doc: "Chemical purity of the sample"
+  orientation(NX_CHAR):
+    doc: "Surface termination of the sample (if crystalline)"
+  layer(NX_CHAR):
+    doc: "Number of layers of the sample (e.g. bulk, monolayer, pentalayer, etc.)"
+  space_group(NX_CHAR):
+    doc: "Space group of the sample (if crystalline)"
+  chemical_formula(NX_CHAR):
+    doc: "Chemical formula of the sample"
+  chemical_name(NX_CHAR):
+    doc: "Full chemical name of the sample"
+  chem_id_cas(NX_CHAR):
+    doc: "CAS registry number of the sample chemical content."
+  sample_temperature(NX_FLOAT):
+    unit: NX_TEMPERATURE
+    doc: "Temperature of the sample during the measurement."
+  drain_current(NX_FLOAT):
+    unit: NX_CURRENT
+    doc: "Current to neutralize the photoemission current"
+  sample_bias(NX_FLOAT):
+    unit: NX_CURRENT
+    doc: "Possible bias of the sample with trespect to analyser ground"
+  pressure(NX_FLOAT):
+    unit: NX_PRESSURE
+    doc: "Pressure of gas surrounding the sample at time of measurement."
+  gas(NX_CHAR):
+    doc: "Gases might be fluxed on the surface for various reasons. Chemical designation,
+      or residual."
+  electric_field(NX_FLOAT):
+    unit: NX_VOLTAGE
+    doc: "Electric field applied across the sample. Different from sample_bias."
+    \@direction(NX_FLOAT):
+    unit: NX_VOLTAGE
+    doc: "Vector determining the direction of the electric field"
+    dimensions:
+      dim: [[1,3]]
+      rank: 1
+  magnetic_field(NX_FLOAT):
+    unit: NX_ANY
+    doc: "Magnetic field applied to the sample during the measurement."
+    \@direction(NX_FLOAT):
+    unit: NX_ANY
+    doc: "Vector determining the direction of the magnetic field"
+    dimensions:
+      dim: [[1,3]]
+      rank: 1
+  stress_field(NX_FLOAT):
+    unit: NX_PRESSURE
+    doc: "Stress field applied to the sample during the measurement."
+    \@direction(NX_FLOAT):
+    unit: NX_PRESSURE
+    doc: "Vector determining the direction of the stress field"
+    dimensions:
+      dim: [[1,3]]
+      rank: 1
+  thickness(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Sample thickness"
+  surface_dopant(NX_CHAR):
+    doc: "Element of evaporated surface dopant such as alkali or other"
+  surface_dopant_coverage(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Nominal thickness of the evaporated dopant"
+  bias(NX_CHAR):
+    doc: "Voltage applied to sample and sample holder."
+  drain_current(NX_FLOAT):
+    unit: NX_CURRENT
+    doc: "Drain current due to photoemission"
+  growth_method(NX_FLOAT):
+    unit: NX_CURRENT
+    doc: "Sample growth method (e. g. molecular beam epitaxy, chemical vapor deposition
+      etc.)"
+  preparation_method(NX_FLOAT):
+    unit: NX_CURRENT
+    doc: "E.g. UHV cleave, sputtering and annealing, etc."
+  preparation_date(NX_DATE_TIME):
+    doc: "Date of sample preparation"
+  vendor(NX_CHAR):
+    doc: "Name of the sample vendor (company or research group)"
+  substrate_material(NX_CHAR):
+    doc: "Material of the substrate in direct contact with the sample."
+  substrate_state(NX_CHAR):
+    doc: "Physical state of the substrate, similar options to sample_state"
+  notes(NXnote):
+    doc: "Further notes."

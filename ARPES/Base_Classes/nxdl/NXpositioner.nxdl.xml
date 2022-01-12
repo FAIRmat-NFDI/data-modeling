@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXpositioner to include fields to describe the use of manipulators in photoemission experiments.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<field name="name" type="NX_CHAR" doc="Name"/>
+		<field name="description" type="NX_CHAR" doc="Description"/>
+		<field name="type" type="NX_CHAR" doc="Type of manipulator, Hexapod, Rod, etc. "/>
+		<field name="pos_x" type="NX_FLOAT" units="NX_LENGTH" doc="Position in the x direction"/>
+		<field name="pos_y" type="NX_FLOAT" units="NX_LENGTH" doc="Position in the y direction"/>
+		<field name="pos_z" type="NX_FLOAT" units="NX_LENGTH" doc="Position in the z direction"/>
+		<field name="pos_azimuth" type="NX_FLOAT" units="NX_ANGLE" doc="Angular position in the azimuthal direction"/>
+		<field name="pos_tilt" type="NX_FLOAT" units="NX_ANGLE" doc="Angular position in the tilt direction"/>
+		<field name="pos_polar" type="NX_FLOAT" units="NX_ANGLE" doc="Angular position in the polar direction"/>
+		<field name="cryostat_temperature" type="NX_FLOAT" units="NX_TEMPERATURE" doc="Temperature of the cryostat (coldest point)"/>
+		<field name="heater_power" type="NX_FLOAT" units="NX_POWER" doc="Power in the heater for temperature control."/>
+		<field name="sample_temperature" type="NX_FLOAT" units="NX_TEMPERATURE" doc="Temperature at the closest point to the sample"/>
+		<field name="drain_current" type="NX_FLOAT" units="NX_CURRENT" doc="Current to neutralize the photoemission current"/>
+		<field name="sample_bias" type="NX_FLOAT" units="NX_CURRENT" doc="Possible bias of the sample with trespect to analyser ground"/>
+	</group>
+</definition>

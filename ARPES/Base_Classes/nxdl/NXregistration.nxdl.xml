@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXobject to include fields to describe image registration procedures.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<group name="applied" type="NX_BOOL" doc="Has the registration been applied?"/>
+		<field name="new_centre" type="NX_FLOAT" units="NX_UNITLESS" doc="Coordinates of the new symmetry centre point.">
+			<dimensions rank="1">
+				<dim index="1" value="2"/>
+			</dimensions>
+		</field>
+		<field name="rotation_centre" type="NX_FLOAT" units="NX_UNITLESS" doc="Coordinates of the rotation centre.">
+			<dimensions rank="1">
+				<dim index="1" value="2"/>
+			</dimensions>
+		</field>
+		<field name="scaling" type="NX_FLOAT" units="NX_DIMENSIONLESS" doc="Scaling factor to compensate shrinking from distortion correction.">
+			<dimensions rank="1">
+				<dim index="1" value="2"/>
+			</dimensions>
+		</field>
+		<group name="TRANSFORMATION" type="NXtransformation" doc="To describe the operations of image registration (combinations of rigid translations and rotations)"/>
+	</group>
+</definition>
