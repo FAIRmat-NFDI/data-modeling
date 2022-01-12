@@ -1,5 +1,0 @@
-{
-    "/entry/instrument/high_tension": {"path": "/instrument/beam_energy", "unit": "kV", "desc": "It's the beam energy"},
-    "/entry/hardware_source": {"path": "/hardware_not_source", "unit": "AAD", "desc": "Its the hardware source"},
-    "/entry/scan/scan_device_properties/mag_boards": {"path": "/bringitallthewayout", "unit": "AAD", "desc": "Its the hardware source"}
-}
