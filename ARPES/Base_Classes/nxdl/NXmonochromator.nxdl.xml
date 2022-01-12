@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXmonochromator to include fields to describe the use of monochromators in photoemission experiments.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<symbols doc="The symbols used in the schema to specify e.g. dimensions of arrays">
+		<sym name="doc" doc="The symbols used in the schema to specify e.g. dimensions of arrays"/>
+		<sym name="nx" doc="Number of points in a spectrum"/>
+	</symbols>
+	<group type="NXobject">
+		<field name="energy" type="NX_FLOAT" units="NX_ENERGY" doc="Central energy "/>
+		<field name="energy_error" type="NX_CHAR" doc="Energy standard deviation"/>
+		<group name="distribution" type="NXdata" doc="Spectrum or live diagnostic">
+			<dimensions rank="2">
+				<dim index="1" value="nx"/>
+				<dim index="1" value="nx"/>
+			</dimensions>
+		</group>
+	</group>
+</definition>

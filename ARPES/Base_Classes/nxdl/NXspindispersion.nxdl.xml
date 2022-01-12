@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft subclass of NXelectronanalyser to describe the spin filters in photoemission experiments.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<field name="spin_filter_type" type="NX_CHAR" doc="Type of spin detector, VLEED, SPLEED, Mott, etc. "/>
+		<field name="spin_filter_FoM" type="NX_FLOAT" units="NX_DIMENSIONLESS" doc="Figure of merit of the spin detector"/>
+		<field name="spin_filter_shermann_function" type="NX_FLOAT" units="NX_DIMENSIONLESS" doc="Effective Shermann function, calibrated spin selectivity factor"/>
+		<field name="spin_scattering_energy" type="NX_FLOAT" units="NX_ENERGY" doc="Energy of the spin-selective scattering "/>
+		<field name="spin_scattering_angle" type="NX_FLOAT" units="NX_ANGLE" doc="Angle of the spin-selective scattering"/>
+		<field name="spin_target" type="NX_CHAR" doc="Name of the target"/>
+		<field name="spin_target_preparation" type="NX_CHAR" doc="Preparation procedure of the spin target"/>
+		<field name="spin_target_preparation_date" type="NX_DATE_TIME" doc="Date of last preparation of the spin target"/>
+		<group name="DEFLECTOR" type="NXdeflector" doc="deflectors in the spin dispersive section"/>
+		<group name="LENS" type="NXlens" doc="Individual lenses in the spin dispersive section"/>
+	</group>
+</definition>

@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXsource to include lasers and FELs.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<symbols doc="The symbols used in the schema to specify e.g. dimensions of arrays">
+		<sym name="doc" doc="The symbols used in the schema to specify e.g. dimensions of arrays"/>
+		<sym name="nx" doc="Number of points in a spectrum"/>
+	</symbols>
+	<group type="NXobject">
+		<field name="name(@short_name)(NX_CHAR)" type="NX_CHAR" doc="Name of the source"/>
+		<field name="type" type="NX_CHAR" doc="Type of radiation source"/>
+		<field name="probe" type="NX_CHAR" doc="Type of radiation used as probe"/>
+		<field name="photon_energy" type="NX_FLOAT" units="NX_ENERGY" doc="The center photon energy of the source, before it is monochromatized or converted"/>
+		<field name="center_wavelength" type="NX_FLOAT" units="NX_WAVELENGTH" doc="The center wavelength of the source, before it is monochromatized or converted"/>
+		<field name="pulse_energy" type="NX_FLOAT" units="NX_ENERGY" doc="For pulsed sources, the energy of a single pulse"/>
+		<field name="peak_power" type="NX_FLOAT" units="NX_POWER" doc="For pulsed sources, the pulse energy divided by the pulse duration"/>
+		<field name="power" type="NX_FLOAT" units="NX_POWER" doc="Average source power"/>
+		<field name="emittance_x" type="NX_FLOAT" units="NX_EMITTANCE" doc="Horizontal emittance"/>
+		<field name="emittance_y" type="NX_FLOAT" units="NX_EMITTANCE" doc="Vertical emittance"/>
+		<field name="sigma_x" type="NX_FLOAT" units="NX_LENGTH" doc="horizontal beam size"/>
+		<field name="sigma_y" type="NX_FLOAT" units="NX_LENGTH" doc="vertical beam size"/>
+		<field name="flux" type="NX_FLOAT" units="NX_FLUX" doc="Photon flux of the source"/>
+		<field name="energy" type="NX_FLOAT" units="NX_ENERGY" doc="Particle beam energy/excitation voltage"/>
+		<field name="current" type="NX_FLOAT" units="NX_CURRENT" doc="Storage ring current/X-ray tube current"/>
+		<field name="frequency" type="NX_FLOAT" units="NX_FREQUENCY" doc="Pulsed source frequency (repetition rate)"/>
+		<field name="pulse_width" type="NX_FLOAT" units="NX_TIME" doc="Duration of the source pulses"/>
+		<group name="distribution" type="NXdata" doc="Energy/wavelength spectrum of the source">
+			<dimensions rank="2">
+				<dim index="1" value="nx"/>
+				<dim index="1" value="nx"/>
+			</dimensions>
+		</group>
+		<field name="number_of_bunches" type="NX_INT" doc="Number of bunches in the storage ring"/>
+		<field name="bunch_length" type="NX_FLOAT" units="NX_TIME" doc="Temporal length of the bunch"/>
+		<field name="bunch_distance" type="NX_FLOAT" units="NX_TIME" doc="Time between bunches"/>
+		<field name="mode" type="NX_CHAR" doc="Source operating mode (single or multi bunch)"/>
+		<field name="top_up" type="NX_BOOLEAN" doc="Is the storage ring in top up?"/>
+		<group name="bunch_pattern" type="NXdata" doc="Description of the bunch pattern">
+			<dimensions rank="2">
+				<dim index="1" value="nx"/>
+				<dim index="1" value="nx"/>
+			</dimensions>
+		</group>
+		<field name="rms_jitter" type="NX_FLOAT" units="NX_TIME" doc="For pump-probe experiments, the synchronization error between pump and probe."/>
+		<field name="bunch_number_start" type="NX_INT" doc="Some facilities tag each bunch. First bunch of the  measurement"/>
+		<field name="bunch_number_end" type="NX_INT" doc="Last bunch of the  measurement"/>
+	</group>
+</definition>

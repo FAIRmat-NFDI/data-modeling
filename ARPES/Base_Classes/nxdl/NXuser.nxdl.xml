@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXuser to describe users of laboratory experiments.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<field name="name" type="NX_CHAR" doc="Name of user responsible for this entry"/>
+		<field name="role" type="NX_CHAR" doc="Role of user (local contact, principal investigator, etc.)"/>
+		<field name="affiliation" type="NX_CHAR" doc="Affiliation of user"/>
+		<field name="address" type="NX_CHAR" doc="Address of user"/>
+		<field name="telephone_number" type="NX_CHAR" doc="Telephone number of user"/>
+		<field name="email" type="NX_CHAR" doc="E-mail address of user"/>
+		<field name="facility_user_id" type="NX_CHAR" doc="User identifier defined by the facility"/>
+	</group>
+</definition>
