@@ -1,0 +1,32 @@
+name: NXelectronanalyser
+category: contributed
+doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
+(NXobject):
+  description(NX_CHAR):
+    doc: "Central energy "
+  name(NX_CHAR):
+    doc: "Name or model of the equipment"
+  \@short_name(NX_CHAR):
+    doc: "Acronym or other shorthand name"
+  temporal_resolution(NX_FLOAT):
+    unit: NX_TIME
+    doc: "Overall time resolution (FWHM of cross correlation)"
+  energy_resolution(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "Overall energy resolution (FWHM of gaussian broadening)"
+  spatial_resolution(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Overall spatial resolution (Airy disk radius)"
+  acquisition_mode(NX_CHAR):
+    doc: ""fixed" or "sweep""
+  fast_axes(NX_CHAR):
+    doc: "List of the axes that are acquired symultaneously by the detector"
+    dimensions:
+      dim: [[1,nfa]]
+      rank: 1
+  slow_axes(NX_CHAR):
+    doc: "List of the axes that are acquired, in order of decreasing speed. Example:
+      energy in a swept scan or spin. "
+    dimensions:
+      dim: [[1,nsa]]
+      rank: 1

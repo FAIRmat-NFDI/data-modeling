@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXdetector to include fields to describe photoelectron detectors.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<field name="amplifier_type" type="NX_CHAR" doc="Type of electron amplifier, MCP, channeltron, etc."/>
+		<field name="detector_type" type="NX_CHAR" doc="Description of the detector type, DLD, Phosphor+CCD, CMOS."/>
+		<field name="detector_voltage" type="NX_FLOAT" units="NX_VOLTAGE" doc="Voltage applied to detector."/>
+		<field name="amplifier_voltage" type="NX_FLOAT" units="NX_VOLTAGE" doc="Voltage applied to the amplifier."/>
+		<field name="amplifier_bias" type="NX_FLOAT" units="NX_VOLTAGE" doc="The low voltage of the amplifier migh not be the ground."/>
+		<field name="sensor_size" type="NX_FLOAT" units="NX_LENGTH" doc="Size of each imaging sensor chip on the detector."/>
+		<field name="sensor_count" type="NX_INT" units="NX_UNITLESS" doc="Number of imaging sensor chips on the detector."/>
+		<field name="sensor_pixel_size" type="NX_FLOAT" units="NX_LENGTH" doc="Physical size of the pixels of the imaging chip on the detector."/>
+		<field name="sensor_pixels" type="NX_INT" units="NX_UNITLESS" doc="Number of raw active elements in each dimension. Important for swept scans."/>
+		<group name="DEFLECTOR" type="NXdeflector" doc="deflectors in the detector section"/>
+		<group name="LENS" type="NXlens" doc="Individual lenses in the detector section"/>
+		<group name="DATA" type="NXdata" doc="raw data output from the detector"/>
+	</group>
+</definition>

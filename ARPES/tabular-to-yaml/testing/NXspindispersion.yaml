@@ -1,0 +1,23 @@
+name: NXspindispersion
+category: contributed
+doc: "Draft subclass of NXelectronanalyser to describe the spin filters in photoemission
+  experiments."
+(NXobject):
+  spin_filter_type(NX_CHAR):
+    doc: "Type of spin detector: "VLEED", "SPLEED", "Mott", etc. "
+  spin_filter_FoM(NX_FLOAT):
+    doc: "Figure of merit of the spin detector"
+  spin_filter_shermann_function(NX_FLOAT):
+    doc: "Effective Shermann function: calibrated spin selectivity factor"
+  spin_scattering_energy(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "Energy of the spin-selective scattering "
+  spin_scattering_angle(NX_FLOAT):
+    unit: NX_ANGLE
+    doc: "Angle of the spin-selective scattering"
+  spin_target(NX_CHAR):
+    doc: "Name of the target"
+  spin_target_preparation(NX_CHAR):
+    doc: "Preparation procedure of the spin target"
+  spin_target_preparation_date(NX_DATE_TIME):
+    doc: "Date of last preparation of the spin target"

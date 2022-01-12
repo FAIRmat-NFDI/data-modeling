@@ -1,0 +1,8 @@
+name: NXinstrument
+category: base
+doc: "Draft extension of NXinstrument to include fields to describe laboratory based
+  experiments."
+(NXobject):
+  description(NX_CHAR):
+    doc: "Short description of the instrument, possibly reference to a technical
+      publication"

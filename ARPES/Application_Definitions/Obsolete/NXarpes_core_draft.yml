@@ -1,0 +1,113 @@
+#pincelli at fhi-berlin.mpg.de, 11/2021
+#a draft version of a NeXus application definition for arpes,
+#the existing NXarpes is too restrictive, this application definition aims at generalizing it
+#to be agnostic of the experimental details.
+#the draft uses the application example of a simple 2D slice through the k-space, the elementary unit of
+#arpes measurements.
+#It uses only existing NeXus base classes. It is designed to be extended by other application definitions
+# with higher granularity in the data description.
+
+# Allowed probe to be both x-ray AND ultraviolet
+# Removed mandatory NXmonochromator: laser beamlines, many helium lamps do not have one.
+# Replaced NXmonochromator with the more flexible NXbeam
+# The "slits" are changed into an aperture object that is more flexible
+# Added an "energy_resolution" item, this simplifies greatly the retrieval of very important information
+
+
+name: NXarpes_core # Decided to use "core" to avoid confusion with "base class"
+doc: This is the most general application definition for angular resolved photo electron spectroscopy.
+category: application # Defaults "exists" to "required"
+#draft the application definition
+(NXentry):
+  \@entry:
+    doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
+  \@version:
+  title:
+  start_time(NX_DATE_TIME):
+  definition:
+    doc: Official NeXus NXDL schema to which this file conforms.
+    enumeration: [NXarpes_core]
+  (NXinstrument):
+    (NXsource):
+      type:
+      name:
+      probe:
+        enumeration: [x-ray,ultraviolet]
+    (NXbeam): # Describes the beam at the sample. Force a naming convention?
+      doc: Properties of the beam at the sample.
+      distance(NX_NUMBER):
+        doc: Distance of the point of evaluation of the beam from the sample.
+        unit: NX_LENGTH
+        # can I force the value to be 0? Does it make sense?
+      incident_wavelength(NX_NUMBER):
+        unit: NX_WAVELENGTH
+      incident_wavelength_spread(NX_NUMBER):
+        unit: NX_WAVELENGTH
+      incident_polarization(NX_NUMBER):
+        doc: Incident polarization specified as a real Jones vector. # As is can not describe circular?
+        exists: optional
+        unit: NX_ANY
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+    # Big issue here, detector is used improperly
+    # detector refers only to the actual particle sensor.
+    # In the bag of words, the approach is different
+    analyser(NXdetector):
+      type:
+        doc: type of detector (Standard hemispherical, Double hemispherical, Momentum microscope etc.)
+      lens_mode:
+        doc: Setting for the electron analyser lens
+      acquisition_mode:
+        enumeration: [swept, fixed]
+      energy_resolution(NX_NUMBER):
+        doc: Energy resolution of the analyser with the current setting.
+        unit: NX_ENERGY
+      momentum_resolution(NX_NUMBER):
+        doc: Momentum resolution of the analyser with the current setting.
+        unit: NX_WAVENUMBER
+      analyser_aperture(NXaperture): # The "slits" are changed into an aperture object that is more flexible
+        doc: aperture generating the momentum and/or energy filtering
+        description:
+          enumeration: [slit,pinhole,iris]
+        shape:
+          description:
+            doc: Shape of the aperture, curved or straight for horizontal slits, square or round for pinhole etc.
+            enumeration: [curved, straight, circle, square, hexagon, octagon, bladed]
+          size(NX_NUMBER):
+            doc: The relevant dimensions for the aperture (slit width, pinhole diameter etc.)
+            units: NX_LENGTH
+      pass_energy:
+        unit: NX_ENERGY
+        doc: energy of the electrons on the mean path of the analyser
+      time_per_channel:
+        exists: optional # Hard to get for tabular data, and not very important.
+        unit: NX_TIME
+        doc: Time spent accumulating in a bin of energy-momentum space. Important for counts to counts/s conversion and swept scan normalization.
+      sensor_size(NX_INT):
+        exists: optional # Hard to get for tabular data, and not very important.
+        doc: Tumber of raw active element in each dimension. Also important for swept scans.
+        dimensions:
+          rank: 1
+          dim: [[1, 2]]
+    (NXsample):
+      name:
+      chemical_formula:
+      sample_history:
+        exists: optional
+        doc: Ideally, a reference to the location or a unique identifier or other metadata file. In the case that is not available, free-text description.
+      preparation_date(NX_DATE_TIME):
+        unit: NX_TIME
+      preparation_time_zone(NX_DATE_TIME):
+        doc: ISO 8601 time_zone offset from UTC.
+        unit: NX_TIME
+      description:
+        doc: Surface preparation technique, UHV cleaving, in-situ growth, sputtering/annealing etc.
+      temperature(NX_NUMBER):
+        doc: Temperature of the sample
+        unit: NX_TEMPERATURE
+      situation: [vacuum]
+      pressure(NX_NUMBER):
+        doc: Residual gas pressure at the sample
+        unit: NX_PRESSURE
+    (NXdata): # Can I leave it completely free? Measurement type? Resolved axes? Standard plot?
