@@ -1,0 +1,25 @@
+#kuehbacm at hu-berlin.de, 12/2021
+category: base
+doc: Proposal for storing mathematical models of peaks, their functional form or at least support.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  Nsupport: Number of support points
+(NXpeak):
+  peak_model:
+    exists: required
+    doc: Is the peak described analytically or with data i.e. intensity as a function of independent variable.
+    enumeration: [empirical, gaussian, lorentzian]
+  positions(NX_NUMBER):
+    doc: In the case of only a data description of the peak and its shoulders, the positions were independent variable values were taken.
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, Nsupport]]
+  intensity(NX_NUMBER):
+    doc: In the case of only a data description of the peak and its shoulders, the intensity at these.
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, Nsupport]]
+  (NXcollection):
+    doc: In the case of an analytical description parameter of the functional form. For example in the case of Gaussian peaks mu, sigma, and cut-off values and background intensity.
