@@ -1,0 +1,229 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "electron spectroscopy common format 0.1",
+    "description": "A metadata schema intended to annoteate the schema of Specs Prodigy .xy files",
+    "type": "object",
+    "definitions": {
+        "analysis_method": {
+			"description": "The type of measurement that was performed",
+			"type": "string",
+			"enum": [
+						"XPS",
+						"UPS",
+						"XAS"
+					]
+		},
+		"time_stamp": {
+			"description": "The time that the spectrum measurement finished",
+			"type": "date-time"
+			},
+			
+		"group_name":{
+			"description":"A title for a group of spectra",
+			"type":"string"
+		},
+
+		"source_label":{
+			"description":"A label for the excitation source used",
+			"type":"string"
+		},
+
+		"lens_mode":{
+			"description":"The lens mode used for the energy analyzer",
+			"type":"string"
+		},
+
+		"voltage_range":{
+			"description":"The voltage range of the energy analyzer",
+			"type":"object",
+			"properties":{
+				"value":{
+					"description":"The value",
+					"type":"number"
+				},
+				"unit":{
+					"description":"The units associated with the reported value",
+					"type":"string"
+				}
+			}
+		},
+
+		"entrance_slit":{
+			"description":"The entrance slit used on the analyzer during the measurement",
+			"type":"string"
+		},
+
+		"exit_slit":{
+			"description":"The exit slit used on the analyzer during the measurement",
+			"type":"string"
+		},
+
+		"scan_mode":{
+			"description":"The energy analyzer's scan mode used during the measurement",
+			"type":"string",
+			"enum":[
+				"FixedEnergies",
+				"SnapshotFAT",
+				"FixedAnalyzerTransmission",
+				"ConstantFinalState"
+			]
+		},
+
+		"lens1":{
+			"description":"The value of the energy analyzer's lens 1 setting during the measurement",
+			"type":"number"
+		},
+
+		"lens2":{
+			"description":"The value of the energy analyzer's lens 2 setting during the measurement",
+			"type":"number"
+		},
+
+		"x_deflector":{
+			"description":"The value of the energy analyzer's x deflector setting during the measurement",
+			"type":"number"
+		},
+
+		"y_deflector":{
+			"description":"The value of the energy analyzer's y deflector setting during the measurement",
+			"type":"number"
+		},
+
+		"focus_displacement":{
+			"description":"The value of the energy analyzer's focus displacement setting during the measurement",
+			"type":"number"
+		},
+
+		"n_values":{
+			"description":"The number of data points in the data array",
+			"type":"integer"
+		},
+
+		"detector_voltage":{
+			"description":"The detector voltage on the energy analyzer's detector during the measurement",
+			"type":"object",
+			"properties":{
+				"value":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"string"
+				}
+			}
+		},
+
+		"excitation_energy":{
+			"description":"The energy of the excitation source used for the measurement",
+			"type":"object",
+			"properties":{
+				"value":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"number"
+				}
+			}
+		},
+
+		"pass_energy":{
+			"description":"The pass energy of the analyzer during the measurement",
+			"type":"object",
+			"properties":{
+				"value":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"string"
+				}
+			}
+		},
+
+		"workfunction":{
+			"description":"The workfunction of the energy analyzer during the measurement",
+			"type":"object",
+			"properties":{
+				"value":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"string"
+				}
+			}
+		},
+
+		"spectrum_type":{
+			"description":"The type of spectrum measured",
+			"type":"string"
+		},
+
+		"dwell_time":{
+			"description":"The time spent per step of the independant variable to integrate detector counts",
+			"type":"object",
+			"properties":{
+				"value":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"string"
+				}
+			}	
+		},
+
+		"independant_variable":{
+			"description":"The data and metadata of the independant variable",
+			"type":"object",
+			"properties":{
+				"energy_type":{
+					"description":"The type of energy that the value of the independant variable represents",
+					"type":"string",
+					"enum":[
+						"binding_energy",
+						"kinetic_energy",
+						"excitataion_energy"
+					]
+				},
+				"step_size":{
+					"description":"The step size of the independant variable",
+					"type":"number"
+				},
+				"start_energy":{
+					"type":"number"
+				},
+				"end_energy":{
+					"type":"number"
+				},
+				"unit":{
+					"type":"string"
+				},
+				"data":{
+					"type":"array"
+				}
+			}
+		},
+
+		"dependant_variable":{
+			"description":"The data and metadata of a dependant variable",
+			"type":"object",
+			"properties":{
+				"name":{
+					"description":"The name of measured variable",
+					"type":"string",
+					"enum":[
+						"counts",
+						"count_rate",
+						"temperature",
+						"pressure",
+						"flow_rate"
+					]
+				},
+				"unit":{
+					"type":"string"
+				},
+				"data":{
+					"type":"array"
+				}
+			}
+        }
+    }
+}
+	
