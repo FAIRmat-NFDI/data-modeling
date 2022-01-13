@@ -1,47 +1,51 @@
-#kuehbacm at hu-berlin.de, 12/2021
-#the application cases in mind are that this class can be used to describe how the sample/specimen
-#is mounted and placed in an instrument to hold it in a controlled place and orientation wrt to the probing radiation
-#the idea of this class is also to document components which can apply external stimuli on the sample
-#by contrast a micromanipulator is a special device for sample preparation in an SEM/FIB instruments which this class does not describe
-#the draft was inspired by commercial products and (transmission) electron microscopy literature such as
+#kuehbacm at hu-berlin.de, 11/2021
+#the application cases in mind are that this class can be used to describe how the specimen
+#is mounted and placed in the electron beam and how external stimuli can be applied
+#micromanipulators are used primarily for sample preparation in an SEM/FIB instruments
+#this application case is excluded here
+#the draft was inspired by commercial products and (transmission) electron microscopy literature
 #https://www.nanotechnik.com/e5as.html
 #https://www.protochips.com/products/fusion/fusion-select-components/
 #L. Reimer's book on transmission electron microscopy, 1997, page 103, table 4.2
 #D. B. Williams and C. B. Carter's book on TEM, 1996, page 124
-#D. J: Larson's book on the Local Electrode Atom Probe, 2013, page 47
-#by contrast, the purpose and design of so-called nano/or micromanipulators, i.e. automatable devices to perform e.g. site-specific lift out
-#procedures warrants to define an own class NXspecimen_manipulator given this is nothing else than miniature robot arm essential
-#one could also think about creating an own NXrobotarm class, below are two examples of such tools as they are used in FIB and SEMs
-#https://nano.oxinst.com/products/omniprobe/omniprobe-200
-#https://www.nanoprobetech.com/about
-category: base
-doc: Candidate class for a component or a set of components which is coarse-grained into one logical unit. The role of the stage in an experiment is to hold/align/orient the sample/specimen and eventually offer a controlled environment and further devices to apply stimuli. Having an own candidate class is justified as contemporary specimen/sample stages are such multi-purpose/-functional tools with multiple actuators, sensors, components and thus also the need to store the various (meta)data that are generated with manipulating the sample. Modern stages realize a hierarchy of components. For example the specimen might be mounted on a multi-axial tilt rotation holders which itself is fixed in the support unit that connects to the microscope. As another example in atom probe researchers may work with wire samples which are clipped into a larger fixing unit for convenience. This unit is known in atom probe jargon as a stub. Stubs in turn are positioned on pucks and these are loaded onto carousels. In this class two layers of this hierarchy are reflected. The stage is the root of the hierarchy. A stage carries the holder. In the case that it is not practical to distinguish these two layers, the holder should be given preference. Applied to the examples, a nanoparticle is attached on a copper grid. The copper grid is the holder. The grid itself is fixed to the stage. An atom probe specimen is fixed in a stub, the set of stub is the holder, while the cryostat temperature control unit reads more as the stage.the puck or a microtip array the stage. #With this first draft we focus functionalities like holding the sample, positioning, and rotating it and controlling its temperature, later components for in-situ testing could be added. In the future, though maybe a hierarchy of holders is necessary
+name: NXstage
+category: contributed
+doc: Draft class for stages, i.e. advanced specimen holders which often represent own small laboratories with more capability than just to hold the sample/specimen in place.
 (NXstage):
+  doc: Candidate class for a component/set of components, assumed as one logical unit with a purpose for the experiment, of an instrument which can hold the sample/specimen and apply stimuli on it. Having an own candidate class is justified as contemporary specimen/sample stages are, especially in cutting-edge experiments, multi-purpose/-functional tools for not only holding the specimen in place, but also aligning and rotating, or perform in-situ heating or cooling, in-situ mechanical testing, offering reaction cells, or controlling the stage temperature, or even offering reaction cells.
+  #in this first draft we focus on the functionalities holding the sample, positioning and rotating it and controlling temperature, later in-situ testing could be added.
   name:
     doc: Colloquial or short name for the component.
+#  stage_location:
+#    doc: location relative to the objective lens
+#    enumeration: [top, bottom, inside]
   stage_design:
-    doc: Principal design of the component which carries also the actual holder. 
+    doc: Principal design of the component which carries also the actual holder. #differences for e.g. EM and APM exist, need to discuss if we go for one class covering all of these cases or for one class from which to inherit and instantiate areaB method-specific stage childs? Given that modern stages themselves represent a hierarchy of components should this hierarchy be considered. E.g. in atom probe we have carousels which carry pucks which themselves carry clips which hold the specimen, TEMs have stages which carry the holder which carries the grid which carries the particle/object or foil that is to be measured.
     enumeration: [side-entry, top-entry]
-  stage_manufacturer_name:
+  stage_manufacturer:
     doc: Name of the manufacturer who built the stage.
-  stage_manufacturer_model:
+  stage_model:
     doc: Commercial name of the stage given by the manufacturer.
+  stage_identifier:
+    doc: Persistent identifier like hash value or serial number of the manufacturer which specifies the stage.
   stage_description:
-    doc: Ideally a link to a (globally persistent) unique identifier which documents or can be used to infer further details of the component. If not available use this field for a free text description to give further details to the stage.
+    doc: Ideally a link to a (globally persistent) unique identifier document or link where further details to the component can be found. If not available use free text to give further details to the stage.
   stage_ref_csys(NXtransformations):
     doc: The reference coordinate system in which all affine transformations are defined at the level of the stage. If the holder enables additional degrees of freedom, use holder_ref_csys
   holder_design:
     doc: Type of holder which carries the specimen.
-    enumeration: [single-tilt, quick-change, multiple-specimen, bulk-specimen, double-tilt, tilt-rotate, heating-chip, atmosphere-chip, electrical-biasing-chip, liquid-cell-chip]
+    enumeration: [single-tilt, quick-change, multiple-specimen, bulk specimen, double-tilt, tilt-rotate, heating chip, atmosphere chip, electrical biasing chip, liquid cell chip]
   #the nested names in my opinion suggest to make a stage a hierarchy of stages or a hierarchy of holders...?
-  holder_manufacturer_name:
+  holder_manufacturer:
     doc: Name of the manufacturer who built the holder.
-  holder_manufacturer_model:
+  holder_model:
     doc:C ommercial name of the holder given by the manufacturer.
   holder_identifier:
     doc: Persistent identifier like hash value or serial number of the manufacturer which specifies the holder.
   holder_description:
-    doc: Ideally a link to a (globally persistent) unique identifier which documents or can be used to infer further details of the component. If not available use this field for a free text description to give further details to the holder. #can be used to describe e.g. the cup material
+    doc: Ideally a link to a (globally persistent) unique identifier document or link where further details to the component can be found. If not available use free text to give further details to the holder.
+  holder_cup_material:
+    doc: In the case of a side-entry stage design, the material of the cup which holds the specimen.
   holder_ref_csys(NXtransformations):
     doc: The reference coordinate system in which all affine transformations are defined at the level of the holder.
 #exemplified here how to describe and deal with complicated positioning tools like an eucentric five axis table stage in an SEM
@@ -52,4 +56,5 @@ doc: Candidate class for a component or a set of components which is coarse-grai
   holder_normal_height(NXpositioner):
   holder_inplane_translate1(NXpositioner):
   holder_inplane_translate2(NXpositioner):
-#need to add temperature control units and components to apply external stimuli on the specimen such as NXmech_testing_unit and NXfurnace, NXreaction_cell
+  #need to add temperature control units and components to apply external stimuli on the specimen
+  #eventually also useful to have gaseous atmosphere
