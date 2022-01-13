@@ -1,0 +1,84 @@
+\documentclass[a4paper,draft,onecolumn]{article}
+%\documentclass[a4paper,final,onecolumn]{article}
+%\usepackage{geometry}
+%\geometry{a4paper,left=25mm,right=25mm,top=25mm,bottom=25mm}
+\usepackage[a4paper,total={7.24in,10.51in}]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{csquotes}
+%\usepackage{uarial} %{dejavu} %{bera}
+%Import the natbib package and sets a bibliography  and citation styles
+%\usepackage[round]{natbib}
+%\bibliographystyle{./MandM.bst}
+%\bibliography{EMMetadataDraft01.bib}
+%\setcitestyle{authoryear,open={((},close={))}}
+\usepackage[bibstyle=nature,date=year,backend=bibtex,citestyle=numeric-comp,sortcites=true,sorting=none,mincrossrefs=1]{biblatex} %sorting=none
+\addbibresource{PaperBibliography.bib}
+
+\usepackage{lineno,hyperref}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+\usepackage{bm}
+
+%units and mathematical notation
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{miller}
+\usepackage{graphicx}
+\usepackage{subfig}
+%where to find the figures
+\graphicspath{{figures/}}
+
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit{\atpercent}{at.\%}
+
+
+\usepackage[font=scriptsize]{caption}
+\usepackage{cleveref} 
+%has to be loaded after hyperref \usepackage[capitalise]{cleveref} % to have all fig. eq. figs. appearing as Fig. https://texblog.org/2013/05/06/cleveref-a-clever-way-to-reference-in-latex/
+%on abbreviations see https://tex.stackexchange.com/questions/256849/cleveref-change-behaviour-of-cref-to-use-the-abbreviated-form
+%specific modifications to cleveref
+
+\usepackage{xcolor}
+%\usepackage{soul}
+%turn on draft figures for document
+%\setkeys{Gin}{draft}
+%\journal{Ultramicroscopy}
+
+%% `Elsevier LaTeX' style
+%\bibliographystyle{elsarticle-num}
+%\biboptions{sort&compress}
+
+%%tables
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+%specific implementation algorithmic charts
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\def\BState{\State\hskip-\ALG@thistlm}
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}
+%https://tex.stackexchange.com/questions/115709/do-while-loop-in-pseudo-code
+
+
+
+%% annotating debug stuff
+\newcommand{\dbg}[1]{\textcolor{red}{\textbf{ #1 }}}
+\newcommand{\suppl}[1]{\textcolor{green}{#1}}
+\newcommand{\kick}[1]{\textcolor{orange}{#1}}
+\usepackage{authblk}
+\usepackage[draft]{changes}
+%\usepackage[final]{changes}
+\definechangesauthor[name={MarkusKuhbach}, color=red]{MK}
+\colorlet{Changes@Color}{red} %adhere to NPJ Comp Mat reviewing rules
+%\addbibresource{EMMetadataDraft01}
+%\bibliography{EMMetadataDraft01}
+%\bibliography{MetadataDraftEM01}
+%\definechangesauthor[name={MarkusKuhbach}, color=red]{MK}
+%\makeatletter
+%\@namedef{Changes@AuthorColor}{red}
+%\colorlet{Changes@Color}{red}
+%\makeatother
