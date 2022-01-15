@@ -2,7 +2,6 @@ name: NXaperture
 category: base
 doc: "Draft extension of NXaperture to describe apertures in electron analysers."
 type: group
-extends: null
 (NXobject):
   shape(NX_CHAR):
     doc: "Shape of the aperture, i.e. straight or curved for slits, circle, square

@@ -4,7 +4,6 @@ NXaperture:
   category: base
   doc: "Draft extension of NXaperture to describe apertures in electron analysers."
   type: group
-  extends:
   (NXobject):
 NXbeam:
   name: NXbeam

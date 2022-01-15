@@ -14,6 +14,8 @@ symbols:
       is fit to a set of features (peaks) at well defined energy positions to determine
       E(TOF). Here we can store the array of fit coefficients."
     unit: NX_ANY
+    \@units(NX_CHAR):
+      doc: "Here: for a energy/tof conversion SI units could be 'J/s', customary 'eV/ns'."
     dimensions:
       dim: [[1,ncoeff]]
       rank: 1
@@ -25,7 +27,7 @@ symbols:
     unit: NX_ANY
   offset(NX_FLOAT):
     doc: "For linear calibration. Offset parameter."
-    unit: NX_ANY
+    unit: NX_ENERGY
   calibrated_axis(NX_FLOAT):
     doc: "A vector representing the axis after calibration, matching the data length"
     unit: NX_ANY
