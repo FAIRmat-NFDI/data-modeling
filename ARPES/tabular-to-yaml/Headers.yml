@@ -3,6 +3,8 @@ NXaperture:
   name: NXaperture
   category: base
   doc: "Draft extension of NXaperture to describe apertures in electron analysers."
+  type: group
+  extends:
   (NXobject):
 NXbeam:
   name: NXbeam
@@ -100,7 +102,7 @@ NXregistration:
 NXsample:
   name: NXsample
   category: base
-  doc: "Draft extension of NXobject to include fields to describe the use of monochromators in photoemission experiments."
+  doc: "Draft extension of NXsample to include fields to describe samples in photoemission experiments."
   (NXobject):
 NXsource:
   name: NXsource
