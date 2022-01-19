@@ -46,7 +46,6 @@ symbols:
     experiment_description:
 
     start_time(NX_DATE_TIME):
-      unit:  NX_TIME
     program_name:
       doc: "Commercial or otherwise defined given name to the program that was used to
         generate the results file(s) with measured data and metadata."
