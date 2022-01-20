@@ -1,7 +1,5 @@
-#pincelli at fhi-berlin.mpg.de, 11/2021
-#a draft version of a NeXus application definition for photoemission,
-#the existing NXarpes is too restrictive, this application definition aims at generalizing it
-#to be agnostic of the experimental details.
+#Pincelli at fhi-berlin.mpg.de, 01/2022
+#Draft version of a NeXus application definition for photoemission,
 #It is designed to be extended by other application definitions
 #with higher granularity in the data description.
 
@@ -54,14 +52,14 @@ category: application # Defaults "exists" to "required"
           unit: NX_ENERGY
         incident_energy_spread(NX_NUMBER):
           exists: recommended
-          doc: "The energy spread FWHM for the corresponding energy(ies) in incident_energy. 
+          doc: "The energy spread FWHM for the corresponding energy(ies) in incident_energy.
           In the case of shot-to-shot variation in the energy spread, this is a 2D array of dimension nP by m (slow to fast) of the spreads of the corresponding energy in incident_energy."
           unit: NX_ENERGY
         incident_energy_weights(NX_NUMBER):
           exists: optional
-          doc: "In the case of a polychromatic beam this is an array of length m of the relative weights of the corresponding energies in incident_energy. 
+          doc: "In the case of a polychromatic beam this is an array of length m of the relative weights of the corresponding energies in incident_energy.
           In the case of a polychromatic beam that varies shot-to-shot, this is a 2D array of dimensions np by m (slow to fast) of the relative weights of the corresponding energies in incident_energy."
-          unit: NX_ENERGY      
+          unit: NX_ENERGY
         incident_polarization(NX_NUMBER):
           exists: recommended
           doc: "Incident polarization specified as a Stokes vector."
@@ -73,10 +71,10 @@ category: application # Defaults "exists" to "required"
             Responsibility on correct formatting and parsing is handed to the user by using 'NX_ANY'.
             Correct parsing can still be implemented by using this attribute.
             Fill with:
-            The unit unidata symbol if the unit has one (Example: 'T' for the unit of magnetic flux density tesla). 
-            The unit unidata name if the unit has a name (Example: 'farad' for capacitance). 
-            A string describing the units according to unidata unit operation notation, 
-            if the unit is a complex combination of named units and does not have a name. 
+            The unit unidata symbol if the unit has one (Example: 'T' for the unit of magnetic flux density tesla).
+            The unit unidata name if the unit has a name (Example: 'farad' for capacitance).
+            A string describing the units according to unidata unit operation notation,
+            if the unit is a complex combination of named units and does not have a name.
             Example: for lightsource brilliance (SI) '1/(s.mm2.mrad2)'.
             Here: SI units are 'V2/m2'."
           dimensions:
@@ -93,7 +91,7 @@ category: application # Defaults "exists" to "required"
         energy_resolution(NX_NUMBER):
           doc: "Energy resolution of the analyser with the current setting. May be linked from a NXcalibration."
           unit: NX_ENERGY
-        fast_axes: 
+        fast_axes:
           exists: optional
           doc: "List of the axes that are acquired symultaneously by the detector.
           These refer only to the experimental variables recorded by the electron analyser.
@@ -113,9 +111,9 @@ category: application # Defaults "exists" to "required"
           dimensions:
             rank: 1
             dim: [[1,nfa]]
-        slow_axes: 
+        slow_axes:
           exists: optional
-          doc: "List of the axes that are acquired by scanning a physical parameter, 
+          doc: "List of the axes that are acquired by scanning a physical parameter,
           listed in order of decreasing speed. See fast_axes for examples."
           dimensions:
             rank: 1
@@ -163,14 +161,14 @@ category: application # Defaults "exists" to "required"
             enumeration: ["DLD","Phosphor+CCD","Phosphor+CMOS","ECMOS", "Anode", "Multi-anode"]
           (NXdata): # Raw signal without calibrated axes.
             exists: recommended
-            \@signal: 
-              enumeration: ['raw'] 
+            \@signal:
+              enumeration: ['raw']
             raw(NX_NUMBER): # There is a block of numbers named raw.
               doc: "Raw data before calibration."
     (NXprocess):
         calculated_energy(NX_FLOAT):
           exists: optional
-          doc: "Calibrated energy axis"
+          doc: "Calibrated energy axis."
           unit: NX_ENERGY
           dimensions:
             rank: 1
@@ -182,10 +180,10 @@ category: application # Defaults "exists" to "required"
       name:
       chemical_formula:
       sample_history(NXnote):
-        exists: recommended 
-        doc: "A descriptor to keep track of the treatment of the sample before entering the photoemission experiment. 
+        exists: recommended
+        doc: "A descriptor to keep track of the treatment of the sample before entering the photoemission experiment.
         Ideally, a full report of the previous operations, in any format (NXnote allows to add pictures, audio, movies).
-        Alternatively, a reference to the location or a unique identifier or other metadata file. 
+        Alternatively, a reference to the location or a unique identifier or other metadata file.
         In the case these are not available, free-text description."
       preparation_date(NX_DATE_TIME):
         exists: recommended
@@ -193,25 +191,25 @@ category: application # Defaults "exists" to "required"
       preparation_description(NXnote):
         doc: "Description of the surface preparation technique for the XPS experiment, i.e. UHV cleaving, in-situ growth, sputtering/annealing etc.
         Ideally, a full report of the previous operations, in any format(NXnote allows to add pictures, audio, movies).
-        Alternatively, a reference to the location or a unique identifier or other metadata file. 
+        Alternatively, a reference to the location or a unique identifier or other metadata file.
         In the case these are not available, free-text description."
       # Problem: if the temperature is logged, the data is an array of temperature/timestamp pairs.
       # the timestamp NX_DATE_TIME structure of the timestamp can not be easily handled by just a field.
       # there is a base class for this, NXlog. The NIAC decided to use the same name (temperature) instead of the previous temperature_log.
       # how do I explain here in an appdef that temperature can be either NXnumber (single value or scanned array) or a NXlog?
       # It seems quite contorted to ask to create a separate timestamp array when we have a base class that handles it more elegantly.
-      temperature(NX_NUMBER): 
+      temperature(NX_NUMBER):
         doc: "In the case of a fixed temperature measurement this is the scalar temperature of the sample.
         In the case of an experiment in which the temperature is changed and recoded, this is an array of length m of temperatures."
         unit: NX_TEMPERATURE
-      situation: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"] 
+      situation: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
       # Similar situation here, ca be a single number or a log.
-      pressure(NX_NUMBER): 
+      pressure(NX_NUMBER):
         doc: "In the case of a fixed pressure measurement this is the scalar pressure.
         In the case of an experiment in which pressure changes, or anyway it is recorded, this is an array of length m of pressures."
         unit: NX_PRESSURE
     (NXdata):
-      \@signal: 
+      \@signal:
         enumeration: ["data"] # There is an object named data that contains the signal
       data(NX_NUMBER): # There is a block of numbers named data.
         doc: "Processed plottable data."
