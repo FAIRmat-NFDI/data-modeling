@@ -1,15 +1,7 @@
 # kuehbacm at hu-berlin.de, 01/2022
-# template of a draft NeXus application definition for the field of electron microscopy
-# An electron microscope is, like most contemporary instruments for advanced materials characterization, a complex instrument with sets of many components with internal hierarchies of components.
-# Components include hardware, control logics, and software tools. The application definition stores a coarse-grained representation of this complexity.
-# Different levels of detailed technical component hierarchies can be injected and the corresponding geometrical arrangement of the components in relation to one another be modelled.
-# With such an approach it is possible to define digital twins of e.g. the entire column of the instrument to instantiate e.g. ray-tracing simulations.
-# Instances of NXtransformations describe the location and geometrical situation of the components relative to the optical axis/electron beam path.
-# Complementarily, instances of NXprocess(es) describe settings, parameters, i.e. metadata, and the numerical data from an electron microscopy experiment.
-# Common examples are the indexing of energy-dispersive X-ray spectroscopy (EDX(S)) scans, the time-averaging of images captured with high-frame rate capable 
-# direct electron detectors, or the online processing of (Kikuchi) diffraction pattern in techniques like electron backscatter diffraction.
+# see also further details in the template application definition NXem
 category: application
-doc: "Template for creating draft application definitions for storing data and metadata for experiments with (scanning and transmission) electron microscopy."
+doc: "Template for creating draft application definitions for storing data and metadata for experiments with scanning transmission electron microscopy with a Nion instrument."
 # symbols:
 #  doc: "The symbols used in the schema to specify e.g. dimensions of arrays."
 #  imageid: "Frame or given number to distinguish different images in a stack."
@@ -18,7 +10,7 @@ doc: "Template for creating draft application definitions for storing data and m
 #  nimages: "Total number of images in the imagestack."
 #  ny: "Number of pixel along the slow-changing direction."
 #  nx: "Number of pixel along the fast-changing direction."
-(NXem):
+(NXem_nion):
   (NXentry):
     # the NeXus default for application definitions wrt to the exists keyword is that it is required
     # so writing exists required can be omitted unless exists should be set to e.g. optional, recommended, or the [min, .., max, ..] syntax
@@ -135,6 +127,62 @@ doc: "Template for creating draft application definitions for storing data and m
         unit: NX_ANGLE
       ac_line_sync(NX_BOOLEAN):
         doc: "Remains to be discussed with colleagues how to use and interpret this."
+      mag_boards(NXcollection):
+        exists: optional
+        doc: "Detailed settings of an internal board, needs detailed discussions with Nion which one, in the scanbox device."
+        # NEW ISSUE: create an own custom class to use for each of these boards
+        board_0_dac_0(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_1(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_10(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_11(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_2(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_3(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_4(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_5(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_6(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_7(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_8(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_dac_9(NX_UINT):
+          unit: NX_UNITLESS
+        board_0_relay(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_0(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_1(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_10(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_11(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_2(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_3(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_4(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_5(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_6(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_7(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_8(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_dac_9(NX_UINT):
+          unit: NX_UNITLESS
+        board_1_relay(NX_UINT):
+          unit: NX_UNITLESS
     em_lab(NXinstrument):
       doc: "Metadata and numerical data of not only the microscope but also the lab in which this microscope is located."
       name:
@@ -218,11 +266,50 @@ doc: "Template for creating draft application definitions for storing data and m
           exists: recommended
         description:
           exists: recommended
-        # inspect NXem_nion for an example how to store aberration constants
+        # NEW ISSUE: clarify the mathematical details behind the following parameters of the these constants and how they are useful
+        c_1_0(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_1_2_a(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_1_2_b(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_2_1_a(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_2_1_b(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_2_3_a(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_2_3_b(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_3_0(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_3_2_a(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_3_2_b(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_3_4_a(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_3_4_b(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
+        c_5_0(NX_FLOAT):
+          doc: "??"
+          unit: NX_LENGTH
         (NXtransformations):
           exists: optional
         # (NXlens_em):
-        # NEW ISSUE:   exists: optional
+        #   exists: optional
       (NXstage_lab):
         design:
         name:
@@ -235,6 +322,18 @@ doc: "Template for creating draft application definitions for storing data and m
           exists: recommended
         description:
           exists: recommended
+        tilt1(NX_FLOAT):
+          doc: "Stage tilt A. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_ANGLE
+        tilt2(NX_FLOAT):
+          doc: "Stage tilt B. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_ANGLE
+        position(NX_FLOAT):
+          doc: "StageOutX, Y, Z. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_LENGTH
+          dimensions:
+            rank: 1
+            dim: [[1, 3]]
         (NXtransformations):
           exists: optional
         # NEW ISSUE: stage-affixed coordinate system to specimen or gun coordinate system
@@ -271,9 +370,6 @@ doc: "Template for creating draft application definitions for storing data and m
           unit: NX_TIME
         description:
           doc: "Free text option to write further details about the detector."
-      # (NXfib):
-      #   exists: optional
-      # NEW ISSUE: layout an example of a SEM/FIB serial-sectioning 3D experiment
       miscellaneous(NXcollection):
         camera_length(NX_FLOAT):
           exists: recommended
@@ -291,6 +387,51 @@ doc: "Template for creating draft application definitions for storing data and m
         semi_convergence_angle(NX_FLOAT):
           doc: "Details how computed needs to be confirmed by Nion."
           unit: NX_ANGLE
+      hadf(NXprocess):
+        exists: optional
+        program:
+          doc: "Container for reporting individually processed images with the HAADF detector ?"
+          \@version:
+            doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner."
+        haadf_inner_half_angle(NX_FLOAT):
+          doc: "HAADF annulus inner half angle ?"
+          unit: NX_ANGLE
+        haadf_outer_half_angle(NX_FLOAT):
+          doc: "HAADF annulus outer half angle ?"
+          unit: NX_ANGLE
+        (NXdata):
+          symbols:
+            n_x: "Number of pixel in the x direction"
+            n_y: "Number of pixel in the y direction"
+          doc: "Container for holding an image (stack) taken with the HA(A) ? DF detector."
+          \@signal: "intensity"
+          \@axes: ["xpos", "ypos"]
+          \@xpos_indices: 0
+          \@ypos_indices: 1
+          intensity(NX_NUMBER):
+            doc: "Image intensity values."
+            unit: NX_UNITLESS
+            dimensions:
+              rank: 2
+              dim: [[0, n_x], [1, n_y]]
+          \@long_name:
+            doc: "Image intensities"
+          xpos(NX_NUMBER):
+            doc: "Pixel barycenter position x-coordinates."
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[0, n_x]]
+          \@long_name:
+            doc: "Label for the x axis."
+          ypos(NX_NUMBER):
+            doc: "Pixel barycenter position y-coordinates."
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[1, n_y]]
+          \@long_name:
+            doc: "Label for the y axis."
         # NEW ISSUE: details about the vacuum and environment control system of the lab
         # NEW ISSUE: lay out in more details which details about the detector should be stored
         # (NXcollection):

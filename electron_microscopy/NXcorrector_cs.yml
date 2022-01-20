@@ -1,25 +1,19 @@
-#kuehbacm at hu-berlin.de, 12/2021
+# kuehbacm at hu-berlin.de, 01/2022
 category: base
-doc: A device of multiple NXem_lenses and other components for correcting spherical aberrations in an electron microscope.
+doc: "Draft of a base class for a device in a (transmission) electron microscope which corrects for spherical aberrations. The device consists of multiple NXlens_em instances and other components."
 (NXcorrector_cs):
+  has_cs_corrector(NX_BOOLEAN):
+    doc: "Does the microscope have a spherical aberration correction unit and was it used?"
   name:
-    doc: Colloquial (or short) name for the corrector. For manufacturer names and identifiers use respective manufacturer fields.
+    doc: "Given name."
+  model:
+    doc: "Given brand or model name by the manufacturer."
+  serial_number:
+    doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
   manufacturer_name:
-    exists: recommended
-    doc: Name of the manufacturer who built/constructed the corrector.
-  manufacturer_model:
-    exists: recommended
-    doc: Hardware name or hash identifier given by the manufacturer to identify the corrector.
+    doc: "Given name of the manufacturer."
   description:
-    doc: Ideally an identifier, link, or free-text which gives further details about the component.
+    doc: "Ideally an identifier, link, or free-text which gives further details about the component."
   (NXtransformations):
-    doc: Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam.
-    position:
-      \@transformation_type:
-        doc: Following transformation_type argument of NXtranslations but allowed value is only translation.
-        enumeration: [translation]
-      \@vector(NX_NUMBER):
-        doc: Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with the reference coordinate system in the gun.
-      \@depends_on:
-        doc: Enter the path where the reference coordinate system for the microscope is defined. Use "." if it is the root, i.e. the reference coordinate system of the instrument.
+    doc: "Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam. The translation actively brings the coordinate system under depends_on into registration with the reference coordinate system in the gun."
   (NXlens_em):

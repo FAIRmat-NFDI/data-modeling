@@ -1,59 +1,69 @@
-#kuehbacm at hu-berlin.de, 12/2021
+# kuehbacm at hu-berlin.de, 01/2022
 category: base
-doc: Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing capabilities, whether it be for the laser or the high-voltage pulsing to trigger ionization.
+doc: "Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing capabilities, whether it be for the laser or the high-voltage pulser, which trigger the removal of ions (atom probe tomography) or the excitation of gas ions (field-ion microscopy)."
+symbols:
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays."
+  Nions: "Total number of ions collected."
 (NXpulser_apm):
-  symbols:
-    Ntlogs: Number of individual measurements
+  pulse_mode:
+    doc: "How evaporation is physically triggered."
+    enumeration: ["laser", "high voltage"]
   laser_pulser(NXsource):
-    exists: optional
-    doc: Atom probe microscopes use controlled either voltage or laser pulsing to trigger a sequence of field evaporation events. Many microscopes have a laser installed enabling measurements of poorly conductive specimens.
+    doc: "Atom probe microscopes use controlled either voltage or laser pulsing to trigger a sequence of field evaporation events. Many microscopes have a laser installed enabling measurements of poorly conductive specimens."
     name:
+      doc: "Given name."
+    model:
+      doc: "Given brand or model name by the manufacturer."
+    serial_number:
+      doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
     manufacturer_name:
-      doc: Name of the manufacturer who built/constructed the laser unit.
-    manufacturer_model:
-      doc: Hardware name/serial number or hash identifier given by the manufacturer to identify the laser unit.
+      doc: "Given name of the manufacturer."
     wavelength(NX_FLOAT):
-      doc: Wavelength of the laser radiation.
+      doc: "Nominal wavelength of the laser radiation."
       unit: NX_WAVELENGTH
     power(NX_FLOAT):
-      doc: Source power
+      doc: "Average power of the laser source while illuminating the specimen."
       unit: NX_POWER
-    #why is the laser energy often a range because the laser energy is time-dependently adjusted?
-    pinhole_to_specimen(NXtransformations):
-      doc: Geometrical description how the laser focusing optics/pinhole-attached coordinate system has to be transformed to align with the specimen coordinate system. A right-handed Cartesian coordinate system, the so-called laser space, is assumed whose positive z-axis points into the direction of the propagating laser beam, i.e. towards the specimen.
-  beam(NXbeam):
-    doc: Optional place for describing details about the focused laser beam with which the specimen is illuminated.
-    #laser pulsing unit make this an own base class or use NXbeam and NXsource, discuss eventually in consolidation workshop
-    laser_pinhole_position(NXcollection):
-      doc: Track time-dependent settings over the course of the measurement where the laser beam exits the focusing optics.
-    laser_impact_position(NXcollection):
-      doc: Track time-dependent settings over the course of the measurement where the laser hits the specimen.
+    pulse_energy(NX_FLOAT):
+      doc: "Average (??) energy of the laser at peak of (each) ?? pulse."
+      unit: NX_ENERGY
+    # NEW ISSUE: discuss with the community why often scientists report the laser energy as a range
+    # NEW ISSUE: eventually this needs to be a made a time-dependent quantity
+    (NXtransformations):
+      # NEW ISSUE: e.g. pinhole_to_specimen_surface
+      doc: "Set of transformations which describe the geometry between how the laser focusing optics/pinhole-attached coordinate system is defined, how it has to be transformed so that it aligns with the specimen coordinate system. A right-handed Cartesian coordinate system, the so-called laser space, should be assumed whose positive z-axis points into the direction of the propagating laser beam."
+  laser_beam(NXbeam):
+    doc: "Details about specific positions along the focused laser beam which for atom probe illuminates the specimen."
+    # NEW ISSUE: eventually fuse beam and laser into an own NXlaser_apm base class
+    pinhole_position(NXcollection):
+      doc: "Track time-dependent settings over the course of the measurement where the laser beam exits the focusing optics."
+    spot_position(NXcollection):
+      doc: "Track time-dependent settings over the course of the measurement where the laser hits the specimen."
   pulse_frequency(NX_NUMBER):
-    exists: recommended
-    doc: to be defined
+    doc: "Frequency with which the high voltage or laser gets pulsed."
     unit: NX_FREQUENCY
-  #how can one store a spatio-temporal profile, own class for this?
+    # NEW ISSUE: enable time-dependent tracking of these functionalities
   pulse_fraction(NX_NUMBER):
-    exists: recommended
-    doc: to be defined
-    unit: NX_UNITLESS #how else to specify percent, there is not NX_PERCENT
+    doc: "Fraction of the pulse_voltage that is applied in addition to the standing_voltage at peak voltage of a pulse."
+    # NEW ISSUE: check with APM colleagues if this is the correct glossary docstring.
+    unit: NX_UNITLESS
   pulsed_voltage(NX_FLOAT):
-    exists: required
-    doc: to be defined
+    doc: "NEED TO DISCUSS WITH APM COLLEAGUES IN DETAIL WHAT THIS IS SPECIFICALLY!"
     unit: NX_VOLTAGE
     dimensions:
       rank: 1
       dim: [[1, Nions]]
   standing_voltage(NX_FLOAT):
-    exists: required
-    doc: Direct current voltage between the specimen and the (local electrode) in the case of a LEAP instrument.
+    doc: "Direct current voltage between the specimen and the (local electrode) in the case of a LEAP instrument."
     unit: NX_VOLTAGE
     dimensions:
       rank: 1
       dim: [[1, Nions]]
-  #laser_pulse_time_profile(NX_FLOAT):
-  #  doc: Spatio-temporal profile of the laser energy as a function of time since the first pulse.
-  #  unit: NX_ENERGY
-  #  dimensions:
-  #    rank: 2
-  #    dim: [[2, Ntlogs]]
+  # NEW ISSUE: laser cavity/pinhole description
+  # NEW ISSUE: support for reporting time-dependent quantities related to pulsing capabilities of an instrument.
+  # laser_pulse_time_profile(NX_FLOAT):
+  #   doc: Spatio-temporal profile of the laser energy as a function of time since the first pulse.
+  #   unit: NX_ENERGY
+  #   dimensions:
+  #     rank: 2
+  #     dim: [[2, Ntlogs]]
