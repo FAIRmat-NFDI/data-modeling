@@ -1,7 +1,24 @@
-# kuehbacm at hu-berlin.de, adrien dot teurtrie at epfl.ch, 01/2022
+# kuehbacm at hu-berlin.de, 01/2022
+# template of a draft NeXus application definition for the field of electron microscopy
+# An electron microscope is, like most contemporary instruments for advanced materials characterization, a complex instrument with sets of many components with internal hierarchies of components.
+# Components include hardware, control logics, and software tools. The application definition stores a coarse-grained representation of this complexity.
+# Different levels of detailed technical component hierarchies can be injected and the corresponding geometrical arrangement of the components in relation to one another be modelled.
+# With such an approach it is possible to define digital twins of e.g. the entire column of the instrument to instantiate e.g. ray-tracing simulations.
+# Instances of NXtransformations describe the location and geometrical situation of the components relative to the optical axis/electron beam path.
+# Complementarily, instances of NXprocess(es) describe settings, parameters, i.e. metadata, and the numerical data from an electron microscopy experiment.
+# Common examples are the indexing of energy-dispersive X-ray spectroscopy (EDX(S)) scans, the time-averaging of images captured with high-frame rate capable 
+# direct electron detectors, or the online processing of (Kikuchi) diffraction pattern in techniques like electron backscatter diffraction.
 category: application
-doc: "Draft application definition for storing data and metadata for scanning transmission, energy-dispersive X-ray spectroscopy experiments at the EPFL, Lausanne. User story how to use components of proposed NXem application definition and related NeXus base classes for a user of the NORTH tools."
-(NXem_edxs):
+doc: "Template for creating draft application definitions for storing data and metadata for experiments with (scanning and transmission) electron microscopy."
+# symbols:
+#  doc: "The symbols used in the schema to specify e.g. dimensions of arrays."
+#  imageid: "Frame or given number to distinguish different images in a stack."
+#  ypos: "Pixel coordinate in the slow-changing direction."
+#  xpos: "Pixel coordinate in the fast-changing direction."
+#  nimages: "Total number of images in the imagestack."
+#  ny: "Number of pixel along the slow-changing direction."
+#  nx: "Number of pixel along the fast-changing direction."
+(NXem):
   (NXentry):
     # the NeXus default for application definitions wrt to the exists keyword is that it is required
     # so writing exists required can be omitted unless exists should be set to e.g. optional, recommended, or the [min, .., max, ..] syntax
@@ -55,8 +72,6 @@ doc: "Draft application definition for storing data and metadata for scanning tr
       # NEW ISSUE: social media
     (NXsample):
       # in FAIRmat we thread the term sample and specimen as de facto as synonyms.
-      symbols:
-        n_comp: Number of compositions
       name:
         doc: "Descriptive name or identifier with which to distinguish the specimen from all others and especially the parts from where it was cut. In cases where the specimen was e.g. site-specifically cut from samples or in cases of an instrument session during which multiple specimens are loaded, the name has to be descriptive enough to resolve which specimen was investigated and is represented by this NXentry. The user is advised to store the details how specimens were cut/prepared from samples in the sample history."
       sample_history:
@@ -69,12 +84,6 @@ doc: "Draft application definition for storing data and metadata for scanning tr
         doc: "Possibility to give an abbreviation of the specimen name field."
       atom_types:
         doc: "Use Hill's system for listing elements of the periodic table which are inside or attached to the surface of the specimen and thus relevant from a scientific point. The purpose of the field is to offer materials database systems an opportunity to parse the relevant elements without having to interpret these from the sample history."
-      density(NX_FLOAT):
-        doc: "Density of sample."
-        unit: NX_MASS_DENSITY
-        dimensions:
-          rank: 1
-          dim: [[1, n_comp]]
       thickness(NX_FLOAT):
         doc: "(Measured) sample thickness"
         unit: NX_LENGTH
@@ -158,27 +167,6 @@ doc: "Draft application definition for storing data and metadata for scanning tr
           enumeration: ["thermionic", "schottky", "field emission"]
         description:
           doc: "Ideally a reference to (another) file (ideally formatted using also an application definition) via a link, name, or a (globally persistent) unique identifier to give further details about the electron gun."
-      probe(NXbeam):
-        doc: Details about nominal properties of the electron beam at the locations where it enters the surface of the sample upon the measurement(s).
-        # extent:
-        #   doc: Two principal axes of the assumed ellipsoidal area which the beam probe illuminates. # Details how this probe geometry is defined should be placed in extent_model.
-        diameter(NX_FLOAT):
-          exists: required
-          doc: "(Nominal/average) probe diameter when the beam probes the sample surface."
-          unit: NX_LENGTH
-        # NEW ISSUE: Details how this probe geometry is defined should be placed in extent_model.
-        energy(NX_FLOAT):
-          doc: "Energy of the beam."
-          unit: NX_ENERGY
-        current(NX_FLOAT):
-          doc: "Current of the beam."
-          unit: NX_CURRENT
-        # extent_model:
-        #   exists: recommended
-        #   doc: Free text description how the principal diameter where measured, e.g. full-width at half maximum of spot intensity.
-        #   dimensions:
-        #     rank: 1
-        #     dim: [[1, 2]]
       (NXaperture):
         exists: [min, 0, max, infty]
         doc: "Details to individual apertures in the instrument."
@@ -234,7 +222,7 @@ doc: "Draft application definition for storing data and metadata for scanning tr
         (NXtransformations):
           exists: optional
         # (NXlens_em):
-        #   exists: optional
+        # NEW ISSUE:   exists: optional
       (NXstage_lab):
         design:
         name:
@@ -247,13 +235,6 @@ doc: "Draft application definition for storing data and metadata for scanning tr
           exists: recommended
         description:
           exists: recommended
-        # NEW ISSUE: "Tilt angles opening up between the outer unit normal vector of the specimen on the side of the incoming probe a normal vector that points in the direction of the incoming probe and is parallel to the optical axis. There are two of them conceptually. Detailed implementation depends on conventions used in Cecile Hebert's group at EPFL for the application of STEM-EDXS."
-        alpha(NX_FLOAT):
-          doc: "Specific convention how the sample holder is tilted against the gun coordinate system has not been shared yet by EPFL colleagues."
-          unit: NX_ANGLE
-        beta(NX_FLOAT):
-          doc: "Specific convention how the sample holder is tilted against the gun coordinate system has not been shared yet by EPFL colleagues."
-          unit: NX_ANGLE
         (NXtransformations):
           exists: optional
         # NEW ISSUE: stage-affixed coordinate system to specimen or gun coordinate system
@@ -263,7 +244,7 @@ doc: "Draft application definition for storing data and metadata for scanning tr
       # an omega filter is an energy filtering device, a specific component of many (transmission) electron microscopes,
       # this instrument is again an ensemble of beam bending and electro-magnetic lenses so it should have an own application def.
       (NXdetector):
-        exists: {min, 1, max, infty]
+        exists: [min, 1, max, infty]
         doc: "Description of the type of the detector e.g. CCD, scintillator, direct electron, image plate, CMOS."
         name:
           exists: recommended
@@ -289,15 +270,18 @@ doc: "Draft application definition for storing data and metadata for scanning tr
         exposure(NX_NUMBER):
           unit: NX_TIME
         description:
-          doc: Free text option to write further details about the detector.
+          doc: "Free text option to write further details about the detector."
+      # (NXfib):
+      #   exists: optional
+      # NEW ISSUE: layout an example of a SEM/FIB serial-sectioning 3D experiment
       miscellaneous(NXcollection):
         camera_length(NX_FLOAT):
           exists: recommended
-          doc: "Exact definition as understood by EPFL colleagues remains to be communicated."
+          doc: "Exact definition as understood by HU colleagues remains to be communicated."
           unit: NX_LENGTH
         magnification(NX_FLOAT):
           exists: recommended
-          doc: "Exact definition as understood by EPFL colleagues remains to be communicated."
+          doc: "Exact definition as understood by HU colleagues remains to be communicated."
           unit: NX_DIMENSIONLESS
         defocus(NX_FLOAT):
           doc: "Exact definition as understood by HU colleagues and Nion remains to be communicated."
@@ -307,135 +291,32 @@ doc: "Draft application definition for storing data and metadata for scanning tr
         semi_convergence_angle(NX_FLOAT):
           doc: "Details how computed needs to be confirmed by Nion."
           unit: NX_ANGLE
-      edx_detector(NXdetector):
-        type:
-          doc: "Description of type scintillator."
-        energy_resolution(NX_FLOAT):
-          doc: "Energy resolution, how measured?, how defined?"
-          unit: NX_ENERGY
-        # NEW ISSUES: ANGLES(NXtransformations):
-        #  exists: [min, 2]
-        #  # see technical note on the need that the creator of the application definitions needs to specify how this angle gets defined
-        #  # https://www.edax.com/-/media/ametekedax/files/integrated_technologies/technical_notes/edswds-geometry-and-the-famous-take-off-angle-technical-note.pdf?dmc=1&la=en&revision=704ae4d5-cfc4-4c7f-92f5-b197af29a0ef&hash=783851743E3EC37EF88CD1341FF7A718
-        #  doc: Tilt angles opening up between the optical axes, the detector on the one hand and the optical axes and the
-        elevation(NX_FLOAT):
-          doc: "Specific convention on how they define this angle in relation to the gun coordinate system has not been shared yet by EPFL colleagues."
-          unit: NX_ANGLE
-        azimuth(NX_FLOAT):
-          doc: "Specific convention on how they define this angle in relation to the gun coordinate system has not been shared yet by EPFL colleagues."
-          unit: NX_ANGLE
-      edx_spectra(NXdata):
-        symbols:
-          n_x: "Number of pixel in the x direction"
-          n_y: "Number of pixel in the y direction"
-          n_photon_energy: "Number of X-ray photon energy (bins)"
-        exists: [min, 1, max, infty]
-        doc: "Container for holding numerical data which represent the set of collected EDX spectra, i.e. counts, for each position on the sample surface where an EDX spectrum was measured. The spectra have to be post-processed to identify accumulated counts which substantiate the presence of specific elements. Plotting these accumulated counts for a given element for all probed positions via post-processing yields a so-called EDX mapping."
-        # an explicitly customized energy resolution is not required for the application meaning we take the spectra as they are reported by the commercial software.
-        \@signal: "counts"
-        \@axes: ["photon_energy", "xpos", "ypos"]
-        \@photon_energy_indices: 0
-        \@xpos_indices: 1
-        \@ypos_indices: 2
-        counts(NX_UINT):
-          doc: The three-dimensional data stack.
-          unit: NX_UNITLESS
-          dimensions:
-            rank: 3
-            dim: [[0, n_photon_energy], [1, n_x], [2, n_y]]
-          \@long_name:
-            doc: E.g. X-ray photon counts
-        photon_energy(NX_NUMBER):
-          unit: NX_ENERGY
-          dimensions:
-            rank: 1
-            dim: [[0, n_photon_energy]]
-          \@long_name:
-            doc: X-ray energy
-        xpos(NX_NUMBER):
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[1, n_x]]
-          \@long_name:
-            doc: Label for the x axis
-        ypos(NX_NUMBER):
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[2, n_y]]
-          \@long_name:
-            doc: Label for the y axis
-      edx_spectra_location(NXdata):
-        exists: [min, 1, max, infty]
-        symbols:
-          n_x: "Number of pixel in the x direction"
-          n_y: "Number of pixel in the y direction"
-        doc: "Container for holding an image (e.g. electron backscatter, secondary electron, or high-angle annular dark field), which resolves the pixel location at which edx_spectra where taken."
-        \@signal: "intensity"
-        \@axes: ["xpos", "ypos"]
-        \@xpos_indices: 0
-        \@ypos_indices: 1
-        intensity(NX_NUMBER):
-          doc: "The two-dimensional image."
-          unit: NX_UNITLESS
-          dimensions:
-            rank: 2
-            dim: [[0, n_x], [1, n_y]]
-          \@long_name:
-            doc: "X-ray photon counts"
-        xpos(NX_NUMBER):
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[0, n_x]]
-          \@long_name:
-            doc: "Label for the x axis"
-        ypos(NX_NUMBER):
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[1, n_y]]
-          \@long_name:
-            doc: "Label for the y axis"
-      edx_indexing(NXprocess):
-        symbols:
-          n_elements: "Number of identified elements."
-        exists: recommended
-        doc: "Details about computational steps how peaks in the EDX spectrum were indexed as atoms."
-        program:
-          doc: "Commercial or otherwise given name to the program which was used to execute this analysis."
-          \@version:
-            doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner."
-        (NXpeak):
-          exists: [min, 0, max, infty]
-          doc: "Name and location of each X-ray line which was indexed as a known ion."
-          label:
-            doc: "Human-readable identifier to specify which concept/entity the peak identifies."
-          position(NX_NUMBER):
-            unit: NX_ANY
-          intensity(NX_NUMBER):
-            unit: NX_ANY
-        element_names(NX_CHAR):
-          doc: "List of the names of identified elements."
-          dimensions:
-            rank: 1
-            dim: [[1, n_elements]]
-      edx_maps(NXprocess):
-        exists: recommended
-        doc: "Container for reporting individually processed element-specific EDX mappings from the edx_spectra data cube."
-        program:
-          doc: "Commercial or otherwise given name to the program which was used to execute this analysis."
-          \@version:
-            doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner."
-        # NEW ISSUE: needs to be formulated out according to requirements of individual colleages
-        # the situation is very similar to EBSD processing
-        # (NXdata):
-        #   exists: [min, 0, max, infty]
-        #   #frame_number(NX_UINT):
-        #   #  exists: required
-        #   #map(NXdata):
-        #   #  exists: required
-        #   #  doc: The element-specific EDX map
-        #   #  instance of NXdata, specify in more details
-        #   #  what if the edx map reports only a sub-set of the spectra data cube?
+        # NEW ISSUE: details about the vacuum and environment control system of the lab
+        # NEW ISSUE: lay out in more details which details about the detector should be stored
+        # (NXcollection):
+        #  darkfield_applied(NX_BOOLEAN):
+        #    exists: optional
+        #    doc: "Remains to be defined, what is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to #eigen noise of the detector without illumination."
+        #  darkfield(NX_FLOAT):
+        #    exists: optional
+        #    doc: "What is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to inherent noise of thr detector without illumination."
+        #    unit: NX_ANY
+        #  pixel_size_x(NX_FLOAT):
+        #    exists: optional
+        #    doc: ""
+        #    unit: NX_PER_LENGTH
+        #  pixel_size_y(NX_FLOAT):
+        #    exists: optional
+        #    doc: ""
+        #    unit: NX_ANY
+        #    # NEW ISSUE: NX_PER_LENGTH
+        #  cartesian_scan_dimensions(NX_UINT):
+        #  cartesian_scan_dimension1_count(NX_UINT):
+        #  cartesian_scan_dimension2_count(NX_UINT):
+        #  cartesian_scan_dimension3_count(NX_UINT):
+        #  scan_properties(NXcollection): #we need to discuss if we allow NXcollections to be nested or rather have them laid out in a flat manner
+        #    scan_system_name:
+        #    x_points_step_width(NX_NUMBER):
+        #      unit: NX_LENGTH
+        #    y_points_step_width(NX_NUMBER):
+        #      unit: NX_LENGTH
