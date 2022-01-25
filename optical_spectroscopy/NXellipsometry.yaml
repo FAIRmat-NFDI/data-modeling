@@ -42,7 +42,7 @@ symbols:
       doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
         - The identifier is usually defined by the facility or principle investigator.
         - The identifier enables to link experiments to e.g. proposals."
-    
+
     experiment_description:
 
     start_time(NX_DATE_TIME):
@@ -522,3 +522,8 @@ symbols:
       depolarization(NX_NUMBER):
         doc: light loss due to depolarization as a value in [0-1]
         unit: NX_UNITLESS
+
+  plot(NXdata):
+    exists: optional
+    doc: "A default view of the data, in this case Psi vs. wavelength and the angles of incidence.
+          If Psi does not exist, use other Müller matrix elements, such as N,C and S."
