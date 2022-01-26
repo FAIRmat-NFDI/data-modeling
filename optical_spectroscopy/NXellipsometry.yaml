@@ -19,7 +19,7 @@ doc: "Draft application definition for ellipsometry measurements, including comp
 symbols:
   doc: Variables used throughout the document, e.g. dimensions and important parameters
   N_wavelength: Size of the energy / wavelength vector used
-  N_variables: How many variables are saved in a measurement (e.g. Psi and delta, Mueller matrix)
+  N_variables: How many variables are saved in a measurement (e.g. Psi and Delta, Mueller matrix)
   N_angles: Number of incident angles used
   N_p1: Number of sample parameters scanned
   N_time: Number of time points measured
@@ -94,7 +94,8 @@ symbols:
       model:
         doc: The name of the instrument
         \@version: 
-          doc: "The used version of the hardware if available. If not a commercial instrument use date of completing the hardware."
+          doc: "The used version of the hardware if available. 
+                If not a commercial instrument use date of completion of the hardware."
       company:
         exists: optional
         doc: "Name of the company which build the instrument"
@@ -107,11 +108,11 @@ symbols:
         \@version:
           doc: "Version and build number or commit hash of the software source code"
         \@url:
-          doc: "..."
+          doc: "Website of the software."
 
       light_source:
         doc: "Specify the used light source. Multiple selection possible."
-        enumeration: [UV light, halogen lamp, xenon lamp, arc lamp, other]
+        enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp, deuterium lamp, silicon carbide globar, other]
       other_light_source:
         exists: optional
         doc: "If you specified 'other' as light source type, please write down what it is."
@@ -308,7 +309,7 @@ symbols:
           unit: NX_ANY
 
         rotating_element:
-          doc: "Define which elements rotates, e.g. polarizer or analyzer..."
+          doc: "Define which elements rotates, e.g. polarizer or analyzer."
           enumeration: [polarizer (source side), analyzer (detector side), compensator (source side), compensator (detector side)]
 
         fixed_revolution(NX_NUMBER):
@@ -324,10 +325,12 @@ symbols:
             dim: [[1, 2]]
 
     (NXsample):
-      doc: "..."
+      doc: "Properties of the sample, its history, the sample environment and 
+            experimental conditions (e.g. surrounding medium, temperature, pressure etc.), 
+            along with the data (data type, wavelength array, measured data)."
       atom_types: 
-        doc: "Use Hill's system for listing elements of the periodic
-              table which are inside or attached to the surface of the specimen
+        doc: "Use Hill's system for listing elements of the periodic table 
+              which are inside or attached to the surface of the specimen
               and thus relevant from a scientific point. The purpose of this field
               is to allow materials database to parse the relevant elements without
               having to interpret the sample history or other fields."
@@ -354,98 +357,98 @@ symbols:
         # DO we really need this mandatory, or just leave it?
     
 
-        data_identifier(NX_NUMBER): 
-          doc: "A identifier to correlate data to the experimental conditions,
-                if several were used in this measurement;
-                typically an index of 0 - N"
-          #what about uniqueness of the identifier?
-          #  -- append it to the experiment identifier...
+      data_identifier(NX_NUMBER): 
+        doc: "A identifier to correlate data to the experimental conditions,
+              if several were used in this measurement;
+              typically an index of 0 - N"
+        #what about uniqueness of the identifier?
+        #  -- append it to the experiment identifier...
 
-        data_type:
-          doc: "Select which type of data was recorded, for example Psi and Delta 
-                (see: https://en.wikipedia.org/wiki/Ellipsometry#Data_acquisition).
-                It is possible to have multiple selections. Data types may also be converted
-                to each other, e.g. a Mueller matrix contains N,C,S data as well.
-                This selection defines how many columns (N_variables) are stored in the
-                data array."
-          enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, N/C/S, raw data]
+      data_type:
+        doc: "Select which type of data was recorded, for example Psi and Delta 
+              (see: https://en.wikipedia.org/wiki/Ellipsometry#Data_acquisition).
+              It is possible to have multiple selections. Data types may also be converted
+              to each other, e.g. a Mueller matrix contains N,C,S data as well.
+              This selection defines how many columns (N_variables) are stored in the
+              data array."
+        enumeration: [psi / delta, tan(psi)/cos(delta), Mueller matrix, Jones matrix, N/C/S, raw data]
 
-        # the above definition and documentation defines N_variables, we do not need this here anymore
-        # number_of_variables(NX_UINT):
-        #  doc: "specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)"
-        #  #we should use maybe in the future again the concepts of symbols
+      # the above definition and documentation defines N_variables, we do not need this here anymore
+      # number_of_variables(NX_UINT):
+      #  doc: "specify the number of variables stored, e.g. psi, delta and their errors are 4 (this can be also automated, based on the provided data table)"
+      #  #we should use maybe in the future again the concepts of symbols
 
-        wavelength(NX_NUMBER):
-          #CE: Will this be automatically converted if, e.g. data are given in eV?
-          #TH: the reader can make sure we have only one type, then analysis programs can
-          #convert freely
-          doc: "Wavelength value(s) used for the measurement.\n
-                An array of 1 or more elements. Length defines N_wavelength"
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[1, N_wavelength]]
+      wavelength(NX_NUMBER):
+        #CE: Will this be automatically converted if, e.g. data are given in eV?
+        #TH: the reader can make sure we have only one type, then analysis programs can
+        #convert freely
+        doc: "Wavelength value(s) used for the measurement.\n
+              An array of 1 or more elements. Length defines N_wavelength"
+        unit: NX_LENGTH
+        dimensions:
+          rank: 1
+          dim: [[1, N_wavelength]]
 
-        measured_data(NX_NUMBER):
-          doc: "Resulting data from the measurement, described by data type.\n
-            Minimum two columns containing Psi and delta, or for the normalized Mueller matrix,
-            it may be 16 (or 15 if 1,1 is all 1)."
-          #data(NX_NUMBER):
-          dimensions:
-            rank: 5
-            dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+      measured_data(NX_NUMBER):
+        doc: "Resulting data from the measurement, described by data type.\n
+          Minimum two columns containing Psi and delta, or for the normalized Mueller matrix,
+          it may be 16 (or 15 if 1,1 is all 1)."
+        #data(NX_NUMBER):
+        dimensions:
+          rank: 5
+          dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
-        uncertainty(NX_NUMBER):
-          # TH: maybe we can use a better name, e.g. data_error, measured_error, etc.?
-          doc: "Specified uncertainties (errors) of the data described by data type.
-                The structure is the same as for the measured data."
-          exists: recommended
-          dimensions:
-            rank: 5
-            dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+      uncertainty(NX_NUMBER):
+        # TH: maybe we can use a better name, e.g. data_error, measured_error, etc.?
+        doc: "Specified uncertainties (errors) of the data described by data type.
+              The structure is the same as for the measured data."
+        exists: recommended
+        dimensions:
+          rank: 5
+          dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
-        time_points(NX_NUMBER): # can this also be shifted to varied parameters?
-          exists: optional
-          doc: "An array of relative time points if a time series was recorded"
-          unit: NX_TIME
+      time_points(NX_NUMBER): # can this also be shifted to varied parameters?
+        exists: optional
+        doc: "An array of relative time points if a time series was recorded"
+        unit: NX_TIME
 
-        medium:
-          # we need this or the next one
-          doc: "Describe what was the medium above or around the sample.
-                The common model is built up from substrate to the medium on the
-                other side. Both boundaries are assumed infinite in the model.
-                Here define the name of the material (e.g. water, air, etc.)."
+      medium:
+        # we need this or the next one
+        doc: "Describe what was the medium above or around the sample.
+              The common model is built up from substrate to the medium on the
+              other side. Both boundaries are assumed infinite in the model.
+              Here define the name of the material (e.g. water, air, etc.)."
 
-        medium_refractive_indices(NX_COMPLEX): #CE: changed NX_COMPLEX to NX_NUMBER....
-          exists: optional
-          doc: "Array of pairs of complex refractive indices of the medium for
-                every measured wavelength.
-                Only necessary if the measurement was performed not in air, or
-                something very well known, e.g. high purity water.
-                Specify the complex refractive index: n + ik"
-          unit: NX_UNITLESS
-          dimensions:
-            rank: 1
-            dim: [[1, N_wavelength]]
+      medium_refractive_indices(NX_COMPLEX): #CE: changed NX_COMPLEX to NX_NUMBER....
+        exists: optional
+        doc: "Array of pairs of complex refractive indices of the medium for
+              every measured wavelength.
+              Only necessary if the measurement was performed not in air, or
+              something very well known, e.g. high purity water.
+              Specify the complex refractive index: n + ik"
+        unit: NX_UNITLESS
+        dimensions:
+          rank: 1
+          dim: [[1, N_wavelength]]
 
-        environment_conditions:
-          exists: optional
-          doc: "External parameters that have influenced the sample."
+      environment_conditions:
+        exists: optional
+        doc: "External parameters that have influenced the sample."
 
-        number_of_runs(NX_UINT):
-          exists: optional
-          doc: "How many measurements were done varying the parameters?
-                This forms an extra dimension beyond incident angle, time points and
-                energy / wavelength (this is the length of the 4th dimension of the data).
-                Defaults to 1."
-          unit: NX_DIMENSIONLESS
+      number_of_runs(NX_UINT):
+        exists: optional
+        doc: "How many measurements were done varying the parameters?
+              This forms an extra dimension beyond incident angle, time points and
+              energy / wavelength (this is the length of the 4th dimension of the data).
+              Defaults to 1."
+        unit: NX_DIMENSIONLESS
 
-        varied_parameters:
-          exists: optional
-          doc: "Indicates which parameter was changed. Its definition must exist below.
-                The specified variable has to be number_of_runs long,
-                providing the parameters for each data set."
-          enumeration: [optical excitation, voltage, temperature, pH, stress, stage positions]
+      varied_parameters:
+        exists: optional
+        doc: "Indicates which parameter was changed. Its definition must exist below.
+              The specified variable has to be number_of_runs long,
+              providing the parameters for each data set."
+        enumeration: [optical excitation, voltage, temperature, pH, stress, stage positions]
 
         optical_excitation(NXsubentry): #CE: Probably some parameters need to be added at some point
           exists: optional
@@ -488,10 +491,10 @@ symbols:
         voltage(NX_NUMBER):
           exists: optional
           doc: "Specify the voltage if the spectra were taken under bias"
-          # ... continue to explain what is the user should do then
+          # ... continue to explain what the user should do then
           unit: NX_VOLTAGE
         temperature(NX_NUMBER): 
-          exists: optional #CE: change to 'recommended' or make it even required?
+          exists: optional
           doc: "Temperature of the sample (sample holder, medium)"
           unit: NX_TEMPERATURE
           #alternative:
@@ -509,7 +512,7 @@ symbols:
           doc: "Pressure of the environment of the sample."
           unit: NX_PRESSURE
 
-        # TO DO: add strain
+        # TO DO: stress and strain
         #
         # stress(NX_NUMBER):
         #   exists: optional
