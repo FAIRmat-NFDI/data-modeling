@@ -14,7 +14,7 @@
 
 
 category: application
-name: NXellipsometry
+#name: NXellipsometry
 doc: "Draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
 symbols:
   doc: Variables used throughout the document, e.g. dimensions and important parameters
@@ -450,86 +450,86 @@ symbols:
               providing the parameters for each data set."
         enumeration: [optical excitation, voltage, temperature, pH, stress, stage positions]
 
-        optical_excitation(NXsubentry): #CE: Probably some parameters need to be added at some point
-          exists: optional
-          #is a boolean sufficient as a storage container?
-          doc: "Was the sample modified using an optical source? Describe in this group
-                the parameters of the optical excitation used."
-          excitation_source:
-            doc: "Specify the source for the external excitation"
+      optical_excitation(NXsubentry): #CE: Probably some parameters need to be added at some point
+        exists: optional
+        #is a boolean sufficient as a storage container?
+        doc: "Was the sample modified using an optical source? Describe in this group
+              the parameters of the optical excitation used."
+        excitation_source:
+          doc: "Specify the source for the external excitation"
 
-          excitation_wavelength(NX_NUMBER):
-            doc: "Wavelength value(s) or the range used for excitation.\n
-                  In cases of continuous laser radiation a value or a set of values
-                  may do but for other illumination types, such as pulsed lasers,
-                  or lamps, a range may describe the source better."
-            unit: NX_LENGTH
-          broadening(NX_NUMBER):
-            exists: optional
-            doc: "Specify the FWHM of the excitation"
-            unit: NX_LENGTH
-          excitation_type:
-            doc: "CW or pulsed excitation"
-            enumeration: [cw, pulsed]
-          pulse_length(NX_NUMBER):
-            exists: optional
-            unit: NX_TIME
-          repetition_rate(NX_NUMBER):
-            exists: optional
-            unit: NX_FREQUENCY
-          excitation_duration(NX_TIME):
-            exists: optional
-            doc: "How long was the sample excited."
-          pulse_energy(NX_NUMBER):
-            exists: optional
-            doc: "The integrated energy of light pulse."
-            unit: NX_ENERGY
-          excitation_power(NX_NUMBER):
-            exists: optional
-            unit: NX_ENERGY
+        excitation_wavelength(NX_NUMBER):
+          doc: "Wavelength value(s) or the range used for excitation.\n
+                In cases of continuous laser radiation a value or a set of values
+                may do but for other illumination types, such as pulsed lasers,
+                or lamps, a range may describe the source better."
+          unit: NX_LENGTH
+        broadening(NX_NUMBER):
+          exists: optional
+          doc: "Specify the FWHM of the excitation"
+          unit: NX_LENGTH
+        excitation_type:
+          doc: "CW or pulsed excitation"
+          enumeration: [cw, pulsed]
+        pulse_length(NX_NUMBER):
+          exists: optional
+          unit: NX_TIME
+        repetition_rate(NX_NUMBER):
+          exists: optional
+          unit: NX_FREQUENCY
+        excitation_duration(NX_TIME):
+          exists: optional
+          doc: "How long was the sample excited."
+        pulse_energy(NX_NUMBER):
+          exists: optional
+          doc: "The integrated energy of light pulse."
+          unit: NX_ENERGY
+        excitation_power(NX_NUMBER):
+          exists: optional
+          unit: NX_ENERGY
 
-        voltage(NX_NUMBER):
-          exists: optional
-          doc: "Specify the voltage if the spectra were taken under bias"
-          # ... continue to explain what the user should do then
-          unit: NX_VOLTAGE
-        temperature(NX_NUMBER): 
-          exists: optional
-          doc: "Temperature of the sample (sample holder, medium)"
-          unit: NX_TEMPERATURE
-          #alternative:
-          #  \@nx_class: nx_char
-          #  enumeration: [room temperature, RT]
-        pH(NX_NUMBER):
-          exists: optional
-          doc: "pH of medium (measured or set)"
-          unit: NX_UNITLESS
-          #alternative:
-          #  \@nx_class: nx_char
-          #  enumeration: [neutral, undefined]
-        pressure(NX_NUMBER):
-          exists: optional
-          doc: "Pressure of the environment of the sample."
-          unit: NX_PRESSURE
+      voltage(NX_NUMBER):
+        exists: optional
+        doc: "Specify the voltage if the spectra were taken under bias"
+        # ... continue to explain what the user should do then
+        unit: NX_VOLTAGE
+      temperature(NX_NUMBER): 
+        exists: optional
+        doc: "Temperature of the sample (sample holder, medium)"
+        unit: NX_TEMPERATURE
+        #alternative:
+        #  \@nx_class: nx_char
+        #  enumeration: [room temperature, RT]
+      pH(NX_NUMBER):
+        exists: optional
+        doc: "pH of medium (measured or set)"
+        unit: NX_UNITLESS
+        #alternative:
+        #  \@nx_class: nx_char
+        #  enumeration: [neutral, undefined]
+      pressure(NX_NUMBER):
+        exists: optional
+        doc: "Pressure of the environment of the sample."
+        unit: NX_PRESSURE
 
-        # TO DO: stress and strain
-        #
-        # stress(NX_NUMBER):
-        #   exists: optional
-        #   #  -- for this, we can take the original stress_field from NX_sample...
-        #   doc: "Mechanical stress exerted on the sample."
-        #   unit: NX_PRESSURE
-        #
-        # stress_orientation(NX_NUMBER):
-        #   exists: optional
-        #   doc: "Euler angles of stress relative to sample in the stage coordinate system,
-        #         see instrument/stage translation part, axes X,Y,Z."
-        #   unit: NX_ANGLE
-        #   dimensions:
-        #     rank: 1
-        #     dim: [[1, 3]]
-          # UNCLEAR, which Euler angles, i.e. according to which convention how mapping to reference coordinate system,
-          # why not use stress or strain tensor applied on sample?
+      # TO DO: stress and strain
+      #
+      # stress(NX_NUMBER):
+      #   exists: optional
+      #   #  -- for this, we can take the original stress_field from NX_sample...
+      #   doc: "Mechanical stress exerted on the sample."
+      #   unit: NX_PRESSURE
+      #
+      # stress_orientation(NX_NUMBER):
+      #   exists: optional
+      #   doc: "Euler angles of stress relative to sample in the stage coordinate system,
+      #         see instrument/stage translation part, axes X,Y,Z."
+      #   unit: NX_ANGLE
+      #   dimensions:
+      #     rank: 1
+      #     dim: [[1, 3]]
+        # UNCLEAR, which Euler angles, i.e. according to which convention how mapping to reference coordinate system,
+        # why not use stress or strain tensor applied on sample?
 
     # derived parameters
     derived_parameters(NXcollection):
