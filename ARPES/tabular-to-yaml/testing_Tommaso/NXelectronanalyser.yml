@@ -12,9 +12,6 @@ doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
     doc: "Name or model of the equipment"
     \@short_name(NX_CHAR):
       doc: "Acronym or other shorthand name"
-      unit: ''
-      Dim: 0
-      Rank: 0
   energy_resolution(NX_FLOAT):
     doc: "Overall energy resolution (FWHM of gaussian broadening)"
     unit: NX_ENERGY

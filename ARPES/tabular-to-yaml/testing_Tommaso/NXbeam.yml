@@ -86,9 +86,6 @@ doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
         to unidata unit operation notation, if the unit is a complex combination of
         named units and does not have a name. Example: for lightsource brilliance
         (SI) ''1/(s.mm2.mrad2)''. Here: SI units are ''V2/m2''."
-      unit: ''
-      Dim: 0
-      Rank: 0
   extent(NX_FLOAT):
     doc: "Beam size vector describing the beam waist FWHM in two perpendicular directions."
     unit: NX_LENGTH
@@ -101,9 +98,6 @@ doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
   fluence(NX_CHAR):
     \@units(NX_CHAR):
       doc: "Here: SI units are ''J/m2'', customary ''mJ/cm2''."
-      unit: ''
-      Dim: 0
-      Rank: 0
   pulse_duration(NX_FLOAT):
     doc: "FWHM duration of the pulses at the diagnostic point"
     unit: NX_TIME
