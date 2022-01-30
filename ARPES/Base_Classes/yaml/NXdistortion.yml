@@ -1,12 +1,11 @@
-name: NXdistortion
 category: base
-doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nsym: Number of symmetry points used for distortion correction
   ndx: Number of points of the matrix distortion field (x direction)
   ndy: Number of points of the matrix distortion field (y direction)
-(NXobject):
+doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
+(NXdistortion):
   applied(NX_BOOL):
     doc: "Has the distortion correction been applied?"
   symmetry(NX_INT):

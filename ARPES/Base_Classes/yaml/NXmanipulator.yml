@@ -1,14 +1,13 @@
-name: NXpositioner
-category: base
-doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators
-  in photoemission experiments."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   ncoords: Number of linear coordinates used to describe the manipulator position
   nangles: Number of angular coordinates used to describe the manipulator position
   npos: Number of positions assumed by the manipulator during the measurement (differing
     even by just one coordinate or angle)
-(NXobject):
+category: base
+doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators
+  in photoemission experiments."
+(NXmanipulator):
   name(NX_CHAR):
     doc: "Name"
   description(NX_CHAR):

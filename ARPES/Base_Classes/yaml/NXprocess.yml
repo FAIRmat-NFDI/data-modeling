@@ -1,8 +1,7 @@
-name: NXprocess
 category: base
 doc: "Draft extension of NXprocess to include fields to describe the processing of
   photoemission data."
-(NXobject):
+(NXprocess):
   REGISTRATION(NXregistration):
     doc: "Class to describe the operations of image registration"
   DISTORTION(NXdistortion):

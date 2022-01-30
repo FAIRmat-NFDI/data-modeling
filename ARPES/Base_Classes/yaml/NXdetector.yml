@@ -1,7 +1,7 @@
 name: NXdetector
 category: base
 doc: "Draft extension of NXdetector to include fields to describe photoelectron detectors."
-(NXobject):
+(NXdetector):
   amplifier_type(NX_CHAR):
     doc: "Type of electron amplifier, MCP, channeltron, etc."
   detector_type(NX_CHAR):

@@ -1,10 +1,9 @@
-name: NXsource
-category: base
-doc: "Draft extension of NXsource to include lasers and FELs."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nx: Number of points in a spectrum
-(NXobject):
+category: base
+doc: "Draft extension of NXsource to include lasers and FELs."
+(NXsource):
   photon_energy(NX_FLOAT):
     doc: "The center photon energy of the source, before it is monochromatized or
       converted"

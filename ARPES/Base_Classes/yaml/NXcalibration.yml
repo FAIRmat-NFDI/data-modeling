@@ -1,12 +1,11 @@
-name: NXcalibration
 category: base
-doc: "Draft subclass of NXprocess to describe post-processing calibrations."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   ncoeff: Number of coefficients of the calibration function
   nfeat: Number of features used to fit the calibration function
   ncal: Number of points of the calibrated and uncalibrated axes
-(NXobject):
+doc: "Draft subclass of NXprocess to describe post-processing calibrations."
+(NXcalibration):
   applied(NX_BOOL):
     doc: "Has the calibration been applied?"
   coefficients(NX_FLOAT):
@@ -14,8 +13,6 @@ symbols:
       is fit to a set of features (peaks) at well defined energy positions to determine
       E(TOF). Here we can store the array of fit coefficients."
     unit: NX_ANY
-    \@units(NX_CHAR):
-      doc: "Here: for a energy/tof conversion SI units could be 'J/s', customary 'eV/ns'."
     dimensions:
       dim: [[1,ncoeff]]
       rank: 1
@@ -27,7 +24,7 @@ symbols:
     unit: NX_ANY
   offset(NX_FLOAT):
     doc: "For linear calibration. Offset parameter."
-    unit: NX_ENERGY
+    unit: NX_ANY
   calibrated_axis(NX_FLOAT):
     doc: "A vector representing the axis after calibration, matching the data length"
     unit: NX_ANY

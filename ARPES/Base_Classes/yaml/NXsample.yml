@@ -1,8 +1,7 @@
-name: NXsample
 category: base
 doc: "Draft extension of NXsample to include fields to describe samples in photoemission
   experiments."
-(NXobject):
+(NXsample):
   sample_id(NX_CHAR):
     doc: "Identification number or signatures of the sample used."
   sample_history(NXnote):

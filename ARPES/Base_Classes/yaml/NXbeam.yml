@@ -1,11 +1,10 @@
-name: NXbeam
 category: base
-doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
-  sources and details relevant for photoemission."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nx: Number of pixels of the chirp spectrum
-(NXobject):
+doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
+  sources and details relevant for photoemission."
+(NXbeam):
   pulse_energy(NX_FLOAT):
     doc: "Energy of a single pulse at the diagnostic point"
     unit: NX_ENERGY
@@ -79,14 +78,14 @@ symbols:
   incident_polarization(NX_CHAR):
     \@units(NX_CHAR):
       doc: "The units for this observable are not included in the NIAC list. Responsibility
-        on correct formatting and parsing is handed to the user by using 'NX_ANY'.
+        on correct formatting and parsing is handed to the user by using ''NX_ANY''.
         Correct parsing can still be implemented by using this attribute. Fill with:
-        The unit unidata symbol if the unit has one (Example: 'T' for the unit of
+        The unit unidata symbol if the unit has one (Example: ''T'' for the unit of
         magnetic flux density tesla). The unit unidata name if the unit has a name
-        (Example: 'farad' for capacitance). A string describing the units according
+        (Example: ''farad'' for capacitance). A string describing the units according
         to unidata unit operation notation, if the unit is a complex combination of
         named units and does not have a name. Example: for lightsource brilliance
-        (SI) '1/(s.mm2.mrad2)'. Here: SI units are 'V2/m2'."
+        (SI) ''1/(s.mm2.mrad2)''. Here: SI units are ''V2/m2''."
   extent(NX_FLOAT):
     doc: "Beam size vector describing the beam waist FWHM in two perpendicular directions."
     unit: NX_LENGTH
@@ -98,7 +97,7 @@ symbols:
     unit: NX_ANY
   fluence(NX_CHAR):
     \@units(NX_CHAR):
-      doc: "Here: SI units are 'J/m2', customary 'mJ/cm2'."
+      doc: "Here: SI units are ''J/m2'', customary ''mJ/cm2''."
   pulse_duration(NX_FLOAT):
     doc: "FWHM duration of the pulses at the diagnostic point"
     unit: NX_TIME

@@ -1,7 +1,6 @@
-name: NXentry
 category: base
 doc: "Draft extension of NXentry to include fields to describe laboratory based experiments."
-(NXobject):
+(NXentry):
   experiment_location(NX_CHAR):
     doc: "City and country where ex. Took place"
   experiment_start_date(NX_DATE_TIME):

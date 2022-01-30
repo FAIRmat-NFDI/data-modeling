@@ -1,21 +1,17 @@
-name: NXelectronanalyser
 category: base
-doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nfa: Number of fast axes (axes acquired symultaneously, without scanning a pysical
     quantity)
   nsa: Number of slow axes (axes acquired scanning a pysical quantity)
-(NXobject):
+doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
+(NXelectronanalyser):
   description(NX_CHAR):
     doc: "Free text description of the type of the detector "
   name(NX_CHAR):
     doc: "Name or model of the equipment"
     \@short_name(NX_CHAR):
       doc: "Acronym or other shorthand name"
-      unit: ''
-      Dim: 0
-      Rank: 0
   energy_resolution(NX_FLOAT):
     doc: "Overall energy resolution (FWHM of gaussian broadening)"
     unit: NX_ENERGY
