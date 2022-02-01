@@ -28,7 +28,7 @@ symbols:
 (NXellipsometry):
   (NXentry):
     # exists: required -- is the default
-    doc: "This is the application definition describing ellipsometry experiments.
+    doc: "Thi    s is the application definition describing ellipsometry experiments.
           Such experiments may be as simple as identifying how a reflected
           beam of light with a single wavelength changes its polarization state,
           to a variable angle spectroscopic ellipsometry experiment.\n
@@ -42,7 +42,7 @@ symbols:
       doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
         - The identifier is usually defined by the facility or principle investigator.
         - The identifier enables to link experiments to e.g. proposals."
-    
+
     experiment_description:
 
     start_time(NX_DATE_TIME):
@@ -135,7 +135,7 @@ symbols:
                       modulator on analyzer side, dual compensator, phase modulation,
                       imaging ellipsometry, null ellipsometry]
 
-      calibration(NXsubentry): 
+      calibration(NXsubentry):
         exists: recommended
         doc: "Ellipsometers require regular calibration to adjust the hardware
               parameters for proper zero values and background light compensation."
@@ -206,10 +206,11 @@ symbols:
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
               (Cartesian) coordinate system and at an orientation defined
               by three Euler angles (alpha, beta, gamma).
-              The stage may be motorized or manual, special for liquids or gas environment." #CE: add 'vacuum'
+              The stage may be motorized or manual, special for liquids or gas environment."
+              #CE: add 'vacuum'
         enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
         exists: recommended #CE: why not required?
-        description: 
+        description:
           exists: recommended
         (NXtransformations): #CE: How should the vectors be entered?
           exists: recommended
@@ -325,16 +326,16 @@ symbols:
             dim: [[1, 2]]
 
     (NXsample):
-      doc: "Properties of the sample, its history, the sample environment and 
-            experimental conditions (e.g. surrounding medium, temperature, pressure etc.), 
+      doc: "Properties of the sample, its history, the sample environment and
+            experimental conditions (e.g. surrounding medium, temperature, pressure etc.),
             along with the data (data type, wavelength array, measured data)."
-      atom_types: 
-        doc: "Use Hill's system for listing elements of the periodic table 
+      atom_types:
+        doc: "Use Hill's system for listing elements of the periodic table
               which are inside or attached to the surface of the specimen
               and thus relevant from a scientific point. The purpose of this field
               is to allow materials database to parse the relevant elements without
               having to interpret the sample history or other fields."
-      sample_name: 
+      sample_name:
 
       sample_history:
         doc: "Ideally, a reference to the location or a unique (globally persistent)
@@ -351,13 +352,13 @@ symbols:
       layer_structure:
         doc: "Qualitative description of the layer structure for the sample.
               For example: Si/native oxide/thermal oxide/polymer/peptide"
-    
+
       # orientation_matrix(n_comp, 3, 3): is part of the base class
         # documentation is of the original NEXUS class
         # DO we really need this mandatory, or just leave it?
-    
 
-      data_identifier(NX_NUMBER): 
+
+      data_identifier(NX_NUMBER):
         doc: "A identifier to correlate data to the experimental conditions,
               if several were used in this measurement;
               typically an index of 0 - N"
@@ -493,7 +494,7 @@ symbols:
         doc: "Specify the voltage if the spectra were taken under bias"
         # ... continue to explain what the user should do then
         unit: NX_VOLTAGE
-      temperature(NX_NUMBER): 
+      temperature(NX_NUMBER):
         exists: optional
         doc: "Temperature of the sample (sample holder, medium)"
         unit: NX_TEMPERATURE
@@ -540,7 +541,7 @@ symbols:
         doc: light loss due to depolarization as a value in [0-1]
         unit: NX_UNITLESS
 
-  plot(NXdata):
-    exists: optional
-    doc: "A default view of the data, in this case Psi vs. wavelength and the angles of incidence.
-          If Psi does not exist, use other Müller matrix elements, such as N, C and S."
+    plot(NXdata):
+      exists: optional
+      doc: "A default view of the data, in this case Psi vs. wavelength and the angles of incidence.
+            If Psi does not exist, use other Müller matrix elements, such as N, C and S."
