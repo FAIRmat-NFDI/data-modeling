@@ -1,11 +1,13 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
-<definition category="application" extends="NXobject" name="NXmpes" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
-	<doc>This is the most general application definition for multidimensional photoelectron spectroscopy.</doc>
+<definition category="application" extends="NXobject" name="NXmpes_ARPES" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+	<doc>This is the most general application definition for multidimensional ARPES.</doc>
 	<symbols>
 		<doc>The symbols used in the schema to specify e.g. dimensions of arrays</doc>
 		<symbol doc="Number of fast axes (acquired simutaneously) e.g. emission angle, kinetic energy" name="nfa"/>
 		<symbol doc="Number of slow axes (acquired scanning a physical quantity) e.g. lens voltage, spin direction" name="nsa"/>
+		<symbol doc="Number of points in the first angular direction" name="nx"/>
+		<symbol doc="Number of points in the energy dispersion direction" name="ne"/>
 	</symbols>
 	<group type="NXentry">
 		<attribute name="entry">
@@ -20,6 +22,7 @@
 			<attribute name="version" type="NX_CHAR"/>
 			<enumeration>
 				<item value="NXmpes"/>
+				<item value="NXmpes_ARPES"/>
 			</enumeration>
 		</field>
 		<group type="NXinstrument">
@@ -77,6 +80,9 @@
 				</field>
 				<field name="energy_resolution" type="NX_NUMBER" units="NX_ENERGY">
 					<doc>Energy resolution of the analyser with the current setting. May be linked from a NXcalibration.</doc>
+				</field>
+				<field name="angular_resolution" type="NX_NUMBER" units="NX_ANGLE">
+					<doc>Angular resolution of the analyser with the current setting.  May be linked from a NXcalibration.</doc>
 				</field>
 				<field name="fast_axes" optional="true" type="NX_CHAR">
 					<doc>List of the axes that are acquired symultaneously by the detector. These refer only to the experimental variables recorded by the electron analyser. Other variables such as temperature, manipulator angles etc. are labeled as fast or slow in the data. Examples: Hemispherical in ARPES mode: fast_axes: [energy,kx] Hemispherical with channeltron, sweeping energy mode: slow_axes: [energy] Tof: fast_axes: [energy, kx, ky] Momentum microscope, spin-resolved: fast_axes: [energy, kx, ky] slow_axes: [spin up-down, spin left-right] axes can be less abstract than this, i.e. [detector_x, detector_y] If energy_scan_mode=sweep, fast_axes: [energy, kx]; slow_axes: [energy] is allowed.</doc>
@@ -193,15 +199,31 @@
 			</group>
 		</group>
 		<group type="NXprocess">
-			<field name="calculated_energy" optional="true" type="NX_FLOAT" units="NX_ENERGY">
+			<field name="calculated_kx" recommended="true" type="NX_FLOAT" units="NX_WAVENUMBER">
+				<doc>Calibrated kx momentum axis.</doc>
+				<dimensions rank="1">
+					<dim index="1" value="nx"/>
+				</dimensions>
+			</field>
+			<field name="calculated_energy" recommended="true" type="NX_FLOAT" units="NX_ENERGY">
 				<doc>Calibrated energy axis.</doc>
 				<dimensions rank="1">
 					<dim index="1" value="ne"/>
 				</dimensions>
 			</field>
+			<group name="distortion_correction" type="NXdistortion">
+				<field name="applied" type="NX_BOOLEAN">
+					<doc>Has a distortion correction been applied?</doc>
+				</field>
+			</group>
 			<group name="energy_calibration" type="NXcalibration">
 				<field name="applied" type="NX_BOOLEAN">
 					<doc>Has an energy calibration been applied?</doc>
+				</field>
+			</group>
+			<group name="momentum_calibration" optional="true" type="NXcalibration">
+				<field name="applied" type="NX_BOOLEAN">
+					<doc>Has a momentum calibration been applied?</doc>
 				</field>
 			</group>
 		</group>
@@ -231,8 +253,21 @@
 					<item value="data"/>
 				</enumeration>
 			</attribute>
+			<attribute name="axes">
+				<enumeration>
+					<item value="['energy', 'kpar']"/>
+				</enumeration>
+			</attribute>
+			<attribute name="energy_indices"/>
+			<attribute name="kpar_indices"/>
 			<field name="data" type="NX_NUMBER">
 				<doc>Processed plottable data.</doc>
+			</field>
+			<field name="energy" type="NX_NUMBER" units="NX_ENERGY">
+				<doc>Data containing the energy axis</doc>
+			</field>
+			<field name="kpar" type="NX_NUMBER" units="NX_WAVEVECTOR">
+				<doc>Data containing the k parallel axis</doc>
 			</field>
 		</group>
 	</group>

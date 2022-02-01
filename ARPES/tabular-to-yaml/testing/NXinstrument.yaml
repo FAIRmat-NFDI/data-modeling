@@ -1,8 +1,0 @@
-(NXinstrument):
-  name(NX_CHAR):
-    doc: "Name or model of the equipment"
-  \@short_name(NX_CHAR):
-    doc: "Acronym or other shorthand name"
-  description(NX_CHAR):
-    doc: "Short description of the instrument, possibly reference to a technical
-      publication"

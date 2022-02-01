@@ -1,122 +1,105 @@
 # Book of headers
 NXaperture:
-  name: NXaperture
   category: base
   doc: "Draft extension of NXaperture to describe apertures in electron analysers."
-  (NXobject):
+  (NXaperture):
 NXbeam:
-  name: NXbeam
   category: base
-  doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed sources and details relevant for photoemission."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nx: "Number of pixels of the chirp spectrum"
-  (NXobject):
+  doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed sources and details relevant for photoemission."
+  (NXbeam):
 NXcalibration:
-  name: NXcalibration
   category: base
-  doc: "Draft subclass of NXprocess to describe post-processing calibrations."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     ncoeff: "Number of coefficients of the calibration function"
     nfeat: "Number of features used to fit the calibration function"
     ncal: "Number of points of the calibrated and uncalibrated axes"
-  (NXobject):
+  doc: "Draft subclass of NXprocess to describe post-processing calibrations."
+  (NXcalibration):
 NXcollectioncolumn:
-  name: NXcollectioncolumn
   category: base
-  doc: "Draft subclass of NXelectronanalyser to describe the electron collection column of a photoelectron analyser."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nl: "Number of lenses in the collection column"
-  (NXobject):
+  doc: "Draft subclass of NXelectronanalyser to describe the electron collection column of a photoelectron analyser."
+  (NXcollectioncolumn):
 NXdetector:
   name: NXdetector
   category: base
   doc: "Draft extension of NXdetector to include fields to describe photoelectron detectors."
-  (NXobject):
+  (NXdetector):
 NXdistortion:
-  name: NXdistortion
   category: base
-  doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nsym: "Number of symmetry points used for distortion correction"
     ndx: "Number of points of the matrix distortion field (x direction)"
     ndy: "Number of points of the matrix distortion field (y direction)"
-  (NXobject):
+  doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
+  (NXdistortion):
 NXelectronanalyser:
-  name: NXelectronanalyser
   category: base
-  doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nfa: "Number of fast axes (axes acquired symultaneously, without scanning a pysical quantity)"
     nsa: "Number of slow axes (axes acquired scanning a pysical quantity)"
-  (NXobject):
+  doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
+  (NXelectronanalyser):
 NXenergydispersion:
-  name: NXenergydispersion
   category: base
   doc: "Draft subclass of NXelectronanalyser to describe the energy dispersion section of a photoelectron analyser."
-  (NXobject):
+  (NXenergydispersion):
 NXentry:
-  name: NXentry
   category: base
   doc: "Draft extension of NXentry to include fields to describe laboratory based experiments."
-  (NXobject):
+  (NXentry):
 NXinstrument:
-  name: NXinstrument
   category: base
   doc: "Draft extension of NXinstrument to include fields to describe laboratory based experiments."
-  (NXobject):
+  (NXinstrument):
 NXmonochromator:
-  name: NXmonochromator
-  category: base
-  doc: "Draft extension of NXmonochromator to include fields to describe the use of monochromators in photoemission experiments."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nx: "Number of points in a spectrum"
-  (NXobject):
-NXmanipulator:
-  name: NXpositioner
   category: base
-  doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators in photoemission experiments."
+  doc: "Draft extension of NXmonochromator to include fields to describe the use of monochromators in photoemission experiments."
+  (NXmonochromator):
+NXmanipulator:
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     ncoords: "Number of linear coordinates used to describe the manipulator position"
     nangles: "Number of angular coordinates used to describe the manipulator position"
     npos: "Number of positions assumed by the manipulator during the measurement (differing even by just one coordinate or angle)"
-  (NXobject):
+  category: base
+  doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators in photoemission experiments."
+  (NXmanipulator):
 NXprocess:
-  name: NXprocess
   category: base
   doc: "Draft extension of NXprocess to include fields to describe the processing of photoemission data."
-  (NXobject):
+  (NXprocess):
 NXregistration:
-  name: NXregistration
   category: base
   doc: "Draft extension of NXobject to include fields to describe image registration procedures."
-  (NXobject):
+  (NXregistration):
 NXsample:
-  name: NXsample
   category: base
-  doc: "Draft extension of NXobject to include fields to describe the use of monochromators in photoemission experiments."
-  (NXobject):
+  doc: "Draft extension of NXsample to include fields to describe samples in photoemission experiments."
+  (NXsample):
 NXsource:
-  name: NXsource
-  category: base
-  doc: "Draft extension of NXsource to include lasers and FELs."
   symbols:
     doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
     nx: "Number of points in a spectrum"
-  (NXobject):
+  category: base
+  doc: "Draft extension of NXsource to include lasers and FELs."
+  (NXsource):
 NXspindispersion:
-  name: NXspindispersion
   category: base
   doc: "Draft subclass of NXelectronanalyser to describe the spin filters in photoemission experiments."
-  (NXobject):
+  (NXspindispersion):
 NXuser:
-  name: NXuser
   category: base
   doc: "Draft extension of NXuser to describe users of laboratory experiments."
-  (NXobject):
+  (NXuser):
