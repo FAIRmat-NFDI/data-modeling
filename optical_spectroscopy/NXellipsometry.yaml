@@ -36,8 +36,17 @@ symbols:
       The application definition defines:
         - elements of the experimental instrument
         - calibration information if available
-        - parameters used to tune the state of the sample 
+        - parameters used to tune the state of the sample
         - sample description"
+
+    definition:
+      \@version:
+        doc: "Version number to identify which definition of this application definition
+             was used for this entry/data."
+        # New approach of NIAC: version controlled application definitions.
+        # taken this from ARPES
+      enumeration: [NXellipsometry]
+
     experiment_identifier:
       doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
         - The identifier is usually defined by the facility or principle investigator.
