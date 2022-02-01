@@ -158,8 +158,9 @@ def xlsx_to_yaml():
                 if(sheet in parsed_yaml):
                     if 'doc' in parsed_yaml[sheet]:
                         parsed_yaml[sheet].update({'doc': "\"" + str(parsed_yaml[sheet]['doc']) + "\""})
+                    tempstring="("+sheet+")"
                     output.update(parsed_yaml[sheet])
-                    output['(NXobject)'] = sheet_dict
+                    output[tempstring] = sheet_dict
                 else:
                     print("ERROR: Not found in Headers.yml; defaulting to no header information.")
                     tempstring = "(" + sheet + ")"

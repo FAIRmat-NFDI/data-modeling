@@ -1,46 +1,42 @@
 #Pincelli at fhi-berlin.mpg.de, 01/2022
-#Draft version of a NeXus application definition for photoemission,
+#Draft version of a NeXus application definition for ARPES.
+#the existing NXarpes is too restrictive, this application definition aims at generalizing it
+#to be agnostic of the experimental details.
 #It is designed to be extended by other application definitions
 #with higher granularity in the data description.
 
-doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
+doc: This is the most general application definition for multidimensional ARPES.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nfa: Number of fast axes (acquired simutaneously) e.g. emission angle, kinetic energy
   nsa: Number of slow axes (acquired scanning a physical quantity) e.g. lens voltage, spin direction
+  nx: Number of points in the first angular direction
+  ne: Number of points in the energy dispersion direction
 category: application # Defaults "exists" to "required"
 #draft the application definition
-(NXmpes):
-\@default:
-  doc: "Default plottable entry name."
+(NXmpes_ARPES):
   (NXentry):
     \@entry:
       doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
     \@default:
-      doc: "Default plottable NX data object."
       exists: optional
     title:
-      #doc: "Title describing the entry." NIAC doc is better.
     start_time(NX_DATE_TIME):
       doc: "ISO8601 formatted date time of the start of the measurement."
     definition:
       \@version: # New approach of NIAC: version controlled application definitions.
-      #doc: "Official NeXus NXDL schema to which this file conforms." NIAC doc is better
-      enumeration: [NXmpes]
+      enumeration: [NXmpes, NXmpes_ARPES]
     (NXinstrument):
       (NXsource):
         doc: "The source used to generate the primary photons. Properties refer strictly to parameters of the source, not of the output beam.
         For example, the energy of the source is not the optical power of the beam, but the energy of the electron beam in a synchrotron and so on."
         type:
-          #doc: "Type of source." NIAC doc is better
           enumeration: ["Synchrotron X-ray Source", "Rotating Anode X-ray", "Fixed Tube X-ray", "UV Laser", "Free-Electron Laser", "Optical Laser", "UV Plasma Source", "Metal Jet X-ray", "HHG laser"]
         name:
-          #doc: "Free text name of the source." NIAC doc is better.
         probe:
           doc: "Type of probe. In photoemission it's always photons, so the full NIAC list is restricted."
           enumeration: ["x-ray","ultraviolet", "visible light"]
       (NXbeam): # Describes the beam at the sample.
-        #doc: "Properties of the beam at the sample." NIAC doc is better
         distance(NX_NUMBER):
           doc: "Distance of the point of evaluation of the beam from the sample surface."
           unit: NX_LENGTH
@@ -94,6 +90,9 @@ category: application # Defaults "exists" to "required"
         energy_resolution(NX_NUMBER):
           doc: "Energy resolution of the analyser with the current setting. May be linked from a NXcalibration."
           unit: NX_ENERGY
+        angular_resolution(NX_NUMBER): # Ahead of base class
+          doc: "Angular resolution of the analyser with the current setting.  May be linked from a NXcalibration."
+          unit: NX_ANGLE
         fast_axes:
           exists: optional
           doc: "List of the axes that are acquired symultaneously by the detector.
@@ -169,16 +168,30 @@ category: application # Defaults "exists" to "required"
             raw(NX_NUMBER): # There is a block of numbers named raw.
               doc: "Raw data before calibration."
     (NXprocess):
+        calculated_kx(NX_FLOAT):
+          exists: recommended
+          doc: "Calibrated kx momentum axis."
+          unit: NX_WAVENUMBER
+          dimensions:
+            rank: 1
+            dim: [[1, nx]]
         calculated_energy(NX_FLOAT):
-          exists: optional
+          exists: recommended
           doc: "Calibrated energy axis."
           unit: NX_ENERGY
           dimensions:
             rank: 1
             dim: [[1, ne]]
+        distortion_correction(NXdistortion):
+          applied(NX_BOOLEAN):
+            doc: "Has a distortion correction been applied?"
         energy_calibration(NXcalibration):
           applied(NX_BOOLEAN):
             doc: "Has an energy calibration been applied?"
+        momentum_calibration(NXcalibration):
+          exists: optional
+          applied(NX_BOOLEAN):
+            doc: "Has a momentum calibration been applied?"
     (NXsample):
       name:
       chemical_formula:
@@ -214,11 +227,18 @@ category: application # Defaults "exists" to "required"
     (NXdata):
       \@signal:
         enumeration: ["data"] # There is an object named data that contains the signal
+      \@axes:
+        enumeration: [['energy','kpar']]
+      \@energy_indices: # There is an axis (to be specified) that represents energy
+      \@kpar_indices: # There is an axis (to be specified) that represents the first parallel momentum direction
       data(NX_NUMBER): # There is a block of numbers named data.
         doc: "Processed plottable data."
-  # NXdata structure is extremely free here to provide a low entry barrier for data parsing in the core appdef.
-  # Will be restricted further in extending appdefs.
+      energy(NX_NUMBER):
+        doc: "Data containing the energy axis"
+        unit: NX_ENERGY
+      kpar(NX_NUMBER):
+        doc: "Data containing the k parallel axis"
+        unit: NX_WAVEVECTOR
   # If there is no rebinning between raw data and plottable data, one can use links
   # to link the data in NXinstrument:NXelectronanalyser:NXdetector:NXdata:Raw
-  # and the axis in NXprocess:calculated_energy
-  # Same goes, obviously, for the case when there's no energy calibration and the display data is raw.
+  # and the axes in NXprocess:calculated_kx and NXprocess:calculated_energy.
