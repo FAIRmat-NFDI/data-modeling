@@ -49,6 +49,7 @@ def load_as_blocks(filename, header):
     # handle it in a special way
     dt = data.to_numpy()
     keylist = []
+    res = {}
     if 'blocks' in header:
         for head in header['blocks']:
             print('analyzing:', head)
@@ -72,8 +73,11 @@ def load_as_blocks(filename, header):
                 dt.shape = tuple(newshape)
                 # dt.shape = (int(dt.shape[0]/lens[0]), lens[0], dt.shape[1])
                 keylist.append(bkeys)
+                res[head] = bkeys
 
-    return { 'data': dt, 'keys': keylist}
+    res['data'] = dt
+    res['keys'] = keylist
+    return res
 # end of load_as_blocks
 
 def array_to_dict(data, along=0):
