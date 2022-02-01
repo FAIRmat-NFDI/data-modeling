@@ -1,0 +1,47 @@
+# kuehbacm at hu-berlin.de, 01/2022
+# the application cases in mind are that this class can be used to describe how the sample/specimen
+# is mounted and placed in an instrument to hold it in a controlled place and orientation wrt to the probing radiation and instruments
+# the idea of this class is also to document components which can apply external stimuli on the sample
+# by contrast a micromanipulator is a special device for sample preparation in an SEM/FIB instruments which this class does not describe
+# the draft was inspired by commercial products and (transmission) electron microscopy literature such as
+# https://www.nanotechnik.com/e5as.html
+# https://www.protochips.com/products/fusion/fusion-select-components/
+# L. Reimer's book on transmission electron microscopy, 1997, page 103, table 4.2
+# D. B. Williams and C. B. Carter's book on TEM, 1996, page 124
+# D. J: Larson's book on the Local Electrode Atom Probe, 2013, page 47
+# by contrast, the purpose and design of so-called nano/or micromanipulators, i.e. automatable devices to perform e.g. site-specific lift out
+# procedures warrants to define an own class NXspecimen_manipulator given this is nothing else than miniature robot arm essential
+# one could also think about creating an own NXrobotarm class, below are two examples of such tools as they are used in FIB and SEMs
+# https://nano.oxinst.com/products/omniprobe/omniprobe-200
+# https://www.nanoprobetech.com/about
+category: base
+doc: "Candidate class for a component or a set of components which is coarse-grained into one logical unit. The role of the stage in an experiment is to hold/align/orient the sample/specimen and eventually offer a controlled environment and further devices to apply stimuli. Having an own candidate class is justified as contemporary specimen/sample stages are such multi-purpose/-functional tools with multiple actuators, sensors, components, and thus also the need to store the various (meta)data that are generated with manipulating the sample. Modern stages realize a hierarchy of components for achieving these tasks. For example the specimen might be mounted on a multi-axial tilt rotation holders which itself is fixed in the support unit that connects to the microscope. In other examples, taken from atom probe microscopy for instance, researchers may work with wire samples which are clipped into a larger fixing unit for convenience. This unit is known in atom probe jargon as a stub. Stubs in turn are positioned on pucks. Pucks are then loaded onto carousels. This NXstage class reflects two layers of this hierarchy. The stage is the root of the hierarchy. A stage carries the holder. In the case that it is not practical to distinguish these two layers, the holder should be given preference. Applied to examples, a nanoparticle is attached on a copper grid. The copper grid is the holder. The grid itself is fixed to the stage. An atom probe specimen is fixed in a stub, in this case the stub can be considered as the holder, while the cryostat temperature control unit reads more as the stage. A microtip on a microtip array is an example of a three-layer hierarchy commonly employed for efficient sequential processing of atom probe experiments. For a single experiment though only one microtip of the array at a time can be measured. Therefore, the microtip is the specimen, the array the holder and the remaining mounting unit that is attached to the cryo-controller the stage. To cover for an as flexible design of these complex lab-like modern stages users should nest NXstage_lab objects for reflect the differences between e.g. a holder and a stage."
+# NEW ISSUE: There will be cases where more advanced representations are required.
+# NEW ISSUE: For this it could be useful to not distinguish between stage and holder but create only one base class NXfixture and then create a nest of fixtures to represent the individual layers of the hierarchy. In each level one could add required components, like heaters, cryo-stats, etc. or later even components for in-situ testing.
+(NXstage_lab):
+  design:
+    doc: "Principal design of the stage."
+    enumeration: ["side entry", "top entry", "single tilt", "quick change", "multiple specimen", "bulk specimen", "double tilt", "tilt rotate", "heating chip", "atmosphere chip", "electrical-biasing chip", "liquid-cell chip"]
+  name:
+    doc: "Given name."
+  model:
+    doc: "Given brand or model name by the manufacturer."
+  serial_number:
+    doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
+  manufacturer_name:
+    doc: "Given name of the manufacturer."
+  description:
+    doc: "Ideally a link to a (globally persistent) unique identifier which documents or can be used to infer further details of the component. If not available use this field for a free text description to give further details to the stage."
+  (NXtransformations):
+    # NEW ISSUE: stage-affixed coordinate system to specimen or gun coordinate system
+    doc: "Set of transformations which describe how the stage-affixed coordinate system is defined and how it has to be transformed so that it aligns with the specimen coordinate system."
+  (NXpositioner):
+  # exemplified here how to describe and deal with complicated positioning tools like an eucentric five axis table stage in an SEM
+  # https://www.nanotechnik.com/e5as.html
+  # shipswing_tilt(NXpositioner):
+  # normal_rotate(NXpositioner):
+  # normal_height(NXpositioner):
+  # inplane_translate1(NXpositioner):
+  # inplane_translate2(NXpositioner):
+  # NEW ISSUE: add temperature control units and components to apply external stimuli on the specimen such as NXmech_testing_unit and NXfurnace, NXreaction_cell
+  # nest as many NXstage_lab objects as needed to represent the individual layers of modern instrument multi-functional stages
