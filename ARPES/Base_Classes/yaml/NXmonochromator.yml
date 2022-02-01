@@ -1,0 +1,18 @@
+name: NXmonochromator
+category: base
+doc: "Draft extension of NXmonochromator to include fields to describe the use of
+  monochromators in photoemission experiments."
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nx: Number of points in a spectrum
+(NXobject):
+  energy(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "Central energy "
+  energy_error(NX_CHAR):
+    doc: "Energy standard deviation"
+  distribution(NXdata):
+    doc: "Spectrum or live diagnostic"
+    dimensions:
+      dim: [[1,nx],[1,nx]]
+      rank: 2

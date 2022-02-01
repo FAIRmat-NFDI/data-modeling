@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xslt"?>
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" category="base" extends="NXobject" type="group" doc="Draft extension of NXobject to include fields to describe the use of monochromators in photoemission experiments.">
+	<field name="name" type="NX_CHAR"/>
+	<field name="category" type="NX_CHAR"/>
+	<group type="NXobject">
+		<field name="name" type="NX_CHAR" doc="Simple and descriptive name of the sample"/>
+		<field name="sample_id" type="NX_CHAR" doc="Identification number or signatures of the sample used."/>
+		<field name="state" type="NX_CHAR" doc="Physical state of the sample"/>
+		<field name="purity" type="NX_FLOAT" units="NX_UNITLESS" doc="Chemical purity of the sample"/>
+		<field name="orientation" type="NX_CHAR" doc="Surface termination of the sample (if crystalline)"/>
+		<field name="layer" type="NX_CHAR" doc="Number of layers of the sample (e.g. bulk, monolayer, pentalayer, etc.)"/>
+		<field name="space_group" type="NX_CHAR" doc="Space group of the sample (if crystalline)"/>
+		<field name="chemical_formula" type="NX_CHAR" doc="Chemical formula of the sample"/>
+		<field name="chemical_name" type="NX_CHAR" doc="Full chemical name of the sample"/>
+		<field name="chem_id_cas" type="NX_CHAR" doc="CAS registry number of the sample chemical content."/>
+		<field name="sample_temperature" type="NX_FLOAT" units="NX_TEMPERATURE" doc="Temperature of the sample during the measurement."/>
+		<field name="drain_current" type="NX_FLOAT" units="NX_CURRENT" doc="Drain current due to photoemission"/>
+		<field name="sample_bias" type="NX_FLOAT" units="NX_CURRENT" doc="Possible bias of the sample with trespect to analyser ground"/>
+		<field name="pressure" type="NX_FLOAT" units="NX_PRESSURE" doc="Pressure of gas surrounding the sample at time of measurement."/>
+		<field name="gas" type="NX_CHAR" doc="Gases might be fluxed on the surface for various reasons. Chemical designation, or residual."/>
+		<field name="electric_field" type="NX_FLOAT" units="NX_VOLTAGE" doc="Vector determining the direction of the electric field">
+			<attribute name="direction" type="NX_FLOAT"/>
+			<dimensions rank="1">
+				<dim index="1" value="3"/>
+			</dimensions>
+		</field>
+		<field name="magnetic_field" type="NX_FLOAT" units="NX_ANY" doc="Vector determining the direction of the magnetic field">
+			<attribute name="direction" type="NX_FLOAT"/>
+			<dimensions rank="1">
+				<dim index="1" value="3"/>
+			</dimensions>
+		</field>
+		<field name="stress_field" type="NX_FLOAT" units="NX_PRESSURE" doc="Vector determining the direction of the stress field">
+			<attribute name="direction" type="NX_FLOAT"/>
+			<dimensions rank="1">
+				<dim index="1" value="3"/>
+			</dimensions>
+		</field>
+		<field name="thickness" type="NX_FLOAT" units="NX_LENGTH" doc="Sample thickness"/>
+		<field name="surface_dopant" type="NX_CHAR" doc="Element of evaporated surface dopant such as alkali or other"/>
+		<field name="surface_dopant_coverage" type="NX_FLOAT" units="NX_LENGTH" doc="Nominal thickness of the evaporated dopant"/>
+		<field name="bias" type="NX_CHAR" doc="Voltage applied to sample and sample holder."/>
+		<field name="growth_method" type="NX_FLOAT" units="NX_CURRENT" doc="Sample growth method (e. g. molecular beam epitaxy, chemical vapor deposition etc.)"/>
+		<field name="preparation_method" type="NX_FLOAT" units="NX_CURRENT" doc="E.g. UHV cleave, sputtering and annealing, etc."/>
+		<field name="preparation_date" type="NX_DATE_TIME" doc="Date of sample preparation"/>
+		<field name="vendor" type="NX_CHAR" doc="Name of the sample vendor (company or research group)"/>
+		<field name="substrate_material" type="NX_CHAR" doc="Material of the substrate in direct contact with the sample."/>
+		<field name="substrate_state" type="NX_CHAR" doc="Physical state of the substrate, similar options to sample_state"/>
+		<group name="notes" type="NXnote" doc="Further notes."/>
+	</group>
+</definition>
