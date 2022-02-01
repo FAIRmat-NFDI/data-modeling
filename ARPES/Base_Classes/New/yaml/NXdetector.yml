@@ -1,4 +1,3 @@
-name: NXdetector
 category: base
 doc: "Draft extension of NXdetector to include fields to describe photoelectron detectors."
 (NXdetector):

@@ -27,7 +27,6 @@ NXcollectioncolumn:
   doc: "Draft subclass of NXelectronanalyser to describe the electron collection column of a photoelectron analyser."
   (NXcollectioncolumn):
 NXdetector:
-  name: NXdetector
   category: base
   doc: "Draft extension of NXdetector to include fields to describe photoelectron detectors."
   (NXdetector):

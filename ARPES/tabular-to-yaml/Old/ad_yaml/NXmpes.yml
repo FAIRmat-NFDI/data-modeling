@@ -11,8 +11,8 @@ symbols:
 category: application # Defaults "exists" to "required"
 #draft the application definition
 (NXmpes):
-#\@default:
-#  doc: "Default plottable entry name."
+\@default:
+  doc: "Default plottable entry name."
   (NXentry):
     \@entry:
       doc: "NeXus convention is to use \"entry1\", \"entry2\", for analysis software to locate each entry."
