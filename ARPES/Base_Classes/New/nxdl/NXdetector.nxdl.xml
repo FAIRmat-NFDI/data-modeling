@@ -29,7 +29,7 @@
 	<field name="sensor_pixels" type="NX_INT" units="NX_UNITLESS">
 		<doc>Number of raw active elements in each dimension. Important for swept scans.</doc>
 	</field>
-	<group name="DATA" type="NXdata">
+	<group type="NXdata">
 		<doc>raw data output from the detector</doc>
 	</group>
 </definition>

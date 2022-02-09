@@ -17,7 +17,7 @@ doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
     unit: NX_ENERGY
   momentum_resolution(NX_FLOAT):
     doc: "Overall momentum resolution (FWHM)"
-    unit: NX_WAVEVECTOR
+    unit: NX_WAVENUMBER
   angular_resolution(NX_FLOAT):
     doc: "Overall angular resolution (FWHM)"
     unit: NX_ANGLE
@@ -43,16 +43,16 @@ doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
     dimensions:
       dim: [[1,nsa]]
       rank: 1
-  COLLECTION_COLUMN(NXcollectioncolumn):
+  (NXcollectioncolumn):
     doc: "class to describe the electron collection (spatial and momentum imaging)
       column"
-  ENERGY_DISPERSION(NXenergydispersion):
+  (NXenergydispersion):
     doc: "class to describe the energy dispersion section"
-  SPIN_DISPERSION(NXspindispersion):
+  (NXspindispersion):
     doc: "class to describe the spin dispersion section"
-  DETECTOR(NXdetector):
+  (NXdetector):
     doc: "class to describe the electron detector"
-  DEFLECTOR(NXdeflector):
+  (NXdeflector):
     doc: "deflectors in the collection column section"
-  LENS(NXlens):
+  (NXlens):
     doc: "Individual lenses in the collection column section"

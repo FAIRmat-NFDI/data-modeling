@@ -41,9 +41,9 @@
 			<dim index="nangles" value="npos"/>
 		</dimensions>
 	</field>
-	<group name="cryocoolant" type="NX_BOOL">
+	<field name="cryocoolant" type="NX_BOOLEAN">
 		<doc>Is cryocoolant flowing through the manipulator?</doc>
-	</group>
+	</field>
 	<field name="cryostat_temperature" type="NX_FLOAT" units="NX_TEMPERATURE">
 		<doc>Temperature of the cryostat (coldest point)</doc>
 	</field>
@@ -59,10 +59,10 @@
 	<field name="sample_bias" type="NX_FLOAT" units="NX_CURRENT">
 		<doc>Possible bias of the sample with trespect to analyser ground</doc>
 	</field>
-	<group name="POSITIONER" type="NXpositioner">
+	<group type="NXpositioner">
 		<doc>class to describe the motors that are used in the manipulator</doc>
 	</group>
-	<group name="TRANSFORMATIONS" type="NXtransformations">
+	<group type="NXtransformations">
 		<doc>class to describe the transformations used.</doc>
 	</group>
 </definition>

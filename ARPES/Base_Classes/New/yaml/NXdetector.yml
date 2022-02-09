@@ -26,5 +26,5 @@ doc: "Draft extension of NXdetector to include fields to describe photoelectron 
   sensor_pixels(NX_INT):
     doc: "Number of raw active elements in each dimension. Important for swept scans."
     unit: NX_UNITLESS
-  DATA(NXdata):
+  (NXdata):
     doc: "raw data output from the detector"

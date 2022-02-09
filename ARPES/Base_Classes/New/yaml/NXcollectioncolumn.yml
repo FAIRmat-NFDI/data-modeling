@@ -37,7 +37,7 @@ doc: "Draft subclass of NXelectronanalyser to describe the electron collection c
     doc: "The size and position of the field aperture inserted in the column"
   contrast_aperture(NXaperture):
     doc: "The size and postion of the contrast aperture inserted in the column."
-  DEFLECTOR(NXdeflector):
+  (NXdeflector):
     doc: "deflectors in the collection column section"
-  LENS(NXlens):
+  (NXlens):
     doc: "Individual lenses in the collection column section"

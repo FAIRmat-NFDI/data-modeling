@@ -19,7 +19,7 @@
 	<field name="energy_resolution" type="NX_FLOAT" units="NX_ENERGY">
 		<doc>Overall energy resolution (FWHM of gaussian broadening)</doc>
 	</field>
-	<field name="momentum_resolution" type="NX_FLOAT" units="NX_WAVEVECTOR">
+	<field name="momentum_resolution" type="NX_FLOAT" units="NX_WAVENUMBER">
 		<doc>Overall momentum resolution (FWHM)</doc>
 	</field>
 	<field name="angular_resolution" type="NX_FLOAT" units="NX_ANGLE">
@@ -40,22 +40,22 @@
 			<dim index="1" value="nsa"/>
 		</dimensions>
 	</field>
-	<group name="COLLECTION_COLUMN" type="NXcollectioncolumn">
+	<group type="NXcollectioncolumn">
 		<doc>class to describe the electron collection (spatial and momentum imaging) column</doc>
 	</group>
-	<group name="ENERGY_DISPERSION" type="NXenergydispersion">
+	<group type="NXenergydispersion">
 		<doc>class to describe the energy dispersion section</doc>
 	</group>
-	<group name="SPIN_DISPERSION" type="NXspindispersion">
+	<group type="NXspindispersion">
 		<doc>class to describe the spin dispersion section</doc>
 	</group>
-	<group name="DETECTOR" type="NXdetector">
+	<group type="NXdetector">
 		<doc>class to describe the electron detector</doc>
 	</group>
-	<group name="DEFLECTOR" type="NXdeflector">
+	<group type="NXdeflector">
 		<doc>deflectors in the collection column section</doc>
 	</group>
-	<group name="LENS" type="NXlens">
+	<group type="NXlens">
 		<doc>Individual lenses in the collection column section</doc>
 	</group>
 </definition>

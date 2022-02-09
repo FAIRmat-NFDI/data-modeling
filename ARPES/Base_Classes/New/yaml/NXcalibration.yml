@@ -6,7 +6,7 @@ symbols:
   ncal: Number of points of the calibrated and uncalibrated axes
 doc: "Draft subclass of NXprocess to describe post-processing calibrations."
 (NXcalibration):
-  applied(NX_BOOL):
+  applied(NX_BOOLEAN):
     doc: "Has the calibration been applied?"
   coefficients(NX_FLOAT):
     doc: "For non-linear energy calibrations, e.g. in a TOF, a polynomial function
@@ -38,5 +38,5 @@ doc: "Draft subclass of NXprocess to describe post-processing calibrations."
     dimensions:
       dim: [[1,ncal],[1,ncal]]
       rank: 2
-  COLLECTION(NXcollection):
+  (NXcollection):
     doc: "Class to describe freely the procedures employed."

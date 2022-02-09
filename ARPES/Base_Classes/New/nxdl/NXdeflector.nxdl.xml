@@ -1,12 +1,11 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
-<definition category="base" extends="NXobject" name="NXlens" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
-	<doc>Draft class definition for electro-static lenses as they are used e.g. in an electron analyser.</doc>
+<definition category="base" extends="NXobject" name="NXdeflector" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+	<doc>Draft class definition for electro-static deflectors as they are used e.g. in an electron analyser.</doc>
 	<field name="type" type="NX_CHAR">
 		<doc>Qualitative type of lens with respect to the number of pole pieces</doc>
 		<enumeration>
-			<item value="single"/>
-			<item value="double"/>
+			<item value="dipole"/>
 			<item value="quadrupole"/>
 			<item value="hexapole"/>
 			<item value="octupole"/>

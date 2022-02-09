@@ -1,9 +1,9 @@
 category: base
-doc: Draft class definition for electro-static lenses as they are used e.g. in an electron analyser.
-(NXlens):
+doc: Draft class definition for electro-static deflectors as they are used e.g. in an electron analyser.
+(NXdeflector):
   type:
     doc: Qualitative type of lens with respect to the number of pole pieces
-    enumeration: [single, double, quadrupole, hexapole, octupole]
+    enumeration: [dipole, quadrupole, hexapole, octupole]
   name:
     doc: Colloquial or short name for the lens. For manufacturer names and identifiers use respective manufacturer fields.
   manufacturer_name:

@@ -2,9 +2,9 @@
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 <definition category="base" extends="NXobject" name="NXregistration" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
 	<doc>Draft extension of NXobject to include fields to describe image registration procedures.</doc>
-	<group name="applied" type="NX_BOOL">
+	<field name="applied" type="NX_BOOLEAN">
 		<doc>Has the registration been applied?</doc>
-	</group>
+	</field>
 	<field name="new_centre" type="NX_FLOAT" units="NX_UNITLESS">
 		<doc>Coordinates of the new centre point.</doc>
 		<dimensions rank="1">
@@ -23,10 +23,10 @@
 			<dim index="1" value="2"/>
 		</dimensions>
 	</field>
-	<group name="TRANSFORMATION" type="NXtransformation">
+	<group type="NXtransformations">
 		<doc>To describe the operations of image registration (combinations of rigid translations and rotations)</doc>
 	</group>
-	<group name="COLLECTION" type="NXcollection">
+	<group type="NXcollection">
 		<doc>Class to describe freely the procedures employed.</doc>
 	</group>
 </definition>

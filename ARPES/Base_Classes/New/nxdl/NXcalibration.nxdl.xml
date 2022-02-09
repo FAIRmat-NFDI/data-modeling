@@ -8,9 +8,9 @@
 		<symbol doc="Number of features used to fit the calibration function" name="nfeat"/>
 		<symbol doc="Number of points of the calibrated and uncalibrated axes" name="ncal"/>
 	</symbols>
-	<group name="applied" type="NX_BOOL">
+	<field name="applied" type="NX_BOOLEAN">
 		<doc>Has the calibration been applied?</doc>
-	</group>
+	</field>
 	<field name="coefficients" type="NX_FLOAT" units="NX_ANY">
 		<doc>For non-linear energy calibrations, e.g. in a TOF, a polynomial function is fit to a set of features (peaks) at well defined energy positions to determine E(TOF). Here we can store the array of fit coefficients.</doc>
 		<dimensions rank="1">
@@ -39,7 +39,7 @@
 			<dim index="1" value="ncal"/>
 		</dimensions>
 	</field>
-	<group name="COLLECTION" type="NXcollection">
+	<group type="NXcollection">
 		<doc>Class to describe freely the procedures employed.</doc>
 	</group>
 </definition>

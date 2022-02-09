@@ -29,10 +29,10 @@
 	<field name="tof_distance" type="NX_FLOAT" units="NX_LENGTH">
 		<doc>Length of the tof drift electrode</doc>
 	</field>
-	<group name="DEFLECTOR" type="NXdeflector">
+	<group type="NXdeflector">
 		<doc>deflectors in the energy dispersive section</doc>
 	</group>
-	<group name="LENS" type="NXlens">
+	<group type="NXlens">
 		<doc>Individual lenses in the energy dispersive section</doc>
 	</group>
 </definition>

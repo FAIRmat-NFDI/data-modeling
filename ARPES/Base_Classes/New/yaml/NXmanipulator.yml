@@ -38,7 +38,7 @@ doc: "Draft extension of NXpositioner to include fields to describe the use of m
     dimensions:
       dim: [[nangles,npos]]
       rank: 2
-  cryocoolant(NX_BOOL):
+  cryocoolant(NX_BOOLEAN):
     doc: "Is cryocoolant flowing through the manipulator?"
   cryostat_temperature(NX_FLOAT):
     doc: "Temperature of the cryostat (coldest point)"
@@ -55,7 +55,7 @@ doc: "Draft extension of NXpositioner to include fields to describe the use of m
   sample_bias(NX_FLOAT):
     doc: "Possible bias of the sample with trespect to analyser ground"
     unit: NX_CURRENT
-  POSITIONER(NXpositioner):
+  (NXpositioner):
     doc: "class to describe the motors that are used in the manipulator"
-  TRANSFORMATIONS(NXtransformations):
+  (NXtransformations):
     doc: "class to describe the transformations used."

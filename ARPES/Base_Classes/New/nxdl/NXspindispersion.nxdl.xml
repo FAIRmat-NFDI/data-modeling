@@ -26,10 +26,10 @@
 	<field name="spin_target_preparation_date" type="NX_DATE_TIME">
 		<doc>Date of last preparation of the spin target</doc>
 	</field>
-	<group name="DEFLECTOR" type="NXdeflector">
+	<group type="NXdeflector">
 		<doc>deflectors in the spin dispersive section</doc>
 	</group>
-	<group name="LENS" type="NXlens">
+	<group type="NXlens">
 		<doc>Individual lenses in the spin dispersive section</doc>
 	</group>
 </definition>

@@ -6,7 +6,7 @@ symbols:
   ndy: Number of points of the matrix distortion field (y direction)
 doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
 (NXdistortion):
-  applied(NX_BOOL):
+  applied(NX_BOOLEAN):
     doc: "Has the distortion correction been applied?"
   symmetry(NX_INT):
     doc: "For symmetry-guided distortion correction (https://www.sciencedirect.com/science/article/abs/pii/S0304399118303474?via%3Dihub),
@@ -34,5 +34,5 @@ doc: "Draft subclass of NXprocess to describe post-processing distortion correct
     dimensions:
       dim: [[ndx,ndy]]
       rank: 1
-  COLLECTION(NXcollection):
+  (NXcollection):
     doc: "Class to describe freely the procedures employed."

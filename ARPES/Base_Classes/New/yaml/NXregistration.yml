@@ -2,7 +2,7 @@ category: base
 doc: "Draft extension of NXobject to include fields to describe image registration
   procedures."
 (NXregistration):
-  applied(NX_BOOL):
+  applied(NX_BOOLEAN):
     doc: "Has the registration been applied?"
   new_centre(NX_FLOAT):
     doc: "Coordinates of the new centre point."
@@ -22,8 +22,8 @@ doc: "Draft extension of NXobject to include fields to describe image registrati
     dimensions:
       dim: [[1,2]]
       rank: 1
-  TRANSFORMATION(NXtransformation):
+  (NXtransformations):
     doc: "To describe the operations of image registration (combinations of rigid
       translations and rotations)"
-  COLLECTION(NXcollection):
+  (NXcollection):
     doc: "Class to describe freely the procedures employed."

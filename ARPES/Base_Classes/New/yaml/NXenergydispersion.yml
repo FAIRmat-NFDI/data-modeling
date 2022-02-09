@@ -29,7 +29,7 @@ doc: "Draft subclass of NXelectronanalyser to describe the energy dispersion sec
   tof_distance(NX_FLOAT):
     doc: "Length of the tof drift electrode"
     unit: NX_LENGTH
-  DEFLECTOR(NXdeflector):
+  (NXdeflector):
     doc: "deflectors in the energy dispersive section"
-  LENS(NXlens):
+  (NXlens):
     doc: "Individual lenses in the energy dispersive section"

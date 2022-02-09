@@ -22,7 +22,7 @@ doc: "Draft subclass of NXelectronanalyser to describe the spin filters in photo
     doc: "Preparation procedure of the spin target"
   spin_target_preparation_date(NX_DATE_TIME):
     doc: "Date of last preparation of the spin target"
-  DEFLECTOR(NXdeflector):
+  (NXdeflector):
     doc: "deflectors in the spin dispersive section"
-  LENS(NXlens):
+  (NXlens):
     doc: "Individual lenses in the spin dispersive section"
