@@ -1,7 +1,7 @@
 category: base
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  nl: Number of lenses in the collection column
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  nl: "Number of lenses in the collection column"
 doc: "Draft subclass of NXelectronanalyser to describe the electron collection column
   of a photoelectron analyser."
 (NXcollectioncolumn):
@@ -38,6 +38,6 @@ doc: "Draft subclass of NXelectronanalyser to describe the electron collection c
   contrast_aperture(NXaperture):
     doc: "The size and postion of the contrast aperture inserted in the column."
   (NXdeflector):
-    doc: "deflectors in the collection column section"
+    doc: "Deflectors in the collection column section"
   (NXlens):
     doc: "Individual lenses in the collection column section"

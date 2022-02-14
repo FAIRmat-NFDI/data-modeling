@@ -1,7 +1,8 @@
 category: base
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  nx: Number of pixels of the chirp spectrum
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  nx: "Number of pixels in the delay axis of a FROG trace"
+  nx: "Number of pixels of the frequency axis of a FROG trace"
 doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
   sources and details relevant for photoemission."
 (NXbeam):
@@ -101,11 +102,23 @@ doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
   pulse_duration(NX_FLOAT):
     doc: "FWHM duration of the pulses at the diagnostic point"
     unit: NX_TIME
-  chirp_spectrum(NXdata):
-    doc: "Spectrum of pulse frequency vs time."
+  frog_trace(NX_FLOAT):
+    doc: "FROG trace of the pulse."
     dimensions:
-      dim: [[1,nx],[1,nx]]
+      dim: [[nx,ny]]
       rank: 2
+   frog_delays(NX_FLOAT):
+    doc: "Horizontal axis of a FROG trace, i.e. delay."
+    unit: NX_TIME
+    dimensions:
+      dim: [[1,nx]]
+      rank: 1
+    frog_frequencies(NX_FLOAT):
+    doc: "Vertical axis of a FROG trace, i.e. frequency."
+    unit: NX_FREQUENCY
+    dimensions:
+      dim: [[1,ny]]
+      rank: 1
   chirp_type(NX_CHAR):
     doc: "The type of chirp implemented"
   chirp_GDD(NX_FLOAT):

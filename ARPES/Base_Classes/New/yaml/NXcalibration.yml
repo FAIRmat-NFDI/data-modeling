@@ -1,9 +1,9 @@
 category: base
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  ncoeff: Number of coefficients of the calibration function
-  nfeat: Number of features used to fit the calibration function
-  ncal: Number of points of the calibrated and uncalibrated axes
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  ncoeff: "Number of coefficients of the calibration function"
+  nfeat: "Number of features used to fit the calibration function"
+  ncal: "Number of points of the calibrated and uncalibrated axes"
 doc: "Draft subclass of NXprocess to describe post-processing calibrations."
 (NXcalibration):
   applied(NX_BOOLEAN):
@@ -31,12 +31,11 @@ doc: "Draft subclass of NXprocess to describe post-processing calibrations."
     dimensions:
       dim: [[1,ncal]]
       rank: 1
-  conversion_table(NX_FLOAT):
-    doc: "2 vectors, representing how the raw points get mapped on the calibrated
-      axis."
+  original_axis(NX_FLOAT):
+    doc: "Vector containing the data coordinates in the original uncalibrated axis"
     unit: NX_ANY
     dimensions:
-      dim: [[1,ncal],[1,ncal]]
-      rank: 2
+      dim: [[1,ncal]]
+      rank: 1
   (NXcollection):
     doc: "Class to describe freely the procedures employed."

@@ -1,9 +1,9 @@
 category: base
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  nsym: Number of symmetry points used for distortion correction
-  ndx: Number of points of the matrix distortion field (x direction)
-  ndy: Number of points of the matrix distortion field (y direction)
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  nsym: "Number of symmetry points used for distortion correction"
+  ndx: "Number of points of the matrix distortion field (x direction)"
+  ndy: "Number of points of the matrix distortion field (y direction)"
 doc: "Draft subclass of NXprocess to describe post-processing distortion correction."
 (NXdistortion):
   applied(NX_BOOLEAN):
@@ -20,12 +20,19 @@ doc: "Draft subclass of NXprocess to describe post-processing distortion correct
     dimensions:
       dim: [[1,2]]
       rank: 1
-  original_points(NX_FLOAT):
-    doc: "For symmetry-guided distortion correction. Here we record coordinates of
+  original_points_x(NX_FLOAT):
+    doc: "For symmetry-guided distortion correction. Here we record the x coordinates of
       the relevant symmetry points."
     unit: NX_UNITLESS
     dimensions:
-      dim: [[2,nsym]]
+      dim: [[1,nsym]]
+      rank: 1
+  original_points_y(NX_FLOAT):
+    doc: "For symmetry-guided distortion correction. Here we record the y coordinates of
+      the relevant symmetry points."
+    unit: NX_UNITLESS
+    dimensions:
+      dim: [[1,nsym]]
       rank: 1
   field(NX_FLOAT):
     doc: "For general non-rigid distortion corrections. 2D matrix mapping the original
@@ -33,6 +40,6 @@ doc: "Draft subclass of NXprocess to describe post-processing distortion correct
     unit: NX_UNITLESS
     dimensions:
       dim: [[ndx,ndy]]
-      rank: 1
+      rank: 2
   (NXcollection):
     doc: "Class to describe freely the procedures employed."

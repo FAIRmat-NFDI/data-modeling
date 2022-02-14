@@ -1,9 +1,9 @@
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  ncoords: Number of linear coordinates used to describe the manipulator position
-  nangles: Number of angular coordinates used to describe the manipulator position
-  npos: Number of positions assumed by the manipulator during the measurement (differing
-    even by just one coordinate or angle)
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  ncoords: "Number of linear coordinates used to describe the manipulator position"
+  nangles: "Number of angular coordinates used to describe the manipulator position"
+  npos: "Number of positions assumed by the manipulator during the measurement (differing
+    even by just one coordinate or angle)"
 category: base
 doc: "Draft extension of NXpositioner to include fields to describe the use of manipulators
   in photoemission experiments."
@@ -30,13 +30,13 @@ doc: "Draft extension of NXpositioner to include fields to describe the use of m
     doc: "Effective positions assumed by the manipulator during the measurement."
     unit: NX_LENGTH
     dimensions:
-      dim: [[ncoord,npos]]
+      dim: [[1,npos],[2,ncoord]]
       rank: 2
   angle_values(NX_FLOAT):
     doc: "Effective angles assumed by the manipulator during the measurement."
     unit: NX_ANGLE
     dimensions:
-      dim: [[nangles,npos]]
+      dim: [[1,npos],[2,nangles]]
       rank: 2
   cryocoolant(NX_BOOLEAN):
     doc: "Is cryocoolant flowing through the manipulator?"

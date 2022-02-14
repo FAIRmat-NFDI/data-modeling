@@ -1,9 +1,9 @@
 category: base
 symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  nfa: Number of fast axes (axes acquired symultaneously, without scanning a pysical
-    quantity)
-  nsa: Number of slow axes (axes acquired scanning a pysical quantity)
+  doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
+  nfa: "Number of fast axes (axes acquired symultaneously, without scanning a pysical
+    quantity)"
+  nsa: "Number of slow axes (axes acquired scanning a pysical quantity)"
 doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
 (NXelectronanalyser):
   description(NX_CHAR):
@@ -53,6 +53,6 @@ doc: "Draft subclass of NXinstrument to describe a photoelectron analyser."
   (NXdetector):
     doc: "class to describe the electron detector"
   (NXdeflector):
-    doc: "deflectors in the collection column section"
+    doc: "Deflectors outside the main optics ensambles described by the subclasses"
   (NXlens):
-    doc: "Individual lenses in the collection column section"
+    doc: "Individual lenses outside the main optics ensambles described by the subclasses"
