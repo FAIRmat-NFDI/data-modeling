@@ -550,4 +550,5 @@ symbols:
             We set wavelength as a default attribute, but it can be replaced in the case
             of not full spectral ellipsometry to any suitable parameter along the X-axis.
             "
-      \@axes: "wavelength"
+      \@axes: 
+        doc: "wavelength"
