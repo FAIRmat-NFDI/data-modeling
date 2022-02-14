@@ -544,11 +544,10 @@ symbols:
 
     plot(NXdata):
       exists: optional
-      doc: "A default view of the data, in this case Psi vs. wavelength and the angles of
+      doc: "A default view of the data, in this case wavelength vs. Psi and the angles of
             incidence. If Psi does not exist, use other Müller matrix elements, such as N,
-            C and S.
-            We set wavelength as a default attribute, but it can be replaced in the case
-            of not full spectral ellipsometry to any suitable parameter along the X-axis.
-            "
-      \@axes: 
-        doc: "wavelength"
+            C and S."
+      \@axes:
+        doc: "We recommend to use wavelength as a default attribute, but it can be
+              replaced in the case of not full spectral ellipsometry to any suitable
+              parameter along the X-axis."
