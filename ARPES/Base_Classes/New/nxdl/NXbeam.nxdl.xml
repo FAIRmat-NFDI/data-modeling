@@ -4,7 +4,9 @@
 	<doc>Draft extension of NXbeam to include fields to describe ultra-short pulsed sources and details relevant for photoemission.</doc>
 	<symbols>
 		<doc>The symbols used in the schema to specify e.g. dimensions of arrays</doc>
-		<symbol doc="Number of pixels of the chirp spectrum" name="nx"/>
+		<symbol name="nx">
+			<doc>Number of pixels of the frequency axis of a FROG trace</doc>
+		</symbol>
 	</symbols>
 	<field name="pulse_energy" type="NX_FLOAT" units="NX_ENERGY">
 		<doc>Energy of a single pulse at the diagnostic point</doc>
@@ -58,13 +60,24 @@
 	<field name="pulse_duration" type="NX_FLOAT" units="NX_TIME">
 		<doc>FWHM duration of the pulses at the diagnostic point</doc>
 	</field>
-	<group name="chirp_spectrum" type="NXdata">
-		<doc>Spectrum of pulse frequency vs time.</doc>
+	<field name="frog_trace" type="NX_FLOAT">
+		<doc>FROG trace of the pulse.</doc>
 		<dimensions rank="2">
-			<dim index="1" value="nx"/>
+			<dim index="nx" value="ny"/>
+		</dimensions>
+	</field>
+	<field name="frog_delays" type="NX_FLOAT" units="NX_TIME">
+		<doc>Horizontal axis of a FROG trace, i.e. delay.</doc>
+		<dimensions rank="1">
 			<dim index="1" value="nx"/>
 		</dimensions>
-	</group>
+	</field>
+	<field name="frog_frequencies" type="NX_FLOAT" units="NX_FREQUENCY">
+		<doc>Vertical axis of a FROG trace, i.e. frequency.</doc>
+		<dimensions rank="1">
+			<dim index="1" value="ny"/>
+		</dimensions>
+	</field>
 	<field name="chirp_type" type="NX_CHAR">
 		<doc>The type of chirp implemented</doc>
 	</field>

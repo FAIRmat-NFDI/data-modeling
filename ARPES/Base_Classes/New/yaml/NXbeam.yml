@@ -107,13 +107,13 @@ doc: "Draft extension of NXbeam to include fields to describe ultra-short pulsed
     dimensions:
       dim: [[nx,ny]]
       rank: 2
-   frog_delays(NX_FLOAT):
+  frog_delays(NX_FLOAT):
     doc: "Horizontal axis of a FROG trace, i.e. delay."
     unit: NX_TIME
     dimensions:
       dim: [[1,nx]]
       rank: 1
-    frog_frequencies(NX_FLOAT):
+  frog_frequencies(NX_FLOAT):
     doc: "Vertical axis of a FROG trace, i.e. frequency."
     unit: NX_FREQUENCY
     dimensions:

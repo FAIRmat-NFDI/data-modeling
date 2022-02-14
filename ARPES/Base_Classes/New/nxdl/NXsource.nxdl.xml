@@ -4,7 +4,9 @@
 	<doc>Draft extension of NXsource to include lasers and FELs.</doc>
 	<symbols>
 		<doc>The symbols used in the schema to specify e.g. dimensions of arrays</doc>
-		<symbol doc="Number of points in a spectrum" name="nx"/>
+		<symbol name="nx">
+			<doc>Number of points in a spectrum</doc>
+		</symbol>
 	</symbols>
 	<field name="photon_energy" type="NX_FLOAT" units="NX_ENERGY">
 		<doc>The center photon energy of the source, before it is monochromatized or converted</doc>
