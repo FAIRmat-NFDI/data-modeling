@@ -137,6 +137,12 @@
             <dim index="1" value="i"/>
         </dimensions>
     </field>
+	<field name="pulse_energy" type="NX_FLOAT" units="NX_ENERGY">
+		<doc>Energy of a single pulse at the diagnostic point</doc>
+	</field>
+	<field name="average_power" type="NX_FLOAT" units="NX_POWER">
+		<doc>Average power at the diagnostic point</doc>
+	</field>
 	<field name="fluence" type="NX_FLOAT" units="NX_ANY">
 		<doc>Incident fluence at the diagnostic point</doc>
 	</field>
