@@ -1,0 +1,122 @@
+# 02/2022
+
+# This is a draft for an application defition or base class for materials libraries. 
+# Inspiration taken from the Kameleont database project at Unold Lab.
+
+material_library:
+  doc: "Sample in which in one or various properties can vary across the area of the substrate,
+        thus containing subsamples whithin.
+        An example would be a subtrate with a deposited film on top in which
+        the chemical compostion of the film varies in the x and y directions."
+  library_id:
+    doc: "Full library id" 
+  library_name:
+    doc: "Short library id"
+  owner:
+    doc: "Name or alias of the library owner"  
+  institute:
+    doc: "Alias/short name of the home institute of the owner, i.e. hzb"
+  creation_datetime: 
+    doc: "Creation date of the library"
+  children:
+    doc: "Full ID or link of parent library, from which the current library was obtained.
+          If not applicable set to null."
+  parent:
+    doc: "List of full library IDs of the libraries
+          into which the current library was transferred (e.g. by breaking or splitting)"
+
+  processess:
+    doc: "Experimetal procedure which the sample gets altered or a new component is added to it.
+          For example, in the context of thin films, a deposition of a new layer
+          by evaporation is a process."
+    pvd_evaporation:
+      doc: "The physical vapor deposition (PVD) of a layer by evaporation."
+      chemicals: 
+        doc: "Database "
+    pld_deposition:
+      doc: "The deposition process of a layer by Pulsed Laser Deposition (PLD) method."
+    ebeam_evaporation:
+      doc: "The physical vapor deposition (PVD) of a layer by e-beam evaporation."
+    hotplate_annealing:
+      doc: "The process of heating a sample in a hot-plate."
+    tubefurnace_annealing:
+      doc: "The process of heating a sample in a tube furnace."
+    rtp_annealing:
+      doc: "The process of heating a sample in a rapid thermal processor (trp)."
+    spin_coating: 
+      doc: "The process of deposition a film using a spin-coater.
+            Typically, a small amount of solution is applied in the center of the subtrate,
+            which is then spinned extending the material over its area"
+    chemical_bath_deposition:
+      doc: "Also known as chemical solution deposition and CBD.
+            Is a thin film deposition method in which the substrate is introduced in a precursor solution"
+
+ # Discuss whether these should be sub-grupped 
+  measurements:
+    doc: "Experimental procedure in which a material library or sample gets characterized by a technique.
+          For example, a measurment by X-ray diffraction to characteriza the structural properties of an specimen
+          or X-ray fluorescence to characteriza its composition."
+    xray_fluorescence(NXfluo):
+      doc: ""
+    xray_difraction:
+      doc: ""
+    raman_spectroscopy:
+      doc: ""
+    resistivity:
+      doc: ""
+    solar_simulator:
+      doc: ""
+    capacitance_voltage:
+      doc: ""
+    external_quantum_efficiency:
+      doc: ""    
+    photoluminescence_imaging:
+      doc: ""
+    uv_vis_nir_imaging:
+      doc: ""
+    uv_vis_spectroscpy:
+      doc: ""
+    time_resolved_photoluminescence:
+      doc: ""
+    terahertz_spectroscopy:
+      doc: ""
+    time_resolved_photoluminescence:
+      doc: ""
+  
+  derived_data:
+    doc: "is information that is gained from already existing data
+          i.e. from processes, measurements and/or other derived_data. 
+          Examples for these are smoothing of data, background subtraction, calculations
+          (e.g. transmittance from raw spectra, bandgap from the absorption coefficient) or simulations"
+
+  layers:
+    doc: "List of layers contained in the library, 
+    which in turn are a (deeply nested) dicts describing the layer and its properties."
+    layer_id:
+      doc: "Unique identifier of the layer (counting in the order of adding).
+            "0" would be assigned to the substrate."
+    layer_type:
+      doc: "Type of the layer"
+      enumeration: [substrate, absorber layer, metal contact, buffer layer, p-type contact, n-type contact]
+    layer_creation_datetime:
+      doc: "Creation datetime for the layer (for substrates ideally the manufacturing)"
+    layer_position:
+      doc: "Position of the layer within the stack counting from substrate = 0; not necessarily gapless"
+    properties:
+      doc: "Different properties that a layer might have"
+      physical:
+        doc: "Physical properties of the layer in terms of dimensions"
+      compositional:
+        doc: ""
+      structural:
+        doc: ""
+      optoelectronic: 
+        doc: ""     
+  
+  project:
+    doc: "A description of the project(s) in which the given material library was created"
+
+  workflow:
+    doc: "A list of the processess, measurements and derived data events in chronological order describing the history of a sample"
+
+  
