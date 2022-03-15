@@ -1,0 +1,48 @@
+# General synthesis data structure concept
+# In this document we collect the conclusions from our weekly synthesis data discussion.
+
+
+- general information:
+    # general metadata of the sample preparation
+    - description of synthesis experiment (e.g. material system / grown material, targeted crystal size, external fields (magnetic…), seed direction)
+    - date
+    - responsible person (staff/grower)
+
+- setup:
+    # description of all used equipment for the sample preparation or preparation environment
+    - description of synthesis environment:
+        - details of used equipment
+            - user
+            - ...
+        - condition of equipment
+        
+- process:
+    # description of the process including, starting material, pre-process and post-process steps
+    - substrate or seed material
+    
+    - pre-process: 
+        # pretreatments: e.g. substrate prepretreatment, target preparation (--> link to setup), preparation of catalysis solution
+        
+    - growth/process: 
+        # main proces of sample preparation
+        - steps of synthesis process:
+            - set parameter values
+            - actual parameter values
+            - in situ measurement (from link to characterization section)
+        
+    - post-process:
+        # post treatment, sample children, etc.    
+        -...
+    
+- Characterization (experiment):
+    # description of the characterization methods and its results
+    - methode
+        - description
+        - measurement
+        - ...
+
+- Simulation:
+
+- result:
+        
+  
