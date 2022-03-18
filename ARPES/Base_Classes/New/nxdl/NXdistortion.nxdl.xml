@@ -26,22 +26,25 @@
 			<dim index="1" value="2"/>
 		</dimensions>
 	</field>
-	<field name="original_points_x" type="NX_FLOAT" units="NX_UNITLESS">
-		<doc>For symmetry-guided distortion correction. Here we record the x coordinates of the relevant symmetry points.</doc>
-		<dimensions rank="1">
-			<dim index="1" value="nsym"/>
-		</dimensions>
-	</field>
-	<field name="original_points_y" type="NX_FLOAT" units="NX_UNITLESS">
-		<doc>For symmetry-guided distortion correction. Here we record the y coordinates of the relevant symmetry points.</doc>
-		<dimensions rank="1">
-			<dim index="1" value="nsym"/>
-		</dimensions>
-	</field>
-	<field name="field" type="NX_FLOAT" units="NX_UNITLESS">
-		<doc>For general non-rigid distortion corrections. 2D matrix mapping the original distorted field in the undistorted one.</doc>
+	<field name="original_points" type="NX_FLOAT" units="NX_UNITLESS">
+		<doc>For symmetry-guided distortion correction. Here we record the coordinates of the relevant symmetry points.</doc>
 		<dimensions rank="2">
-			<dim index="ndx" value="ndy"/>
+			<dim index="1" value="nsym"/>
+			<dim index="2" value="2"/>
+		</dimensions>
+	</field>
+	<field name="cdeform_field" type="NX_FLOAT" units="NX_UNITLESS">
+		<doc>Column deformation field for general non-rigid distortion corrections. 2D matrix holding the column information of the mapping of each original coordinate.</doc>
+		<dimensions rank="2">
+			<dim index="1" value="ndx"/>
+			<dim index="2" value="ndy"/>
+		</dimensions>
+	</field>
+	<field name="rdeform_field" type="NX_FLOAT" units="NX_UNITLESS">
+		<doc>Row deformation field for general non-rigid distortion corrections. 2D matrix holding the row information of the mapping of each original coordinate.</doc>
+		<dimensions rank="2">
+			<dim index="1" value="ndx"/>
+			<dim index="2" value="ndy"/>
 		</dimensions>
 	</field>
 	<group type="NXcollection">

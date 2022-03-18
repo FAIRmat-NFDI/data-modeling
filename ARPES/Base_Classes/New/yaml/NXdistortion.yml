@@ -20,26 +20,26 @@ doc: "Draft subclass of NXprocess to describe post-processing distortion correct
     dimensions:
       dim: [[1,2]]
       rank: 1
-  original_points_x(NX_FLOAT):
-    doc: "For symmetry-guided distortion correction. Here we record the x coordinates of
+  original_points(NX_FLOAT):
+    doc: "For symmetry-guided distortion correction. Here we record the coordinates of
       the relevant symmetry points."
     unit: NX_UNITLESS
     dimensions:
-      dim: [[1,nsym]]
-      rank: 1
-  original_points_y(NX_FLOAT):
-    doc: "For symmetry-guided distortion correction. Here we record the y coordinates of
-      the relevant symmetry points."
+      dim: [[1,nsym], [2,2]]
+      rank: 2
+  cdeform_field(NX_FLOAT):
+    doc: "Column deformation field for general non-rigid distortion corrections. 2D matrix holding
+      the column information of the mapping of each original coordinate."
     unit: NX_UNITLESS
     dimensions:
-      dim: [[1,nsym]]
-      rank: 1
-  field(NX_FLOAT):
-    doc: "For general non-rigid distortion corrections. 2D matrix mapping the original
-      distorted field in the undistorted one."
+      dim: [[1,ndx], [2,ndy]]
+      rank: 2
+  rdeform_field(NX_FLOAT):
+    doc: "Row deformation field for general non-rigid distortion corrections. 2D matrix holding
+      the row information of the mapping of each original coordinate."
     unit: NX_UNITLESS
     dimensions:
-      dim: [[ndx,ndy]]
+      dim: [[1,ndx], [2,ndy]]
       rank: 2
   (NXcollection):
     doc: "Class to describe freely the procedures employed."
