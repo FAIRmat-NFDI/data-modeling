@@ -209,3 +209,7 @@ I have changed the data name, because it seems to generate confusion. The measur
 
 ## length of runs
 The problem with this field is that it is a bit misleading. Length of a run is something like how many measurements were run or for how long (time). Now, what we mean is that how many parameter was varied beyond the waveelngths and incident angles.
+
+# Finalize the process
+Rename the ellipsometry-summary_with_NEXUS_fields.yaml to NXellipsometry.yaml, and remove the other files. Summary.yaml is still a good place to look up the original things as a really human readable file.
+

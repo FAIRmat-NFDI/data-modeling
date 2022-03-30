@@ -15,9 +15,13 @@
 
 category: application
 #name: NXellipsometry
-doc: "Draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
+doc: "Draft application definition for ellipsometry measurements,
+      including complex systems up to variable angle spectroscopic ellipsometry.
+      In this application definition, times should be specified always together
+      with a UTC offset."
 symbols:
-  doc: Variables used throughout the document, e.g. dimensions and important parameters
+  # normal quoated text is flattened out in YAML
+  doc: "Variables used throughout the document, e.g. dimensions and important parameters"
   N_wavelength: Size of the energy / wavelength vector used
   N_variables: How many variables are saved in a measurement (e.g. Psi and Delta, Mueller matrix)
   N_angles: Number of incident angles used
@@ -28,16 +32,20 @@ symbols:
 (NXellipsometry):
   (NXentry):
     # exists: required -- is the default
-    doc: "Thi    s is the application definition describing ellipsometry experiments.
-          Such experiments may be as simple as identifying how a reflected
-          beam of light with a single wavelength changes its polarization state,
-          to a variable angle spectroscopic ellipsometry experiment.\n
+    # The first line of this doc is a summary; second line needs the indentation
+    # to be taken as an empty line, part of the doc!
+    doc: | #block quote allows a properly formated text with new lines and indents
+      This is the application definition describing ellipsometry experiments.
+      
+      Such experiments may be as simple as identifying how a reflected
+      beam of light with a single wavelength changes its polarization state,
+      to a variable angle spectroscopic ellipsometry experiment.
 
       The application definition defines:
-        - elements of the experimental instrument
-        - calibration information if available
-        - parameters used to tune the state of the sample
-        - sample description"
+      - elements of the experimental instrument
+      - calibration information if available
+      - parameters used to tune the state of the sample
+      - sample description
 
     definition:
       \@version:
@@ -45,10 +53,14 @@ symbols:
              was used for this entry/data."
         # New approach of NIAC: version controlled application definitions.
         # taken this from ARPES
+      \@url:
+        doc: "URL where to find further material (documentation, examples) relevant to
+          the application definition"
       enumeration: [NXellipsometry]
 
     experiment_identifier:
-      doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
+      doc: |
+        Unique identifier of the experiment, such as a (globally persistent) unique identifier.
         - The identifier is usually defined by the facility or principle investigator.
         - The identifier enables to link experiments to e.g. proposals."
 
@@ -58,8 +70,9 @@ symbols:
 
     program:
       exists: optional
-      doc: "Commercial or otherwise defined given name to the program that was used to
-        generate the results file(s) with measured data and metadata (or a link to the instrument software)."
+      doc: "Commercial or otherwise defined given name to the program that was used
+        to generate the results file(s) with measured data and metadata (or a link
+        to the instrument software)."
       \@version:
         doc: "Either version with build number, commit hash, or description of a
           (online) repository where the source code of the program and build
@@ -74,9 +87,11 @@ symbols:
             https://gitlab.mpcdf.mpg.de/nomad-lab/areab-appdef/-/blob/spectroscopic-ellipsometry-consolidation/optical_spectroscopy"
       #exists: optional
       \@version:
-        doc: "Ideally version with build number are commit hash of the application definition. If not available a free-text description."
+        doc: "Ideally version with build number are commit hash of the application
+          definition. If not available a free-text description."
       \@url:
-        doc: URL where to find further material (documentation, examples) relevant to the application definition
+        doc: "URL where to find further material (documentation, examples) relevant
+          to the application definition"
 
     operator(NXuser):
       # we want to have several possible values, but one is required
@@ -102,8 +117,8 @@ symbols:
       doc: "General properties of the ellipsometry equipment"
       model:
         doc: The name of the instrument
-        \@version: 
-          doc: "The used version of the hardware if available. 
+        \@version:
+          doc: "The used version of the hardware if available.
                 If not a commercial instrument use date of completion of the hardware."
       company:
         exists: optional
@@ -170,7 +185,8 @@ symbols:
                   Jones vector: N_variables = 4, Mueller martix -> N_variables= 16, etc."
             enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix, not provided]
           calibration_angle_of_incidence(NX_NUMBER):
-            doc: "angle(s) of incidence used during the calibration measurement (excluding straight through mode)"
+            doc: "angle(s) of incidence used during the calibration measurement
+              (excluding straight through mode)"
             unit: NX_ANGLE
             dimensions:
               rank: 1
@@ -228,7 +244,7 @@ symbols:
                 normal of the substrate (bottom reflecting surface) from the stage
                 towards the general direction of the light source. The beam
                 comes with angle of incidence towards this Z-axis, but in opposite
-                direction, thus they are connected with a rotation of 
+                direction, thus they are connected with a rotation of
                 180 - angle of incidence (in degrees).
 
                 This transformation brings us from the NEXUS coordinates to the stage coordinates.
@@ -375,7 +391,7 @@ symbols:
         #  -- append it to the experiment identifier...
 
       data_type:
-        doc: "Select which type of data was recorded, for example Psi and Delta 
+        doc: "Select which type of data was recorded, for example Psi and Delta
               (see: https://en.wikipedia.org/wiki/Ellipsometry#Data_acquisition).
               It is possible to have multiple selections. Data types may also be converted
               to each other, e.g. a Mueller matrix contains N,C,S data as well.
