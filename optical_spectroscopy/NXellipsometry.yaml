@@ -15,10 +15,7 @@
 
 category: application
 #name: NXellipsometry
-doc: "Draft application definition for ellipsometry measurements,
-      including complex systems up to variable angle spectroscopic ellipsometry.
-      In this application definition, times should be specified always together
-      with a UTC offset."
+doc: "Ellipsometry, complex systems, up to variable angle spectroscopy."
 symbols:
   # normal quoated text is flattened out in YAML
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
@@ -59,10 +56,7 @@ symbols:
       enumeration: [NXellipsometry]
 
     experiment_identifier:
-      doc: |
-        Unique identifier of the experiment, such as a (globally persistent) unique identifier.
-        - The identifier is usually defined by the facility or principle investigator.
-        - The identifier enables to link experiments to e.g. proposals."
+      doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier. i) The identifier is usually defined by the facility or principle investigator. ii) The identifier enables to link experiments to e.g. proposals."
 
     experiment_description:
 
@@ -445,7 +439,7 @@ symbols:
               other side. Both boundaries are assumed infinite in the model.
               Here define the name of the material (e.g. water, air, etc.)."
 
-      medium_refractive_indices(NX_COMPLEX): #CE: changed NX_COMPLEX to NX_NUMBER....
+      medium_refractive_indices(NX_NUMBER): #CE: changed NX_COMPLEX to NX_NUMBER....
         exists: optional
         doc: "Array of pairs of complex refractive indices of the medium for
               every measured wavelength.
