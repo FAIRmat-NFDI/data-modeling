@@ -1,15 +1,16 @@
 # kuehbacm at hu-berlin.de, 01/2022
 category: base
-doc: "Draft for a class which can be used for representing a coarse-grained description of all those components of an atom probe microscope which realize the pulsing capabilities, whether it be for the laser or the high-voltage pulser, which trigger the removal of ions (atom probe tomography) or the excitation of gas ions (field-ion microscopy)."
+doc: "Laser-, voltage-, or combined- pulsing to trigger field evaporation."
 symbols:
   doc: "The symbols used in the schema to specify e.g. dimensions of arrays."
   Nions: "Total number of ions collected."
 (NXpulser_apm):
   pulse_mode:
     doc: "How evaporation is physically triggered."
-    enumeration: ["laser", "high voltage"]
+    enumeration: ["laser", "high_voltage", "laser_and_high_voltage"]
   laser_pulser(NXsource):
-    doc: "Atom probe microscopes use controlled either voltage or laser pulsing to trigger a sequence of field evaporation events. Many microscopes have a laser installed enabling measurements of poorly conductive specimens."
+    doc: "Atom probe microscopes use controlled laser, voltage, or a combination of pulsing strategies to trigger the excitation and eventual field evaporation/emission of an ion in an atom probe microscopy experiment.
+    # Many microscopes have a laser installed which enables measurements also with poorly conductive specimens."
     name:
       doc: "Given name."
     model:
@@ -26,21 +27,22 @@ symbols:
       unit: NX_POWER
     pulse_energy(NX_FLOAT):
       doc: "Average (??) energy of the laser at peak of (each) ?? pulse."
+    # NEW ISSUE: feedback on how to define this quantity exactly is required
       unit: NX_ENERGY
     # NEW ISSUE: discuss with the community why often scientists report the laser energy as a range
     # NEW ISSUE: eventually this needs to be a made a time-dependent quantity
     (NXtransformations):
       # NEW ISSUE: e.g. pinhole_to_specimen_surface
-      doc: "Set of transformations which describe the geometry between how the laser focusing optics/pinhole-attached coordinate system is defined, how it has to be transformed so that it aligns with the specimen coordinate system. A right-handed Cartesian coordinate system, the so-called laser space, should be assumed whose positive z-axis points into the direction of the propagating laser beam."
+      doc: "Set of transformations which describe the geometry between how the laser focusing optics/pinhole-attached coordinate system is defined, how it has to be transformed so that it aligns with the specimen coordinate system. A right-handed Cartesian coordinate system, the so-called laser space, should be assumed, whose positive z-axis points into the direction of the propagating laser beam."
   laser_beam(NXbeam):
-    doc: "Details about specific positions along the focused laser beam which for atom probe illuminates the specimen."
+    doc: "Details about specific positions along the focused laser beam which illuminates the atom probe specimen."
     # NEW ISSUE: eventually fuse beam and laser into an own NXlaser_apm base class
     pinhole_position(NXcollection):
       doc: "Track time-dependent settings over the course of the measurement where the laser beam exits the focusing optics."
     spot_position(NXcollection):
       doc: "Track time-dependent settings over the course of the measurement where the laser hits the specimen."
   pulse_frequency(NX_NUMBER):
-    doc: "Frequency with which the high voltage or laser gets pulsed."
+    doc: "Frequency with which the high voltage or laser pulser fires."
     unit: NX_FREQUENCY
     # NEW ISSUE: enable time-dependent tracking of these functionalities
   pulse_fraction(NX_NUMBER):
@@ -48,7 +50,7 @@ symbols:
     # NEW ISSUE: check with APM colleagues if this is the correct glossary docstring.
     unit: NX_UNITLESS
   pulsed_voltage(NX_FLOAT):
-    doc: "NEED TO DISCUSS WITH APM COLLEAGUES IN DETAIL WHAT THIS IS SPECIFICALLY!"
+    doc: "NEED TO DISCUSS WITH APM COLLEAGUES IN MORE DETAIL WHAT THIS IS SPECIFICALLY!"
     unit: NX_VOLTAGE
     dimensions:
       rank: 1
@@ -59,6 +61,7 @@ symbols:
     dimensions:
       rank: 1
       dim: [[1, Nions]]
+  # NEW ISSUE: is the local electrode the counter_electrode ?
   # NEW ISSUE: laser cavity/pinhole description
   # NEW ISSUE: support for reporting time-dependent quantities related to pulsing capabilities of an instrument.
   # laser_pulse_time_profile(NX_FLOAT):

@@ -1,0 +1,17 @@
+# kuehbacm at hu-berlin.de, 01/2022
+category: base
+doc: "Device for reducing flight time differences of ions in ToF experiments."
+# A device whose controlled electric field can be used to modify the flight path of ions in a ToF experiment to reduce flight time differences."
+(NXreflectron):
+  name:
+    doc: "Given name."
+  model:
+    doc: "Given brand or model name by the manufacturer."
+  serial_number:
+    doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
+  manufacturer_name:
+    doc: "Given name of the manufacturer."
+  description:
+    doc: "Free-text field to specify further details about the reflectron. The quantity can inform for instance if the reflectron is flat or curved."
+  (NXtransformations):
+    doc: "Affine transformation(s) which detail where the reflectron is located relative to e.g. the origin of the specimen space reference coordinate system. This group can also be used for specifying how the reflectron is rotated relative to the specimen axis. The purpose of these more detailed instrument descriptions is to support the creation of a digital twin of the instrument for computational science."
