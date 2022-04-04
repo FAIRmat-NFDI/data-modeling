@@ -9,17 +9,27 @@
             - optional subcategories: #e.g.: targeted crystal size, external fields (magnetic…), seed direction
         - synthesis category: melt | gas phase | assembly | solid phase and solution | ?
         - synthesis methode: #list dependend on selection of category and optional text
+    - status of experiment: Enum(completed, ongoing, aborted, ...)
     - date: 
         # start date of synthesis
         -  year, month, day
         # time only at process steps --> timestamp
-    - responsible person:
-        - main person:
+    -  experimentor:
+        - responsible person:
+            - name:
+            - email: [optional]
+            - orcid: [optional]
         - supervisor: [optional]
-        - additional person: [optional]
+            - name:
+            - email: [optional]
+            - orcid: [optional]
+        - ADDITIONAL PERSON: [optional]
+            - name: 
+            - email: [optional]
+            - orcid: [optional]
     - affiliation: 
-        # institute name, department and adress, 
-        
+        # institute name, department and adress. Refers to responsible person. Aim is contact information to ask questians.
+
 - setup:
     # description of all used equipment for the sample preparation or preparation environment
     - description of synthesis environment:
