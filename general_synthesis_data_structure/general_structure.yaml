@@ -32,20 +32,27 @@
 
 - setup:
     # description of all used equipment for the sample preparation or preparation environment
-    - description of synthesis environment:
-        - details of used equipment
-            - user
-            - ...
-        - condition of equipment
-        
+    - DEVICE [id]: "PHMT"
+        # will be filled by entering the id. Unspecific to device
+        - device_type: "pH meter"
+        - device_company: "Mettler Toledo"
+        - device_name: "Five Easy"
+        - device_calibration [optional]: date…
+        - device_status [optional]: In operation
+        - USER: fz
+        - serial number:
+        # Device specific.
+        - device_standardmeasurement: 1, 3, 7
+
 - process:
     # description of the process including, starting material, pre-process and post-process steps
-    - substrate or seed material
-    
+       
     - pre-process: 
         # pretreatments: e.g. substrate prepretreatment, target preparation (--> link to setup), preparation of catalysis solution
         
     - growth/process: 
+        - substrate or seed material:
+        - general process parameters: # paramters that stay constant
         # main proces of sample preparation
         - steps of synthesis process:
             - set parameter values
