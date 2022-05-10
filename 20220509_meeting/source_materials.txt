@@ -1,0 +1,11 @@
+# source materials for MBE
+- gas: # howto deal with mixtures?
+	- chemical formula:
+	- purity: 
+	- vendor:
+	- charge id:
+- solid: # howto deal with mixtures, e.g. SnO2+SnO
+	- chemical formula:
+	- purity: 
+	- vendor:
+	- form factor: # granular xy mesh, slugs, ...
