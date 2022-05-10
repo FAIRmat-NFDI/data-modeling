@@ -1,0 +1,187 @@
+Sol-Gel synthesis example.
+
+Everything timestamped
+Linebreak for adding a next step
+
+- general information:
+    - material system --> SiO2
+    - date --> 11.03.2022
+    - responsible person --> Fabian Zemke
+
+Setting Experiment vessel (block 1):
+    - Volume (mL)
+    - material
+    - //Additional comment
+Chemical Precursor (block 1):
+    - Timestamp
+        11.03.2022 10:30
+    - Chemical name
+        Tetraethylorthosilicate
+    - Amount (g)
+        10.42
+    - //CAS number
+    - //Purity (%)
+        98
+    - //Distributor
+        Sigma Aldrich
+    - //Duration of adding chemical
+        0
+    - //Additional comment
+Chemical Solvent (block 1):
+    - Timestamp
+        asdf
+    - Chemical name
+        Ethanol
+    - Amount (g)
+        3.46
+    - Purity (%)
+        99
+    - //CAS number
+    - //Distributor
+        Merck
+    - //Duration of adding chemical (s)
+        10
+    - //Additional comment
+        dropwise
+Chemical Additives (block 1):
+    - Timestamp
+        asdf
+    - Chemical name
+        Selfmade batch (HCl/Ethanol) --> recipe
+    - Amount (g)
+        3.46
+    - //CAS number
+    - //Purity (%)
+    - //Distributor
+    - //Duration of adding chemical
+        10
+    - //Additional comment
+        dropwise
+Chemical Solvent (block 2):
+    - Timestamp
+        asdf
+    - Chemical name
+        Water
+    - Amount (g)
+        0.9
+    - Purity (%)
+        asdf
+    - //CAS number
+    - //Distributor
+    - //Duration of adding chemical
+    - //Additional comment
+
+Measurement Temperature (block 1):
+    - Value (°C)
+        25
+Measurement Humidity (block 1):
+    - Value (%)
+        asdf
+
+Setting Closing/opening system (block 1):
+    - Close system (True/False)
+        True
+Setting Stirring speed (block 1):
+    - Value (rpm)
+        100
+
+Chemical Solvent (block 3):
+    - Timestamp
+        asdf
+    - Chemical name
+        Ethanol
+    - Amount (g)
+        11.52
+    - Purity (%)
+        99
+    - //CAS number
+    - //Distributor
+        Merck
+    - //Duration of adding chemical
+        20
+    - //Additional comment
+        dropwise
+Chemical Additives (block 2):
+    - Timestamp
+        asdf
+    - Chemical name
+        Selfmade batch (Ammonia water solution) --> recipe
+    - Amount (g)
+        2.35
+    - //CAS number
+    - //Purity (%)
+    - //Distributor
+    - //Duration of adding chemical
+    - //Additional comment
+
+Setting Stirring speed (block 2):
+    - Value (rpm)
+        0
+Setting Experiment vessel (block 2):
+    - Volume (mL)
+        50
+    - material
+        PTFE
+    - //Additional comment
+Setting Closing/opening system (block 2):
+    - Close system (True/False)
+        True
+
+Drying/Aging (block 1):
+    - Temperature (°C)
+        50
+    - Time (s)
+        3600
+    - Equipment ID
+        asdf
+    - //Pressure
+
+Setting Temperature (block 1):
+    - Value (°C)
+        25
+
+Setting Washing (block 1):
+    - Timestamp
+        asdf
+    - Chemical name
+        ethanol
+    - Purity
+        98
+    - //CAS number
+    - //Distributor
+        Sigma Aldrich
+    - //Amount (g)
+        25
+
+Setting Washing (block 2):
+    - Timestamp
+        asdf
+    - Chemical name
+        Ethanol/Hexane
+    - Purity
+        asdf
+    - //CAS number
+    - //Distributor
+    - //Amount (g)
+
+Setting Washing (block 3):
+    - Timestamp
+        asdf
+    - Chemical name
+        Ethanol/Hexane
+    - Purity
+        asdf
+    - //CAS number
+    - //Distributor
+    - //Amount (g)
+
+Setting Closing/opening system (block 3):
+    - Close system (True/False)
+        False
+Drying/Aging (block 2):
+    - Temperature
+        25
+    - Time (s)
+        7200
+    - Equipment ID
+    - //Pressure

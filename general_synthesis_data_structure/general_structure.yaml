@@ -43,6 +43,12 @@
         - serial number:
         # Device specific.
         - device_standardmeasurement: 1, 3, 7
+    
+    - chemical?:
+        
+    
+
+- substrate
 
 - process:
     # description of the process including, starting material, pre-process and post-process steps
@@ -55,8 +61,14 @@
         - general process parameters: # paramters that stay constant
         # main proces of sample preparation
         - steps of synthesis process:
-            - set parameter values
-            - actual parameter values
+            - precusors/chemical:
+                - reference to chemical:
+                - timestamp:
+                - amount:
+            - device:
+                - refernce to device:
+                - set parameter values:
+                - actual parameter values:
             - in situ measurement (from link to characterization section)
         
     - post-process:
