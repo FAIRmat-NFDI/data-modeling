@@ -13,19 +13,19 @@
 
 
 category: application
-doc: "Draft application definition for temperature dependent IV curve measurements. 
+doc: "Draft application definition for temperature dependent IV curve measurements.
       In this application definition, times should be specified always together with a UTC offset."
 symbols:
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
-  N_data_points: "Number of elements in the scanned voltage array" 
+  N_data_points: "Number of elements in the scanned voltage array"
   N_variables: "Number of additional variables that are changed with the temperature (can be understood as columns next to the temperature)"
   N_different_temperatures: "Number of different temperatures that are set"
 
 (NXIVtemp):
   (NXentry):
     doc: "This is the application definition describing temperature dependent IV curve measurements.
-          For this a temperature is set. After reaching the temperature a voltage sweep is performed 
-          and for each voltage a current is measured. Then the next desired temperature is set and 
+          For this a temperature is set. After reaching the temperature a voltage sweep is performed
+          and for each voltage a current is measured. Then the next desired temperature is set and
           an IV measurement is performed.\n
 
       The application definition defines:
@@ -78,7 +78,7 @@ symbols:
       affiliation:
         doc: "Name of the affiliation of the user at the point in time when the
               experiment was performed."
-      address: 
+      address:
         doc: "Full address (street, street number, ZIP, city, country) of the user's affiliation."
       email:
         doc: "Email address of the user."
@@ -94,34 +94,34 @@ symbols:
 
       IVvoltage_source(NXsensor):
         doc: "Specify the used voltage source used in the voltage sweep for the IV measurement."
-        model: 
+        model:
           exists: optional
           doc: "Free-text desribing the model and make of the voltage source which is used for the IV sweep measurement"
-        name: 
+        name:
           exists: optional
           doc: "Custom name of the voltage source for the IV sweep given by the user/institution"
         measurement:
           exists: optional
           doc: "Free-text describing the measurement performed in a few words"
-        type: 
+        type:
           exists: optional
-          doc: "Free-text describing the type of voltage setting: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism." 
-        
+          doc: "Free-text describing the type of voltage setting: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism."
+
       IVcurrent_source(NXsensor):
         doc: "Specify the used current source used in the voltage sweep for the IV measurement."
-        model: 
+        model:
           exists: optional
           doc: "Free-text desribing the model and make of the current source which is used for the IV sweep measurement"
-        name: 
+        name:
           exists: optional
-          doc: "Custom name of the current source for the IV sweep given by the user/institution" 
+          doc: "Custom name of the current source for the IV sweep given by the user/institution"
         measurement:
           exists: optional
-          doc: "Free-text describing the measurement performed in a few words" 
-        type: 
+          doc: "Free-text describing the measurement performed in a few words"
+        type:
           exists: optional
-          doc: "Free-text describing the type of current measuring: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism." 
-        
+          doc: "Free-text describing the type of current measuring: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism."
+
 
       calibration(NXsubentry):
         exists: optional
@@ -129,27 +129,27 @@ symbols:
         calibration_time(NX_DATE_TIME):
           doc: ISO8601 datum when calibration was last performed before this measurement. UTC offset should be specifiec.
           # NX_DATE_TIME is the ISO8601 format, possibly with time zone
-        
+
 
       temperature_control(NXsubentry):
         exists: optional
         doc: "Describes the system for controlling the temperature if temperature control was used."
         type:
           doc: "What kind of temperature control was used? PID, custom temp control?"
-        PID_settings:
+        PID_settings(NXsubentry):
           exists: optional
           doc: "K_p, K_i, and K_d values used for the temperature control"
           K_p_value(NX_NUMBER):
-            doc: "Proportional term. The proportional term produces an output value that is proportional to the current error value. 
-            The proportional response can be adjusted by multiplying the error by a constant Kp, called the proportional gain constant."
+            doc: "Proportional term. The proportional term produces an output value that is proportional to the current error value.
+              The proportional response can be adjusted by multiplying the error by a constant Kp, called the proportional gain constant."
           K_i_value(NX_NUMBER):
-            doc: "The contribution from the integral term is proportional to both the magnitude of the error and the duration of the error. 
-            The integral in a PID controller is the sum of the instantaneous error over time and gives the accumulated offset that should have 
-            been corrected previously. The accumulated error is then multiplied by the integral gain (Ki) and added to the controller output"
+            doc: "The contribution from the integral term is proportional to both the magnitude of the error and the duration of the error.
+              The integral in a PID controller is the sum of the instantaneous error over time and gives the accumulated offset that should have
+              been corrected previously. The accumulated error is then multiplied by the integral gain (Ki) and added to the controller output"
           K_d_value(NX_NUMBER):
-            doc: "The derivative of the process error is calculated by determining the slope of the error over time and multiplying this rate 
-            of change by the derivative gain K_d. The magnitude of the contribution of the derivative term to the overall control action is 
-            termed the derivative gain, K_d"
+            doc: "The derivative of the process error is calculated by determining the slope of the error over time and multiplying this rate
+              of change by the derivative gain K_d. The magnitude of the contribution of the derivative term to the overall control action is
+              termed the derivative gain, K_d"
 
         temp_sensor:
           doc: "Describes the temperature sensor that was used"
@@ -157,19 +157,20 @@ symbols:
         other_temp_sensor:
           exists: optional
           doc: "If you specified 'other' as temperature sensor, please write down what it is."
-        
-        temp_calculation: 
+
+        temp_calculation(NXsubentry):
           exists: optional
           doc: "Describes the way the temperature is determined from a measured value"
           raw_temp_data(NX_NUMBER):
             exists: optional
-            rank: 1
-            dim: [[1, N_raw_temp_data]]
+            dimensions:
+              rank: 1
+              dim: [[1, N_raw_temp_data]]
             doc: "Data of the most principal measurement of the temperature. For example resistance of a Pt1000."
           conversion_function:
             exists: optional
             doc: "Algebraic function to determine temperature from the raw_temp_data. All values are in SI units."
-          
+
     (NXsample):
       doc: "Properties of the sample, its history, the sample environment and
             experimental conditions (e.g. surrounding medium, temperature, pressure etc.),
@@ -202,22 +203,22 @@ symbols:
           # N_variables would be "I, V and Time" in this case
           # Describes the following type of data structure
           # Temp
-          # 100    
+          # 100
           #     I   V   Time
           #     1   2   0
           #     2   3   1
           #     4   5   2
-          # 200    
+          # 200
           #     I   V   Time
           #     1   2   5
           #     2   3   6
           #     4   5   7
-          # 300    
+          # 300
           #     I   V   Time
           #     1   2   8
           #     2   3   9
           #     4   5   10
-     
+
 
       environment_conditions:
         exists: optional
@@ -229,10 +230,10 @@ symbols:
               The specified variable has to be number_of_runs long,
               providing the parameters for each data set."
         enumeration: [temperature]
-        
+
     plot(NXdata):
       exists: optional
-      doc: "A default view of the data. The current (y-axis) should be plotted against 
+      doc: "A default view of the data. The current (y-axis) should be plotted against
         the voltage (x-axis) with color coding for the temperature of each IV-curve"
       \@axes:
         doc: "We recommend to use voltage as a default attribute"
