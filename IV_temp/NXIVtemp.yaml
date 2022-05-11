@@ -1,16 +1,10 @@
-#05/2022
+# May 2022
 #a draft version of a NeXus application definition for temperature dependent IV curve measurements
 
 # the document has the following main elements:
 # instrument used and its characteristics
 # measured data, the discription of the sample and what was measured about it
 # derived parameters: extra parameters derived in the measurement software
-
-# one would need a Class/ separate entry for the sample description which can link to and should contain a full description of the composition.
-# A free description as text might be not enough or unclear. Especially if one deals with many layer structured samples
-#
-# Comments are moved to the Development_notes.md file
-
 
 category: application
 doc: "Draft application definition for temperature dependent IV curve measurements.
@@ -55,17 +49,28 @@ symbols:
       exists: recommended
       doc: "UTC offset should be specifiec."
 
-    program:
+    # program: # Maybe change to NXprocess - see below
+    #   exists: optional
+    #   doc: "Commercial or otherwise defined given name to the program that was used to
+    #     generate the results file(s) with measured data and metadata (or a link to the instrument software)."
+    #   \@version:
+    #     doc: "Either version with build number, commit hash, or description of a
+    #       (online) repository where the source code of the program and build
+    #       instructions can be found so that the program can be configured in such
+    #       a way that result files can be created ideally in a deterministic manner."
+    #   \@url:
+    #     doc: "Website of the software."
+    
+    (NXprocess):
       exists: optional
-      doc: "Commercial or otherwise defined given name to the program that was used to
-        generate the results file(s) with measured data and metadata (or a link to the instrument software)."
-      \@version:
+      doc: "Define the program that was used to generate the results file(s) with measured data and metadata."
+      program:
+        doc: "Commercial or otherwise defined given name of the program (or a link to the instrument software)."
+      version:
         doc: "Either version with build number, commit hash, or description of a
           (online) repository where the source code of the program and build
           instructions can be found so that the program can be configured in such
           a way that result files can be created ideally in a deterministic manner."
-      \@url:
-        doc: "Website of the software."
 
     operator(NXuser):
       # we want to have several possible values, but one is required
@@ -122,54 +127,59 @@ symbols:
           exists: optional
           doc: "Free-text describing the type of current measuring: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism."
 
-
-      calibration(NXsubentry):
+      calibration(NXsubentry): # Alternative to NXsubentry?
         exists: optional
         doc: "Calibration of the temperature sensor is possible"
         calibration_time(NX_DATE_TIME):
-          doc: ISO8601 datum when calibration was last performed before this measurement. UTC offset should be specifiec.
+          doc: "ISO8601 datum when calibration was last performed before this measurement. 
+            UTC offset should be specifiec."
           # NX_DATE_TIME is the ISO8601 format, possibly with time zone
-
 
       temperature_control(NXsubentry):
         exists: optional
         doc: "Describes the system for controlling the temperature if temperature control was used."
         type:
           doc: "What kind of temperature control was used? PID, custom temp control?"
-        PID_settings(NXsubentry):
+        PID_settings(NXenvironment): #CE: NXenvironment: Parameters for controlling external conditions
           exists: optional
-          doc: "K_p, K_i, and K_d values used for the temperature control"
+          doc: "Specify the settings of the PID temperature controller: 
+            K_p, K_i, and K_d values used for the temperature control"
           K_p_value(NX_NUMBER):
-            doc: "Proportional term. The proportional term produces an output value that is proportional to the current error value.
-              The proportional response can be adjusted by multiplying the error by a constant Kp, called the proportional gain constant."
+            doc: "Proportional term. The proportional term produces an output value that is proportional 
+              to the current error value. The proportional response can be adjusted by multiplying the 
+              error by a constant Kp, called the proportional gain constant."
           K_i_value(NX_NUMBER):
-            doc: "The contribution from the integral term is proportional to both the magnitude of the error and the duration of the error.
-              The integral in a PID controller is the sum of the instantaneous error over time and gives the accumulated offset that should have
-              been corrected previously. The accumulated error is then multiplied by the integral gain (Ki) and added to the controller output"
+            doc: "The contribution from the integral term is proportional to both the magnitude of the 
+              error and the duration of the error. The integral in a PID controller is the sum of the 
+              instantaneous error over time and gives the accumulated offset that should have been 
+              corrected previously. The accumulated error is then multiplied by the integral gain (Ki) 
+              and added to the controller output"
           K_d_value(NX_NUMBER):
-            doc: "The derivative of the process error is calculated by determining the slope of the error over time and multiplying this rate
-              of change by the derivative gain K_d. The magnitude of the contribution of the derivative term to the overall control action is
+            doc: "The derivative of the process error is calculated by determining the slope of the 
+              error over time and multiplying this rate of change by the derivative gain K_d. The 
+              magnitude of the contribution of the derivative term to the overall control action is
               termed the derivative gain, K_d"
 
-        temp_sensor:
-          doc: "Describes the temperature sensor that was used"
+        temp_sensor_type:
+          doc: "Specify the temperature sensor that was used"
           enumeration: [thermocouple, thermistor, RTD, other]
         other_temp_sensor:
           exists: optional
           doc: "If you specified 'other' as temperature sensor, please write down what it is."
 
-        temp_calculation(NXsubentry):
+        # temp_calculation(NXsubentry): #CE: Which base class could be use here? NXlog 
+        #   exists: optional
+        #   doc: "Describes the way the temperature is determined from a measured value"
+        raw_temp_data(NX_NUMBER):
           exists: optional
-          doc: "Describes the way the temperature is determined from a measured value"
-          raw_temp_data(NX_NUMBER):
-            exists: optional
-            dimensions:
-              rank: 1
-              dim: [[1, N_raw_temp_data]]
-            doc: "Data of the most principal measurement of the temperature. For example resistance of a Pt1000."
-          conversion_function:
-            exists: optional
-            doc: "Algebraic function to determine temperature from the raw_temp_data. All values are in SI units."
+          dimensions:
+            rank: 1
+            dim: [[1, N_raw_temp_data]]
+          doc: "Data of the most principal measurement of the temperature. For example resistance of a Pt1000."
+        conversion_function:
+          exists: optional
+          doc: "Algebraic function that is used to determine temperature from the raw_temp_data. 
+            All values should be given in SI units."
 
     (NXsample):
       doc: "Properties of the sample, its history, the sample environment and
@@ -181,9 +191,9 @@ symbols:
       sample_history:
         doc: "Ideally, a reference to the location or a unique (globally persistent)
               identifier (e.g.) of e.g. another file which gives as many as possible
-              details of the material, its microstructure. In the case that such a detailed
-              history of the sample is not available, use this field as a free-text
-              description to specify details of the sample and its preparation."
+              details of the material, its microstructure. In the case that such a 
+              detailed history of the sample is not available, use this field as a 
+              free-text description to specify details of the sample and its preparation."
 
       preparation_date(NX_DATE_TIME):
         exists: recommended
@@ -192,8 +202,7 @@ symbols:
 
       data_identifier(NX_NUMBER):
         doc: "An identifier to correlate data to the experimental conditions,
-              if several were used in this measurement;
-              typically an index of 0 - N"
+              if several were used in this measurement; typically an index of 0 - N"
 
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type."
@@ -222,9 +231,11 @@ symbols:
 
       environment_conditions:
         exists: optional
-        doc: "External parameters that have influenced the sample."
+        doc: "Information about external parameters that have influenced the sample."
 
-      varied_parameters:
+      varied_parameters: 
+        #CE: number_of_runs is not defined, but should be N_different_temperatures.
+        #   not sure if this block is really needed.
         exists: optional
         doc: "Indicates which parameter was changed. Its definition must exist below.
               The specified variable has to be number_of_runs long,
