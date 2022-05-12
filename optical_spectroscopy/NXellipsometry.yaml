@@ -14,11 +14,21 @@
 
 
 category: application
-#name: NXellipsometry
-doc: "Draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry. 
-      In this application definition, times should be specified always together with a UTC offset."
+doc: |
+  Ellipsometry, complex systems, up to variable angle spectroscopy.
+  
+  Information on ellipsometry is provided, e.g. in:
+  - H. Fujiwara, Spectroscopic ellipsometry: principles and applications, John Wiley & Sons, 2007.
+  - R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light, North-Holland Publishing Company, 1977.
+  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry, William Andrew, 2005.
+  
+  Open acces sources:
+  - https://www.angstromadvanced.com/resource.asp
+  - https://pypolar.readthedocs.io/en/latest/
+
 symbols:
-  doc: Variables used throughout the document, e.g. dimensions and important parameters
+  # normal quoated text is flattened out in YAML
+  doc: "Variables used throughout the document, e.g. dimensions and important parameters"
   N_wavelength: Size of the energy / wavelength vector used
   N_variables: How many variables are saved in a measurement (e.g. Psi and Delta, Mueller matrix)
   N_angles: Number of incident angles used
@@ -29,40 +39,61 @@ symbols:
 (NXellipsometry):
   (NXentry):
     # exists: required -- is the default
-    doc: "This is the application definition describing ellipsometry experiments.
-          Such experiments may be as simple as identifying how a reflected
-          beam of light with a single wavelength changes its polarization state,
-          to a variable angle spectroscopic ellipsometry experiment.\n
+    # The first line of this doc is a summary; second line needs the indentation
+    # to be taken as an empty line, part of the doc!
+    doc: | #block quote allows a properly formated text with new lines and indents
+      This is the application definition describing ellipsometry experiments.
+      
+      Such experiments may be as simple as identifying how a reflected
+      beam of light with a single wavelength changes its polarization state,
+      to a variable angle spectroscopic ellipsometry experiment.
 
       The application definition defines:
-        - elements of the experimental instrument
-        - calibration information if available
-        - parameters used to tune the state of the sample
-        - sample description"
+      - elements of the experimental instrument
+      - calibration information if available
+      - parameters used to tune the state of the sample
+      - sample description
 
     definition:
       doc: "An application definition for ellipsometry."
       \@version:
         doc: "Version number to identify which definition of this application definition
              was used for this entry/data."
+        # New approach of NIAC: version controlled application definitions.
+        # taken this from ARPES
       \@url:
-        doc: URL where to find further material (documentation, examples) relevant to the application definition
+        doc: "URL where to find further material (documentation, examples) relevant to
+          the application definition"
       enumeration: [NXellipsometry]
 
+    # definition:
+    #   doc: "FAIRmat-specific candidate proposal for an application definition
+    #         exemplifying ellipsometry. For example:
+    #         https://gitlab.mpcdf.mpg.de/nomad-lab/areab-appdef/-/blob/spectroscopic-ellipsometry-consolidation/optical_spectroscopy"
+    #   #exists: optional
+    #   \@version:
+    #     doc: "Ideally version with build number are commit hash of the application
+    #       definition. If not available a free-text description."
+    #   \@url:
+    #     doc: "URL where to find further material (documentation, examples) relevant
+    #       to the application definition"
+
     experiment_identifier:
-      doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
-        - The identifier is usually defined by the facility or principle investigator.
-        - The identifier enables to link experiments to e.g. proposals."
+      doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier. i) The identifier is usually defined by the facility or principle investigator. ii) The identifier enables to link experiments to e.g. proposals."
 
     experiment_description:
+      exists: recommended
+      doc: "A free-text description of the experiment. What is the aim of the experiment?
+        The general procedure."
 
     start_time(NX_DATE_TIME):
-      doc: "UTC offset should be specifiec."
+      doc: "Start time of the experiment. UTC offset should be specified."
 
     program:
       exists: optional
-      doc: "Commercial or otherwise defined given name to the program that was used to
-        generate the results file(s) with measured data and metadata (or a link to the instrument software)."
+      doc: "Commercial or otherwise defined given name to the program that was used
+        to generate the results file(s) with measured data and metadata (or a link
+        to the instrument software)."
       \@version:
         doc: "Either version with build number, commit hash, or description of a
           (online) repository where the source code of the program and build
@@ -78,25 +109,28 @@ symbols:
             investigator who performed this experiment.
             Adding multiple users if relevant is recommended."
       name:
-
+        doc: "Name of the user."
       affiliation:
         doc: "Name of the affiliation of the user at the point in time when the
               experiment was performed."
-      address:
+      address: #CE: added doc strings
+        doc: "Full address (street, street number, ZIP, city, country) of the user's affiliation."
       email:
+        doc: "Email address of the user."
       orcid:
         exists: recommended
-
+        doc: "Author ID defined by https://orcid.org/."
       telephone_number:
-        # recommended is a special case
         exists: recommended
+        doc: "Official telephone number of the user."
+
 
     (NXinstrument):
       doc: "General properties of the ellipsometry equipment"
       model:
         doc: The name of the instrument
-        \@version: 
-          doc: "The used version of the hardware if available. 
+        \@version:
+          doc: "The used version of the hardware if available.
                 If not a commercial instrument use date of completion of the hardware."
       company:
         exists: optional
@@ -127,7 +161,6 @@ symbols:
         doc: "Specify the angular spread caused by the focussing probes"
         unit: NX_ANGLE
       ellipsometry_type:
-        # required
         doc: "What type of ellipsometry was used? See Fujiwara Table 4.2"
         enumeration: [rotating analyzer, rotating analyzer with analyzer compensator,
                       rotating analyzer with polarizer compensator,
@@ -136,15 +169,18 @@ symbols:
                       modulator on analyzer side, dual compensator, phase modulation,
                       imaging ellipsometry, null ellipsometry]
 
+      calibration_status(NX_DATE_TIME):
+        doc: "Was a calibration done. If yes, when was it done?"
+        enumeration: [calibration time provided, no calibration, within 1 hour, within 1 day, within 1 week]
+
       calibration(NXsubentry):
         exists: recommended
         doc: "Ellipsometers require regular calibration to adjust the hardware
               parameters for proper zero values and background light compensation."
         calibration_time(NX_DATE_TIME):
-          doc: ISO8601 datum when calibration was last performed before this measurement. UTC offset should be specifiec.
-          # NX_DATE_TIME is the ISO8601 format, possibly with time zone
-          #alternative (NX_CHAR) and then add
-          #enumeration: [no calibration, within 1 hour, within 1 day, within 1 week]
+          exists: optional
+          doc: "If calibtration status is 'calibration time provided', specify the ISO8601 datum when calibration was
+            last performed before this measurement. UTC offset should be specified."
 
         calibration_data(NXsubentry):
           doc: "Arrays which provide the measured calibration data.
@@ -162,7 +198,8 @@ symbols:
                   Jones vector: N_variables = 4, Mueller martix -> N_variables= 16, etc."
             enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix, Mueller matrix, not provided]
           calibration_angle_of_incidence(NX_NUMBER):
-            doc: "angle(s) of incidence used during the calibration measurement (excluding straight through mode)"
+            doc: "angle(s) of incidence used during the calibration measurement
+              (excluding straight through mode)"
             unit: NX_ANGLE
             dimensions:
               rank: 1
@@ -208,19 +245,18 @@ symbols:
               (Cartesian) coordinate system and at an orientation defined
               by three Euler angles (alpha, beta, gamma).
               The stage may be motorized or manual, special for liquids or gas environment."
-              #CE: add 'vacuum'
         enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
-        exists: recommended #CE: why not required?
         description:
+          doc: "A free-text field to provide information about the stage."
           exists: recommended
-        (NXtransformations): #CE: How should the vectors be entered?
+        (NXtransformations):
           exists: recommended
           doc: "The stage coordinate system vs. the incident beam.
                 The Z-axis of the stage is considered to point along the
                 normal of the substrate (bottom reflecting surface) from the stage
                 towards the general direction of the light source. The beam
                 comes with angle of incidence towards this Z-axis, but in opposite
-                direction, thus they are connected with a rotation of 
+                direction, thus they are connected with a rotation of
                 180 - angle of incidence (in degrees).
 
                 This transformation brings us from the NEXUS coordinates to the stage coordinates.
@@ -241,17 +277,18 @@ symbols:
                   plane of incidence'."
 
 
-      window(NXaperture): #CE: could add 'UHV' and 'cryostat'
+      window(NXaperture):
         exists: optional
-        doc: "For environmental measurements, the environment (liquid, vapor etc.)
-              is enclosed in a cell, which has windows both in the direction
-              of the source and the detector (looking from the sample). These
-              windows also add a phase shift to the light altering the measured
-              signal. This shift has to be corrected based on measuring a known
-              sample in the environmental cell."
+        doc: "For environmental measurements, the environment (liquid, vapor,
+              vacuum etc.) is enclosed in a cell or cryostat, which has windows
+              both in the direction of the source and the detector (looking from
+              the sample). These windows also add a phase shift to the light
+              altering the measured signal. This shift has to be corrected based
+              on measuring a known sample in the environmental cell."
 
         material(NX_CHAR):
-          doc: the material of the window
+          doc: The material of the window
+          # add enumeration: [quartzglass, diamond, etc.]?
 
         thickness(NX_NUMBER):
           doc: Thickness of the window
@@ -278,7 +315,8 @@ symbols:
               rank: 1
               dim: [[1, N_wavelength]]
 
-          data(NX_NUMBER):
+          data(NX_NUMBER): #Should we make this recommended instead of required, if window calibration data
+            # are not available but the user would still like to specify the window properties?
             doc: "Recorded data of a reference surface with and without window / medium."
             unit: NX_UNITLESS
             #can one specify the dimensions of these calibration data?
@@ -337,6 +375,7 @@ symbols:
               is to allow materials database to parse the relevant elements without
               having to interpret the sample history or other fields."
       sample_name:
+        doc: "Descriptive name of the sample"
 
       sample_history:
         doc: "Ideally, a reference to the location or a unique (globally persistent)
@@ -360,14 +399,14 @@ symbols:
 
 
       data_identifier(NX_NUMBER):
-        doc: "A identifier to correlate data to the experimental conditions,
+        doc: "An identifier to correlate data to the experimental conditions,
               if several were used in this measurement;
               typically an index of 0 - N"
         #what about uniqueness of the identifier?
         #  -- append it to the experiment identifier...
 
       data_type:
-        doc: "Select which type of data was recorded, for example Psi and Delta 
+        doc: "Select which type of data was recorded, for example Psi and Delta
               (see: https://en.wikipedia.org/wiki/Ellipsometry#Data_acquisition).
               It is possible to have multiple selections. Data types may also be converted
               to each other, e.g. a Mueller matrix contains N,C,S data as well.
@@ -381,9 +420,6 @@ symbols:
       #  #we should use maybe in the future again the concepts of symbols
 
       wavelength(NX_NUMBER):
-        #CE: Will this be automatically converted if, e.g. data are given in eV?
-        #TH: the reader can make sure we have only one type, then analysis programs can
-        #convert freely
         doc: "Wavelength value(s) used for the measurement.\n
               An array of 1 or more elements. Length defines N_wavelength"
         unit: NX_LENGTH
@@ -395,13 +431,11 @@ symbols:
         doc: "Resulting data from the measurement, described by data type.\n
           Minimum two columns containing Psi and delta, or for the normalized Mueller matrix,
           it may be 16 (or 15 if 1,1 is all 1)."
-        #data(NX_NUMBER):
         dimensions:
           rank: 5
           dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
-      uncertainty(NX_NUMBER):
-        # TH: maybe we can use a better name, e.g. data_error, measured_error, etc.?
+      data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
               The structure is the same as for the measured data."
         exists: recommended
@@ -421,7 +455,7 @@ symbols:
               other side. Both boundaries are assumed infinite in the model.
               Here define the name of the material (e.g. water, air, etc.)."
 
-      medium_refractive_indices(NX_NUMBER): #CE: we want to use NX_COMPLEX when it is available
+      medium_refractive_indices(NX_NUMBER): #CE: changed NX_COMPLEX to NX_NUMBER....
         exists: optional
         doc: "Array of pairs of complex refractive indices of the medium for
               every measured wavelength.
@@ -452,7 +486,7 @@ symbols:
               providing the parameters for each data set."
         enumeration: [optical excitation, voltage, temperature, pH, stress, stage positions]
 
-      optical_excitation(NXsubentry): #CE: Probably some parameters need to be added at some point
+      optical_excitation(NXsubentry):
         exists: optional
         #is a boolean sufficient as a storage container?
         doc: "Was the sample modified using an optical source? Describe in this group
@@ -475,9 +509,11 @@ symbols:
           enumeration: [cw, pulsed]
         pulse_length(NX_NUMBER):
           exists: optional
+          doc: "Duration of one laser pulse."
           unit: NX_TIME
         repetition_rate(NX_NUMBER):
           exists: optional
+          doc: "Repetition rate of the laser."
           unit: NX_FREQUENCY
         excitation_duration(NX_TIME):
           exists: optional
@@ -488,6 +524,7 @@ symbols:
           unit: NX_ENERGY
         excitation_power(NX_NUMBER):
           exists: optional
+          doc: "The power of one laser pulse."
           unit: NX_ENERGY
 
       voltage(NX_NUMBER):
@@ -499,16 +536,10 @@ symbols:
         exists: optional
         doc: "Temperature of the sample (sample holder, medium)"
         unit: NX_TEMPERATURE
-        #alternative:
-        #  \@nx_class: nx_char
-        #  enumeration: [room temperature, RT]
       pH(NX_NUMBER):
         exists: optional
         doc: "pH of medium (measured or set)"
         unit: NX_UNITLESS
-        #alternative:
-        #  \@nx_class: nx_char
-        #  enumeration: [neutral, undefined]
       pressure(NX_NUMBER):
         exists: optional
         doc: "Pressure of the environment of the sample."
@@ -534,19 +565,18 @@ symbols:
         # why not use stress or strain tensor applied on sample?
 
     # derived parameters
-    derived_parameters(NXcollection):
+    derived_parameters(NXprocess):
       exists: optional
-      # use NX_process?
-      doc: What parameters are derived from the above data
+      doc: "What parameters are derived from the above data."
       depolarization(NX_NUMBER):
-        doc: light loss due to depolarization as a value in [0-1]
+        exists: optional
+        doc: "Light loss due to depolarization as a value in [0-1]."
         unit: NX_UNITLESS
 
     plot(NXdata):
       exists: optional
-      doc: "A default view of the data, in this case wavelength vs. Psi and the angles of
-            incidence. If Psi does not exist, use other Müller matrix elements, such as N,
-            C and S."
+      doc: "A default view of the data, in this case Psi vs. wavelength and the angles of incidence.
+            If Psi does not exist, use other Müller matrix elements, such as N, C and S."
       \@axes:
         doc: "We recommend to use wavelength as a default attribute, but it can be
               replaced in the case of not full spectral ellipsometry to any suitable
