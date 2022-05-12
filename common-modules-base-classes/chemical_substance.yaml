@@ -8,7 +8,7 @@ doc: "Draft base class to describe a chemical element)"
 (NXchemical_substance):
   doc: |
     A base class draft to describe a chemical substance
-
+    
     In [Wikipedia](https://en.wikipedia.org/wiki/Chemical_substance) you find the definition
     as: a form of matter having constant chemical composition and characteristic properties.
     It cannot be separated to its constituent elements by physical means, that is without
@@ -17,7 +17,7 @@ doc: "Draft base class to describe a chemical element)"
     Materials described in this class are possible input and output components of chemical reactions
     e.g. in chemical synthesis processes.
     This base class can be also used to describe any components of samples used for measurements.
-
+    
     An important usage of this class is to form a mixture, e.g. a solution or alloy from several
     substances. Therefore space is provided here to specify an amount and resulted concentration
     of this substance in that mixture formed. When looking only on this class, it may be not

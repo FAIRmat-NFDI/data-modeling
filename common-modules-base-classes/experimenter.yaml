@@ -7,7 +7,7 @@ doc: "Base class to contain information about people doing experiments"
 (NXexperimenter):
   doc: |
     A base class to collect information about people doing experiments.
-
+    
     This base class can be used in all the places where information is spelled out
     about who is doing experiments.
     Typical information includes:

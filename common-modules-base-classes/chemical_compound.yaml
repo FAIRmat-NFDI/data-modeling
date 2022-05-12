@@ -8,7 +8,7 @@ doc: "Draft base class to describe a chemical element)"
 (NXchemical_compound):
   doc: |
     A base class draft to describe a chemical compound formed from chemical substances
-
+    
     This class describes any materials used for experiments formed by a set of substances,
     which may be in any state, that is liquid, solid, etc. form.
 
