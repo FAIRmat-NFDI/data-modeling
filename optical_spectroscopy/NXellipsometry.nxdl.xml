@@ -324,7 +324,7 @@ Last, provide the rotations of the sample</doc>
 				<doc>Ideally, a reference to the location or a unique (globally persistent) identifier (e.g.) of e.g. another file which gives as many as possible details of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample is not available, use this field as a free-text description to specify details of the sample and its preparation.</doc>
 			</field>
 			<field name="preparation_date" recommended="true" type="NX_DATE_TIME">
-				<doc>ISO 8601 date with time zone specified.</doc>
+				<doc>ISO 8601 date with time zone specified. UTC offset should be specifiec.</doc>
 			</field>
 			<field name="layer_structure" type="NX_CHAR">
 				<doc>Qualitative description of the layer structure for the sample. For example: Si/native oxide/thermal oxide/polymer/peptide</doc>

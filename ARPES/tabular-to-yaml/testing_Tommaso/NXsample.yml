@@ -1,0 +1,47 @@
+category: base
+doc: "Draft extension of NXsample to include fields to describe samples in photoemission
+  experiments."
+(NXsample):
+  sample_id(NX_CHAR):
+    doc: "Identification number or signatures of the sample used."
+  sample_history(NXnote):
+    doc: "A descriptor to keep track of the treatment of the sample before entering
+      the photoemission experiment. Ideally, a full report of the previous operations,
+      in any format (NXnote allows to add pictures, audio, movies). Alternatively,
+      a reference to the location or a unique identifier or other metadata file. In
+      the case these are not available, free-text description"
+  state(NX_CHAR):
+    doc: "Physical state of the sample"
+  purity(NX_FLOAT):
+    doc: "Chemical purity of the sample"
+    unit: NX_UNITLESS
+  orientation(NX_CHAR):
+    doc: "Surface termination of the sample (if crystalline)"
+  layer(NX_CHAR):
+    doc: "Number of layers of the sample (e.g. bulk, monolayer, pentalayer, etc.)"
+  chemical_name(NX_CHAR):
+    doc: "Full chemical name of the sample"
+  chem_id_cas(NX_CHAR):
+    doc: "CAS registry number of the sample chemical content."
+  gas(NX_CHAR):
+    doc: "Gases might be fluxed on the surface for various reasons. Chemical designation,
+      or residual."
+  surface_dopant(NX_CHAR):
+    doc: "Element of evaporated surface dopant such as alkali or other"
+  surface_dopant_coverage(NX_FLOAT):
+    doc: "Nominal thickness of the evaporated dopant"
+    unit: NX_LENGTH
+  bias(NX_FLOAT):
+    doc: "Voltage applied to sample and sample holder."
+    unit: NX_VOLTAGE
+  growth_method(NX_CHAR):
+    doc: "Sample growth method (e. g. molecular beam epitaxy, chemical vapor deposition
+      etc.)"
+  vendor(NX_CHAR):
+    doc: "Name of the sample vendor (company or research group)"
+  substrate_material(NX_CHAR):
+    doc: "Material of the substrate in direct contact with the sample."
+  substrate_state(NX_CHAR):
+    doc: "Physical state of the substrate, similar options to sample_state"
+  notes(NXnote):
+    doc: "Further notes."

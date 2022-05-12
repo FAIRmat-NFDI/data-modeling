@@ -1,0 +1,10 @@
+category: base
+doc: "Draft extension of NXprocess to include fields to describe the processing of
+  photoemission data."
+(NXprocess):
+  REGISTRATION(NXregistration):
+    doc: "Class to describe the operations of image registration"
+  DISTORTION(NXdistortion):
+    doc: "class to describe the operations of image distrortion correction"
+  CALIBRATION(NXcalibration):
+    doc: "class to describe the operations of calibration"

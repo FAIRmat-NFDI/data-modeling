@@ -1,0 +1,250 @@
+# May 2022
+#a draft version of a NeXus application definition for temperature dependent IV curve measurements
+
+# the document has the following main elements:
+# instrument used and its characteristics
+# measured data, the discription of the sample and what was measured about it
+# derived parameters: extra parameters derived in the measurement software
+
+category: application
+doc: "Draft application definition for temperature dependent IV curve measurements.
+      In this application definition, times should be specified always together with a UTC offset."
+symbols:
+  doc: "Variables used throughout the document, e.g. dimensions and important parameters"
+  N_data_points: "Number of elements in the scanned voltage array"
+  N_variables: "Number of additional variables that are changed with the temperature (can be understood as columns next to the temperature)"
+  N_different_temperatures: "Number of different temperatures that are set"
+
+(NXIVtemp):
+  (NXentry):
+    doc: "This is the application definition describing temperature dependent IV curve measurements.
+          For this a temperature is set. After reaching the temperature a voltage sweep is performed
+          and for each voltage a current is measured. Then the next desired temperature is set and
+          an IV measurement is performed.\n
+
+      The application definition defines:
+        - elements of the experimental instrument
+        - calibration information if available
+        - parameters used to tune the state of the sample
+        - sample description"
+
+    definition:
+      doc: "An application definition for temperature dependent IV curve measurements."
+      \@version:
+        doc: "Version number to identify which definition of this application definition
+             was used for this entry/data."
+      \@url:
+        exists: optional
+        doc: URL where to find further material (documentation, examples) relevant to the application definition
+
+    experiment_identifier:
+      doc: "Unique identifier of the experiment, such as a (globally persistent) unique identifier.
+        - The identifier is usually defined by the facility or principle investigator.
+        - The identifier enables to link experiments to e.g. proposals."
+
+    experiment_description:
+      doc : "Description of the exact experiment performed."
+
+    start_time(NX_DATE_TIME):
+      exists: recommended
+      doc: "UTC offset should be specifiec."
+
+    # program: # Maybe change to NXprocess - see below
+    #   exists: optional
+    #   doc: "Commercial or otherwise defined given name to the program that was used to
+    #     generate the results file(s) with measured data and metadata (or a link to the instrument software)."
+    #   \@version:
+    #     doc: "Either version with build number, commit hash, or description of a
+    #       (online) repository where the source code of the program and build
+    #       instructions can be found so that the program can be configured in such
+    #       a way that result files can be created ideally in a deterministic manner."
+    #   \@url:
+    #     doc: "Website of the software."
+    
+    (NXprocess):
+      exists: optional
+      doc: "Define the program that was used to generate the results file(s) with measured data and metadata."
+      program:
+        doc: "Commercial or otherwise defined given name of the program (or a link to the instrument software)."
+      version:
+        doc: "Either version with build number, commit hash, or description of a
+          (online) repository where the source code of the program and build
+          instructions can be found so that the program can be configured in such
+          a way that result files can be created ideally in a deterministic manner."
+
+    operator(NXuser):
+      # we want to have several possible values, but one is required
+      exists: [min, 1]
+      doc: "Contact information of at least the user of the instrument or the
+            investigator who performed this experiment.
+            Adding multiple users if relevant is recommended."
+      name:
+
+      affiliation:
+        doc: "Name of the affiliation of the user at the point in time when the
+              experiment was performed."
+      address:
+        doc: "Full address (street, street number, ZIP, city, country) of the user's affiliation."
+      email:
+        doc: "Email address of the user."
+      orcid:
+        exists: recommended
+        doc: "Author ID defined by https://orcid.org/."
+      telephone_number:
+        exists: recommended
+        doc: "Official telephone number of the user."
+
+    (NXinstrument):
+      doc: "General properties of the temperature dependent IV curve measurements equipment"
+
+      IVvoltage_source(NXsensor):
+        doc: "Specify the used voltage source used in the voltage sweep for the IV measurement."
+        model:
+          exists: optional
+          doc: "Free-text desribing the model and make of the voltage source which is used for the IV sweep measurement"
+        name:
+          exists: optional
+          doc: "Custom name of the voltage source for the IV sweep given by the user/institution"
+        measurement:
+          exists: optional
+          doc: "Free-text describing the measurement performed in a few words"
+        type:
+          exists: optional
+          doc: "Free-text describing the type of voltage setting: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism."
+
+      IVcurrent_source(NXsensor):
+        doc: "Specify the used current source used in the voltage sweep for the IV measurement."
+        model:
+          exists: optional
+          doc: "Free-text desribing the model and make of the current source which is used for the IV sweep measurement"
+        name:
+          exists: optional
+          doc: "Custom name of the current source for the IV sweep given by the user/institution"
+        measurement:
+          exists: optional
+          doc: "Free-text describing the measurement performed in a few words"
+        type:
+          exists: optional
+          doc: "Free-text describing the type of current measuring: an internal sweep using the functionality of the voltage supply, or a set/wait/read/repeat mechanism."
+
+      calibration(NXsubentry): # Alternative to NXsubentry?
+        exists: optional
+        doc: "Calibration of the temperature sensor is possible"
+        calibration_time(NX_DATE_TIME):
+          doc: "ISO8601 datum when calibration was last performed before this measurement. 
+            UTC offset should be specifiec."
+          # NX_DATE_TIME is the ISO8601 format, possibly with time zone
+
+      temperature_control(NXsubentry):
+        exists: optional
+        doc: "Describes the system for controlling the temperature if temperature control was used."
+        type:
+          doc: "What kind of temperature control was used? PID, custom temp control?"
+        PID_settings(NXenvironment): #CE: NXenvironment: Parameters for controlling external conditions
+          exists: optional
+          doc: "Specify the settings of the PID temperature controller: 
+            K_p, K_i, and K_d values used for the temperature control"
+          K_p_value(NX_NUMBER):
+            doc: "Proportional term. The proportional term produces an output value that is proportional 
+              to the current error value. The proportional response can be adjusted by multiplying the 
+              error by a constant Kp, called the proportional gain constant."
+          K_i_value(NX_NUMBER):
+            doc: "The contribution from the integral term is proportional to both the magnitude of the 
+              error and the duration of the error. The integral in a PID controller is the sum of the 
+              instantaneous error over time and gives the accumulated offset that should have been 
+              corrected previously. The accumulated error is then multiplied by the integral gain (Ki) 
+              and added to the controller output"
+          K_d_value(NX_NUMBER):
+            doc: "The derivative of the process error is calculated by determining the slope of the 
+              error over time and multiplying this rate of change by the derivative gain K_d. The 
+              magnitude of the contribution of the derivative term to the overall control action is
+              termed the derivative gain, K_d"
+
+        temp_sensor_type:
+          doc: "Specify the temperature sensor that was used"
+          enumeration: [thermocouple, thermistor, RTD, other]
+        other_temp_sensor:
+          exists: optional
+          doc: "If you specified 'other' as temperature sensor, please write down what it is."
+
+        # temp_calculation(NXsubentry): #CE: Which base class could be use here? NXlog 
+        #   exists: optional
+        #   doc: "Describes the way the temperature is determined from a measured value"
+        raw_temp_data(NX_NUMBER):
+          exists: optional
+          dimensions:
+            rank: 1
+            dim: [[1, N_raw_temp_data]]
+          doc: "Data of the most principal measurement of the temperature. For example resistance of a Pt1000."
+        conversion_function:
+          exists: optional
+          doc: "Algebraic function that is used to determine temperature from the raw_temp_data. 
+            All values should be given in SI units."
+
+    (NXsample):
+      doc: "Properties of the sample, its history, the sample environment and
+            experimental conditions (e.g. surrounding medium, temperature, pressure etc.),
+            along with the data (data type, wavelength array, measured data)."
+      sample_name:
+        doc: "Descriptive name of the sample"
+
+      sample_history:
+        doc: "Ideally, a reference to the location or a unique (globally persistent)
+              identifier (e.g.) of e.g. another file which gives as many as possible
+              details of the material, its microstructure. In the case that such a 
+              detailed history of the sample is not available, use this field as a 
+              free-text description to specify details of the sample and its preparation."
+
+      preparation_date(NX_DATE_TIME):
+        exists: recommended
+        doc: "ISO 8601 date with time zone specified. UTC offset should be specifiec."
+
+
+      data_identifier(NX_NUMBER):
+        doc: "An identifier to correlate data to the experimental conditions,
+              if several were used in this measurement; typically an index of 0 - N"
+
+      measured_data(NX_NUMBER):
+        doc: "Resulting data from the measurement, described by data type."
+        dimensions:
+          rank: 3
+          dim: [[3, N_different_temperatures], [2, N_variables], [1, N_data_points]]
+          # N_variables would be "I, V and Time" in this case
+          # Describes the following type of data structure
+          # Temp
+          # 100
+          #     I   V   Time
+          #     1   2   0
+          #     2   3   1
+          #     4   5   2
+          # 200
+          #     I   V   Time
+          #     1   2   5
+          #     2   3   6
+          #     4   5   7
+          # 300
+          #     I   V   Time
+          #     1   2   8
+          #     2   3   9
+          #     4   5   10
+
+
+      environment_conditions:
+        exists: optional
+        doc: "Information about external parameters that have influenced the sample."
+
+      varied_parameters: 
+        #CE: number_of_runs is not defined, but should be N_different_temperatures.
+        #   not sure if this block is really needed.
+        exists: optional
+        doc: "Indicates which parameter was changed. Its definition must exist below.
+              The specified variable has to be number_of_runs long,
+              providing the parameters for each data set."
+        enumeration: [temperature]
+
+    plot(NXdata):
+      exists: optional
+      doc: "A default view of the data. The current (y-axis) should be plotted against
+        the voltage (x-axis) with color coding for the temperature of each IV-curve"
+      \@axes:
+        doc: "We recommend to use voltage as a default attribute"

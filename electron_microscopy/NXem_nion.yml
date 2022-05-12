@@ -1,0 +1,480 @@
+# kuehbacm at hu-berlin.de, 01/2022
+# see also further details in the template application definition NXem
+category: application
+doc: "Template for creating draft application definitions for storing data and metadata for experiments with scanning transmission electron microscopy with a Nion instrument."
+# symbols:
+#  doc: "The symbols used in the schema to specify e.g. dimensions of arrays."
+#  imageid: "Frame or given number to distinguish different images in a stack."
+#  ypos: "Pixel coordinate in the slow-changing direction."
+#  xpos: "Pixel coordinate in the fast-changing direction."
+#  nimages: "Total number of images in the imagestack."
+#  ny: "Number of pixel along the slow-changing direction."
+#  nx: "Number of pixel along the fast-changing direction."
+(NXem_nion):
+  (NXentry):
+    # the NeXus default for application definitions wrt to the exists keyword is that it is required
+    # so writing exists required can be omitted unless exists should be set to e.g. optional, recommended, or the [min, .., max, ..] syntax
+    definition:
+      doc: "Official NeXus NXDL schema to which this entry conforms."
+      \@version:
+        doc: "Version specifier which enables documentation of modifications to the schema."
+    experiment_identifier:
+      doc: "Ideally, a (globally persistent) unique identifier for referring to this experiment. The identifier is usually defined/issued by the facility, laboratory, or the principle investigator. The identifier enables to link experiments to e.g. proposals."
+    experiment_description:
+      exists: optional
+      doc: "Possibility for leaving a free-text description about the experiment. Users are strongly advised to detail the sample history in the respective field and fill rather as completely as possible the fields of this application definition rather than writing these details in prose into this field."
+    start_time(NX_DATE_TIME):
+      doc: "ISO 8601 formatted time code with local time zone offset to UTC information included when the experiment started. If the application demands that time codes in this section of the application definition should only be used for specifying when the experiment was performed - and the exact duration is not relevant - this start time field should be used. Often though it is useful to specify a time interval with specifying both start_time and end_time to allow for more detailed bookkeeping and interpretation of the experiment. The user should be aware that even with having both time instances specified it may not be advisable to infer how long the experiment took or for how long data were acquired. More detailed timing data over the course of the experiment have to be collected."
+      # NEW ISSUE: see duration and collection time, duty cycle
+    end_time(NX_DATE_TIME):
+      exists: recommended
+      doc: "ISO 8601-formatted time code with local time zone offset to UTC included when the experiment ended."
+    # NEW ISSUE: duration and collection_time needs a clearer description and definition by the community
+    program_name:
+      doc: Commercial or otherwise given name to the program which was used to acquire/measure the dataset. Electron microscopy experiments are usually controlled/performed via commercial integrated acquisition and instrument control software. In many cases, an EM dataset is useful only if gets post-processed already during the acquisition or shortly thereafter, i.e. while the scientists is still sitting at the microscope. Many of these processes are automated, if not they virtually involve GUI interactions with the control software. Examples include collecting of diffraction pattern and on-the-fly indexing of these. These situations and tools are realized with individual NXprocess groups which can hold more details and numerical data to these processing steps. Frequently, some of these NXprocess groups are performed with (open-source) research software. Therefore, there is strictly speaking not a single program used in electron microscopy, and thus each NXprocess has its own program name and description."
+      \@version:
+        doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result file is numerically recreatable in the same deterministic manner."
+    experiment_documentation(NXnote):
+      exists: optional
+      doc: "Binary container for a file or a compressed collection of files which can be used to add further descriptions and details to the experiment. The container can hold e.g. a ppt, pdf, latex, txt, image, or zip archive ...)."
+    thumbnail(NXnote):
+      exists: recommended
+      doc: "A small image that is representative of the entry. This can be an image from the dataset or a thumbnail of a spectrum. Either way it is recommended to use 640x480 pixel jpeg image. Adding a scale bar to that image is recommended but not required as the main purpose of the thumbnail is to provide e.g. thumbnail images for displaying them in data repositories."
+      \@type:
+    operator(NXuser):
+      exists: [min, 1]
+      doc: "Contact information of at least the user of the instrument who measured this specimen or the principal investigator who performed this experiment. Adding multiple users if relevant is recommended."
+      name:
+        doc: "Given (first) name and surname of the user."
+      affiliation:
+        exists: recommended
+        doc: "Name of the affiliation of the user at the point in time when the experiment was performed."
+      address:
+        exists: recommended
+        doc: "Postal address of the affiliation."
+      email:
+        doc: "Email address of the user at the point in time when the experiment was performed. Given the most permanently used email is recommended."
+      orcid:
+        exists: recommended
+        doc: "Globally unique identifier of the user as offers by services like ORCID or Researcher ID."
+      telephone_number:
+        exists: recommended
+        doc: "(Business) (tele)phone number of the user at the point in time when the experiment was performed."
+      role:
+        exists: recommended
+        doc: "Which role does the user have in the place, and at the point in time when, the experiment was performed (e.g. technician operating the microscope, student, postdoc, principal investigator, guest ...)."
+      # NEW ISSUE: social media
+    (NXsample):
+      # in FAIRmat we thread the term sample and specimen as de facto as synonyms.
+      name:
+        doc: "Descriptive name or identifier with which to distinguish the specimen from all others and especially the parts from where it was cut. In cases where the specimen was e.g. site-specifically cut from samples or in cases of an instrument session during which multiple specimens are loaded, the name has to be descriptive enough to resolve which specimen was investigated and is represented by this NXentry. The user is advised to store the details how specimens were cut/prepared from samples in the sample history."
+      sample_history:
+        doc: "Ideally, a reference to the location of or a (globally persistent) unique identifier of e.g. another file which should document ideally as many details as possible of the material, its microstructure, and its thermo-chemo-mechanical processing/preparation history. In the case that such a detailed history of the sample/specimen is not available, use this field as a free-text description to specify a sub-set of the entire sample history, i.e. what you would consider being the key steps and relevant information about the specimen, its material, microstructure, thermo-chemo-mechanical processing state and details of the preparation."
+      preparation_date(NX_DATE_TIME):
+        exists: recommended
+        doc: "ISO8601 date and time with local time zone offset to UTC included when the specimen was prepared. Ideally report the end of the preparation, i.e. the last known time the measured specimen surface was actively prepared. Knowing when the specimen was exposed to e.g. specific atmosphere is especially required for environmentally sensitive material such as hydrogen-charged specimens or experiments including tracers with a short half-time. The user is advised to include these temporal details in the sample_history."
+      short_title:
+        exists: optional
+        doc: "Possibility to give an abbreviation of the specimen name field."
+      atom_types:
+        doc: "Use Hill's system for listing elements of the periodic table which are inside or attached to the surface of the specimen and thus relevant from a scientific point. The purpose of the field is to offer materials database systems an opportunity to parse the relevant elements without having to interpret these from the sample history."
+      thickness(NX_FLOAT):
+        exists: recommended
+        doc: "(Measured) sample thickness"
+        unit: NX_LENGTH
+      # NEW ISSUE: error estimates of the thickness and origin, i.e. how the value was obtained would be useful
+    (NXdata):
+      doc: "Hard link to a location/locations in the hierarchy of the NeXus file where the data for default plotting are stored."
+    em_lab(NXinstrument):
+      doc: "Metadata and numerical data of not only the microscope but also the lab in which this microscope is located."
+      name:
+        doc: "Given name of the microscope, e.g. NionHermes."
+      location:
+        exists: recommended
+        doc: "Geographic coordinates of the lab or the place where the instrument is installed using GEOREF geocodes ideally."
+      instrument_manufacturer:
+        doc: "Manufacturer of the entire instrument to enable e.g. queries in materials database systems for instrument manufacturers. Usually more technical details are needed though to specify the instrument, these should be written into instrument_model and instrument_capabilities."
+      instrument_model:
+        doc: "Manufacturer brand/model to enable e.g. queries about microscope models. See comments on instrument_manufacturer on how to provide further specification."
+      instrument_identifier:
+        exists: recommended
+        doc: "Hardware name/serial number or hash identifier given by the manufacturer to identify the instrument."
+      instrument_capability:
+        exists: recommended
+        doc: "Free-text list possibly multiple terms of functionalities which the instrument provides."
+        # NEW ISSUE: Define a bag of controlled words and use only these. Examples are Feg, Astar, OmegaFilter."
+      electron_gun(NXsource):
+        doc: "The source creating the electron beam."
+        voltage(NX_FLOAT):
+          doc: "Voltage relevant to compute the energy of the electrons immediately after they left the gun."
+          unit: NX_VOLTAGE
+        probe:
+          exists: optional
+          doc: "Type of radiation."
+          enumeration: ["electron"]
+        emitter_type:
+          exists: recommended
+          doc: "Emitter type used to create the beam."
+          # NEW ISSUE: extra enum needed for cold-FEGs?
+          enumeration: ["thermionic", "schottky", "field emission"]
+        description:
+          exists: recommended
+          doc: "Ideally a reference to (another) file (ideally formatted using also an application definition) via a link, name, or a (globally persistent) unique identifier to give further details about the electron gun."
+      (NXaperture):
+        exists: [min, 0, max, infty]
+        doc: "Details to individual apertures in the instrument."
+        name:
+          exists: recommended
+          doc: "Given name."
+        model:
+          exists: recommended
+          doc: "Given brand or model name by the manufacturer."
+        serial_number:
+          exists: recommended
+          doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
+        manufacturer_name:
+          exists: recommended
+          doc: "Given name of the manufacturer."
+        value(NX_NUMBER):
+          doc: "Relevant value from the control software as this is not always just the diameter of (not even in the case) of a circular aperture but a rather a value from a list of predefined ones in the control software. Which actual settings are behind these should be Details which choice was made should be explained under description."
+          unit: NX_ANY
+        description:
+          exists: recommended
+          doc: An (ideally globally persistent) unique identifier, link, or text which gives further details.
+        (NXtransformations):
+          exists: optional
+          doc: "Affine transformations and geometrical descriptions which detail how the aperture is placed and arranged in the microscope relative to the optical axis and beam path."
+      (NXlens_em):
+        exists: optional
+        doc: "Details to individual lenses in the microscope."
+        type:
+          exists: recommended
+          doc: Which type describes the type of the lens closest?
+          enumeration: ["single", "double", "quadrupole", "hexapole", "octopol"]
+        name:
+        model:
+          exists: recommended
+        serial_number:
+          exists: recommended
+        manufacturer_name:
+          exists: recommended
+        description:
+          exists: recommended
+        (NXtransformations):
+          exists: optional
+      (NXcorrector_cs):
+        exists: optional
+        doc: "Details about an eventual device which corrects spherical aberrations."
+        has_cs_corrector(NX_BOOLEAN):
+          doc: "Does the microscope have a spherical aberration correction unit and was it used?"
+        name:
+          exists: recommended
+        model:
+          exists: recommended
+        serial_number:
+          exists: recommended
+        manufacturer_name:
+          exists: recommended
+        description:
+          exists: recommended
+        # NEW ISSUE: clarify the mathematical details behind the following parameters of the these constants and how they are useful
+        c_1_0(NX_FLOAT):
+          unit: NX_LENGTH
+        c_1_2_a(NX_FLOAT):
+          unit: NX_LENGTH
+        c_1_2_b(NX_FLOAT):
+          unit: NX_LENGTH
+        c_2_1_a(NX_FLOAT):
+          unit: NX_LENGTH
+        c_2_1_b(NX_FLOAT):
+          unit: NX_LENGTH
+        c_2_3_a(NX_FLOAT):
+          unit: NX_LENGTH
+        c_2_3_b(NX_FLOAT):
+          unit: NX_LENGTH
+        c_3_0(NX_FLOAT):
+          unit: NX_LENGTH
+        c_3_2_a(NX_FLOAT):
+          unit: NX_LENGTH
+        c_3_2_b(NX_FLOAT):
+          unit: NX_LENGTH
+        c_3_4_a(NX_FLOAT):
+          unit: NX_LENGTH
+        c_3_4_b(NX_FLOAT):
+          unit: NX_LENGTH
+        c_5_0(NX_FLOAT):
+          unit: NX_LENGTH
+        (NXtransformations):
+          exists: optional
+        # (NXlens_em):
+        #   exists: optional
+      (NXstage_lab):
+        design:
+          exists: recommended
+        name:
+          exists: recommended
+        model:
+          exists: recommended
+        serial_number:
+          exists: recommended
+        manufacturer_name:
+          exists: recommended
+        description:
+          exists: recommended
+        tilt1(NX_FLOAT):
+          doc: "Stage tilt A. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_ANGLE
+        tilt2(NX_FLOAT):
+          doc: "Stage tilt B. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_ANGLE
+        position(NX_FLOAT):
+          doc: "StageOutX, Y, Z. Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_LENGTH
+          dimensions:
+            rank: 1
+            dim: [[1, 3]]
+        (NXtransformations):
+          exists: optional
+        # NEW ISSUE: stage-affixed coordinate system to specimen or gun coordinate system
+        (NXpositioner):
+          exists: optional
+      # NEW ISSUE: base classes for energy_filters for applications in e.g. EDX, EELS, omega filter.
+      # an omega filter is an energy filtering device, a specific component of many (transmission) electron microscopes,
+      # this instrument is again an ensemble of beam bending and electro-magnetic lenses so it should have an own application def.
+      (NXdetector):
+        doc: "Description of the type of the detector e.g. CCD, scintillator, direct electron, image plate, CMOS."
+        name:
+          exists: recommended
+          doc: "Given name."
+        model:
+          exists: recommended
+          doc: "Given brand or model name by the manufacturer."
+        serial_number:
+          exists: recommended
+          doc: "Given hardware name/serial number or hash identifier issued by the manufacturer."
+        manufacturer_name:
+          exists: recommended
+          doc: "Given name of the manufacturer."
+        sensor_material:
+          exists: recommended
+        bit_depth_readout(NX_INT):
+          exists: recommended
+        number_of_cycles(NX_INT):
+          exists: recommended
+        x_pixel_size(NX_FLOAT):
+          exists: recommended
+          unit: NX_LENGTH
+        y_pixel_size(NX_FLOAT):
+          exists: recommended
+          unit: NX_LENGTH
+        flatfield_applied(NX_BOOLEAN):
+        flatfield(NX_FLOAT):
+          exists: recommended
+        exposure(NX_NUMBER):
+          exists: recommended
+          unit: NX_TIME
+        description:
+          doc: "Free text option to write further details about the detector."
+      miscellaneous(NXcollection):
+        camera_length(NX_FLOAT):
+          exists: recommended
+          doc: "Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_LENGTH
+        magnification(NX_FLOAT):
+          exists: recommended
+          doc: "Exact definition as understood by HU colleagues remains to be communicated."
+          unit: NX_DIMENSIONLESS
+        defocus(NX_FLOAT):
+          doc: "Exact definition as understood by HU colleagues and Nion remains to be communicated."
+          unit: NX_LENGTH
+        # NEW ISSUE: where were defocus and magnification measured
+        # NEW ISSUE: how is the camera length defined
+        semi_convergence_angle(NX_FLOAT):
+          doc: "Details how computed needs to be confirmed by Nion."
+          unit: NX_ANGLE
+      hadf(NXprocess):
+        exists: optional
+        program:
+          doc: "Container for reporting individually processed images with the HAADF detector ?"
+          \@version:
+            doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner."
+        haadf_inner_half_angle(NX_FLOAT):
+          doc: "HAADF annulus inner half angle ?"
+          unit: NX_ANGLE
+        haadf_outer_half_angle(NX_FLOAT):
+          doc: "HAADF annulus outer half angle ?"
+          unit: NX_ANGLE
+        (NXscanbox_em):
+          symbols:
+            n_x: "Number of pixel in the x direction"
+            n_y: "Number of pixel in the y direction"
+            d_x: "Physical size of a pixel in x direction"
+            d_y: "Physical size of a pixel in y direction"
+          doc: "Description of the scan box which is instructed by the microscope control software to direct the probe to controlled locations according to a scan scheme and plan."
+          program:
+            doc: "Commercial or otherwise given name to the program which was used to execute this analysis."
+            \@version:
+              doc: "Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner."
+          calibration_style:
+            # NEW ISSUE: which controlled words enums?
+            exists: recommended
+            doc: "Remains to be discussed with colleagues which suggestions to put as enumerations."
+            enumeration: ["space"]
+          center(NX_NUMBER):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_ANY
+            # \@units:
+            #  enumeration: nm
+            # NEW ISSUE: make use of and define duty cycle
+          flyback_time(NX_FLOAT):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_TIME
+          field_of_view(NX_FLOAT):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_LENGTH
+          line_time(NX_FLOAT):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_TIME
+          pixel_time(NX_FLOAT):
+            exists: recommended
+            # NEW ISSUE: build on work of EMglossary with HMC and use duty cycle instead
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_TIME
+          requested_pixel_time(NX_FLOAT):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_TIME
+          rotation(NX_FLOAT):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+            unit: NX_ANGLE
+          ac_line_sync(NX_BOOLEAN):
+            exists: recommended
+            doc: "Remains to be discussed with colleagues how to use and interpret this."
+          # NEW ISSUE: create an own custom class to use for each of these boards
+          mag_boards(NXcollection):
+            exists: recommended
+            doc: "Detailed settings of an internal board(s) in the scanbox device. Further information exchange/discussions with Nion is needs to elucidate what these are."
+            board_0_dac_0(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_1(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_10(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_11(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_2(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_3(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_4(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_5(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_6(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_7(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_8(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_dac_9(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_0_relay(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_0(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_1(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_10(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_11(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_2(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_3(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_4(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_5(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_6(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_7(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_8(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_dac_9(NX_NUMBER):
+              unit: NX_UNITLESS
+            board_1_relay(NX_NUMBER):
+              unit: NX_UNITLESS
+        # NEW ISSUE: at least partial copy with the actual detector settings for that scan have to be added
+        (NXdata):
+          symbols:
+            n_x: "Number of pixel in the x direction"
+            n_y: "Number of pixel in the y direction"
+          doc: "Container for holding an image (stack) taken with the HA(A) ? DF detector."
+          \@signal:
+          # "intensity"
+          \@axes:
+          # ["xpos", "ypos"]
+          \@xpos_indices:
+          # 0
+          \@ypos_indices:
+          # 1
+          intensity(NX_NUMBER):
+            doc: "Image intensity values."
+            unit: NX_UNITLESS
+            dimensions:
+              rank: 2
+              dim: [[0, n_x], [1, n_y]]
+          \@long_name:
+            doc: "Image intensities"
+          xpos(NX_NUMBER):
+            doc: "Pixel barycenter position x-coordinates."
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[0, n_x]]
+          \@long_name:
+            doc: "Label for the x axis."
+          ypos(NX_NUMBER):
+            doc: "Pixel barycenter position y-coordinates."
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[1, n_y]]
+          \@long_name:
+            doc: "Label for the y axis."
+        # NEW ISSUE: details about the vacuum and environment control system of the lab
+        # NEW ISSUE: lay out in more details which details about the detector should be stored
+        # (NXcollection):
+        #  darkfield_applied(NX_BOOLEAN):
+        #    exists: optional
+        #    doc: "Remains to be defined, what is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to #eigen noise of the detector without illumination."
+        #  darkfield(NX_FLOAT):
+        #    exists: optional
+        #    doc: "What is the idea of the darkfield here, using the camera for dark field imaging mode or is this related to inherent noise of thr detector without illumination."
+        #    unit: NX_ANY
+        #  pixel_size_x(NX_FLOAT):
+        #    exists: optional
+        #    doc: ""
+        #    unit: NX_PER_LENGTH
+        #  pixel_size_y(NX_FLOAT):
+        #    exists: optional
+        #    doc: ""
+        #    unit: NX_ANY
+        #    # NEW ISSUE: NX_PER_LENGTH
+        #  cartesian_scan_dimensions(NX_UINT):
+        #  cartesian_scan_dimension1_count(NX_UINT):
+        #  cartesian_scan_dimension2_count(NX_UINT):
+        #  cartesian_scan_dimension3_count(NX_UINT):
+        #  scan_properties(NXcollection): #we need to discuss if we allow NXcollections to be nested or rather have them laid out in a flat manner
+        #    scan_system_name:
+        #    x_points_step_width(NX_NUMBER):
+        #      unit: NX_LENGTH
+        #    y_points_step_width(NX_NUMBER):
+        #      unit: NX_LENGTH
