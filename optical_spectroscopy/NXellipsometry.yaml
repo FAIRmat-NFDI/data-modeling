@@ -16,11 +16,11 @@
 category: application
 doc: |
   Ellipsometry, complex systems, up to variable angle spectroscopy.
-
-  Information on ellipsometry is provided, e.g. in: 
+  
+  Information on ellipsometry is provided, e.g. in:
   - H. Fujiwara, Spectroscopic ellipsometry: principles and applications, John Wiley & Sons, 2007.
   - R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light, North-Holland Publishing Company, 1977.
-  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry, William Andrew, 2005. 
+  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry, William Andrew, 2005.
   
   Open acces sources:
   - https://www.angstromadvanced.com/resource.asp
@@ -168,7 +168,7 @@ symbols:
                       rotating compensator on analyzer side, modulator on polarizer side,
                       modulator on analyzer side, dual compensator, phase modulation,
                       imaging ellipsometry, null ellipsometry]
-      
+
       calibration_status(NX_DATE_TIME):
         doc: "Was a calibration done. If yes, when was it done?"
         enumeration: [calibration time provided, no calibration, within 1 hour, within 1 day, within 1 week]
@@ -179,7 +179,7 @@ symbols:
               parameters for proper zero values and background light compensation."
         calibration_time(NX_DATE_TIME):
           exists: optional
-          doc: "If calibtration status is 'calibration time provided', specify the ISO8601 datum when calibration was 
+          doc: "If calibtration status is 'calibration time provided', specify the ISO8601 datum when calibration was
             last performed before this measurement. UTC offset should be specified."
 
         calibration_data(NXsubentry):
@@ -249,7 +249,7 @@ symbols:
         description:
           doc: "A free-text field to provide information about the stage."
           exists: recommended
-        (NXtransformations): 
+        (NXtransformations):
           exists: recommended
           doc: "The stage coordinate system vs. the incident beam.
                 The Z-axis of the stage is considered to point along the
@@ -277,13 +277,13 @@ symbols:
                   plane of incidence'."
 
 
-      window(NXaperture): 
+      window(NXaperture):
         exists: optional
-        doc: "For environmental measurements, the environment (liquid, vapor, 
-              vacuum etc.) is enclosed in a cell or cryostat, which has windows 
-              both in the direction of the source and the detector (looking from 
-              the sample). These windows also add a phase shift to the light 
-              altering the measured signal. This shift has to be corrected based 
+        doc: "For environmental measurements, the environment (liquid, vapor,
+              vacuum etc.) is enclosed in a cell or cryostat, which has windows
+              both in the direction of the source and the detector (looking from
+              the sample). These windows also add a phase shift to the light
+              altering the measured signal. This shift has to be corrected based
               on measuring a known sample in the environmental cell."
 
         material(NX_CHAR):
@@ -434,7 +434,7 @@ symbols:
         dimensions:
           rank: 5
           dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
-   
+
       data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
               The structure is the same as for the measured data."
