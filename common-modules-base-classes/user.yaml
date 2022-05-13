@@ -1,6 +1,9 @@
 # 2022-05-13
 # an update on the NXuser base class
 # 1. make name and email mandatory fields
+# 2. add address separate from institute name -- affiliation
+#
+# Link to original: https://manual.nexusformat.org/classes/base_classes/NXuser.html#nxuser
 
 category: base
 doc: "base class to define contact information of a user"
