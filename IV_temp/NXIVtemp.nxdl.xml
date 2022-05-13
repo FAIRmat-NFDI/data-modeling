@@ -44,10 +44,15 @@ The application definition defines: - elements of the experimental instrument - 
 			<field name="version" type="NX_CHAR">
 				<doc>Either version with build number, commit hash, or description of a (online) repository where the source code of the program and build instructions can be found so that the program can be configured in such a way that result files can be created ideally in a deterministic manner.</doc>
 			</field>
+			<field name="program_url" recommended="true" type="NX_CHAR">
+				<doc>Website of the software.</doc>
+			</field>
 		</group>
 		<group minOccurs="1" name="operator" type="NXuser">
 			<doc>Contact information of at least the user of the instrument or the investigator who performed this experiment. Adding multiple users if relevant is recommended.</doc>
-			<field name="name" type="NX_CHAR"/>
+			<field name="name" type="NX_CHAR">
+				<doc>Name of the user.</doc>
+			</field>
 			<field name="affiliation" type="NX_CHAR">
 				<doc>Name of the affiliation of the user at the point in time when the experiment was performed.</doc>
 			</field>

@@ -71,6 +71,9 @@ symbols:
           (online) repository where the source code of the program and build
           instructions can be found so that the program can be configured in such
           a way that result files can be created ideally in a deterministic manner."
+      program_url:
+        exists: recommended
+        doc: "Website of the software."
 
     operator(NXuser):
       # we want to have several possible values, but one is required
@@ -79,7 +82,7 @@ symbols:
             investigator who performed this experiment.
             Adding multiple users if relevant is recommended."
       name:
-
+        doc: "Name of the user."
       affiliation:
         doc: "Name of the affiliation of the user at the point in time when the
               experiment was performed."
