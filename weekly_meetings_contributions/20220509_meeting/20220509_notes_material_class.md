@@ -1,12 +1,13 @@
 
 	
 # Notes 09.05.2022 from weekly task force meeting	
-# Discussion on blocks/base classes
-# idea of "material" class
-# Homework:
-#	- review draft on material class and add potential subclasses
-#	- indentify input in process? eg: add chemical, add precusor, material source parameters
-#	- material in process?
+Discussion on blocks/base classes
+idea of "material" class
+
+## Homework:
+	- review draft on material class and add potential subclasses
+	- indentify input in process? eg: add chemical, add precusor, material source parameters
+	- material in process?
 
 	  
 
