@@ -5,3 +5,6 @@ There are a couple of components required in every experiments we describe, such
 
 Now, let us collect here modules that are required in every tasks of Aarea A, but may not have been written by other Areas so far.
 For example: chemical substances.
+
+# removing experimenter
+the experimenter file was a redo of NXuser. Tune the NXuser instead as it is needed.
