@@ -10,12 +10,12 @@ idea of "material" class
 	- material in process?
 
 	  
-
-'''
-{	
-class material:
-	type = [pure chemical, compound, substrate]
-	# substrates for epitaxy
+## Material class:
+### base class
+```
+- class material:
+	- type : [pure chemical, compound, substrate]
+	
 	- substrate:
 		- material:
 			- formula: # e.g., Ga2O3
@@ -49,11 +49,10 @@ class material:
 		
 	- what other subclasses needed?
 
-}
-'''
-	
+```
 
-Process:
+## Material used in Process:
+
 	- indentify input in process? eg: add chemical, add precusor, material source parameters
 	- material in process?
 		-  
