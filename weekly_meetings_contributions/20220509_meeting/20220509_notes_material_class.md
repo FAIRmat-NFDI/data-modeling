@@ -11,8 +11,8 @@ idea of "material" class
 
 	  
 
-
-	
+'''
+{	
 class material:
 	type = [pure chemical, compound, substrate]
 	# substrates for epitaxy
@@ -48,8 +48,11 @@ class material:
 		- opening time of chemical
 		
 	- what other subclasses needed?
+
+}
+'''
 	
-	
+
 Process:
 	- indentify input in process? eg: add chemical, add precusor, material source parameters
 	- material in process?
