@@ -47,13 +47,13 @@ definitions:
               furnace:
                 section:
                   quantities:
-                    diomerda:
+                    test_quantity:
                       type: str
             sub_sections:
               heating:
                 section:
                   quantities:
-                    diomerda:
+                    test_quantity:
                       type: str
             sub_sections:
               temperature_sensor:
@@ -138,5 +138,5 @@ definitions:
                     post_process:
                       section:
                         quantities:
-                          diomerda:
+                          test_quantity:
                             type: str
