@@ -176,3 +176,7 @@ definitions:
                         quantities:
                           test_quantity:
                             type: str
+data:  
+  m_def: MeltCzochralski
+  operator:
+    name: Giovanni Giorgio
