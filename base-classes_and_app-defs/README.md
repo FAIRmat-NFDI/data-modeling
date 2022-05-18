@@ -8,6 +8,9 @@ There are several components required in every experiments we describe, such as:
 - synthesis process
 - characterization
 
+![App Def examples](https://box.hu-berlin.de/f/dae06cc0ec674accb1d0/?dl=1)
+
+
 Each of these elements is a base class, e. g., the set of terms that might be used in an instance of that class.
 Consider the base classes as a set of components that are used to construct a data file (synthesis or measurement).
 Now, let us collect here modules (base classes) that are required in every tasks of Area A, but may not have been written by other Areas so far.
@@ -38,4 +41,6 @@ Consider an application definition as a contract between a data provider (such a
 App defs are composed of base classes.
 The app def should be as flexible as the user wants but it should be composed of standard classes  (e. g., user, instrument, process, sample, characterization).  
 
-![App Def examples](https://box.hu-berlin.de/f/9d0540efcc63435d9761/?dl=1)
+We want to combine our base classes to design an app def, we also want to link app defs inside our own
+
+![App Def examples](https://box.hu-berlin.de/f/9661b5d0f9ab40d1a929/?dl=1)
