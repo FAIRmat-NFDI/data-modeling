@@ -1,0 +1,18 @@
+# substrates for epitaxy
+- substrate:
+	- material:
+		- formula: # e.g., Ga2O3
+		- DOPANT:
+			- element: # chem. symbol, e.g. Fe
+			- concentration: # cm^-3, e.g., 3e18
+	- crystal structure: # e.g., monoclinic, lattice params.??? - ideally all description a,b,c, aplha, beta, gamma
+	- surface orientation: 
+		- hkl: # e.g. (100)
+		- offcut:
+			- degrees: #, e.g. 2
+			- towards:  e.g. (001)
+	- vendor: # text
+	- wafer id: # text
+	- shape: # e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
+	- thickness: # in mm
+	- polishing: # 1sp = single sided, 2sp = double sided

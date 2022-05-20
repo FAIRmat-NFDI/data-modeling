@@ -1,0 +1,22 @@
+
+- setup:
+    # description of all used equipment for the sample preparation or preparation environment
+    - description of synthesis environment:
+        - DEVICE [id]: "PHMT"
+            # Will be filled by entering the id.
+            # unspecific to device
+            - device_type: "pH meter"
+            - device_company: "Mettler Toledo"
+            - device_name: "Five Easy"
+            - device_calibration [optional]: date…
+            - device_status [optional]: In operation
+            - USER: fz
+            # Device specific.
+            - device_standardmeasurement: 1, 3, 7
+
+
+#In the process you then have:
+- prcess:
+    - Measurement_pH:
+        - PHMT
+        - 3.7

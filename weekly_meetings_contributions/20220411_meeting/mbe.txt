@@ -1,0 +1,24 @@
+MBEsystem
+collection of sources
+source: orifice diameter, distance to substrate, polar angle to substrate normal, azimutal angle
+source/effusion cell: charge, emitted species (what molecules), T(°C), BEP(mbar), flux(nm^-2s^-1)
+source/gas injector: what gas (incl mixtures), flow-rate (sccm)
+source/plasma source: gas injector + plasma power
+substrate rotation
+substrate heater (T_sub)
+T_sub (TC, pyro, other)
+chamber pressure
+chamber mass spectrum
+
+
+substrate (similar to methods)
+
+process = sequence of steps
+
+step:
+duration
+T_sub (t)
+open-cells (T, BEP, flux, plasma power) (t)
+chamber pressure or mass spectra (t)
+
+

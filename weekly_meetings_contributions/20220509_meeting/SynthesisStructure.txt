@@ -1,0 +1,136 @@
+Everything timestamped
+Linebreak for adding a next step
+"//" is optional, everything else mandatory.
+"____" displays a new block.
+
+- general information:
+    - material system
+    - date
+    - responsible person
+
+
+_________________________________________________________________
+Chemical Precursor (block):
+    - Timestamp
+    - Chemical name
+    - Amount (g)
+    - //CAS number
+    - //Purity (%)
+    - //Distributor
+    - //Duration of adding chemical (s)
+    - //Additional comment
+_________________________________________________________________
+
+
+_________________________________________________________________
+Chemical Additives (block):
+    - Timestamp
+    - Chemical name
+    - Amount (g)
+    - //CAS number
+    - //Purity (%)
+    - //Distributor
+    - //Duration of adding chemical (s)
+    - //Additional comment
+_________________________________________________________________
+
+
+_________________________________________________________________
+Chemical Solvent (block):
+    - Timestamp
+    - Chemical name
+    - Amount (g)
+    - Purity (%)
+    - //CAS number
+    - //Distributor
+    - //Duration of adding chemical (s)
+    - //Additional comment
+_________________________________________________________________
+
+
+_________________________________________________________________
+Measurement pH (block):
+    - Value
+_________________________________________________________________
+
+
+_________________________________________________________________
+Measurement Temperature (block):
+    - Value (°C)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Measurement Humidity (block):
+    - Value (%)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Temperature (block):
+    - Value (°C)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Stirring speed (block):
+    - Value (rpm)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Closing/opening system (block):
+    - Close system (True/False)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Seperation (block):
+    - Type (Centrifuge, filtration, evaporation, decantation)
+    - //Additional comment
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Washing (block):
+    - Timestamp
+    - Chemical name
+    - Purity
+    - //CAS number
+    - //Distributor
+    - //Amount (g)
+_________________________________________________________________
+
+
+_________________________________________________________________
+Setting Experiment vessel (block):
+    - Volume (mL)
+    - material
+    - //Additional comment
+_________________________________________________________________
+
+_________________________________________________________________
+Drying/Aging (block):
+    - Temperature (°C)
+    - Time (s)
+    - Equipment ID
+    - //Pressure
+_________________________________________________________________
+
+
+_________________________________________________________________
+Autoclave/Hydrothermal (block):
+    - Volume (mL)
+    - Filling factor (mL/mL)
+    - Pressure (bar)
+    - //Volume ratio
+_________________________________________________________________
+
+
+_________________________________________________________________
+Calcination/Stabilization (block):
+    - Temperature (°C)
+    - Time (s)
+    - Equipment
+    - Heating ramp
+_________________________________________________________________

@@ -1,0 +1,33 @@
+# meeting notes 02.05.2022
+# discussion about process steps
+# homework for next week identify and describe blocks/base classes
+- sample:
+	
+	- if other process step on whole sample --> same sample
+	
+		
+	- process:
+		# description of the process including, starting material, pre-process and post-process steps
+		   
+		- pre-process: 
+			# pretreatments: e.g. substrate prepretreatment, target preparation (--> link to setup), preparation of catalysis solution
+			
+		- growth/process: 
+			- substrate or seed material:
+			- general process parameters: # paramters that stay constant
+			# main proces of sample preparation
+			- steps of synthesis process:
+				- set parameter values
+				- actual parameter values
+				- in situ measurement (from link to characterization section)
+			
+		- post-process:
+			# post treatment, sample children, etc.    
+			- if sample split --> new sample generated with sample as parent, if possible document how split (e.g. sample)
+	
+
+Blocks:
+	- chemical
+	- instrument part
+	- subtrate
+	- 
