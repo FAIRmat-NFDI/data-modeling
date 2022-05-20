@@ -1,6 +1,6 @@
 # 1 Common modules (base classes)
 
-There are several components required in every experiments we describe, such as:
+There are several components required in every experiment we describe, such as:
 
 - operator
 - sample (name, ID, source, etc.)
@@ -13,18 +13,12 @@ There are several components required in every experiments we describe, such as:
 
 Each of these elements is a base class, e. g., the set of terms that might be used in an instance of that class.
 Consider the base classes as a set of components that are used to construct a data file (synthesis or measurement).
-Now, let us collect here modules (base classes) that are required in every tasks of Area A, but may not have been written by other Areas so far.
-For example: chemical_substances, or process_step.
+Now, let us collect here base classes that are required in every tasks of Area A, but may not have been written by other Areas so far.
+For example: sample and its related subclasses (chemical_substances, process_step, substrate, ...).
 
-## removing experimenter
-
-the experimenter file was a redo of NXuser. Tune the NXuser instead as it is needed.
-
-### the "nexus harmonization" will be accomplished in detail later
+### the "NeXus harmonization" will be accomplished in detail later, for the moment let's address mainly structural questions. We will then be able to decorate them according to the emerging syntax rules (NeXus or NOMAD)
 
 ## sample types (qualification)
-
-Sample types as already listed in Andreas presentation in task force meeting on 16th of May 2022:
 
 - simple substance (element or chemical compound)
 - mixture (or single phase mixture, solution, suspension, alloy or colloid)
