@@ -1,0 +1,13 @@
+NXsample:
+  exists: [min, 1, max, unbounded]
+  sample_id(NXid):
+  citation: doi
+  method: [experimental, simulation, declared by vendor]
+  qualification: [element, compound, mixture, layer, composite, gel, ...]
+  concentration:
+  amount:
+  molar_mass:
+  thickness:
+  surface_orientation:
+  other properties: "..."
+  COMPONENT(NXsample):
