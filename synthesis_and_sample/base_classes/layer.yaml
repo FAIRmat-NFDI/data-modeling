@@ -59,7 +59,7 @@ LAYER:
         doc: Specifies the International Union of Crystallography (IUC) number of the 3D space
              group of this system.
         type: int 
-      lattice params:
+      lattice_params:
             a:
               doc: Length of the first basis vector.
               type: float
