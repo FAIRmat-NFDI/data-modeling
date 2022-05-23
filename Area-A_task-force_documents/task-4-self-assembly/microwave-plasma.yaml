@@ -1,0 +1,47 @@
+# NEXUS definition primer for sample perparation in self-assembly
+# base class to define properties of dip-coating
+#
+# Here we describe one step in a preparation process
+# Sample description itself belongs to the application definition
+#
+category: base
+doc: "Draft base class to describe sample activation or surface etching via
+  microwave plasma"
+
+(NXmicrowave_plasma):
+  name:
+    doc: "Name used in the chain of process steps"
+
+  model:
+    doc: "Model of device used for the experiment, e.g. TEPLA-100E"
+
+  serial_number:
+    doc: "Serial number of the device, if not home made"
+  description:
+    doc: "Description of the experiment done with the device"
+
+  STEP(NXsubentry):
+    doc: |
+      Etching / activation step characterized by:
+        - gas pressure
+        - flow rate (optional)
+        - power used for the microwave generator
+        - gas type (typically H2, O2, N2, NH3, CH4, etc.)
+
+  gas_type:
+    doc: "free text description of the gas mixture used, e.g. O2 20 V%, H2 50 V%, etc.;
+      always describe the whole mixture. Alternatively, a vague description as 'air' is
+      also acceptable"
+  gas_pressure(NX_PRESSURE):
+    doc: "gas pressure used, if provided by the device"
+
+  gas_flowrate:
+    # problem: NX_FLOWRATE may not exist, it is composite again between volume / time
+    doc: "Flow rate measured by the instrument, typically in ml/min units."
+
+  duration(NX_TIME):
+    doc: "Duration of active plasma treatment"
+
+  power(NX_POWER):
+    doc: "electric power applied on the microwave generator head"
+
