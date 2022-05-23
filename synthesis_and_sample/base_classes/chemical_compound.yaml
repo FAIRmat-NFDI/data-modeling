@@ -12,29 +12,14 @@ doc: "Draft base class to describe a chemical element)"
     This class describes any materials used for experiments formed by a set of substances,
     which may be in any state, that is liquid, solid, etc. form.
 
-  name:
-    doc: "name of the compound, possibly specifying characteristic concentrations as well"
-    exists: required
-
-  COMPONENT(NXchemical_substance):
-    doc: "the individual components of this material, including their corresponding concentrations
-          here we also recite some components of the NXchemical_substance base class, because they
-          are now required!"
-    state:
-      doc: "State of the compound, e.g. solid, liquid, gas, plasma"
+  general(to be moved in the general sample class): 
+    name:
+      doc: "name of the compound"
       exists: required
-      enumeration: [solid, liquid, gas, plasma]
-    amount_type:
-      doc: "how was the substance provided? By mass, by volume, by molar amount, in solution,
-        in a mixture..."
-      exists: required
-      enumeration: [by mass, by volume, molar]
-    concentration_type:
-      doc: "what concentration was used?"
-      enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-    concentration(NX_NUMBER):
-      doc: "and the corresponding number"
-      exists: required
+    category(or qualification or type):
+    chemical_formula:
+    molecular_weight:
+    COMPONENT(NXsample):
 
   # now, outside the COMPONENTs, we still have to tell how much of this compound we
   # use for whatever purposes:
@@ -47,5 +32,11 @@ doc: "Draft base class to describe a chemical element)"
     enumeration: [by mass, by volume, molar]
   amount(NX_NUMBER):
     doc: "Amount with a unit corresponding to the above amount type"
-
-
+  concentration_type:
+    exists: only required if this compound is part of a mixture(NXsample)
+    doc: "what concentration was used?"
+    enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
+  concentration(NX_NUMBER):
+    exists: only required if this compound is part of a mixture(NXsample)
+    doc: "and the corresponding number"
+    exists: required
