@@ -8,15 +8,6 @@ doc: "Draft base class to describe a crystal sample"
   doc: |
     A base class draft to describe a crystal sample
 
-  general(to be moved in the general sample class): 
-    name:
-      doc: "name of the compound"
-      exists: required
-    category(or qualification or type):
-    chemical_formula:
-    molecular_weight:
-    COMPONENT(NXsample):
-
   structural_data:
     structure:
     degree_of_crystallinity: 

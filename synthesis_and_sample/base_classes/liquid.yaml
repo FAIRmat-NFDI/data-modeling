@@ -8,15 +8,6 @@ doc: "Draft base class to describe a liquid sample, also a melted solid sample c
   doc: |
     A base class draft to describe a liquid sample, also a melted solid sample can be described within this class
 
-  general(to be moved in the general sample class): 
-    name:
-      doc: "name of the compound"
-      exists: required
-    category(or qualification or type):
-    chemical_formula:
-    molecular_weight:
-    COMPONENT(NXsample):
-
   structural_data:
     mass:
     volume:

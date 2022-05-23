@@ -1,3 +1,5 @@
+# One or several COMPONENTS are making a MATERIAL.
+# One or several MATERIALS are making a SAMPLE
 sample:
   ID:
   name:
@@ -6,7 +8,7 @@ sample:
   method: [experimental, simulation, declared by vendor]
   chemical_specimen or material: [mixture, composite, gel, ...]
     exists: [min, 1, max, unbounded]
-    chemical_substance:
+    chemical_substance or component:
       exists: [min, 1, max, unbounded]
       INCHI: ...
       name: IUPAC

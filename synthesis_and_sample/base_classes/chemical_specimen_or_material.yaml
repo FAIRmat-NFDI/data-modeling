@@ -5,7 +5,7 @@
 category: base
 doc: "Draft base class to describe a chemical element)"
 
-(NXchemical_compound):
+(chemical_specimen or material):
   doc: |
     A base class draft to describe a chemical compound formed from chemical substances
     
@@ -15,7 +15,7 @@ doc: "Draft base class to describe a chemical element)"
     doc: "name of the compound, possibly specifying characteristic concentrations as well"
     exists: required
 
-  COMPONENT(NXchemical_substance):
+  (chemical_substance or component):
     doc: "the individual components of this material, including their corresponding concentrations
           here we also recite some components of the NXchemical_substance base class, because they
           are now required!"

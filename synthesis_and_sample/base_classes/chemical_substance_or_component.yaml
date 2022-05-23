@@ -5,7 +5,7 @@
 category: base
 doc: "Draft base class to describe a chemical element)"
 
-(NXchemical_substance):
+(chemical_substance or component):
   doc: |
     A base class draft to describe a chemical substance
     
