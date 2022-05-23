@@ -1,13 +1,28 @@
-NXsample:
-  exists: [min, 1, max, unbounded]
-  sample_id(NXid):
+sample:
+  ID:
+  name:
+  user:
   citation: doi
   method: [experimental, simulation, declared by vendor]
-  qualification: [element, compound, mixture, layer, composite, gel, ...]
-  concentration:
-  amount:
-  molar_mass:
-  thickness:
-  surface_orientation:
+  chemical_specimen or material: [mixture, composite, gel, ...]
+    exists: [min, 1, max, unbounded]
+    chemical_substance:
+      exists: [min, 1, max, unbounded]
+      INCHI: ...
+      name: IUPAC
+      molecular mass: in g/mol
+      concentration: if needed
+      amount: added amount
+      electron distribution: for simulations
+      number_of_electrons:
+      ...
+    geometry: shape description, orientation if it matters
+    physical state: solid, crystalline, ...
+    amount: present in the sample
+    role in experiment: carrier, catalyst, substrate, layer
+    bath: where it was taking from
+  property_1: characterization needed for this sample as reference
+  property_2:
+  ...
   other properties: "..."
-  COMPONENT(NXsample):
+  
