@@ -22,7 +22,7 @@ For example: sample and its related subclasses (chemical_substances, process_ste
 
 after the 23rd of may task force meeting, this is the updated shape of sample class
 
-![Sample examples](https://box.hu-berlin.de/f/ef3e2eca64b94b8396b5/?dl=1)
+![Sample examples](https://box.hu-berlin.de/f/dae06cc0ec674accb1d0/?dl=1)
 
 Summary:
 
