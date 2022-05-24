@@ -24,8 +24,14 @@ after the 23rd of may task force meeting, this is the updated shape of sample cl
 
 ![Sample examples](https://box.hu-berlin.de/f/ef3e2eca64b94b8396b5/?dl=1)
 
+Summary:
+
+What should be described in the Component Section:
 
 - simple substance (element or chemical compound)
+
+What should be described in Material Section:
+
 - mixture (or single phase mixture, solution, suspension, alloy or colloid)
 - multi phase sample (multi domain or composite)
 - layer (or film or substrate)
@@ -33,6 +39,10 @@ after the 23rd of may task force meeting, this is the updated shape of sample cl
 - gel
 - dispersion
 - policrystalline powder
+
+What should be described in Sample Section:
+
+- general attributes (ID, name, etc)
 
 # 2 Application definitions
 
