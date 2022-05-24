@@ -20,6 +20,11 @@ For example: sample and its related subclasses (chemical_substances, process_ste
 
 ## sample types (qualification)
 
+after the 23rd of may task force meeting, this is the updated shape of sample class
+
+![Sample examples](https://box.hu-berlin.de/f/ef3e2eca64b94b8396b5/)
+
+
 - simple substance (element or chemical compound)
 - mixture (or single phase mixture, solution, suspension, alloy or colloid)
 - multi phase sample (multi domain or composite)
@@ -33,7 +38,7 @@ For example: sample and its related subclasses (chemical_substances, process_ste
 
 Consider an application definition as a contract between a data provider (such as the beam line control system) and a data consumer (such as a data analysis program for a scientific technique) that describes the information is certain to be available in a data file.
 App defs are composed of base classes.
-The app def should be as flexible as the user wants but it should be composed of standard classes  (e. g., user, instrument, process, sample, characterization).  
+The app def should be as flexible as the user wants but it should be composed of standard classes  (e. g., user, instrument, process, sample, characterization).
 
 We want to combine our base classes to design an app def, we also want to link app defs inside our own
 
