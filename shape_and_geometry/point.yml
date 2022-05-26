@@ -23,9 +23,9 @@ parameters:
     dox: an array of coordinates with or without time
     unit: NX_LENGTH, NX_TIME
 
-  dimensions(NX_NUMBER):
-    rank: 1
-    dim: [[1, N_dimensions]]
+    dimensions(NX_NUMBER):
+      rank: 1
+      dim: [[1, N_dimensions]]
 
   time_specified(NX_BOOLEAN):
     doc: is time included? If so, time is the last coordinate
