@@ -26,6 +26,6 @@ parameters:
       rank: 2
       dim:[[1, N_dim],[2, N_points]]
     unit: NX_LENGTH, NX_TIME
-
-    time_specified(NX_BOOLEAN):
-      doc: if the last coordinate is time
+  
+  time_specified(NX_BOOLEAN):
+    doc: if the last coordinate is time
