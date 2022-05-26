@@ -20,7 +20,7 @@ parameters:
     if time is specified, it is always the last coordinate!
 
   point(NX_NUMBER):
-    dox: an array of coordinates with or without time
+    doc: an array of coordinates with or without time
     unit: NX_LENGTH, NX_TIME
 
     dimensions(NX_NUMBER):
