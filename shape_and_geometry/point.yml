@@ -6,7 +6,7 @@ category: base
 doc: "Dract base class for a vector / point in space"
 
 parameters:
-  N_array: the length of the coordinate array
+  N_dimensions: the length of the coordinate array
 
 (point):
   doc: |
@@ -21,12 +21,11 @@ parameters:
 
   point(NX_NUMBER):
     dox: an array of coordinates with or without time
+    unit: NX_LENGTH, NX_TIME
+
   dimensions(NX_NUMBER):
-    doc: the number of dimensions, the length of the array
-    @value: N_array
+    rank: 1
+    dim: [[1, N_dimensions]]
 
   time_specified(NX_BOOLEAN):
     doc: is time included? If so, time is the last coordinate
-
-  time_units:
-    doc: in what unit is time provided? It should be any of NX_TIME
