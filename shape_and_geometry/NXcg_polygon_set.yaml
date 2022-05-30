@@ -1,0 +1,88 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# spheres, their volume only ? their surface, both, is
+# redundant as there is NXoff_geometry, but in order
+# see discussion in the README.md that substantiates why
+# it is useful to define own base classes for frequently
+# used classes
+(NXcg_polygon_set):
+  # essentially a soup of polygons, do we need to store intersection
+  # and or connectivity information?
+  # the special case of a triangle soup and triangle mesh is very
+  # frequently required and overlapping with polyhedron
+  # information, or rather in an own group e.g. like proposed here
+  symbols:
+    d: "Dimensionality, i.e. the dimensionality of the vertices array, which has to be at least 3."
+    c: "Cardinality of the set, which has to be at least 1."
+    n_unique: "Number of unique points supporting the set of polygons."
+    n_total: "Number of total vertices visited when all polygons have been defined."
+  # does it make sense to store the cardinality of the set also explicitly?
+  doc: |
+    A set of polygons.
+    
+    Polygons are a special case of a polyline set:
+    * A polygon is a closed polyline in the d-1-dimensional plane.
+    * A polygon has at least three vertices.
+    The members of a set of polygons may have differing number of points.
+  dimensionality(NX_POSINT):
+  cardinality(NX_POSINT): 
+    c: "Cardinality of the set, which has to be at least 1."
+  # does it make sense to store the cardinality of the set also explicitly?
+  # and if so how to assure that a field value like the one for cardinality == c ?
+  number_of_unique_points(NX_POSINT): #n_unique
+  number_of_total_points(NX_POSINT): #ntotal
+  identifier_offset(NX_UINT):
+    # somewhat a global offset e. g. polygon named 2, polygon named 3 when offset is 2
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for polygons. These identifiers need to be distinguished
+    from identifiers of (unique) points. Identifier for polygons are defined 
+    either implicit or explicit. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the 
+    identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different
+    offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish polygons in the case of explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  number_of_vertices(NX_POSINT):
+    doc: "Number of vertices per polygon."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # either we use an instance of a NXcg_point_set to describe the unique
+  # vertices, but how can we then assure that the identifier_offset for the
+  # point identifiers matches those used here?
+  unique_vertices(Nxcg_point_set):
+    doc: "The set of unique vertices which support the polygon set."
+  polygons(NX_UINT):
+    doc: "Array of identifier of the unique vertices which describes as a sequence each polygon."
+    dimensions:
+      rank: 1
+      dim: [[1, n_total]]
+  # should we always leave this a one dimensional array or should we
+  # make it a 2D array such that for a set of polylines which have all
+  # the same number of support vertices we can more intuitively describe
+  winding_order:
+    doc: "Specifies if it can be safely assumed that polygons follow a specific winding order or not."
+    enumeration: [clockwise, counter-clockwise, undefined]
+  vertex_normal(NXcg_unit_normal_set):
+  # how to assure this is an n_total set by NeXus-in-build consistence checks?
+  vertex_normal_type:
+    doc: "Are vertex normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # vertex_normal_model(NXprocess):
+  # for polygons vertices are ill-defined so there has to be a model behind this which defines the normal field
+  face_normal(NXcg_unit_normal_set):
+  face_normal_type:
+    doc: "Are face normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # how to assure this is a set with as many values as edges by NeXus-in-build consistence checks?
+  # face_area(NX_NUMBER):
+  # edge_length(NX_NUMBER):
+  # interior_angle(NX_NUMBER):
+  # surface_area(NX_NUMBER):

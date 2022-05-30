@@ -1,0 +1,80 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# flat triangles for now only or also spherical triangles ?
+# a triangle soup
+(NXcg_triangle_set):
+  symbols:
+    d: "Dimensionality, i.e. the length of the coordinate array, which has to be at least 2."
+    c: "Cardinality of the set, which has to be at least 1."
+  # does it make sense to store the cardinality of the set also explicitly?
+  # and if so how to assure that a field value like the one for cardinality == c ?
+  doc: |
+    A set of triangles in d-dimensional space.
+    
+    Each triangle is built of either a sequence of vertices.
+  dimensionality(NX_POSINT):
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for triangles. These identifiers need to be distinguished
+    from identifiers of (unique) points. Identifier for triangles are defined 
+    either implicit or explicit. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the 
+    identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different
+    offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish triangles of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # do we need/wish to describe the triangle set by just giving point coordinates directly?
+  # the benefit is that when all points are disjoint such a description is more efficient
+  # for connected triangle sets though vertices are shared which makes the splitting
+  # eventually more efficient
+  # how to assure that if for an NXcg-triangle_set instance with d == 2 that the 
+  # NXcg_point_set also has d == 2 ?
+  unique_vertices(NXcg_point_set):
+    doc: "The set of unique vertices which support the triangle set."
+  triangles(NX_UINT):
+    doc: "Array of indices referring vertices from unique_vertices to describe each triangle."
+    dimensions:
+      rank: 2
+      dim: [[1, ntotal], [2, 3]]
+  winding_order:
+    doc: "Specifies if it can be safely assumed that triangles follow a specific
+    winding order or not."
+    enumeration: [clockwise, counter-clockwise, undefined]
+  vertex_normal(NXcg_unit_normal_set):
+  vertex_normal_type:
+    doc: "Are vertex normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # vertex_normal_model(NXprocess):
+  # for polygons vertices are ill-defined so there has to be a model behind this which defines the normal field
+  # or should the normal_type be part of NXcg_unit_normal_set
+  face_normal(NXcg_unit_normal_set):
+  face_normal_type:
+    doc: "Are face normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # similar question as posed for vertex_normal_type
+  face_area(NX_NUMBER):
+    unit: NX_AREA
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  face_edge_length(NX_NUMBER):
+    doc: Array of edge length values. For each triangle the edge length is reported for the edges traversed in winding order. If the winding order is undefined the edges are reported between columnwise point differences as stored in triangles.
+    unit: NX_LENGTH
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, 3]]
+  face_interior_angles(NX_NUMBER):
+    doc: Array of interior angle values. For each triangle the angle is reported for the angle opposite to the edges which are traversed in winding order. If the winding order is undefined the angles are reported between columnwise point differences as stored in triangles.
+    unit: NX_ANGLE
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, 3]]
+  # do we need descriptors that threat the triangle set as a set with eventually intersections?

@@ -1,0 +1,45 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# spheres, their volume only ? their surface, both, is
+# redundant as there is NXcsg, and NXquadric, but in order
+# see discussion in the README.md that substantiates why
+# it is useful to define own base classes for frequently
+# used classes
+(NXcg_cylinder_set):
+  symbols:
+    c: "Cardinality of the set, which has to be at least 1."
+  # does it make sense to store the cardinality of the set also explicitly?
+  doc: |
+    A set of cylinders with possibly different size.
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for cylinders. Identifier are defined 
+    either implicitly or explicitly. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish cylinders of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  support(NXcg_point_set):
+    doc: "A set of disjoint vertices that can be used to define for each cylinder a center cap support point. Each point lies on the axis of the cylinder. The height of the cylinder is then difference between the second minus the first point."
+    # how to assure that the point set has cardinality = 2*c?
+    # but eventually this may not be needed because we could equally
+    # think about a set of cylinders that share all the same two
+    # cap center positions but the radii differ.
+    # if we define it like this we need to have 2*c identifier
+    # and at least 2, at most 2*c disjoint points
+    # (if all cylinders overlap or all cylinders are disjoint respectively)
+  radius(NX_NUMBER):
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # again cap, lateral surface area and volume are so trivial to compute
+  # do we need really storage for this costs more to store than to recompute on-the-fly?
+  # similarly to hollow sphere discussion, hollow cylinder, cylinder stack
+  # do wish to define intersections?, if this is the case, one
+  # should use the NXcsg and NXquadric descriptions?
