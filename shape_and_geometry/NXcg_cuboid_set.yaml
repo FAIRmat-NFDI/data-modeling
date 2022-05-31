@@ -1,0 +1,87 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# spheres, their volume only ? their surface, both, is
+# redundant as there is NXoff_geometry, but in order
+# see discussion in the README.md that substantiates why
+# it is useful to define own base classes for frequently
+# used classes
+(NXcg_cuboid_set):
+  # essentially a soup of cuboids, do we need to store intersection
+  # information, or rather in an own group e.g. like proposed here
+  symbols:
+    c: "Cardinality of the set, which has to be at least 1."
+  # does it make sense to store the cardinality of the set also explicitly?
+  doc: |
+    A set of cuboids (rotated bounding boxes) with possibly different size.
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for cuboids. Identifier are defined either implicitly or explicitly.
+    For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. 
+    For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), from 0 (also referred to as C-, 
+    Python-style notation), or from a different offset, which is best suited to 
+    support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish cuboids of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  support(NXcg_point_set):
+    doc: "A set of disjoint vertices that can be used to define for each cuboid the eight edges of the cuboids."
+    # similar discussion to reuse here NXcg_point_set or not like in NXcg_tetrahedra_set
+  cuboids(NX_UINT):
+    doc: "Array of six quads per cuboid which specifies how disjoint points map to specific vertices."
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, 6*4]]
+  winding_order:
+    doc: "Specifies if it can be safely assumed that the definition of the quads follows a specific winding order or not."
+    enumeration: [clockwise, counter-clockwise, undefined]
+  # we should add a comment how each ordering leads to a specific orientation of the individual quads' (outer/inner) unit normal see also here vertex_normal_type
+  vertex_normal(NXcg_unit_normal_set):
+  # how to assure this is a [[1, c], [2, 8*3]] array by NeXus-in-build consistence checks if the normals are stored in the NXcg_unit_normal_set
+  vertex_normal_type:
+    doc: "Are vertex normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # this is implicit provided that winding_order is not undefined, but sometimes codes just dump triangles naively
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # vertex_normal_model(NXprocess):
+  # for polygons vertices are ill-defined so there has to be a model behind this which defines the normal field
+  face_normal(NXcg_unit_normal_set):
+  # how to assure this is an [[1, c], [2, 6*3]] set by NeXus-in-build consistence checks?
+  # check and integrate vertex normal type information
+  face_normal_type:
+    doc: "Are face normals consistently oriented."
+    enumeration: [outer, inner, undefined]
+  # we can use here an uint8 character array as we need only 2bits to store the information
+  # same discussion as above
+  face_area(NX_NUMBER):
+    doc: "Array of area values. For each tetrahedron the area of the adjoining triangles is reported between which combinations of vertices."
+    # circulation order?
+    # "How to define the area consistently? Winding order? Not relevant for undefined though"
+    unit: NX_AREA
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, 6]]
+  # again a few trivial descriptors follow that people may frequently need but one can argue we could equally fast compute them on the fly rather then loading them from disk?
+  barycenter(NXcg_point_set):
+  edge_length(NX_NUMBER):
+    doc: "Array of edge length values. For each tetrahedron the length of the edges is reported between columnwise point differences as stored in tetrahedra which resolves named support points."
+    unit: NX_LENGTH
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, 3]]
+  surface_area(NX_NUMBER):
+  # again trivial quad sum if we have a 4*c face_area array
+    unit: NX_AREA
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  volume(NX_NUMBER):
+    unit: NX_VOLUME
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # do wish to define intersections and or topology?

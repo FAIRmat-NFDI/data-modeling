@@ -1,4 +1,4 @@
-# Basic class to devine a point or better the end point of a vector
+# Basic class to define a point or better the end point of a vector
 # in a 1-4 D space. This is a fundamental class in any geometry systems.
 
 category: base

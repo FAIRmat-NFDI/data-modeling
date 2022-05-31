@@ -1,0 +1,46 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# spheres, their volume only ? their surface, both, is
+# redundant as there is NXcsg, and NXquadric
+(NXcg_ellipsoid_set):
+  symbols:
+    c: "Cardinality of the set, which has to be at least 1."
+    d: "Dimensionality, should be at least 2."
+  # does it make sense to store the cardinality of the set also explicitly?
+  doc: |
+    A set of (tri-axial) ellipsoids with possibly different half-axes radii.
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  dimensionality(NX_POSINT):
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for ellipsoids. Identifier are defined 
+    either implicitly or explicitly. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish ellipsoids of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  halfaxes_radii(NX_NUMBER):
+    doc: "d-many half-axes radii for each ellipsoid."
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, c], [2, d]]
+  barycenter(NXcg_point_set):
+    doc: "List of barycenter positions for each ellipsoid."
+  volume(NX_NUMBER):
+    doc: "Volume of each ellipsoid."
+    unit: NX_VOLUME  # d-dimensional, what happens if d==2 would it conflict then with NX_AREA?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  surface_area(NX_NUMBER):
+    doc: "Surface area of each ellipsoid."
+    unit: NX_AREA  # d-dimensional?, circuference if d==2 though... conflicting names?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  orientation(NXms_orientation_set):
