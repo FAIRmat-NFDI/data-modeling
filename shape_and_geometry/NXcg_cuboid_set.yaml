@@ -38,7 +38,11 @@ category: base
       dim: [[1, c], [2, 6*4]]
   winding_order:
     doc: "Specifies if it can be safely assumed that the definition of the quads follows a specific winding order or not."
+    # maybe store 
     enumeration: [clockwise, counter-clockwise, undefined]
+    dimensions:
+      rank: 1
+      dim: [[1, c], [2, 6]]
   # we should add a comment how each ordering leads to a specific orientation of the individual quads' (outer/inner) unit normal see also here vertex_normal_type
   vertex_normal(NXcg_unit_normal_set):
   # how to assure this is a [[1, c], [2, 8*3]] array by NeXus-in-build consistence checks if the normals are stored in the NXcg_unit_normal_set
