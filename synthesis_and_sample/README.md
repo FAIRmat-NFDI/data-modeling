@@ -10,7 +10,6 @@ There are several components required in every experiment we describe, such as:
 
 ![App Def examples](https://box.hu-berlin.de/f/af9fddf4e83b44568973/?dl=1)
 
-
 Each of these elements is a base class, e. g., the set of terms that might be used in an instance of that class.
 Consider the base classes as a set of components that are used to construct a data file (synthesis or measurement).
 Now, let us collect here base classes that are required in every tasks of Area A, but may not have been written by other Areas so far.
@@ -26,11 +25,11 @@ after the 23rd of may task force meeting, this is the updated shape of sample cl
 
 Summary:
 
-What should be described in the Component Section:
+What should be described in the SUBSTANCE Section:
 
 - simple substance (element or chemical compound)
 
-What should be described in Material Section:
+What should be described in MATERIAL Section:
 
 - mixture (or single phase mixture, solution, suspension, alloy or colloid)
 - multi phase sample (multi domain or composite)
@@ -40,7 +39,7 @@ What should be described in Material Section:
 - dispersion
 - policrystalline powder
 
-What should be described in Sample Section:
+What should be described in SAMPLE Section:
 
 - general attributes (ID, name, etc)
 

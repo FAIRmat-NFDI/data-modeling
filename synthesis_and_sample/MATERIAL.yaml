@@ -1,0 +1,85 @@
+category: base
+doc: "Draft base class to describe a chemical element)"
+
+(chemical_specimen_or_material):
+  doc: |
+    A base class draft to describe a chemical compound formed from chemical substances
+
+    This class describes any materials used for experiments formed by a set of substances,
+    which may be in any state, that is liquid, solid, etc. form.
+  chemical_name:
+    doc: |
+      The name of the material
+  component(SUBSTANCE):
+    doc: A REFERENCE to the chemical separate entry
+
+    # let's discuss where to describe the amount and concentrattion:
+    # E. G. I have my NaCl solution in water whose concentration is described in the "chemical_substance_or_component",
+    # I take a teaspoon from that bottle to compose my "chemical_specimen_or_material"
+    # where to indicate that?
+    # the idea was to extend the SUBSTANCE base class with the following quantities only when it is invoked as a camponent of a MATERIAL
+
+    fabrication_date:
+      doc: |
+        Date of preparation
+    mass:
+      unit: mg
+      doc: |
+        Mass of the powder precursor weighted out in the glove box
+    amount:
+      unit: mmol
+      doc: |
+        Amount of substance of precursor powder weighted out
+    volume_solvent:
+      unit: ml
+      doc: |
+        Volume of solvent used to solve the powder precursor
+    mass_concentration:
+      unit: g/L
+      doc: |
+        Mass concentration of the prepared precursor-solvent solution
+    concentration:
+      unit: mmol/L
+      doc: |
+        Amount of substance concentration of the prepared precursor-solvent solution
+    amount_type:
+      doc: |
+        How was the substance provided? By mass, by volume, by molar amount, in solution,
+        in a mixture...
+      enumeration: [by mass, by volume, molar]
+    concentration_type:
+      doc: |
+        what concentration was used?
+      enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
+    concentration:
+      doc: |
+        and the corresponding number
+      exists: required
+
+  supplier:
+    doc: |
+      Fabricating company
+  state_or_phase:
+    doc: |
+      State of the compound, e.g. solid, liquid, gas, plasma
+    enumeration: [solid, liquid, gas, plasma, solution]
+  GEOMETRY_INFO:
+    size:
+      doc: |
+        dimensions, need to be better defined
+    orientation:
+      doc: |
+        crystallographic orientation of the material in [hkl]
+    off_cut:
+      unit: degrees
+      doc: |
+        Off-cut angle to the substrates surface
+  comment:
+    doc: |
+      Remarks about the chemical beyond the typically collected information.
+      Here you can collect information about your experience using this chemical,
+      for example if it might have been contaminated during an experiment
+
+  # now, outside the COMPONENTs, we still have to tell how much of this compound we
+  # use for whatever purposes
+  # we could do the same here, extending this class when it is instanciated in the upper SAMPLE level

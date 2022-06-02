@@ -1,0 +1,103 @@
+MATERIAL:
+  doc: |
+    A base class draft to describe a material
+
+# IN SOLID SAMPLES
+
+  structural_data:
+    structure:
+    degree_of_crystallinity:
+      doc: https://goldbook.iupac.org/terms/view/D01565
+    density:
+    space_group:
+    lattice_constants:
+    density:
+
+  thermal_radiation:
+    emissivity:
+    absorption_coefficient:
+    refraction_index:
+
+  thermal_properties:
+    thermal_expansion_coeff:
+    heat_capacity:
+    heat_conductivity:
+    interphase_solid_liquid:
+      melting_point_temperature:
+      latent_heat:
+
+  mechanical_properties:
+    elastic_stiffness:
+    critical_resolved_shear_stress:
+
+  electro-magnetic properties:
+    electrical_conductivity:
+    magnetic_susceptibility:
+
+  substrate-connected magnitudes:
+    wafer_id: # text
+    crystal structure: # e.g., monoclinic, lattice params.?? - ideally all description a,b,c, aplha, beta, gamma
+    surface orientation:
+        hkl: # e.g. (100)
+        offcut:
+            degrees: #, e.g. 2
+            towards: #e.g. (001)
+    vendor: # text
+    shape: # e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
+    thickness: # in mm
+    polishing: # 1sp = single sided, 2sp = double sided
+    component:
+        formula: # e.g., Ga2O3
+    dopant:
+        formula: # chem. symbol, e.g. Fe
+        concentration: # cm^-3, e.g., 3e18
+
+# IN LIQUID SAMPLES
+
+  structural_data:
+    mass:
+    volume:
+    density:
+
+  thermal_radiation:
+    emissivity:
+    absorption_coefficient:
+    refraction_index:
+
+  thermal_properties:
+    thermal_expansion_coeff:
+    heat_capacity:
+    heat_conductivity:
+    interphase_solid_liquid:
+      melting_point_temperature:
+      latent_heat:
+    interphase_liquid_gas:
+      boiling_point_temperature:
+      boiling_heat:
+
+  mechanical_properties:
+    viscosity:
+    surface_tension:
+    termocapillary_coefficient:
+
+  electro-magnetic properties:
+    electrical_conductivity:
+
+# IN GAS SAMPLES
+  structural_data:
+    mass:
+    volume:
+    density:
+
+  thermal_radiation:
+    absorption_coefficient:
+    refraction_index:
+
+  thermal_properties:
+    thermal_expansion_coeff:
+    heat_capacity:
+    heat_conductivity:
+
+  mechanical_properties:
+    viscosity:
+
