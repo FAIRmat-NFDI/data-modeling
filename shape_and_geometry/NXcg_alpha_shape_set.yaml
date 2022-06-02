@@ -1,0 +1,59 @@
+category: base
+(NXcg_alpha_shape):
+  doc: |
+    A base class for documenting a alpha shape to a point cloud.
+    
+    For details see:
+    * https://doi.org/10.1109/TIT.1983.1056714 for 2D,
+    * https://doi.org/10.1145/174462.156635 for 3D,
+    * https://dl.acm.org/doi/10.5555/871114 for weighted, and
+    * https://doc.cgal.org/latest/Alpha_shapes_3 for 3D implementation in CGAL,
+    the Computational Geometry Algorithms Library
+  # we follow for now the conventions of the CGAL library
+  # weighted alpha shapes
+  # The so-called spectrum or sets of (weighted) 
+  # alpha shapes includes the
+  #  convex hull of a point set.
+  symbols:
+    d: "Dimensionality, for now 2 or 3."  # generalize to d > 3
+    n_c: "Number of cells."
+    n_f: "Number of faces."
+    n_e: "Number of edges."
+  dimensionality(NX_UINT): # 2 or 3
+  version:
+    enumeration: [basic] # , weighted]
+  mode:
+    doc: "Specifically when computed with the CGAL, the mode specifies if singular faces are removed (regularized)." # or not. CHECK THIS AGAIN CAREFULLY
+    enumeration: [general, regularized]
+  s(NXcg_point_set):
+  # this could also just be implemented as a link but how would this be possible
+  # unfold the NXcg_point_set and add a 
+  # weight(NX_NUMBER):
+  #   doc: "Weights for each point"
+  alpha(NX_NUMBER):
+    doc: "Real number whose reciprocal values defines the radius of the d-sphere."
+    # check again carefully the CGAL documentation talks about, 
+    # for 3D, the square of the radius!
+    # unit: reciprocal length
+  # In general, an alpha complex is a disconnected and non-pure complex, 
+  # meaning in particular that the alpha complex may have singular faces.
+  # so the number of cells, faces and edges depends on how a specific alpha complex,
+  # i.e. an alpha-shape of S for alpha, is filtrated with respect to k < d-dimensional
+  # simplices. Here we assume that number_of_cells, number_of_faces, number_of_edges
+  # are reported assuming one filtrates these simplices according to mode.
+  # also using the assumption the base class reports the unique vertices
+  # of the specifically filtrated alpha complex.
+  triangulation(NXcg_triangle_set):
+  # add for each triangle if desirable a notation of whether the simplex is
+  # exterior, regular, singular, or interior with respect to the alpha complex
+  # but a triangulation is more than a triangle (soup)/set because there is
+  # connectivity information
+  # customize the NXcg_triangle_set base class members such that connectivity
+  # information is contained
+  # we need to find also a better name for this, what people intutive understand
+  # as the interior, may not even exist for a given alpha value
+  # more specifically it is the set of filtrated cells acknowledging mode
+  # e.g. the interior cells of the regularized alpha complex
+  interior_cells(NXcg_tetrahedra_set):
+  # document the alpha status
+  # https://doc.cgal.org/latest/Alpha_shapes_3/classCGAL_1_1Alpha__status.html

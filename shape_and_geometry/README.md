@@ -110,6 +110,7 @@ describing microstructure data have to be flexible enough to reflect these desig
 *   have limited resources to participate in such activities, again prioritization, focus should be on interoperability?  
 *   Nomad MetaInfo does not go deep enough?  
 * Multi-dimensionally-capable base classes, e.g. NXcg_ellipsoid_set how to solve that for d==2 and d==3 surface area/circumference length degenerate how to remain intuitive?
+* s in NXcg_alpha_shape how to mix link and/or NXcg_point_set
 
 **TO DO**
 NXms_matpoint_set
@@ -147,7 +148,7 @@ Consider e.g. the [layer.yaml](https://github.com/FAIRmat-Experimental/data-mode
 Let's assume we cut us a rectangular specimen from the sheet with dimensions 3 times 1 cm and want to characterize it.
 
 **NeXus schema instance without considering CSG or any new geometry base classes.**
-Let's use the proposal for layer.yaml proposal and assume we use it inside some_base_class that is maybe_in_sample:  
+Let's use the layer.yaml proposal and assume we use it inside some_base_class that is maybe_in_sample:  
 
 some_base_class_maybe_in_sample/layer1/id: 1  
 some_base_class_maybe_in_sample/layer1/layer_type: substrate  
@@ -202,7 +203,7 @@ The layers are then a group, an instance of NX_cg_cuboid_set with
 cardinality: 5
 identifier: [1, 2, 3, 4, 5]
 * One would describe the specimen with vertices and store these under support:
-* Vertices in the plane between adjoining layers are shared so we need to store 4 + 4\*4 + 4 vertices.
+* Vertices in the plane between adjoining layers are shared so we need to store 4 + 4 times 4 + 4 vertices.
 * One would have to store the quads for each cuboid.  
 * One would have to duplicate these quads though for each cuboid.  
 * Evidently this makes a point that defining something like an NXcg_stack could be useful.  
@@ -233,22 +234,27 @@ a clean description how the layers are differently shaped; which is not covered 
 
 One could avoid data duplication if one pulls the specimen-constraining planes out of the layers group. Thus one describes that the layer stack forms overall a (cuboidal or disk-shaped respectively) specimen and in doing so one could put the four globally cutting planes elsewhere into the application definition. Maybe under the sample geometry.
 
-An example following this approach using CSG exemplified for the Y2O3 layer could then look as follows:
+An example following this approach using CSG exemplified for the Y2O3 layer could then look as follows:  
 * Two NXquadric instances are required, both of them are planes.  
-* These planes have to be fully parameterized  *
-* Thereby, one not only says we have a so-and-so-thick layer but there is a layer that is precisely located relative the coordinate system.
-* For instantiating a computer simulation this can be useful if not be a requirement.
+* These planes have to be fully parameterized  
+* Thereby, one not only says we have a so-and-so-thick layer but there is a layer that is precisely located relative the coordinate system.  
+* For instantiating a computer simulation this can be useful if not be a requirement.  
 * Specifically the planes would have opposite normals, realized via the parameterization of the quadric.  
 * Thus, the planes point into their respective positive half-spaces.  
-* The negative half-space behind the plane is the volume that when intersected by the half-space of the other plane, yields an infinitely extended slab with a well-defined thickness.
-* If the resulting infinite slab is again intersected with the interior half-space of a circular quadric the CSG-operations define a specifically oriented disk-shaped layer with a precisely defined diameter and thickness thus replacing substrate_size, length and width.  
-* Alternatively using four quadrics, or even simpler a cuboid that is parameterized through an NXoff_geometry, instance yields the cuboidal specimen.
-* The combination of NXoff_geometry and NXquadric makes the CSG approach a de facto more generalized approach.
+* The negative half-space behind the plane is the volume that when intersected by the half-space of the other plane,  
+* yields an infinitely extended slab with a well-defined thickness.  
+* If the resulting infinite slab is again intersected with the interior half-space of a circular quadric the  
+* CSG-operations define a specifically oriented disk-shaped layer with a precisely defined diameter and  
+* thickness thus replacing substrate_size, length and width.  
+* Alternatively using four quadrics, or even simpler a cuboid that is parameterized through an NXoff_geometry, instance yields the cuboidal specimen.  
+* The combination of NXoff_geometry and NXquadric makes the CSG approach a de facto more generalized approach.  
 
-** We learn from this example that there is no golden-bullet how to describe this multi-layer example;**  
-** however we also learn how NeXus can be customized or used already as is to extend the applicability of the layer.yaml description wrt to making additional statements towards a more precise geometrical description of the sample.**
+**We learn from this example that there is no golden-bullet how to describe this multi-layer example;**  
+**however we also learn how NeXus can be customized or used already as is to extend the applicability**  
+**of the layer.yaml description wrt to making additional statements towards a more precise**  
+**geometrical description of the sample.**  
 
-** Furthermore, we learn that we need also an example for how to describe e.g. the polycrystalline structure of each layer.**
+** Furthermore, we learn that we need also an example for how to describe e.g. the polycrystalline structure of each layer.**  
 
 We may place this under sample. On the flipside how do we know that the layer is specifically polycrystalline, with well defined crystals,
 eventually even two-dimensionally or three-dimensionally resolved crystals, for this one could perform characterization experiments.
