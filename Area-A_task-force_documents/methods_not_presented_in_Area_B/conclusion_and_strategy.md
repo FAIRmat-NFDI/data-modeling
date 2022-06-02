@@ -1,5 +1,5 @@
 # Conclusion
-We cathegorized the methods needed for sample characterization into the follwing groups:
+We categorized the methods needed for sample characterization into the follwing groups:
 
 - electrical methods
 	- Hall
@@ -46,7 +46,7 @@ How to go on from our first meeting on methods for sample characterization?
 Motivation: what needs to be done to keep measurements reproducible?
 
 Next steps:
-1. agree with Area B on general cathegories --> talk to them next Tuesday in their task force meeting
+1. agree with Area B on general categories --> talk to them next Tuesday in their task force meeting
 2. working on different methods with real data of methods in subgroups, meet again in 1-2 weeks
 3. derive general schema 
 
