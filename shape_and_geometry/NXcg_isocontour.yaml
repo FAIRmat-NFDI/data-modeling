@@ -1,0 +1,12 @@
+category: base
+(NXcg_isocontour):
+  doc: |
+    A container to organize metadata and data related to isocontours in d-dimensional space.
+  symbols:
+    d: "Dimensionality."
+  dimensionality(NX_POSINT):
+  grid: #(NXcg_grid):
+    doc: "Link to the grid on which the iso-contour is defined."
+    # how to assure that the grid is d-dimensional ?
+  isovalue(NX_NUMBER):
+    unit: NX_ANY
