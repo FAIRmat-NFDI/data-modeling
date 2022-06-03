@@ -1,0 +1,10 @@
+category: base
+(NXcs_profiling):
+  doc: |
+    Proposal for a root container class to store simple profiling data which an application collects about its performance.
+  (NXcs_computer):
+    doc: "A collection of computing nodes with resources. This can be as simple as a laptop or a cluster computer."
+  (NXcs_job):
+    doc: "A description of the job."
+  (NXcs_profiling_event):
+    doc: "A collection of individual profiling data that were collected to probe e.g. how much time the program took for certain computational steps and how much memory was consumed during these operations."
