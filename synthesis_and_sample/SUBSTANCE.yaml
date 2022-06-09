@@ -1,0 +1,103 @@
+category: base
+doc: |
+  Draft base class to describe a chemical element)
+(substance):
+  doc: |
+    A base class draft to describe a chemical substance
+
+    In [Wikipedia](https://en.wikipedia.org/wiki/Chemical_substance) you find the definition
+    as: a form of matter having constant chemical composition and characteristic properties.
+    It cannot be separated to its constituent elements by physical means, that is without
+    breaking chemical bonds.
+    In this current draft, we include chemical elements, compounds and alloys as possibilities.
+    Materials described in this class are possible input and output components of chemical reactions
+    e.g. in chemical synthesis processes.
+    This base class can be also used to describe any components of samples used for measurements.
+
+    An important usage of this class is to form a mixture, e.g. a solution or alloy from several
+    substances. Therefore space is provided here to specify an amount and resulted concentration
+    of this substance in that mixture formed. When looking only on this class, it may be not
+    clear, but when looking at all substances listed together, the composition of the resulted
+    sample becomes clear.
+    For a proper hierarchy, we shall also need an NXchemical_compound class formed as a list
+    of these chemical substances.
+  chemical_name:
+    doc: |
+      The name of the chemical that is typically used in literature
+  iupac_name:
+    doc: |
+      The IUPAC nomenclature of the chemical
+    exists: required
+  empirical_formula:
+    doc: |
+      Formed by juxtaposition of the atomic symbols with their appropriate subscripts
+      to give the simplest possible formula expressing the composition of a compound.
+      [IUPAC](https://goldbook.iupac.org/terms/view/E02063)
+  inchi:
+    doc: |
+      An inchi: [text based international chemical identifier](https://en.wikipedia.org/wiki/International_Chemical_Identifier) if available
+  cas:
+    doc: |
+      The CAS registry number
+  smiles:
+    doc: |
+      The [simplified molecular input line entry system identifier](https://en.wikipedia.org/wiki/Simplified_molecular_input_line_entry_specification)
+  sku_number:
+    doc: |
+      Stock keeping unit of the chemical. (e.g. 244619-50G)
+  sds_link:
+    doc: |
+      The corresponding Safety Data Sheet (SDS) of the product
+  supplier:
+    doc: |
+      Fabricating company
+  state_or_phase:
+    doc: |
+      State of the compound, e.g. solid, liquid, gas, plasma
+    enumeration: [solid, liquid, gas, plasma, solution]
+  molar_mass:
+    doc: |
+      Molar mass possibly in g/mol units
+  density:
+    doc: |
+      Density of the compound
+  purity:
+    doc: |
+      Purity of the Chemical. [Wikipedia](https://en.wikipedia.org/wiki/Chemical_purity)
+    enumeration: [ACS grade, Reagent grade, USP grade, NF grade, BP grade, JP grade, Laboratory grade, Purified grade, Technical grade]
+  buying_date:
+    doc: |
+      Date of the Invoice Mail
+  opening_date:
+    doc: |
+      Date of Opening the Chemical bottle
+  impurities:
+    doc: |
+      Descriptions of the impurities of the product
+  doping_level:
+    doc: |
+      Chemical doping level of electrically conductive substrates
+  doping_species:
+    doc: |
+      Doping species to obtain electrical conductivity in the substrates
+  comment:
+    doc: |
+      Remarks about the chemical beyond the typically collected information.
+      Here you can collect information about your experience using this chemical,
+      for example if it might have been contaminated during an experiment
+
+# CAN we comment whether the taken amount of substance should go here or outside?
+
+  amount_type:
+    doc: |
+      How was the substance provided? By mass, by volume, by molar amount, in solution,
+      in a mixture..."
+    enumeration: [by mass, by volume, molar]
+  amount:
+    doc: "Amount with a unit corresponding to the above amount type"
+
+  concentration_type:
+    doc: "what concentration was used?"
+    enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
+  concentration:
+    doc: "and the corresponding number"

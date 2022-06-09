@@ -1,0 +1,10 @@
+category: base
+(NXgraph_node_set):
+  doc: |
+    A set of nodes/vertices in space representing members of a graph.
+  # a graph in which space d-dimensional, categorical, at all a metric one?
+  symbols:
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  position: # can be a (NXcg_point_set)
+  # attribute data

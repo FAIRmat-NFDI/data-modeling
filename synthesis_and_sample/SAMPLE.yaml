@@ -1,0 +1,16 @@
+# One or several COMPONENTS are making a MATERIAL.
+# One or several MATERIALS are making a SAMPLE
+SAMPLE:
+  ID:
+  name:
+  user:
+  citation: doi
+  method: [experimental, simulation, declared by vendor]
+  MATERIAL:
+      ... see material.yaml
+    SUBSTANCE:
+      ... see substance.yaml
+  property_1: characterization needed for this sample as reference
+  property_2:
+  ...
+  other properties: "..."

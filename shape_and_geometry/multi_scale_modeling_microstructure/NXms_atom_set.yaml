@@ -1,0 +1,10 @@
+category: base
+(NXms_atom_set):
+  doc: |
+    A base class to wrap details about a spatial configuration of atoms.
+  (NXcg_point_set):
+    doc: "Atom positions."
+    # the application-definition specific NXcg_point_set instance
+    # should be extended then by a field type(NX_UINT):
+    # we need a case-dependent discussion with e.g. Joseph, Nathan, and Luca
+    # on time-tracking of atom sets

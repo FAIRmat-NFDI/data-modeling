@@ -1,0 +1,40 @@
+Process:
+  global:
+    description:
+    experiment_identifier:
+    experiment_location:
+    start_time:
+    end_time:
+    synthesis_category:
+    synthesis_method:
+  samples:
+    doc: |
+      Define all the materials and samples that are used in the process,
+      they belong to the sample class and you can reference it through your process
+    rod:
+    consumables:
+    precursor:
+    substrate:
+  time_independent_settings:
+    film: -> Aykut
+    substrate:
+      doc: |
+        you can reference here your material
+    t_substrate: -> Aykut
+    o2_ar: -> Aykut
+    thickness: -> Aykut
+    roughness: -> Aykut
+  time_dependent_settings_user_filled:
+    timestamp:
+    deposition_control: -> Aykut
+    gas ambient: -> Iryna
+      gas_pressure:
+      gas_inflow_rate:
+      gas_outflow_rate:
+      gas_composition:
+      doping:
+  time_dependent_settings_digital_filled:
+   timestamp:
+Characterization:
+  ...
+

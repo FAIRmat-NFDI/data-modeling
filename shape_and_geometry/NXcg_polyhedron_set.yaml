@@ -1,0 +1,98 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+# spheres, their volume only ? their surface, both, is
+# redundant as there is NXoff_geometry, but in order
+# see discussion in the README.md that substantiates why
+# it is useful to define own base classes for frequently
+# used classes, a polyhedron is a specific polytope in 3d, do we need
+# higher-dimensional polytopes? that could be useful for simplicies though
+# as they are used in numerics etc. maybe reach out here to our friends
+# from MarDI, for now let's assume we do not need polytopes for d > 3
+(NXcg_polyhedron_set):
+  # essentially a soup of polyhedra there are multiple question to this description
+  # often the polyhedra result from an e.g. Voronoi-tessellation of space, 
+  # in this case it is redundant to store the faces for each cell, as they are shared
+  # so one question is do we want to have an own base class for tessellations with 
+  # members like point set, rule set, metric, for now I propose the usual description
+  symbols:
+    c: "Cardinality of the set, which has to be at least 1."
+    nfaces: "Number of faces"
+    ntopology: "Total number of elements in all sequences of all faces of all polyhedra."
+  # does it make sense to store the cardinality of the set also explicitly?
+  doc: |
+    A set of polyhedra, so-called cells, all non-degenerated, closed, built of
+    non-self-interacting polygon meshes.
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  nfaces(NX_POSINT):
+  ntopology(NX_POSINT): # also I have seen computer simulations which exceed the range of uint32, how is this reflected by NeXus
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for polyhedra. Identifier are defined either implicitly or explicitly.
+    For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. 
+    For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), from 0 (also referred to as C-, 
+    Python-style notation), or from a different offset, which is best suited to 
+    support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish polyhedra of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  support(NXcg_point_set):
+    doc: "The set of all disjoint vertices of the polyhedra."
+    # similar discussion to reuse here NXcg_point_set or not like in NXcg_tetrahedra_set
+  # we can either encapsulate the entire surface in an NXcg_polygon_set or write it out explicitly
+  number_of_faces(NX_UINT):
+    doc: "The number of faces for each polyhedron."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # there are different situations 
+  # i) polyhedra are floating in space without intersections, 
+  # ii) polyhedra intersect (some of them, all of them), 
+  # iii) polyhedra make contact (only some, all as in a Voronoi tessellation)
+  # if they we face a tessellation we need to have a reference volume if that reference volume 
+  # is closed some polyhedra make contact with the edge of the domain, or other polyhedra
+  # (in the case of periodic boundary conditions)
+  # which case we face has implications for the winding order because if two
+  # polyhedra touch when what is an outer or inner normal, outer/inner with respect to which polyhedron?
+  # in the first case it is implicit that the shortest Euclidean distance between each polyhedron is at least epsilon
+  # so 
+  face_type(NX_UINT): #maybe a better name maybe topology, although this is misleading for the above-mentioned reasons
+    doc: "A concatenated array, for each polygon face the number of vertices."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, nfaces]]
+  faces(NX_UINT):
+    doc: "A concatenated array, for each polyhedron and each of its faces, the sequence how vertices built the polygon, if possible in winding order."
+    # but see the above comment on arbitrariness of winding order
+    dimensions:
+      rank: 1
+      dim: [[1, ntopology]
+  winding_order:
+    doc: "Specifies for each face if it can be safely assumed that the definition of the face polygon follows a specific winding order or not."
+    enumeration: [clockwise, counter-clockwise, undefined]
+  winding_order_reference(NX_INT):
+    doc: "For each face the identifier of the polyhedron which serves as the reference for the winding order."
+    # or will something like this not be needed because we can use a global definition for the winding order but I think exactly this does not work for all cases?
+  # further ideas which or may not be useful
+  # topology, how to describe this, one could either store polyhedron-adjacency hashes or Weinberg vectors
+  vertex_normal(NXcg_unit_normal_set):
+  vertex_normal_type:
+  face_normal(NXcg_unit_normal_set):
+  face_normal_type:
+  face_area(NX_NUMBER): # to trivial to store/better compute on-the-fly?
+    doc: "Array of area values for each face."
+    unit: NX_AREA
+    dimensions:
+      rank: 2
+      dim: [[1, nfaces]]
+  # circumference(NX_NUMBER):
+  barycenter(NXcg_point_set): # per polyhedron
+  # approximate MacPherson-Srolovitz ?
+  # volume(NX_NUMBER): # per polyhedron
+  # surface_area(NX_NUMBER): # per polyhedron
+  # intersections? as a graph

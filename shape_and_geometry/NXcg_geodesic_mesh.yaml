@@ -1,0 +1,17 @@
+category: base
+(NXcg_geodesic_mesh):
+  doc: |
+    Base class to describe details about a specific geodesic mesh.
+    
+    People from geodesic/surveyors will likely have specific demands and 
+    different views what should be included in such a base class, given that
+    nested geodesic mesh are a key component of climate modelling tools.
+    Discussions with NFDI-Earth could make this base class more meaty and detailed.
+    
+    For the time being, we use the base class as a wrapper to specify how a 
+    geodesic surface mesh was instantiated, as there are many possibilities
+    and a geodesic surface mesh is in this sense a triangulated surface mesh
+    with special meta data. See e.g. E. S. Popko and C. J. Kitrick for details
+    https://doi.org/10.1201/9781003134114 
+    (especially the section on subdivision schemata)
+  (NXcg_triangulated_surface_mesh_set):

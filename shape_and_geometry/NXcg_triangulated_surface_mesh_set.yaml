@@ -1,0 +1,41 @@
+category: base
+# triangulated_surface_mesh_set or sets?
+(NXcg_triangulated_surface_mesh):
+  # essentially a soup of triangles with connectivity
+  # a description often used to approximate manifold surfaces
+  symbols:
+    ntriangles: "Number of triangles"
+  doc: |
+    A mesh of triangles, can self-interact, all triangles non-degenerated, can have holes.
+  number_of_triangles(NX_POSINT):
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    triangles. Identifier are defined either implicitly or explicitly.
+    For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. 
+    For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), from 0 (also referred to as C-, 
+    Python-style notation), or from a different offset, which is best suited to 
+    support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish triangles of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, ntriangles]]
+  support(NXcg_point_set):
+    doc: "The set of all disjoint vertices of the triangles."
+    # similar discussion to reuse here NXcg_point_set or not like in NXcg_tetrahedra_set
+  # we can either encapsulate the entire surface in an NXcg_polygon_set or write it out explicitly
+  # edge-based, triangles or face, number_of_faces(NX_UINT):
+  
+  STILL_UNSURE_ABOUT_THE_NAME(NX_UINT):
+    doc: "How the support vertices make up the triangles."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, ntriangles], [2, 3]]
+  # the above-mentioned approach is the usual indexing strategy, however it disregards topology
+  # half_edges(NX_UINT): on the contrary would describe the wire-frame/edges of the mesh and then
+  # one would need support fields that document whether a surface is closed or not, i.e. if we have
+  # a triangle or an edge graph
+  # the rest is very similar to NXcg_triangle_set, should we fuse it or not

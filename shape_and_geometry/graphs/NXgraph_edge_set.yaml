@@ -1,0 +1,19 @@
+category: base
+(NXgraph_edge_set):
+  doc: |
+    A set of (eventually directed) edges which connect nodes (vertices).
+  symbols:
+    n_edges: "Number of edges."
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  directionality(NX_CHAR):
+    doc: "Specifier for each edge whether it is non-directional, one-directional, or bidirectional. Use the smallest available binary representation which can store three different states. State 0x00 is non-directional, state 0x01 is one-directional, state 0x02 is bi-directional."
+    dimensions:
+      rank: 1
+      dim: [[1, n_edges]]
+  node_pair(NX_UINT):
+    doc: "Array of pairs of graph vertex/node identifiers. Each pair represents the connection between the two nodes. In the case that the directionality of the connection is one-directional, the first member of the pair is the source and the second member is target, i.e. the pair encodes the information as if one traverses the edge from the source node walking to the target node."
+    dimensions:
+      rank: 2
+      dim: [[1, 2], [2, n_edges]]
+    # attribute data

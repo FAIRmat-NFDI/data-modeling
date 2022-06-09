@@ -1,0 +1,52 @@
+category: base
+(NXcg_grid):
+  doc: |
+    A base class representing a d-dimensional grid of Wigner-Seitz cells.
+    
+    Frequently convenient three-dimensional grids with cubic cells are used.
+    Examples applications are crystal plasticity and stencil methods like 
+    phase field or cellular automata.
+  symbols:
+    d: "Dimensionality"
+    n: "Total number of cells."
+  dimensionality(NX_UINT): # 2 or 3
+  # origin as an NXtransformation or as an explicit d-dimensional position vector
+  
+  origin(NX_NUMBER):
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+  symmetry:
+    doc: "The symmetry of the lattice defining the shape of the unit cell."
+    enumeration: [cubic]
+  cell_dimensions(NX_NUMBER):
+    doc: "The unit cell dimensions using crystallographic notation."
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+  extent(NX_UINT):
+    doc: "Number of unit cells along each of the d unit vectors."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+  # number_of_cells(NX_UINT): maybe already too trivial quantities
+  # should constraints on the grid be place here or not
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifier of cells. Cells are indexed either implicitly or explicitly.
+    For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1].
+    For explicit indexing the identifier array has to be used. 
+    The identifier_offset describes e. g. if cell IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different
+    offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish polylines of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, n]]
+  bounding_box(NXcg_polyhedron_set):
+  # a good example for a general bounding box description for such a grids of triclinic cells
+  # https://docs.lammps.org/Howto_triclinic.html NXcg_polyhedron because a parallelepiped

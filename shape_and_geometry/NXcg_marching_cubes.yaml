@@ -1,0 +1,24 @@
+category: base
+(NXcg_marching_cubes):
+  doc: |
+    A base class to document metadata and data about a used marching cubes.
+    
+    Documenting which specific version was used can help to understand how robust
+    the results are with respect to the topology of the triangulation.
+  grid: #(NXcg_grid):
+    doc: "Link to the grid on which the marching cubes algorithm is operating."
+  implementation:
+    doc: |
+      Reference to the specific implementation of marching cubes used.
+      
+      See the following papers for details to identify a DOI to put in this field
+      which specifies which implementation was used
+      * https://doi.org/10.1016/j.cag.2006.07.021
+      * https://doi.org/10.1109/MCG.2020.2971284
+      The value placed here should be a DOI
+    \@version:
+      doc: "Version and build number which details the rule set and handling of topological inconsistencies."
+    # we could also think to store the rule sets in here explicitly including the coordinate system conventions
+    # the problem is that commercial software like Matlab does not expose the rule set and thus 
+    # such a field cannot be fillded
+    # one could use an enumeration to narrow down

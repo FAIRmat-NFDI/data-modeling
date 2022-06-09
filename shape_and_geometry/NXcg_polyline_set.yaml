@@ -1,0 +1,87 @@
+category: base
+# which space, should we restrict us to the Euclidean?
+(NXcg_polyline_set):
+  symbols:
+    d: "Dimensionality, i.e. the length of the coordinate array, which has to be at least 1."
+    c: "Cardinality of the set, which has to be at least 1."
+  #  n: "Number of unique points supporting the polylines, which has to be at least one."
+    ntotal: "Number of total nodes visited to define each polyline."
+  # does it make sense to store the cardinality of the set also explicitly?
+  # and if so how to assure that a field value like the one for cardinality == c ?
+  doc: |
+    A set of polylines in d-dimensional space.
+    
+    Each polyline is built of either a sequence of point/vertices
+    described by a sequence of identifiers for vertices.
+    Each polyline needs to have a start and an end point though.
+    The sequence describes the traversal along the line from the start to the end.
+  dimensionality(NX_POSINT):
+  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
+  number_of_unique_points(NX_POSINT): #n
+  number_of_total_points(NX_POSINT): #ntotal
+  identifier_offset(NX_UINT):
+    # somewhat a global offset polyline 2, polyline 3 when offset is 2
+    doc: "Integer which specifies the first index to be used for distinguishing
+    identifiers for polylines. These identifiers need to be distinguished
+    from identifiers of (unique) points. Identifier for polylines are defined 
+    either implicit or explicit. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the 
+    identifier array has to be used.  The identifier_offset describes e. g. 
+    if object IDs start from 1 (also referred to as the Fortran-), 
+    from 0 (also referred to as C-, Python-style notation), or from a different
+    offset, which is best suited to support the description respectively."
+  # is implicit the right word?
+  identifier(NX_UINT):
+    doc: "Integer used to distinguish polylines of the set using explicit indexing."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  closed(NX_BOOLEAN):
+    doc: "If true that polyline is closed so there is a connection pointing from the end to the start."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # either we use an instance of a NXcg_point_set to describe the unique
+  # vertices, but how can we then assure that the identifier_offset for the
+  # point identifiers matches those used here?
+  unique_vertices(Nxcg_point_set):
+    doc: "The set of unique vertices which support the polyline set."
+  vertices_sequence(NX_UINT):
+    doc: "Array of indices referring vertices from unique_vertices 
+    to describe each polyline."
+    dimensions:
+      rank: 1
+      dim: [[1, ntotal]]
+  # should we always leave this a one dimensional array or should we
+  # make it a 2D array such that for a set of polylines which have all
+  # the same number of support vertices we can more intuitively describe
+  # the polyline set?
+
+
+# example 1
+# dimensionality: 3
+# cardinality: 2
+# number_of_unique_points: 5
+# number_of_total_points: 3 + 2 = 5
+# either or
+# identifier_offset:
+# or
+# identifier: [3, 7] # we want two polylines, one named 3 the other one 7
+# closed: [True, False] # polyline 3 is closed, polyline 7 not
+# unique_vertices: [coordinates of the five points, offset for points 1]
+# vertices_sequence:
+#   polyline 3: 1 -> 2 -> 3 -> (1) so a closed three line, a "triangle"
+#   polyline 7: 2 -> 4 -> a straight line from junction point 2 to point 4
+
+# example 2
+# dimensionality: 2
+# cardinality: 2
+# number_of_unique_points: 4
+# number_of_total_points: 4
+# identifier_offset: 0
+# or
+# identifier:
+# closed: [False, False]
+# unique_vertices: [coordinates of the five points, offset for points 1]
+# vertices_sequence:
+#   polyline 0: 0 -> 1
+#   polyline 1: 2 -> 3

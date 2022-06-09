@@ -1,0 +1,7 @@
+category: base
+(NXgraph_root):
+  doc: |
+    A graph.
+  nodes(NXgraph_node_set):
+  relation(NXgraph_edge_set):
+  # further attributes
