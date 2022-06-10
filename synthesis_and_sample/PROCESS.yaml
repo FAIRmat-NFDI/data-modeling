@@ -16,6 +16,10 @@ Process:
     precursor:
     substrate:
   process_step:
+    doc: |
+      Each action pursued during the process should be placed here with a timestamp pin.
+      A step can be a preparation step or even a monitoring measurement carried out after the start of the process.
+      The timestamp is fundamental as it allows to plot all the quantities one would like to monitor in the same time abscissa.
     step_type: Enum [pre-process, process, post-process, monitoring-measure]
     timestamp:
     time_independent_settings:
