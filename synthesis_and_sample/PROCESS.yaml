@@ -17,6 +17,7 @@ Process:
     substrate:
   process_step:
     step_type: Enum [pre-process, process, post-process]
+    timestamp:
     time_independent_settings:
       film: -> Aykut
       substrate:
