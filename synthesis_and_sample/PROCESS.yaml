@@ -37,7 +37,6 @@ Process:
         gas_composition:
         doping:
     time_dependent_settings_digital_filled:
-    timestamp:
 Characterization:
   ...
 
