@@ -17,26 +17,13 @@ doc: "Draft subclass of NXelectronanalyser to describe the electron collection c
   working_distance(NX_FLOAT):
     doc: "Distance between sample and detector entrance"
     unit: NX_LENGTH
-  lens_names(NX_CHAR):
-    doc: "Set of names of electron optic lenses"
-    dimensions:
-      dim: [[1,nl]]
-      rank: 1
-  lens_voltages(NX_FLOAT):
-    doc: "Array of corresponding voltages"
-    unit: NX_VOLTAGE
-    dimensions:
-      dim: [[1,nl]]
-      rank: 1
   projection(NX_CHAR):
     doc: "The space projected in the angularly dispersive directions, real or reciprocal"
   magnification(NX_FLOAT):
     doc: "The magnification of the projected image in the angularly dispersive direction"
     unit: NX_DIMENSIONLESS
-  field_aperture(NXaperture):
-    doc: "The size and position of the field aperture inserted in the column"
-  contrast_aperture(NXaperture):
-    doc: "The size and postion of the contrast aperture inserted in the column."
+  (NXaperture):
+    doc: "The size and position of an aperture inserted in the column, e.g. field or contrast aperture"
   (NXdeflector):
     doc: "Deflectors in the collection column section"
   (NXlens):
