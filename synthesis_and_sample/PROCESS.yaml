@@ -15,26 +15,28 @@ Process:
     consumables:
     precursor:
     substrate:
-  time_independent_settings:
-    film: -> Aykut
-    substrate:
-      doc: |
-        you can reference here your material
-    t_substrate: -> Aykut
-    o2_ar: -> Aykut
-    thickness: -> Aykut
-    roughness: -> Aykut
-  time_dependent_settings_user_filled:
+  process_step:
+    step_type: Enum [pre-process, process, post-process]
+    time_independent_settings:
+      film: -> Aykut
+      substrate:
+        doc: |
+          you can reference here your material
+      t_substrate: -> Aykut
+      o2_ar: -> Aykut
+      thickness: -> Aykut
+      roughness: -> Aykut
+    time_dependent_settings_user_filled:
+      timestamp:
+      deposition_control: -> Aykut
+      gas ambient: -> Iryna
+        gas_pressure:
+        gas_inflow_rate:
+        gas_outflow_rate:
+        gas_composition:
+        doping:
+    time_dependent_settings_digital_filled:
     timestamp:
-    deposition_control: -> Aykut
-    gas ambient: -> Iryna
-      gas_pressure:
-      gas_inflow_rate:
-      gas_outflow_rate:
-      gas_composition:
-      doping:
-  time_dependent_settings_digital_filled:
-   timestamp:
 Characterization:
   ...
 
