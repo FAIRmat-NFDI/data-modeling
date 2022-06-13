@@ -22,6 +22,8 @@ doc: "Draft extension of NXobject to include fields to describe image registrati
     dimensions:
       dim: [[1,2]]
       rank: 1
+  depends_on(NX_CHAR):
+    doc: "Specifies the position by pointing to the last transformation in the transformation chain in the NXtransformations group."
   (NXtransformations):
     doc: "To describe the operations of image registration (combinations of rigid
       translations and rotations)"
