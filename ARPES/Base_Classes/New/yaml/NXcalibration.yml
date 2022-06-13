@@ -37,5 +37,5 @@ doc: "Draft subclass of NXprocess to describe post-processing calibrations."
     dimensions:
       dim: [[1,ncal]]
       rank: 1
-  (NXcollection):
-    doc: "Class to describe freely the procedures employed."
+  description(NX_CHAR):
+    doc: "A description of the procedures employed."

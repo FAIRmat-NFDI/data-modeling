@@ -41,5 +41,5 @@ doc: "Draft subclass of NXprocess to describe post-processing distortion correct
     dimensions:
       dim: [[1,ndx], [2,ndy]]
       rank: 2
-  (NXcollection):
-    doc: "Class to describe freely the procedures employed."
+  description(NX_CHAR):
+    doc: "Description of the procedures employed."

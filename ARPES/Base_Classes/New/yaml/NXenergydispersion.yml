@@ -17,10 +17,8 @@ doc: "Draft subclass of NXelectronanalyser to describe the energy dispersion sec
       swept scan of m steps it is a 2xm array of windows one for each measurement
       point."
     unit: NX_ENERGY
-  entrance_slit(NXaperture):
-    doc: "Size, position and shape of the entrance slits in dispersive analyzers"
-  exit_slit(NXaperture):
-    doc: "Size, position and shape of the exit slits in dispersive analyzer"
+  (NXaperture):
+    doc: "Size, position and shape of a slit in dispersive analyzer, e.g. entrance and exit slits."
   diameter(NX_FLOAT):
     doc: "Diameter of the dispersive orbit"
     unit: NX_LENGTH

@@ -26,6 +26,11 @@ doc: "Draft extension of NXsample to include fields to describe samples in photo
   gas(NX_CHAR):
     doc: "Gases might be fluxed on the surface for various reasons. Chemical designation,
       or residual."
+  gas_pressure(NX_NUMBER):
+    doc: "In the case of a fixed pressure measurement this is the scalar pressure.
+      In the case of an experiment in which pressure changes, or anyway it is recorded, 
+      this is an array of length m of pressures."
+    unit: NX_PRESSURE
   surface_dopant(NX_CHAR):
     doc: "Element of evaporated surface dopant such as alkali or other"
   surface_dopant_coverage(NX_FLOAT):

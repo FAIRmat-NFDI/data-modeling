@@ -18,12 +18,7 @@ doc: "Draft class definition for electro-static deflectors as they are used e.g.
   current(NX_NUMBER):
     doc: "Excitation current of the lens. For dipoles it is a single number. For higher orders, it is an array."
     unit: NX_CURRENT
+  depends_on(NX_CHAR):
+    doc: "Specifies the position of the deflecter by pointing to the last transformation in the transformation chain in the NXtransformations group."
   (NXtransformations):
     doc: "Collection of axis-based translations and rotations to describe the location and geometry of the corrector as a component in the instrument. Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used. The origin of the coordinate system is placed in the center of the gun pinhole as the virtual point-like assumed source of the electron beam. A right-handed coordinate system is assumed whose positive z-axis points in the direction of the propagating electron beam."
-    position:
-      \@transformation_type:
-        doc: "Following transformation_type argument of NXtranslations but allowed value is only translation."
-      \@vector(NX_NUMBER):
-        doc: "Following vector argument of NXtranslations. The translation actively brings the coordinate system under depends_on into registration with a coordinate system in the center of the lens."
-      \@depends_on:
-        doc: "Enter the path where the reference coordinate system for the instrument is defined."
