@@ -7,6 +7,8 @@ Process:
     end_time:
     synthesis_category:
     synthesis_method:
+  user:
+  instrument:
   samples:
     doc: |
       Define all the materials and samples that are used in the process,
