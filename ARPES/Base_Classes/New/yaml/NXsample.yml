@@ -48,5 +48,11 @@ doc: "Draft extension of NXsample to include fields to describe samples in photo
     doc: "Material of the substrate in direct contact with the sample."
   substrate_state(NX_CHAR):
     doc: "Physical state of the substrate, similar options to sample_state"
+  sample_temperature(link):
+    target: /entry/instrument/electronanalyser/manipulator/sample_temperature
+  drain_current(link):
+    target: /entry/instrument/electronanalyser/manipulator/drain_current
+  sample_bias(link):
+    target: /entry/instrument/electronanalyser/manipulator/sample_bias
   notes(NXnote):
     doc: "Further notes."

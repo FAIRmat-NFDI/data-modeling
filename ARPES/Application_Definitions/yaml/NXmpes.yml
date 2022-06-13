@@ -168,7 +168,7 @@ category: application # Defaults "exists" to "required"
               enumeration: ['raw']
             raw(NX_NUMBER): # There is a block of numbers named raw.
               doc: "Raw data before calibration."
-        (NXmanipulator):
+        manipulator(NXmanipulator):
           exists: optional
           doc: "Manipulator for positioning of the sample."
     (NXprocess):
