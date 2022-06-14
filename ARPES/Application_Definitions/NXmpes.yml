@@ -1,0 +1,285 @@
+#Pincelli at fhi-berlin.mpg.de, 01/2022
+#Draft version of a NeXus application definition for photoemission,
+#It is designed to be extended by other application definitions
+#with higher granularity in the data description.
+
+doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  nfa: Number of fast axes (acquired simutaneously) e.g. emission angle, kinetic energy
+  nsa: Number of slow axes (acquired scanning a physical quantity) e.g. lens voltage, spin direction
+category: application # Defaults "exists" to "required"
+#draft the application definition
+(NXmpes):
+#\@default:
+#  doc: "Default plottable entry name."
+  (NXentry):
+    \@entry:
+      doc: "NeXus convention is to use \"entry1\", \"entry2\", ..., \"entryn\", to enable the analysis software to locate each entry."
+    \@default:
+      doc: "Default plottable NX data object."
+      exists: optional
+    title:
+      #doc: "Title describing the entry." NIAC doc is better.
+    start_time(NX_DATE_TIME):
+      doc: "ISO8601 formatted date time of the start of the measurement."
+    definition:
+      \@version: # New approach of NIAC: version controlled application definitions.
+      #doc: "Official NeXus NXDL schema to which this file conforms." NIAC doc is better
+      enumeration: [NXmpes]
+    (NXinstrument):
+      (NXsource):
+        doc: "The source used to generate the primary photons. Properties refer strictly to parameters of the source, not of the output beam.
+        For example, the energy of the source is not the optical power of the beam, but the energy of the electron beam in a synchrotron and so on."
+        type:
+          #doc: "Type of source." NIAC doc is better
+          enumeration: [
+            "Synchrotron X-ray Source",
+            "Rotating Anode X-ray", 
+            "Fixed Tube X-ray",
+            "UV Laser", 
+            "Free-Electron Laser", 
+            "Optical Laser", 
+            "UV Plasma Source", 
+            "Metal Jet X-ray", 
+            "HHG laser"
+          ]
+        name:
+          #doc: "Free text name of the source." NIAC doc is better.
+        probe:
+          doc: "Type of probe. In photoemission it's always photons, so the full NIAC list is restricted."
+          enumeration: ["x-ray","ultraviolet", "visible light"]
+      (NXbeam): # Describes the beam at the sample.
+        #doc: "Properties of the beam at the sample." NIAC doc is better
+        distance(NX_NUMBER):
+          doc: "Distance of the point of evaluation of the beam from the sample surface."
+          unit: NX_LENGTH
+        incident_energy(NX_NUMBER): # Built similarly to wavelengths in NXmx
+          doc: | 
+            In the case of a monchromatic beam this is the scalar energy.
+            Several other use cases are permitted, depending on the presence of other incident_energy_X fields.
+             * In the case of a polychromatic beam this is an array of length m of energies, with the relative weights in incident_energy_weights.
+             * In the case of a monochromatic beam that varies shot-to-shot, this is an array of energies, one for each recorded shot. 
+             Here, incident_energy_weights and incident_energy_spread are not set.
+             * In the case of a polychromatic beam that varies shot-to-shot, 
+             this is an array of length m with the relative weights in incident_energy_weights as a 2D array.
+             * In the case of a polychromatic beam that varies shot-to-shot and where the channels also vary,
+             this is a 2D array of dimensions nP by m (slow to fast) with the relative weights in incident_energy_weights as a 2D array.
+            Note, variants are a good way to represent several of these use cases in a single dataset,
+            e.g. if a calibrated, single-value energy value is available along with the original spectrum from which it was calibrated.
+          unit: NX_ENERGY
+        incident_energy_spread(NX_NUMBER):
+          exists: recommended
+          doc: "The energy spread FWHM for the corresponding energy(ies) in incident_energy.
+          In the case of shot-to-shot variation in the energy spread, this is a 2D array of dimension nP by m (slow to fast) of the spreads of the corresponding energy in incident_energy."
+          unit: NX_ENERGY
+        incident_energy_weights(NX_NUMBER):
+          exists: optional
+          doc: "In the case of a polychromatic beam this is an array of length m of the relative weights of the corresponding energies in incident_energy.
+          In the case of a polychromatic beam that varies shot-to-shot, this is a 2D array of dimensions np by m (slow to fast) of the relative weights of the corresponding energies in incident_energy."
+          unit: NX_ENERGY
+        incident_polarization(NX_NUMBER):
+          exists: recommended
+          doc: "Incident polarization specified as a Stokes vector."
+          unit: NX_ANY
+          \@units: # Built following and trying to improve the handling of odd units in NXcanSAS. the unit (child of field)
+            # vs units (attribute of field) similarity might create confusion.
+            # we could call the attribute 'unit_label' to have a less ambiguous designation.
+            doc: | 
+              The units for this observable are not included in the NIAC list.
+              Responsibility on correct formatting and parsing is handed to the user by using 'NX_ANY'.
+              Correct parsing can still be implemented by using this attribute.
+              
+              | Fill with:
+               * The unit unidata symbol if the unit has one (Example: 'T' for the unit of magnetic flux density tesla).
+               * The unit unidata name if the unit has a name (Example: 'farad' for capacitance).
+               * A string describing the units according to unidata unit operation notation,
+              if the unit is a complex combination of named units and does not have a name.
+
+              Example: for lightsource brilliance (SI) '1/(s.mm2.mrad2)'.
+              Here: SI units are 'V2/m2'.
+          dimensions:
+            rank: 1
+            dim: [[1, 4]]
+        # In NIAC "incident_polarization" is a 2-vector of floats.
+          # It is not explained but looks like a real-valued Jones vector, which
+          # cannot describe circular or partially polarized.
+          # Extended to a 4-vector of floats.
+          # It is then meant to be represented as a Stokes vector.
+      (NXelectronanalyser):
+        description:
+          doc: "Free text description of the type of detector."
+        energy_resolution(NX_NUMBER):
+          doc: "Energy resolution of the analyser with the current setting. May be linked from a NXcalibration."
+          unit: NX_ENERGY
+        fast_axes:
+          exists: optional
+          doc: |
+            List of the axes that are acquired simultaneously by the detector.
+            These refer only to the experimental variables recorded by the electron analyser.
+            Other variables such as temperature, manipulator angles etc. are labeled as fast or slow in the data.
+            =========
+            Examples
+            =========
+            :Hemispherical in ARPES mode: fast_axes: [\"energy\", \"kx\"]
+            :Hemispherical with channeltron, sweeping energy mode: slow_axes: [\"energy\"]
+            
+            :Tof: fast_axes: [\"energy\", \"kx\", \"ky\"]
+            :Momentum microscope, spin-resolved: 
+              fast_axes: [\"energy, \"kx\", \"ky\"]
+              slow_axes: [\"spin up-down\", \"spin left-right\"]
+
+            | Axes may be less abstract than this, i.e. [\"detector_x\", \"detector_y\"].
+            If energy_scan_mode=sweep, fast_axes: [\"energy\", \"kx\"]; slow_axes: [\"energy\"] is allowed.
+          dimensions:
+            rank: 1
+            dim: [[1,nfa]]
+        slow_axes:
+          exists: optional
+          doc: "List of the axes that are acquired by scanning a physical parameter,
+          listed in order of decreasing speed. See fast_axes for examples."
+          dimensions:
+            rank: 1
+            dim: [[1,nsa]]
+        (NXcollectioncolumn):
+          scheme:
+            doc: "Scheme of the electron collection column."
+            enumeration: ["Standard", "Deflector", "PEEM", "Momentum Microscope"]
+          mode:
+            exists: recommended
+            doc: "Labelling of the lens setting in use."
+          projection:
+            exists: recommended
+            doc: "The space projected in the angularly dispersive directions, i.e. real or reciprocal."
+            enumeration: ["real", "reciprocal"]
+          field_aperture(NXaperture):
+            exists: optional
+            doc: "The size and position of the field aperture inserted in the column.
+              To add additional or other apertures use the APERTURE group of NXcollectioncolumn."
+          contrast_aperture(NXaperture):
+            exists: optional
+            doc: "The size and position of the contrast aperture inserted in the column.
+              To add additional or other apertures use the APERTURE group of Nxcollectioncolumn."
+        (NXenergydispersion):
+          scheme:
+            doc: "Energy dispersion scheme employed."
+            enumeration: ["tof", "hemispherical", "double hemispherical", "cylindrical mirror", "display mirror", "retarding grid"]
+          pass_energy(NX_NUMBER):
+            doc: "energy of the electrons on the mean path of the analyser. Pass energy for hemispherics, drift energy for tofs."
+            unit: NX_ENERGY
+          energy_scan_mode:
+            doc: "Way of scanning the energy axis (fixed or sweep)."
+            enumeration: ["fixed","sweep"]
+          entrance_slit(NXaperture):
+            exists: optional
+            doc: "Size, position and shape of the entrance slit in dispersive analyzers.
+              To add additional or other slits use the APERTURE group of NXenergydispersion."
+            description:
+              doc: "Type of aperture inserted in the beam."
+              enumeration: ["slit","pinhole","iris"]
+            shape: # For the shape, NXgeometry is used that is deprecated. I just added a field.
+              doc: "Description of the shape of the active part of the aperture, curved or straight for horizontal slits, square or round for pinhole etc."
+              enumeration: ["curved", "straight", "circle", "square", "hexagon", "octagon", "bladed"]
+            size(NX_NUMBER): # Surprisingly, there is no direct field to describe the size of an aperture!
+              doc: "The relevant dimension for the aperture (slit width, pinhole diameter etc)."
+              unit: NX_LENGTH
+          exit_slit(NXaperture):
+            exists: optional
+            doc: "Size, position and shape of the exit slit in dispersive analyzers.
+              To add additional or other slits use the APERTURE group of NXenergydispersion."
+            description:
+              doc: "Type of aperture inserted in the beam."
+              enumeration: ["slit","pinhole","iris"]
+            shape: # For the shape, NXgeometry is used that is deprecated. I just added a field.
+              doc: "Description of the shape of the active part of the aperture, curved or straight for horizontal slits, square or round for pinhole etc."
+              enumeration: ["curved", "straight", "circle", "square", "hexagon", "octagon", "bladed"]
+            size(NX_NUMBER): # Surprisingly, there is no direct field to describe the size of an aperture!
+              doc: "The relevant dimension for the aperture (slit width, pinhole diameter etc)."
+              unit: NX_LENGTH
+          (NXaperture):
+            exists: recommended
+            doc: "Aperture generating the momentum and/or energy filtering." # Specifies existing doc.
+            description:
+              doc: "Type of aperture inserted in the beam."
+              enumeration: ["slit","pinhole","iris"]
+            shape: # For the shape, NXgeometry is used that is deprecated. I just added a field.
+              doc: "Description of the shape of the active part of the aperture, curved or straight for horizontal slits, square or round for pinhole etc."
+              enumeration: ["curved", "straight", "circle", "square", "hexagon", "octagon", "bladed"]
+            size(NX_NUMBER): # Surprisingly, there is no direct field to describe the size of an aperture!
+              doc: "The relevant dimension for the aperture (slit width, pinhole diameter etc)."
+              unit: NX_LENGTH
+        (NXdetector):
+          amplifier_type:
+            exists: recommended
+            doc: "Type of electron amplifier in the first amplification step."
+            enumeration: ["MCP", "channeltron"]
+          detector_type:
+            doc: "Description of the detector type."
+            enumeration: ["DLD","Phosphor+CCD","Phosphor+CMOS","ECMOS", "Anode", "Multi-anode"]
+          (NXdata): # Raw signal without calibrated axes.
+            exists: recommended
+            \@signal:
+              enumeration: ['raw']
+            raw(NX_NUMBER): # There is a block of numbers named raw.
+              doc: "Raw data before calibration."
+        (NXmanipulator):
+          exists: optional
+          doc: "Manipulator for positioning of the sample."
+    (NXprocess):
+        calculated_energy(NX_FLOAT):
+          exists: optional
+          doc: "Calibrated energy axis."
+          unit: NX_ENERGY
+          dimensions:
+            rank: 1
+            dim: [[1, ne]]
+        energy_calibration(NXcalibration):
+          applied(NX_BOOLEAN):
+            doc: "Has an energy calibration been applied?"
+    (NXsample):
+      name:
+        doc: "Descriptive name of the sample"
+      chemical_formula:
+        exists: recommended
+        doc: "The chemical formula of the sample. For mixtures use the NXsample_component group in NXsample instead."
+      sample_history(NXnote):
+        exists: recommended
+        doc: "A descriptor to keep track of the treatment of the sample before entering the photoemission experiment.
+        Ideally, a full report of the previous operations, in any format (NXnote allows to add pictures, audio, movies).
+        Alternatively, a reference to the location or a unique identifier or other metadata file.
+        In the case these are not available, free-text description."
+      preparation_date(NX_DATE_TIME):
+        exists: recommended
+        doc: "ISO 8601 date of preparation of the sample for the XPS experiment (i.e. cleaving, last annealing)."
+      preparation_description(NXnote):
+        doc: "Description of the surface preparation technique for the XPS experiment, i.e. UHV cleaving, in-situ growth, sputtering/annealing etc.
+        Ideally, a full report of the previous operations, in any format(NXnote allows to add pictures, audio, movies).
+        Alternatively, a reference to the location or a unique identifier or other metadata file.
+        In the case these are not available, free-text description."
+      # Problem: if the temperature is logged, the data is an array of temperature/timestamp pairs.
+      # the timestamp NX_DATE_TIME structure of the timestamp can not be easily handled by just a field.
+      # there is a base class for this, NXlog. The NIAC decided to use the same name (temperature) instead of the previous temperature_log.
+      # how do I explain here in an appdef that temperature can be either NXnumber (single value or scanned array) or a NXlog?
+      # It seems quite contorted to ask to create a separate timestamp array when we have a base class that handles it more elegantly.
+      temperature(NX_NUMBER):
+        doc: "In the case of a fixed temperature measurement this is the scalar temperature of the sample.
+        In the case of an experiment in which the temperature is changed and recoded, this is an array of length m of temperatures."
+        unit: NX_TEMPERATURE
+      situation: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
+      # Similar situation here, ca be a single number or a log.
+      gas_pressure(NX_NUMBER):
+        doc: "In the case of a fixed pressure measurement this is the scalar pressure.
+          In the case of an experiment in which pressure changes, or anyway it is recorded, 
+          this is an array of length m of pressures."
+        unit: NX_PRESSURE
+    (NXdata):
+      \@signal:
+        enumeration: ["data"] # There is an object named data that contains the signal
+      data(NX_NUMBER): # There is a block of numbers named data.
+        doc: "Processed plottable data."
+  # NXdata structure is extremely free here to provide a low entry barrier for data parsing in the core appdef.
+  # Will be restricted further in extending appdefs.
+  # If there is no rebinning between raw data and plottable data, one can use links
+  # to link the data in NXinstrument:NXelectronanalyser:NXdetector:NXdata:Raw
+  # and the axis in NXprocess:calculated_energy
+  # Same goes, obviously, for the case when there's no energy calibration and the display data is raw.
