@@ -6,10 +6,21 @@ SAMPLE:
   user:
   citation: doi
   method: [experimental, simulation, declared by vendor]
+  SAMPLE:
+    ...
+    ...
   MATERIAL:
       ... see material.yaml
-    SUBSTANCE:
-      ... see substance.yaml
+    component(SUBSTANCE):
+      link_to_substance_archive: ...
+      ...
+      ...
+      QUANTIFY:
+        amount:
+        concentration:
+    QUANTIFY:
+      amount:
+      concentration:
   property_1: characterization needed for this sample as reference
   property_2:
   ...
