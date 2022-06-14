@@ -85,19 +85,3 @@ doc: |
       Remarks about the chemical beyond the typically collected information.
       Here you can collect information about your experience using this chemical,
       for example if it might have been contaminated during an experiment
-
-# CAN we comment whether the taken amount of substance should go here or outside?
-
-  amount_type:
-    doc: |
-      How was the substance provided? By mass, by volume, by molar amount, in solution,
-      in a mixture..."
-    enumeration: [by mass, by volume, molar]
-  amount:
-    doc: "Amount with a unit corresponding to the above amount type"
-
-  concentration_type:
-    doc: "what concentration was used?"
-    enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-  concentration:
-    doc: "and the corresponding number"

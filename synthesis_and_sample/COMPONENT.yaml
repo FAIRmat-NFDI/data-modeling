@@ -1,7 +1,7 @@
 category: base
 doc: "Draft base class to describe a chemical element)"
 
-(chemical_specimen_or_material):
+(COMPONENT):
   doc: |
     A base class draft to describe a chemical compound formed from chemical substances
 
@@ -10,7 +10,7 @@ doc: "Draft base class to describe a chemical element)"
   chemical_name:
     doc: |
       The name of the material
-  component(SUBSTANCE):
+  SUBSTANCE:
     doc: A REFERENCE to the chemical separate entry
 
     # let's discuss where to describe the amount and concentrattion:

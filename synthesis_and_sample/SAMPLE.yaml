@@ -9,18 +9,40 @@ SAMPLE:
   SAMPLE:
     ...
     ...
-  MATERIAL:
+  COMPONENT:
       ... see material.yaml
-    component(SUBSTANCE):
-      link_to_substance_archive: ...
+    SUBSTANCE:
+      link_to_substance_archive_file: ...
       ...
       ...
-      QUANTIFY:
+      QUANTIFY: # extension of a substance when it is part of a component
+          amount_type:
+            doc: |
+              How was the substance provided? By mass, by volume, by molar amount, in solution,
+              in a mixture..."
+            enumeration: [by mass, by volume, molar]
+          amount:
+            doc: "Amount with a unit corresponding to the above amount type"
+
+          concentration_type:
+            doc: "what concentration was used?"
+            enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
+          concentration:
+    doc: "and the corresponding number"
+    QUANTIFY:  # extension of a component when it is part of a sample
+        amount_type:
+          doc: |
+            How was the substance provided? By mass, by volume, by molar amount, in solution,
+            in a mixture..."
+          enumeration: [by mass, by volume, molar]
         amount:
+          doc: "Amount with a unit corresponding to the above amount type"
+
+        concentration_type:
+          doc: "what concentration was used?"
+          enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
         concentration:
-    QUANTIFY:
-      amount:
-      concentration:
+          doc: "and the corresponding number"
   property_1: characterization needed for this sample as reference
   property_2:
   ...
