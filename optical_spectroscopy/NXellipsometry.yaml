@@ -1,4 +1,4 @@
-# 01/2022
+# 06/2022
 # A draft version of a NeXus application definition for ellipsometry.
 
 # The document has the following main elements:
@@ -11,11 +11,11 @@ doc: |
   Ellipsometry, complex systems, up to variable angle spectroscopy.
   
   Information on ellipsometry is provided, e.g. in:
-  - H. Fujiwara, Spectroscopic ellipsometry: principles and applications, 
+  - H. Fujiwara, Spectroscopic ellipsometry: principles and applications,
     John Wiley & Sons, 2007.
-  - R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light, 
+  - R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light,
     North-Holland Publishing Company, 1977.
-  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry, 
+  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry,
     William Andrew, 2005.
   
   Open acces sources:
@@ -23,30 +23,36 @@ doc: |
   - https://pypolar.readthedocs.io/en/latest/
   
   Review articles:
-  - T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry", 
+  - T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry",
     J. Phys. D: Appl. Phys. 32, R45 (1999)
     https://doi.org/10.1088/0022-3727/32/9/201
-  - D. E. Aspnes, "Spectroscopic ellipsometry - Past, present, and future", 
+  - D. E. Aspnes, "Spectroscopic ellipsometry - Past, present, and future",
     Thin Solid Films 571, 334-344 (2014)
     https://doi.org/10.1016/j.tsf.2014.03.056
-  - R. M. A. Azzam, "Mueller-matrix ellipsometry: a review", 
+  - R. M. A. Azzam, "Mueller-matrix ellipsometry: a review",
     Proc. SPIE 3121, (1997)
     https://doi.org/10.1117/12.283870
-  - E. A. Irene, "Applications of spectroscopic ellipsometry to microelectronics", 
+  - E. A. Irene, "Applications of spectroscopic ellipsometry to microelectronics",
     Thin Solid Films 233, 96-111 (1993)
     https://doi.org/10.1016/0040-6090(93)90069-2
-  - S. Zollner et al., "Spectroscopic ellipsometry from 10 to 700 K", 
+  - S. Zollner et al., "Spectroscopic ellipsometry from 10 to 700 K",
     Adv. Opt. Techn. (2022)
     https://doi.org/10.1515/aot-2022-0016
 
 symbols:
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
-  N_wavelength: Size of the energy or wavelength vector used
-  N_variables: "How many variables are saved in a measurement 
-    (e.g. Psi and Delta, Mueller matrix elements)"
-  N_angles: Number of incident angles used
-  N_p1: Number of sample parameters scanned
-  N_time: Number of time points measured
+  # since formating is dropped for quoted string, we can make it look nice in the file:
+  N_wavelength: "Size of the energy or wavelength vector used, the length of
+                NXsample/wavelength array"
+  N_variables: "How many variables are saved in a measurement. e.g. 2 for Psi
+                and Delta, 16 for Mueller matrix elements, 15 for normalized
+                Mueller matrix, 3 for NCS, the length of NXsample/column_names"
+  N_angles: "Number of incident angles used, the length of
+            NXinstrument/angle_of_incidence array"
+  N_p1: "Number of sample parameters scanned, if you varied any of the parameters
+        such as temperature, pressure, or pH, the length of the array specified by
+        the enum in NXsample/varied_parameters"
+  N_time: "Number of time points measured, the length of NXsample/time_points"
 
 (NXellipsometry):
   (NXentry):
@@ -66,23 +72,23 @@ symbols:
     definition:
       doc: "An application definition for ellipsometry."
       \@version:
-        doc: "Version number to identify which definition of this application 
+        doc: "Version number to identify which definition of this application
           definition was used for this entry/data."
       \@url:
-        doc: "URL where to find further material (documentation, examples) 
+        doc: "URL where to find further material (documentation, examples)
           relevant to the application definition"
       enumeration: [NXellipsometry]
 
     experiment_identifier:
       doc: |
-        Unique identifier of the experiment, such as a (globally persistent) unique 
-        identifier. 
-        i) The identifier is usually defined by the facility or principle investigator. 
+        Unique identifier of the experiment, such as a (globally persistent) unique
+        identifier.
+        i) The identifier is usually defined by the facility or principle investigator.
         ii) The identifier enables to link experiments to e.g. proposals.
 
     experiment_description:
       exists: recommended
-      doc: "A free-text description of the experiment. What is the aim of the 
+      doc: "A free-text description of the experiment. What is the aim of the
         experiment? The general procedure."
 
     start_time(NX_DATE_TIME):
@@ -90,13 +96,13 @@ symbols:
 
     program:
       exists: optional
-      doc: "Commercial or otherwise defined given name to the program that was 
+      doc: "Commercial or otherwise defined given name to the program that was
         used to generate the result file(s) with measured data and metadata."
       \@version:
-        doc: "Either version with build number, commit hash, or description of 
+        doc: "Either version with build number, commit hash, or description of
           a (online) repository where the source code of the program and build
-          instructions can be found so that the program can be configured in 
-          such a way that result files can be created ideally in a 
+          instructions can be found so that the program can be configured in
+          such a way that result files can be created ideally in a
           deterministic manner."
       \@url:
         doc: "Website of the software."
@@ -112,7 +118,7 @@ symbols:
         doc: "Name of the affiliation of the user at the point in time when the
               experiment was performed."
       address:
-        doc: "Full address (street, street number, ZIP, city, country) of the 
+        doc: "Full address (street, street number, ZIP, city, country) of the
           user's affiliation."
       email:
         doc: "Email address of the user."
@@ -129,17 +135,17 @@ symbols:
       model:
         doc: The name of the instrument
         \@version:
-          doc: "The used version of the hardware if available. If not a 
+          doc: "The used version of the hardware if available. If not a
             commercial instrument use date of completion of the hardware."
       company:
         exists: optional
         doc: "Name of the company which build the instrument"
       construction_year(NX_DATE_TIME):
         exists: optional
-        doc: "ISO8601 date when the instrument was constructed. 
+        doc: "ISO8601 date when the instrument was constructed.
           UTC offset should be specified."
       software:
-        doc: "Commercial or otherwise defined name of the software that was 
+        doc: "Commercial or otherwise defined name of the software that was
           used for the measurement"
         \@version:
           doc: "Version and build number or commit hash of the software source code"
@@ -148,7 +154,7 @@ symbols:
 
       light_source:
         doc: "Specify the used light source. Multiple selection possible."
-        enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp, 
+        enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
           deuterium lamp, silicon carbide globar, other]
       other_light_source:
         exists: optional
@@ -173,7 +179,7 @@ symbols:
 
       calibration_status(NX_DATE_TIME):
         doc: "Was a calibration performed? If yes, when was it done?"
-        enumeration: [calibration time provided, no calibration, within 1 hour, 
+        enumeration: [calibration time provided, no calibration, within 1 hour,
           within 1 day, within 1 week]
 
       calibration(NXsubentry):
@@ -182,25 +188,25 @@ symbols:
               parameters for proper zero values and background light compensation."
         calibration_time(NX_DATE_TIME):
           exists: optional
-          doc: "If calibtration status is 'calibration time provided', specify 
-            the ISO8601 date when calibration was last performed before this 
+          doc: "If calibtration status is 'calibration time provided', specify
+            the ISO8601 date when calibration was last performed before this
             measurement. UTC offset should be specified."
 
         calibration_data(NXsubentry):
           doc: "Arrays which provide the measured calibration data.
                 Multiple sets are possible, e.g. Psi and delta measured on a
                 e.g. silicon calibration wafer, and the straight-through data.
-                We recommend to provide data that is measured under the same 
-                settings as the measurement was performed, that is if Psi and 
-                Delta are measured for your data, also provide Psi and Delta 
+                We recommend to provide data that is measured under the same
+                settings as the measurement was performed, that is if Psi and
+                Delta are measured for your data, also provide Psi and Delta
                 here and use the same wavelenghts as for the measured data."
 
           calibration_data_type:
             doc: "What data were recorded for the calibration?
-                  The number of variables (N_variables) have to be set to the 
-                  number of provided data columns accordingly, 
-                  e.g. psi/delta -> N_variables = 2, 
-                  Jones vector -> N_variables = 4, 
+                  The number of variables (N_variables) have to be set to the
+                  number of provided data columns accordingly,
+                  e.g. psi/delta -> N_variables = 2,
+                  Jones vector -> N_variables = 4,
                   Mueller martix -> N_variables = 16, etc."
             enumeration: [psi/delta, tan(psi)/cos(delta), Jones matrix,
                Mueller matrix, not provided]
@@ -215,9 +221,9 @@ symbols:
           calibration_wavelength(NX_NUMBER):
             doc: |
               The wavelength or equivalent values (which are inter-convertible).
-              The importer should convert all to one unit, and make the others 
-              accessible. Historically, energy is used in eV, but for visible 
-              spectroscopy wavelength is more common, for IR wave numbers in 
+              The importer should convert all to one unit, and make the others
+              accessible. Historically, energy is used in eV, but for visible
+              spectroscopy wavelength is more common, for IR wave numbers in
               1/cm units.
 
               Possibly use the same type of data as for the measurement.
@@ -228,12 +234,12 @@ symbols:
           calibration_data(NX_NUMBER):
             doc: "Calibration is performed on a reference surface (usually a
                   silicon wafer with a well defined oxide layer) at a number of
-                  angles of incidence and in a straight through mode 
+                  angles of incidence and in a straight through mode
                   (transmission in air)."
             unit: NX_UNITLESS
             dimensions:
               rank: 3
-              dim: [[3, N_calibration_angles+1], [2, N_variables], [1, N_calibration_wavelength]]
+              dim: [[1, N_calibration_angles+1], [2, N_variables], [3, N_calibration_wavelength]]
 
         calibration_sample(NX_CHAR):
           doc: "Free-text to describe which sample was used for calibration,
@@ -251,7 +257,7 @@ symbols:
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
               (Cartesian) coordinate system and at an orientation defined
               by three Euler angles (alpha, beta, gamma).
-              The stage may be motorized or manual, special for liquids or gas 
+              The stage may be motorized or manual, special for liquids or gas
               environment."
         enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
         description:
@@ -259,21 +265,21 @@ symbols:
           exists: recommended
         (NXtransformations):
           exists: recommended
-          doc: "The stage coordinate system vs. the incident beam. The Z-axis 
-                of the stage is considered to point along the normal of the 
-                substrate (bottom reflecting surface) from the stage towards 
-                the general direction of the light source. The beam comes with 
+          doc: "The stage coordinate system vs. the incident beam. The Z-axis
+                of the stage is considered to point along the normal of the
+                substrate (bottom reflecting surface) from the stage towards
+                the general direction of the light source. The beam comes with
                 the angle of incidence towards this Z-axis, but in opposite
                 direction, thus they are connected with a rotation of
                 180 - angle of incidence (in degrees).
 
-                This transformation brings us from the NEXUS coordinates to the 
+                This transformation brings us from the NEXUS coordinates to the
                 stage coordinates.
 
-                Then provide the set of translations (if there are any). These 
-                all have a vector defining their relative direction in the 
-                current coordinate system. (This current coordinate system 
-                changes with every transformation if you set the parameter 
+                Then provide the set of translations (if there are any). These
+                all have a vector defining their relative direction in the
+                current coordinate system. (This current coordinate system
+                changes with every transformation if you set the parameter
                 'depends' to the name of the previous step.)
 
                 Last, provide the rotations of the sample"
@@ -281,8 +287,8 @@ symbols:
           alternative:
             exists: optional
             doc: "If there is no motorized stage, we should at least qualify
-                  where the beam hits the sample and in what direction the 
-                  sample stands in a free-text description, e.g. 'center of 
+                  where the beam hits the sample and in what direction the
+                  sample stands in a free-text description, e.g. 'center of
                   sample, long edge parallel to plane of incidence'."
 
 
@@ -290,17 +296,17 @@ symbols:
         exists: optional
         doc: "For environmental measurements, the environment (liquid, vapor,
               vacuum etc.) is enclosed in a cell or cryostat, which has windows
-              both in the direction of the source and the detector (looking 
-              from the sample). These windows also add a phase shift to the 
-              light altering the measured signal. This shift has to be 
-              corrected based on measuring a known sample in the environmental 
+              both in the direction of the source and the detector (looking
+              from the sample). These windows also add a phase shift to the
+              light altering the measured signal. This shift has to be
+              corrected based on measuring a known sample in the environmental
               cell."
 
         material(NX_CHAR):
           doc: The material of the window
-          enumeration: [quartz, diamond, calcium fluoride, zinc selenide, 
+          enumeration: [quartz, diamond, calcium fluoride, zinc selenide,
             thallium bromoiodide, alkali halide compound, Mylar, other]
-        
+
         other_material(NX_CHAR):
           exists: optional
           doc: "If you specified 'other' as window material, decsribe here
@@ -317,15 +323,15 @@ symbols:
 
         reference_data(NXsubentry):
           doc: "Recorded data that can be used to calculate the window effect.
-                Typically this is the substrate (e.g. silicon with thermal 
-                oxide layer) in air without window and in a known medium with 
+                Typically this is the substrate (e.g. silicon with thermal
+                oxide layer) in air without window and in a known medium with
                 the window."
 
           reference_sample:
             doc: "What sample was used to estimate the window effect?"
 
           reference_wavelength(NX_NUMBER):
-            doc: "Wavelength of the reference data. Use the same wavelengths 
+            doc: "Wavelength of the reference data. Use the same wavelengths
               at which all other measurements are recorded"
             unit: NX_LENGTH
             dimensions:
@@ -338,44 +344,44 @@ symbols:
             unit: NX_UNITLESS
             dimensions:
               rank: 4
-              dim: [[4,2], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+              dim: [[1,2], [2, N_angles], [3, N_variables], [4, N_wavelength]]
 
       (NXdetector):
         doc: "Which type of detector was used, and what is known about it?
               A detector can be a photomultiplier (PMT), a CCD in a camera, or
-              an array in a spectrometer. If so, the whole detector unit goes 
+              an array in a spectrometer. If so, the whole detector unit goes
               in here."
 
         detector_type:
           doc: "What kind of detector module is used, e.g. CCD-spectrometer,
                 CCD camera, PMT, photodiode, etc."
-          enumeration: [PMT, photodiode, avalanche diode, CCD camera, 
+          enumeration: [PMT, photodiode, avalanche diode, CCD camera,
             CCD spectrometer, other]
 
         other_detector:
           exists: optional
-          doc: "If you specified 'other' as detector type, please write down 
+          doc: "If you specified 'other' as detector type, please write down
             what it is."
-        
+
         integration_time(NX_NUMBER):
-          doc: "Integration time for the measurement. Single number or array 
+          doc: "Integration time for the measurement. Single number or array
             if it was varied."
           unit: NX_TIME
 
         revolution(NX_NUMBER):
           exists: optional
-          doc: "Define how many rotations of the rotating element were taken 
+          doc: "Define how many rotations of the rotating element were taken
                 into account per spectrum."
           unit: NX_ANY
 
         rotating_element:
           doc: "Define which element rotates, e.g. polarizer or analyzer."
-          enumeration: [polarizer (source side), analyzer (detector side), 
+          enumeration: [polarizer (source side), analyzer (detector side),
             compensator (source side), compensator (detector side)]
 
         fixed_revolution(NX_NUMBER):
           exists: optional
-          doc: "Rotation rate, if the revolution does not change during 
+          doc: "Rotation rate, if the revolution does not change during
             the measurement."
           unit: NX_FREQUENCY
 
@@ -388,26 +394,26 @@ symbols:
 
     (NXsample):
       doc: "Properties of the sample, its history, the sample environment and
-            experimental conditions (e.g. surrounding medium, temperature, 
-            pressure etc.), along with the data (data type, wavelength array, 
+            experimental conditions (e.g. surrounding medium, temperature,
+            pressure etc.), along with the data (data type, wavelength array,
             measured data)."
       atom_types:
         doc: "Use Hill's system for listing elements of the periodic table
               which are inside or attached to the surface of the specimen
-              and thus relevant from a scientific point. The purpose of this 
-              field is to allow material databases to parse the relevant 
+              and thus relevant from a scientific point. The purpose of this
+              field is to allow material databases to parse the relevant
               elements without having to interpret the sample history or other
               fields."
       sample_name:
         doc: "Descriptive name of the sample"
 
       sample_history:
-        doc: "Ideally, a reference to the location or a unique (globally 
-              persistent) identifier (e.g.) of e.g. another file which gives 
-              as many as possible details of the material, its microstructure, 
-              and its thermo-chemo-mechanical processing/preparation history. 
-              In the case that such a detailed history of the sample is not 
-              available, use this field as a free-text description to specify 
+        doc: "Ideally, a reference to the location or a unique (globally
+              persistent) identifier (e.g.) of e.g. another file which gives
+              as many as possible details of the material, its microstructure,
+              and its thermo-chemo-mechanical processing/preparation history.
+              In the case that such a detailed history of the sample is not
+              available, use this field as a free-text description to specify
               details of the sample and its preparation."
 
       preparation_date(NX_DATE_TIME):
@@ -426,12 +432,20 @@ symbols:
       data_type:
         doc: "Select which type of data was recorded, for example Psi and Delta
               (see: https://en.wikipedia.org/wiki/Ellipsometry#Data_acquisition).
-              It is possible to have multiple selections. Data types may also be 
-              converted to each other, e.g. a Mueller matrix contains N,C,S data 
-              as well. This selection defines how many columns (N_variables) are 
+              It is possible to have multiple selections. Data types may also be
+              converted to each other, e.g. a Mueller matrix contains N,C,S data
+              as well. This selection defines how many columns (N_variables) are
               stored in the data array."
-        enumeration: [psi/delta, tan(psi)/cos(delta), Mueller matrix, 
+        enumeration: [psi/delta, tan(psi)/cos(delta), Mueller matrix,
           Jones matrix, N/C/S, raw data]
+
+      column_names:
+        doc: "Please list in this array the column names used in your actual data.
+              That is ['psi', 'delta'] or ['MM1', 'MM2', 'MM3', ..., 'MM16] for
+              a full Mueller matrix, etc."
+        dimensions:
+          rank: 1
+          dim: [[1, N_variables]]
 
       wavelength(NX_NUMBER):
         doc: "Wavelength value(s) used for the measurement.
@@ -442,12 +456,12 @@ symbols:
           dim: [[1, N_wavelength]]
 
       measured_data(NX_NUMBER):
-        doc: "Resulting data from the measurement, described by data type.\n
-          Minimum two columns containing Psi and Delta, or for the normalized 
+        doc: "Resulting data from the measurement, described by data type.
+          Minimum two columns containing Psi and Delta, or for the normalized
           Mueller matrix it may be 16 (or 15 if the element (1,1) is all 1)."
         dimensions:
           rank: 5
-          dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+          dim: [[1, N_time], [2, N_p1], [3, N_angles], [4, N_variables], [5, N_wavelength]]
 
       data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
@@ -455,15 +469,18 @@ symbols:
         exists: recommended
         dimensions:
           rank: 5
-          dim: [[5, N_time], [4, N_p1], [3, N_angles], [2, N_variables], [1, N_wavelength]]
+          dim: [[1, N_time], [2, N_p1], [3, N_angles], [4, N_variables], [5, N_wavelength]]
 
       time_points(NX_NUMBER):
         exists: optional
         doc: "An array of relative time points if a time series was recorded."
         unit: NX_TIME
+        dimensions:
+          rank: 1
+          dim: [[1, N_time]]
 
       medium:
-        doc: "Describe what was the medium above or around the sample. The 
+        doc: "Describe what was the medium above or around the sample. The
               common model is built up from the substrate to the medium on the
               other side. Both boundaries are assumed infinite in the model.
               Here, define the name of the medium (e.g. water, air, UHV, etc.)."
@@ -486,31 +503,31 @@ symbols:
 
       number_of_runs(NX_UINT):
         exists: optional
-        doc: "How many measurements were done varying the parameters? This 
+        doc: "How many measurements were done varying the parameters? This
               forms an extra dimension beyond incident angle, time points and
-              energy/wavelength (this is the length of the 4th dimension of 
+              energy/wavelength (this is the length of the 4th dimension of
               the data). Defaults to 1."
         unit: NX_DIMENSIONLESS
 
       varied_parameters:
         exists: optional
-        doc: "Indicates which parameter was changed. Its definition must exist 
+        doc: "Indicates which parameter was changed. Its definition must exist
               below. The specified variable has to be number_of_runs long,
               providing the parameters for each data set."
-        enumeration: [optical excitation, voltage, temperature, pH, stress, 
+        enumeration: [optical excitation, voltage, temperature, pH, stress,
           stage positions]
 
       optical_excitation(NXsubentry):
         exists: optional
-        doc: "Was the sample modified using an optical source? Describe in this 
+        doc: "Was the sample modified using an optical source? Describe in this
               group the parameters of the optical excitation used."
         excitation_source:
           doc: "Specify the source for the external excitation"
 
         excitation_wavelength(NX_NUMBER):
           doc: "Wavelength value(s) or the range used for excitation.
-                In cases of continuous laser radiation, a value or a set of 
-                values may do but for other illumination types, such as pulsed 
+                In cases of continuous laser radiation, a value or a set of
+                values may do but for other illumination types, such as pulsed
                 lasers, or lamps, a range may describe the source better."
           unit: NX_LENGTH
         broadening(NX_NUMBER):
@@ -567,10 +584,10 @@ symbols:
 
     plot(NXdata):
       exists: optional
-      doc: "A default view of the data, in this case Psi vs. wavelength and 
-            the angles of incidence. If Psi does not exist, use other Mueller 
+      doc: "A default view of the data, in this case Psi vs. wavelength and
+            the angles of incidence. If Psi does not exist, use other Mueller
             matrix elements, such as N, C and S."
       \@axes:
-        doc: "We recommend to use wavelength as a default attribute, but it 
-              can be replaced in the case of not full spectral ellipsometry 
+        doc: "We recommend to use wavelength as a default attribute, but it
+              can be replaced in the case of not full spectral ellipsometry
               to any suitable parameter along the X-axis."
