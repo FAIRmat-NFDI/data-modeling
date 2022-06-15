@@ -1,12 +1,11 @@
 doc: |
   Properties of the neutron or X-ray beam at a given location. 
         
-  | It will be referenced
-  by beamline component groups within the :ref:`NXinstrument` group or by the :ref:`NXsample` group. Note
-  that variables such as the incident energy could be scalar values or arrays. This group is
-  especially valuable in storing the results of instrument simulations in which it is useful
-  to specify the beam profile, time distribution etc. at each beamline component. Otherwise,
-  its most likely use is in the :ref:`NXsample` group in which it defines the results of the neutron
+  It will be referenced by beamline component groups within the :ref:`NXinstrument` group or by the :ref:`NXsample` group. 
+  Note that variables such as the incident energy could be scalar values or arrays. 
+  This group is especially valuable in storing the results of instrument simulations in which it is useful to specify the beam profile, 
+  time distribution etc. at each beamline component. 
+  Otherwise, its most likely use is in the :ref:`NXsample` group in which it defines the results of the neutron
   scattering by the sample, e.g., energy transfer, polarizations.
 symbols:
   doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
@@ -18,18 +17,20 @@ category: base
     doc: "Distance from sample"
   incident_energy(NX_FLOAT):
     unit: NX_ENERGY
-    doc: "In the case of a monchromatic beam this is the scalar energy.
+    doc: | 
+      In the case of a monchromatic beam this is the scalar energy.
       Several other use cases are permitted, depending on the presence of other incident_energy_X fields.
-      In the case of a polychromatic beam this is an array of length m of energies,
-      with the relative weights in incident_energy_weights.
-      In the case of a monochromatic beam that varies shot-to-shot, this is an array of energies, one for each recorded shot.
-      Here, incident_energy_weights and incident_energy_spread are not set.
-      In the case of a polychromatic beam that varies shot-to-shot,
-      this is an array of length m with the relative weights in incident_energy_weights as a 2D array.
-      In the case of a polychromatic beam that varies shot-to-shot and where the channels also vary,
-      this is a 2D array of dimensions nP by m (slow to fast) with the relative weights in incident_energy_weights as a 2D array.
-      Note, variants are a good way to represent several of these use cases in a single dataset, e.g. if a calibrated,
-      single-value energy value is available along with the original spectrum from which it was calibrated."
+      
+      * In the case of a polychromatic beam this is an array of length m of energies, with the relative weights in incident_energy_weights.
+      * In the case of a monochromatic beam that varies shot-to-shot, this is an array of energies, one for each recorded shot. 
+        Here, incident_energy_weights and incident_energy_spread are not set.
+      * In the case of a polychromatic beam that varies shot-to-shot, 
+        this is an array of length m with the relative weights in incident_energy_weights as a 2D array.
+      * In the case of a polychromatic beam that varies shot-to-shot and where the channels also vary,
+        this is a 2D array of dimensions nP by m (slow to fast) with the relative weights in incident_energy_weights as a 2D array.
+      
+      Note, variants are a good way to represent several of these use cases in a single dataset,
+      e.g. if a calibrated, single-value energy value is available along with the original spectrum from which it was calibrated.  
     dimensions:
       rank: 1
       dim: [[1, i]]
@@ -59,19 +60,22 @@ category: base
       dim: [[1, i]]
   incident_wavelength(NX_FLOAT):
     unit: NX_WAVELENGTH
-    doc: "In the case of a monchromatic beam this is the scalar wavelength.
+    doc: |
+      In the case of a monchromatic beam this is the scalar wavelength.
       Several other use cases are permitted, depending on the presence of other incident_wavelength_X fields.
-      In the case of a polychromatic beam this is an array of length m of wavelengths,
-      with the relative weights in incident_wavelength_weights.
-      In the case of a monochromatic beam that varies shot-to-shot,
-      this is an array of wavelengths, one for each recorded shot.
-      Here, incident_wavelength_weights and incident_wavelength_spread are not set.
-      In the case of a polychromatic beam that varies shot-to-shot,
-      this is an array of length m with the relative weights in incident_wavelength_weights as a 2D array.
-      In the case of a polychromatic beam that varies shot-to-shot and where the channels also vary,
-      this is a 2D array of dimensions nP by m (slow to fast) with the relative weights in incident_wavelength_weights as a 2D array.
+      
+      * In the case of a polychromatic beam this is an array of length m of wavelengths,
+        with the relative weights in incident_wavelength_weights.
+      * In the case of a monochromatic beam that varies shot-to-shot,
+        this is an array of wavelengths, one for each recorded shot.
+        Here, incident_wavelength_weights and incident_wavelength_spread are not set.
+      * In the case of a polychromatic beam that varies shot-to-shot,
+        this is an array of length m with the relative weights in incident_wavelength_weights as a 2D array.
+      * In the case of a polychromatic beam that varies shot-to-shot and where the channels also vary,
+        this is a 2D array of dimensions nP by m (slow to fast) with the relative weights in incident_wavelength_weights as a 2D array.
+      
       Note, variants are a good way to represent several of these use cases in a single dataset, e.g. if a calibrated,
-      single-value wavelength value is available along with the original spectrum from which it was calibrated."
+      single-value wavelength value is available along with the original spectrum from which it was calibrated.
     dimensions:
       rank: 1
       dim: [[1, i]]
@@ -106,14 +110,20 @@ category: base
       rank: 1
       dim: [[1, 4]]
     \@units:
-      doc: "The units for this observable are not included in the NIAC list.
-        Responsibility on correct formatting and parsing is handed to the user by using ''NX_ANY''.
-        Correct parsing can still be implemented by using this attribute.
-        Fill with: The unit unidata symbol if the unit has one (Example: ''T'' for the unit of magnetic flux density tesla).
-        The unit unidata name if the unit has a name (Example: ''farad'' for capacitance).
-        A string describing the units according to unidata unit operation notation,
+     doc: | 
+      The units for this observable are not included in the NIAC list.
+      Responsibility on correct formatting and parsing is handed to the user by using 'NX_ANY'.
+      Correct parsing can still be implemented by using this attribute.
+      
+      | Fill with:
+      
+      * The unit unidata symbol if the unit has one (Example: 'T' for the unit of magnetic flux density tesla).
+      * The unit unidata name if the unit has a name (Example: 'farad' for capacitance).
+      * A string describing the units according to unidata unit operation notation,
         if the unit is a complex combination of named units and does not have a name.
-        Example: for lightsource brilliance (SI) ''1/(s.mm2.mrad2)''. Here: SI units are ''V2/m2''."
+
+      Example: for lightsource brilliance (SI) '1/(s.mm2.mrad2)'.
+      Here: SI units are 'V2/m2'. 
   final_polarization(NX_FLOAT):
     unit: NX_ANY
     doc: "Polarization vector on leaving beamline component"

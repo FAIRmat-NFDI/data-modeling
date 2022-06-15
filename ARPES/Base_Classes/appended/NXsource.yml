@@ -72,7 +72,7 @@ category: base
     doc: "Pulsed source target material"
     enumeration: [Ta, W, depleted_U, enriched_U, Hg, Pb, C]
   notes(NXnote):
-    doc: "any source/facility related messages/events that 
+    doc: "Any source/facility related messages/events that 
 			occurred during the experiment"
   bunch_pattern(NXdata):
     doc: "For storage rings, description of the bunch pattern.  
@@ -89,23 +89,23 @@ category: base
     doc: "For storage rings, time between bunches"
   pulse_width(NX_FLOAT):
     unit: NX_TIME
-    doc: "temporal width of source pulse"
+    doc: "Temporal width of source pulse"
   pulse_shape(NXdata):
-    doc: "source pulse shape"
+    doc: "Source pulse shape"
   mode:
-    doc: "source operating mode"
+    doc: "Source operating mode"
     enumeration: 
       Single Bunch: 
-        doc: "for storage rings"
+        doc: "For storage rings"
       Multi Bunch: 
-        doc: "for storage rings"
+        doc: "For storage rings"
   top_up(NX_BOOLEAN):
     doc: "Is the synchrotron operating in top_up mode?"
   last_fill(NX_NUMBER):
     unit: NX_CURRENT
     doc: "For storage rings, the current at the end of the most recent injection."
     \@time:
-      doc: "date and time of the most recent injection."
+      doc: "Date and time of the most recent injection."
   photon_energy(NX_FLOAT):
     unit: NX_ENERGY
     doc: "The center photon energy of the source, before it is monochromatized or converted"

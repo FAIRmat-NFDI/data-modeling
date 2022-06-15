@@ -197,7 +197,8 @@ category: base
         dim: [[1, i], [2, j], [3, k]]
     wavelength(NX_FLOAT):
       unit: NX_WAVELENGTH
-      doc: "This field can be two things:
+      doc: |
+        This field can be two things:
 
         #. For a pixel detector it provides the nominal wavelength
            for which the detector has been calibrated.
@@ -207,26 +208,27 @@ category: base
            For some detectors, the efficiency is wavelength dependent.
            Thus this field provides the wavelength axis for the efficiency field.
            In this use case, the efficiency and wavelength arrays must
-           have the same dimensionality."
+           have the same dimensionality.
       dimensions:
         rank: 3
         dim: [[1, i], [2, j], [3, k]]
   real_time(NX_NUMBER):
     unit: NX_TIME
-    doc: "Real-time of the exposure (use this if exposure time varies for
+    doc: |
+      Real-time of the exposure (use this if exposure time varies for
       each array element, otherwise use ``count_time`` field).
-	    
+
       Most often there is a single real time value that is constant across
       an entire image frame.  In such cases, only a 1-D array is needed.
       But there are detectors in which the real time
       changes per pixel. In that case, more than one dimension is needed. Therefore
-      the rank of this field should be less than or equal to (detector rank + 1)."
+      the rank of this field should be less than or equal to (detector rank + 1).
     dimensions:
       rank: 3
       dim: [[1, np], [2, i], [3, j]]
   start_time(NX_FLOAT):
     unit: NX_TIME
-    doc: "start time for each frame, with the ``start`` attribute as absolute reference"
+    doc: "Start time for each frame, with the ``start`` attribute as absolute reference"
     dimensions:
       rank: 1
       dim: [[1, np]]
@@ -406,14 +408,12 @@ category: base
     doc: "The value at which the detector goes into saturation.
       Especially common to CCD detectors, the data
       is known to be invalid above this value.
-
       For example, given a saturation_value and an underload_value, the valid
       pixels are those less than or equal to the saturation_value and greater
       than or equal to the underload_value."
   underload_value(NX_INT):
     doc: "The lowest value at which pixels for this detector would be reasonably
       measured. The data is known to be invalid below this value.
-
       For example, given a saturation_value and an underload_value, the valid
       pixels are those less than or equal to the saturation_value and greater
       than or equal to the underload_value."
@@ -442,7 +442,6 @@ category: base
   (NXdetector_module):
     doc: "For use in special cases where the data in NXdetector
       is represented in several parts, each with a separate geometry.
-
       Use one or more instances of the NXdetector_module
       group to declare regions of interest or some other
       subdivision of a detector."

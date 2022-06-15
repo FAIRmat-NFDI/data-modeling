@@ -12,17 +12,16 @@ category: base
   date(NX_DATE_TIME):
     doc: "Date and time of processing."
   (NXregistration):
-    doc: "Class to describe the operations of image registration"
+    doc: "Describes the operations of image registration"
   (NXdistortion):
-    doc: "class to describe the operations of image distrortion correction"
+    doc: "Describes the operations of image distrortion correction"
   (NXcalibration):
-    doc: "class to describe the operations of calibration"
+    doc: "Describes the operations of calibration"
   (NXnote):
-    doc: "The note will contain information about how the data was processed
+    doc: "Notes contain information about how the data was processed
       or anything about the data provenance.
       The contents of the note can be anything that the processing code
       can understand, or simple text.
-
       The name will be numbered to allow for ordering of steps."
   \@default:
     doc: |

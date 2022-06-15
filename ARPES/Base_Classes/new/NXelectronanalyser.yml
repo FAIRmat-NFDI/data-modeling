@@ -26,20 +26,20 @@ symbols:
     unit: NX_LENGTH
   fast_axes(NX_CHAR):
     doc: |
-      List of the axes that are acquired symultaneously by the detector. These
-      refer only to the experimental variables recorded by the electron analyser.
-      Other variables such as temperature, manipulator angles etc. are labeled as
-      fast or slow in the data. 
-      ========
-      Examples 
-      ========
-      :Hemispherical in ARPES mode: fast_axes: [\"energy\",\"kx\"] 
-      :Hemispherical with channeltron, sweeping energy mode: slow_axes: [\"energy\"] 
-      :Tof: fast_axes: [\"energy\", \"kx\", \"ky\"] 
-      :Momentum microscope, spin-resolved: fast_axes: [\"energy\", \"kx\", \"ky\"] slow_axes: [\"spin up-down\", \"spin left-right\"] axes
-      
-      | May be less abstract than this, i.e. [\"detector_x\", \"detector_y\"]. 
-      If energy_scan_mode=sweep, fast_axes: [\"energy\", \"kx\"]; slow_axes: [\"energy\"] is allowed.
+      List of the axes that are acquired simultaneously by the detector.
+      These refer only to the experimental variables recorded by the electron analyser.
+      Other variables such as temperature, manipulator angles etc. are labeled as fast or slow in the data.
+
+      .. csv-table:: Examples
+        :header: "Mode", "fast_axes", "slow_axes"
+
+        Hemispherical in ARPES mode,  "['energy', 'kx']",""
+        "Hemispherical with channeltron, sweeping energy mode", "", [\"energy\"]
+        "Tof", "['energy', 'kx', 'ky']",""
+        "Momentum microscope, spin-resolved", "['energy', 'kx', 'ky']", "['spin up-down', 'spin left-right']"
+
+      | Axes may be less abstract than this, i.e. ['detector_x', 'detector_y'].
+      If energy_scan_mode=sweep, fast_axes: ['energy', 'kx']; slow_axes: ['energy'] is allowed.
     dimensions:
       dim: [[1, nfa]]
       rank: 1
