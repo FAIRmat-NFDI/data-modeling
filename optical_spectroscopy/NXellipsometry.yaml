@@ -43,12 +43,14 @@ symbols:
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
   # since formating is dropped for quoted string, we can make it look nice in the file:
   N_wavelength: "Size of the energy or wavelength vector used, the length of
-                NXsample/wavelength array"
+                NNXinstrument/spectrometer/wavelength array"
   N_variables: "How many variables are saved in a measurement. e.g. 2 for Psi
                 and Delta, 16 for Mueller matrix elements, 15 for normalized
                 Mueller matrix, 3 for NCS, the length of NXsample/column_names"
   N_angles: "Number of incident angles used, the length of
             NXinstrument/angle_of_incidence array"
+
+  # suggestion from NIAC to combine N_p1 and N_time using scans...
   N_p1: "Number of sample parameters scanned, if you varied any of the parameters
         such as temperature, pressure, or pH, the length of the array specified by
         the enum in NXsample/varied_parameters"
@@ -94,11 +96,15 @@ symbols:
     start_time(NX_DATE_TIME):
       doc: "Start time of the experiment. UTC offset should be specified."
 
-    program:
+    acquisition_program(NXprocess):
       exists: optional
-      doc: "Commercial or otherwise defined given name to the program that was
-        used to generate the result file(s) with measured data and metadata."
-      \@version:
+      program:
+        doc: "Commercial or otherwise defined given name to the program that was
+          used to generate the result file(s) with measured data and metadata.
+          This program converts the measured signals to ellipsometry data. If
+          home written, one can provide the actual steps in the NOTES subfield
+          here."
+      version:
         doc: "Either version with build number, commit hash, or description of
           a (online) repository where the source code of the program and build
           instructions can be found so that the program can be configured in
@@ -140,11 +146,13 @@ symbols:
       company:
         exists: optional
         doc: "Name of the company which build the instrument"
+
       construction_year(NX_DATE_TIME):
         exists: optional
         doc: "ISO8601 date when the instrument was constructed.
           UTC offset should be specified."
-      software:
+
+      firmware:
         doc: "Commercial or otherwise defined name of the software that was
           used for the measurement"
         \@version:
@@ -154,20 +162,36 @@ symbols:
 
       light_source:
         doc: "Specify the used light source. Multiple selection possible."
-        enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
-          deuterium lamp, silicon carbide globar, other]
-      other_light_source:
-        exists: optional
-        doc: "If you specified 'other' as light source type, please write down what it is."
+
+        type:
+          doc: "NXsource lists already possible sources, and here we list some
+            further sources to complement the original list. Please select one or
+            more, according to the setup"
+            #enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
+            # deuterium lamp, silicon carbide globar, other]
+            # use the target to define the actual quality
+          enumeration: [arc lamp, halogen lamp, LED, other]
+
+        other_light_source (NXsource):
+          exists: optional
+          doc: "If you specified 'other' as light source type, please write down what it is."
+
+        target_material:
+          doc: "unlike in the original, the material used to generate the light, that is
+            argon, helium, neon, gases, or merciry/cadmium vapor, etc."
+
       focussing_probes(NX_BOOLEAN):
         doc: "Were focussing probes (lenses) used or not?"
+
       data_correction(NX_BOOLEAN):
         exists: optional
         doc: "Were the recorded data corrected by the window effects of the lenses or not?"
+
       angular_spread(NX_NUMBER):
         exists: optional
         doc: "Specify the angular spread caused by the focussing probes"
         unit: NX_ANGLE
+
       ellipsometry_type:
         doc: "What type of ellipsometry was used? See Fujiwara Table 4.2"
         enumeration: [rotating analyzer, rotating analyzer with analyzer compensator,
@@ -254,6 +278,13 @@ symbols:
           dim: [[1, N_angles]]
 
       stage(NXsubentry):
+        # if we wanted to bring this one level higher in agreement with NIAC
+        # suggestions, then I would say use:
+        # stage
+        # stage_description
+        # stage_transformations
+        # stage_transformations_alternative
+        # as names
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
               (Cartesian) coordinate system and at an orientation defined
               by three Euler angles (alpha, beta, gamma).
@@ -392,6 +423,20 @@ symbols:
             rank: 1
             dim: [[1, 2]]
 
+      spectrometer(NXmonochromator):
+        # created this and moved wavelength into it in accordance to NIAC
+        # recommendation
+        doc: "the spectroscope element of the ellipsometer before the detector,
+            but often integrated to form one closed unit"
+
+        wavelength(NX_NUMBER):
+          doc: "Wavelength value(s) used for the measurement.
+                An array of 1 or more elements. Length defines N_wavelength"
+          unit: NX_LENGTH
+          dimensions:
+            rank: 1
+            dim: [[1, N_wavelength]]
+
     (NXsample):
       doc: "Properties of the sample, its history, the sample environment and
             experimental conditions (e.g. surrounding medium, temperature,
@@ -446,14 +491,6 @@ symbols:
         dimensions:
           rank: 1
           dim: [[1, N_variables]]
-
-      wavelength(NX_NUMBER):
-        doc: "Wavelength value(s) used for the measurement.
-              An array of 1 or more elements. Length defines N_wavelength"
-        unit: NX_LENGTH
-        dimensions:
-          rank: 1
-          dim: [[1, N_wavelength]]
 
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type.
@@ -521,41 +558,45 @@ symbols:
         exists: optional
         doc: "Was the sample modified using an optical source? Describe in this
               group the parameters of the optical excitation used."
-        excitation_source:
+
+        excitation_source(NXsource):
+          # utilizing NXsource here brings most of the fields with it
+          # I just have to remove 'excitation_'
           doc: "Specify the source for the external excitation"
 
-        excitation_wavelength(NX_NUMBER):
-          doc: "Wavelength value(s) or the range used for excitation.
-                In cases of continuous laser radiation, a value or a set of
-                values may do but for other illumination types, such as pulsed
-                lasers, or lamps, a range may describe the source better."
-          unit: NX_LENGTH
-        broadening(NX_NUMBER):
-          exists: optional
-          doc: "Specify the FWHM of the excitation"
-          unit: NX_LENGTH
-        excitation_type:
-          doc: "CW or pulsed excitation"
-          enumeration: [CW, pulsed]
-        pulse_length(NX_NUMBER):
-          exists: optional
-          doc: "Duration of one laser pulse."
-          unit: NX_TIME
-        repetition_rate(NX_NUMBER):
-          exists: optional
-          doc: "Repetition rate of the laser."
-          unit: NX_FREQUENCY
-        excitation_duration(NX_TIME):
-          exists: optional
-          doc: "How long was the sample excited."
-        pulse_energy(NX_NUMBER):
-          exists: optional
-          doc: "The integrated energy of light pulse."
-          unit: NX_ENERGY
-        excitation_power(NX_NUMBER):
-          exists: optional
-          doc: "The power of one laser pulse."
-          unit: NX_ENERGY
+          excitation_wavelength(NX_NUMBER):
+            doc: "Wavelength value(s) or the range used for excitation.
+                  In cases of continuous laser radiation, a value or a set of
+                  values may do but for other illumination types, such as pulsed
+                  lasers, or lamps, a range may describe the source better."
+            unit: NX_LENGTH
+
+          broadening(NX_NUMBER):
+            exists: optional
+            doc: "Specify the FWHM of the excitation"
+            unit: NX_LENGTH
+          excitation_type:
+            doc: "CW or pulsed excitation"
+            enumeration: [CW, pulsed]
+          pulse_length(NX_NUMBER):
+            exists: optional
+            doc: "Duration of one laser pulse."
+            unit: NX_TIME
+          repetition_rate(NX_NUMBER):
+            exists: optional
+            doc: "Repetition rate of the laser."
+            unit: NX_FREQUENCY
+          excitation_duration(NX_TIME):
+            exists: optional
+            doc: "How long was the sample excited."
+          pulse_energy(NX_NUMBER):
+            exists: optional
+            doc: "The integrated energy of light pulse."
+            unit: NX_ENERGY
+          #excitation_power(NX_NUMBER):
+            #exists: optional
+            #doc: "The power of one laser pulse."
+            #unit: NX_ENERGY
 
       voltage(NX_NUMBER):
         exists: optional
