@@ -1,0 +1,17 @@
+category: base
+doc: |
+   A container for qualifying an optical system.
+(NXoptical_system):
+  # NEW ISSUE: for now used to store difficult to place entries
+  camera_length(NX_NUMBER):
+    unit: NX_LENGTH
+  magnification(NX_NUMBER):
+    unit: NX_DIMENSIONLESS
+  defocus(NX_NUMBER):
+    unit: NX_LENGTH
+  semi_convergence_angle(NX_NUMBER):
+    unit: NX_ANGLE
+  # NEW ISSUE: the KIT/SCC propose:
+  # adding of the image_mode or field mode
+  # imageMode: enum: [normal_image, sad, eds, nbd, cbed]
+  # fieldMode: enum: [dark_field, bright_field]

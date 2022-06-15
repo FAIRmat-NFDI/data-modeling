@@ -1,0 +1,9 @@
+category: base
+doc: |
+  A container to structure a set of events.
+  
+  An event is a time interval during which the microscope
+  was configured, considered stable, and used for
+  characterization.
+(NXevent_data_em_set):
+  EVENT_DATA_EM(NXevent_data_em):

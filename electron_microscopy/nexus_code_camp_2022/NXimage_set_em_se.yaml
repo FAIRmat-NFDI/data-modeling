@@ -1,0 +1,102 @@
+category: base
+doc: |
+  Container for reporting a set of secondary electron images.
+  
+  Secondary electron images are the most important signal especially for
+  SEM used in materials science and engineering for analyses of surface
+  topography, getting an overview of the analysis region, or fractographical
+  analyses.
+symbols:
+  n_images: Number of images.
+  n_x: Number of pixels along the fast scan direction (often x).
+  n_y: Number of pixels along the slow scan direction (often y).
+(NXimage_set_em_se):
+  # NEW ISSUE: (NXcg_polygon_set):
+  roi_dimensions(NX_NUMBER):
+    doc: Physical dimensions of the region-of-interest on the specimen surface which the image covers. The first entry for each image should be the fast, the second one the value for the slow direction.
+    unit: NX_LENGTH
+    dimensions: 
+      rank: 2
+      dim: [[1, n_images], [2, 2]]
+  bounding box
+  number of pixels
+  barycenter
+  
+  # drift correction
+  dwell_time(NX_FLOAT):
+    unit: NX_TIME
+  number_of_frames_averaged(NX_UINT):
+    doc: How many frames were averaged to obtain the image.
+    unit: NX_UNITLESS
+
+# stage position: x, y, z, tilt, rot
+
+
+
+bias
+faraday cage bias to repell SEs with very low energy
+type of detector
+energy spectrum
+location of the se detector
+direction dependence
+
+
+magnification relevant for leakage of SE and BSE into multiple pixels or not
+
+
+bse in-lens quadrat detector collection angles
+
+
+
+optics(NXcollection):
+doc: |
+  Miscellaneous details of the optical system that are relevant but
+  do not fit in right now in other places.
+working_distance(NX_FLOAT):
+  doc:
+  unit: NX_LENGTH
+field_of_view(NX_FLOAT):
+  doc:
+  unit: NX_LENGTH
+
+
+
+scan_rotation(NXprocess):
+  doc: |
+    Scan rotation is an option offer by most control software. 
+  ##MK
+
+
+tilt_correction(NXprocess):
+  doc: |
+    Tilt correction is an option offered by most control software of SEMs
+    to apply an on-the-fly processing of the image to correct for
+    the excursion of objects when characterized with SE images
+    on samples whose surface normal is tilted about an axis perpendicular
+    to the optical axis.
+  active(NX_BOOLEAN):
+    doc: Was the option switched active or not.
+
+dynamic_focus(NXprocess):
+  doc: |
+     Dynamic focus is an option offered by most control software of SEMs
+     to keep the image also focused when probing locations on the specimens
+     beyond those for which the lens system was calibrated.
+  active(NX_BOOLEAN):
+    doc: Was the option switched active or not.
+  # NEW ISSUE eventually store the settings of the dynamic focus
+  # as to guide users to quicker find relevant settings with a specific SEM
+  
+# NEW ISSUE: quantum efficiency of the detector
+# SE and BSE yield models
+  
+    
+
+# NEW ISSUE stereo microscopy
+# NEW ISSUE calibrations
+# NEW ISSUE contrast transfer function, i.e. how many photons/electron translate into how many counts
+
+
+final_aperture(NX_FLOAT):
+working_distance(NX_FLOAT):
+

@@ -1,0 +1,50 @@
+category: base
+doc: |
+  Container for reporting a set of annular dark field images.
+(NXimage_set_em_adf):
+  (NXprocess):
+    doc: Details about how the images were processed from the detector readings.
+    program:
+      doc: Commercial or otherwise given name to the program which was used to process detector data into the adf image(s).
+      \@version:
+      doc: Program version plus build number, commit hash, or description of an ever persistent resource where the source code of the program and build instructions can be found so that the program can be configured in such a manner that the result file is ideally recreatable yielding the same results.
+    adf_inner_half_angle(NX_FLOAT):
+      doc: Annulus inner half angle
+      unit: NX_ANGLE
+    adf_outer_half_angle(NX_FLOAT):
+      doc: HAADF annulus outer half angle
+      unit: NX_ANGLE
+  (NXdata):
+    doc: Annular dark field images.
+    \@signal:
+    # intensity
+    \@axes:
+    # [xpos, ypos]
+    \@xpos_indices:
+    # 0
+    \@ypos_indices:
+    # 1
+    intensity(NX_NUMBER):
+      doc: Image intensity values.
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, n_x], [2, n_y]]
+    \@long_name:
+      doc: Image intensities
+    xpos(NX_NUMBER):
+      doc: Pixel barycenter position x-coordinates.
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, n_x]]
+      \@long_name:
+        doc: Label for the x axis.
+    ypos(NX_NUMBER):
+      doc: Pixel barycenter position y-coordinates.
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, n_y]]
+      \@long_name:
+        doc: Label for the y axis.

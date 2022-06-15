@@ -1,0 +1,197 @@
+category: base
+doc: |
+  Container for reporting a set of Kikuchi diffraction images.
+  
+  The container can also store data related to a post-processing of these
+  Kikuchi pattern, which is the backbone of electron back-scatter diffraction
+  EBSD used for e.g. orientation microscopy especially in materials science
+  and engineering.
+  
+  Based on a fuse of the [h5ebsd](https://doi.org/10.1186/2193-9772-3-4)
+  and the [H5OINA](https://doi.org/10.1017/S1431927621006103) proposals.
+symbols:
+  n_p: Number of scan points, one pattern per scan point.
+  n_x: Number of pixel per Kikuchi pattern in the fast direction
+  n_y: Number of pixel per Kikuchi pattern in the slow direction
+(NXimage_set_em_kikuchi):
+  # a collection of pattern-related metadata
+  (NXdata):
+    doc: | 
+      Collected Kikuchi pattern as an image stack.
+    intensity(NX_NUMBER):
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 3
+        dim: [[1, n_p], [2, n_y], [3, n_x]]
+      \@long_name:
+        doc: Kikuchi pattern intensity
+    \@signal: intensity
+    \@axes: [pattern_id, ypos, xpos]
+    \@pattern_indices: 0
+    \@ypos_indices: 1
+    \@xpos_indices: 2
+    pattern_id(NX_NUMBER):
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 1
+        dim: [[1, n_p]]
+      \@long_name:
+        doc: Kikuchi pattern identifier
+    ypos(NX_NUMBER):
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, n_y]]
+      \@long_name:
+        doc: Label for the y axis
+    xpos(NX_NUMBER):
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, n_x]]
+      \@long_name:
+        doc: Label for the x axis
+
+  # post-processing into EBSD mappings follows, here an example for 2D map
+  # if the pattern is a regular grid
+  (NXgrid):
+    # number of pixels
+    # step size
+  # what about examples for a 1D map and a 3D map?
+  # NEW ISSUE: one could do a reanalyzing with having a collection of NXprocesses
+  (NXprocess):
+    doc: |
+      Post-processing of the Kikuchi pattern to identify orientations.
+    pattern_quality(NX_FLOAT):
+      doc:
+      unit: NX_UNITLESS
+      dimensions: ##MK [[1, n_p]]
+    pattern_center(NXcg_point_set):
+    detector_distance(NX_FLOAT):
+      doc:
+      unit: NX_LENGTH
+      dimensions: ##MK [[1, n_p]]
+    background_correction(NXprocess): ##MK
+      # auto_background_correction: ##MK
+      # static_or_dynamic: ##MK
+    band_detection(NXprocess):
+      mode:
+        doc: How are Kikuchi bands detected ##MK
+        enumeration: [center]
+      band_contrast(NX_NUMBER):
+        doc:
+        unit: NX_UNITLESS
+        dimensions: ##MK [[1, n_p]]
+      band_slope(NX_NUMBER):
+        doc:
+        unit: NX_UNITLESS
+        dimensions: ##MK [[1, n_p]]
+      bands(NX_NUMBER):
+        doc: How many bands were detected in the pattern.
+        unit: NX_UNITLESS
+        dimensions: ##MK [[1, n_p]]
+    indexing(NXprocess):
+      ##MK:: phase/reflectors
+      #  lattice structure
+      #  laue_group
+      #  number of reflectors
+      #  reflectors NXplane_set ?
+      #  phase_identifier
+      #  space_group
+      #  phase_name (alias)
+      mode:
+        doc: How are pattern being indexed?
+        enumeration: [optimize_bd] ##MK::what does this mean?
+      min_bands(NX_NUMBER):
+        doc: Minimum number of bands required to index the pattern
+        ##MK could be made a dimensions: ##MK [[1, n_p]]
+      status(NX_NUMBER):
+        doc: |
+          Which return value did the indexing algorithm yield for each pattern.
+          * Details about bad pixels
+          * Too high angular deviation
+          * no solution
+          * not analyzed
+          * success
+          * unexpected errors
+        unit: NX_UNITLESS
+      phase_identifier(NX_UINT):
+        doc: Labels referring to the phase_identifier for each pattern (from reflectors) that matched best.
+      (NXorientation_set): ##MK
+      mean_angular_deviation(NX_FLOAT):
+        doc:
+        unit: NX_ANGLE
+        dimensions: ##MK [[1, n_p]]
+      confidence_index(NX_FLOAT):
+        doc:
+        unit: NX_UNITLESS
+        dimensions: ##MK [[1, n_p]]
+
+  # on the other hand there are specific metadata to store with taking EBSD
+  # mappings
+  # tilt_angle(NX_FLOAT):
+    # maybe better make this integrated into the NXtransformations of the stage_lab, a stage_lab event?
+  calibration(NXprocess): ##MK gain etc on the detector
+  beam_position(NXcg_point_set):
+  (NXdetector):
+    exposure_time(NX_FLOAT):
+      unit: NX_TIME
+    gain(NX_FLOAT): 
+    ##MK how does a gain translate mathematically an input signal into an intensity signal?
+    insertion_distance(NX_FLOAT):
+      unit: NX_LENGTH
+    ##MK a coordinate system for the detector in the NXcoordinate_system_set
+    drift_correction(NX_BOOLEAN): ##MK??
+  binning(NXcollection):
+    mode:
+      doc: Free-text description for instrument specific settings
+    binning(NXgrid): ##MK equivalent to pattern height and width?
+      doc: How is the camera signal binned? This 
+  hough_transformation(NXprocess):
+    resolution(NX_NUMBER):
+  profiling(NXcollection):
+    acquisition_speed(NX_FLOAT):
+      doc: Average number of patterns taken on average.
+      unit: NX_FREQUENCY
+    acquisition_time(NX_FLOAT):
+      doc: Wall-clock time the acquisition took.
+      unit: NX_TIME
+    hit_rate(NX_FLOAT):
+      doc: Fraction of successfully indexed pattern of the set.
+      unit: NX_FRACTION
+  ##lens FOV, magnification
+  ##frame averaging
+
+  # going towards the level of suggestions what would all be immediately possible
+  ebsd_mapping(NXprocess):
+    doc: |
+      An EBSD mapping is the result of a collecting and indexing of Kikuchi
+      pattern, so that for each pattern there is either an associated
+      phase_identifier or a status marker stating that no solution was found
+    (NXsst_color_model): ##MK
+      doc: |
+        For each stereographic standard triangle, (fundamental zone) of 
+        the orientation space, it is possible to define a color model which
+        associates an orientation in the fundamental zone to a color.
+        
+        For details see:
+        * [G. Nolze et al.](https://doi.org/10.1107/S1600576716012942)
+        * Srikanth Patala and coworkers"'" work and of others.
+      (NXorientation_set):
+        doc: |
+          Collection of quaternions in the SO3 fundamental zone with colors and
+          details about how to plot the stereographic standard triangle (SST).
+        rgb(NX_NUMBER):
+          doc: RGB colors.
+          unit: NX_UNITLESS
+          dimensions: [[1, n_oris], [2, 3]]
+        # hsv and other models
+        (NXcg_point_set):
+          rgb(NX_NUMBER):
+            dimensions: [[1, n_points], [2, 3]]
+    mapping(NX_NUMBER):
+      doc: | 
+        The EBSD mapping with colors outlined
+      unit: NX_UNITLESS
+      dimensions: [[1, n_y], [2, n_x], [3, 3]]
+   # it would also be possible to define additional color models to overlay

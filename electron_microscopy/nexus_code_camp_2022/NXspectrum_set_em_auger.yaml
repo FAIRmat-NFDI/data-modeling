@@ -1,0 +1,4 @@
+category: base
+doc: |
+  Container for reporting a set of auger electron energy spectra.
+(NXspectrum_set_em_auger):
