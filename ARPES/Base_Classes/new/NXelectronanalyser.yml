@@ -46,7 +46,7 @@ symbols:
   slow_axes(NX_CHAR):
     doc:
       "List of the axes that are acquired by scanning a physical parameter, listed
-      in order of decreasing speed."
+      in order of decreasing speed. See fast_axes for examples."
     dimensions:
       dim: [[1, nsa]]
       rank: 1

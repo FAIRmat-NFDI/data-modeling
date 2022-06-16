@@ -7,10 +7,10 @@ doc: This is the most general application definition for multidimensional photoe
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays
   nfa: Number of fast axes (acquired simutaneously) e.g. emission angle, kinetic energy
-  nsa: Number of slow axes (acquired scanning a physical quantity) e.g. lens voltage, spin direction
 category: application 
 (NXmpes):
   (NXentry):
+    title:
     start_time(NX_DATE_TIME):
       doc: "ISO8601 formatted date time of the start of the measurement."
     definition:
@@ -40,14 +40,15 @@ category: application
       (NXbeam): 
         distance(NX_NUMBER):
           doc: "Distance of the point of evaluation of the beam from the sample surface."
-        incident_energy(NX_NUMBER):
+        incident_energy(NX_FLOAT):
         incident_energy_spread(NX_NUMBER):
           exists: recommended
         incident_polarization(NX_NUMBER):
           exists: recommended
       (NXelectronanalyser):
         description:
-        energy_resolution(NX_NUMBER):
+        energy_resolution(NX_FLOAT):
+          exists: recommended
           doc: "Energy resolution of the analyser with the current setting. May be linked from a NXcalibration."
         fast_axes(NX_CHAR):
           exists: recommended
@@ -153,7 +154,7 @@ category: application
             doc: "Has an momentum calibration been applied?"
           calibrated_axis(NX_FLOAT):
             exists: recommended
-            doc: "This is the momentum energy axis to be used for data plotting."
+            doc: "This is the momentum axis to be used for data plotting."
     (NXsample):
       name:
       chemical_formula:
@@ -178,7 +179,7 @@ category: application
       # there is a base class for this, NXlog. The NIAC decided to use the same name (temperature) instead of the previous temperature_log.
       # how do I explain here in an appdef that temperature can be either NXnumber (single value or scanned array) or a NXlog?
       # It seems quite contorted to ask to create a separate timestamp array when we have a base class that handles it more elegantly.
-      temperature(NX_NUMBER):
+      temperature(NX_FLOAT):
         doc: "In the case of a fixed temperature measurement this is the scalar temperature of the sample.
         In the case of an experiment in which the temperature is changed and recoded, this is an array of length m of temperatures.
         This should be a link to
@@ -187,7 +188,7 @@ category: application
       situation: 
         enumeration: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
       # Similar situation here, ca be a single number or a log.
-      gas_pressure(NX_NUMBER):
+      gas_pressure(NX_FLOAT):
     (NXdata):
       \@signal:
         enumeration: ["data"] # There is an object named data that contains the signal
