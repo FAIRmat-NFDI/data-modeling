@@ -3,9 +3,10 @@ doc: "Subclass of NXelectronanalyser to describe the energy dispersion section
   of a photoelectron analyser."
 (NXenergydispersion):
   scheme(NX_CHAR):
-    doc: "tof, hemispherical, cylindrical, mirror, retarding grid, etc."
+    doc: "Energy dispersion scheme employed."
   pass_energy(NX_FLOAT):
-    doc: "Pass energy in dispersive electrodes"
+    doc: "Energy of the electrons on the mean path of the analyser.
+      Pass energy for hemispherics, drift energy for tofs."
     unit: NX_ENERGY
   center_energy(NX_FLOAT):
     doc: "Center of the energy window"
@@ -24,7 +25,8 @@ doc: "Subclass of NXelectronanalyser to describe the energy dispersion section
     doc: "Diameter of the dispersive orbit"
     unit: NX_LENGTH
   energy_scan_mode(NX_CHAR):
-    doc: "fixed or sweep"
+    doc: "Way of scanning the energy axis (fixed or sweep)."
+    enumeration: ["fixed", "sweep"]
   tof_distance(NX_FLOAT):
     doc: "Length of the tof drift electrode"
     unit: NX_LENGTH

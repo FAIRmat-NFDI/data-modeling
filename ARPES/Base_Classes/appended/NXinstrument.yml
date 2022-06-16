@@ -1,0 +1,16 @@
+(NXinstrument):
+  energy_resolution(NX_FLOAT):
+    doc: "Energy resolution of the electron analyser (FWHM or gaussian broadening)"
+    unit: NX_ENERGY
+  momentum_resolution(NX_FLOAT):
+    doc: "Momentum resolution of the electron analyser (FWHM)"
+    unit: NX_WAVENUMBER
+  angular_resolution(NX_FLOAT):
+    doc: "Angular resolution of the electron analyser (FWHM)"
+    unit: NX_ANGLE
+  spatial_resolution(NX_FLOAT):
+    doc: "Spatial resolution of the electron analyser (Airy disk radius)"
+    unit: NX_LENGTH
+  temporal_resolution(NX_FLOAT):
+    doc: "Temporal resolution of the electron analyser (FWHM)"
+    unit: NX_TIME

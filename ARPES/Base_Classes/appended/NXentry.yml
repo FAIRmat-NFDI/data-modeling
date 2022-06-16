@@ -130,11 +130,13 @@ category: base
       which gives the T0 signal to the detector electronics. If another component in the
       NXinstrument hierarchy provides this information, this should be a link."
   experiment_location(NX_CHAR):
-    doc: "City and country where ex. Took place"
+    doc: "City and country where the experiment took place"
   experiment_start_date(NX_DATE_TIME):
-    doc: "Start date and time of ex. in ISO 8601 format, ideally including UTC offset."
+    doc: "Start time of experimental run that includes the current measurement,
+      for example a beam time."
   experiment_end_date(NX_DATE_TIME):
-    doc: "Start date and time of ex. in ISO 8601 format, ideally including UTC offset."
+    doc: "End time of experimental run that includes the current measurement,
+      for example a beam time."
   experiment_institution(NX_CHAR):
     doc: "Name of the institution hosting the facility"
   experiment_facility(NX_CHAR):

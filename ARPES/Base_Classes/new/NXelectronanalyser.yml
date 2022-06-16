@@ -13,43 +13,51 @@ symbols:
     \@short_name(NX_CHAR):
       doc: "Acronym or other shorthand name"
   energy_resolution(NX_FLOAT):
-    doc: "Overall energy resolution (FWHM of gaussian broadening)"
+    doc: "Energy resolution of the electron analyser (FWHM of gaussian broadening)"
     unit: NX_ENERGY
   momentum_resolution(NX_FLOAT):
-    doc: "Overall momentum resolution (FWHM)"
+    doc: "Momentum resolution of the electron analyser (FWHM)"
     unit: NX_WAVENUMBER
   angular_resolution(NX_FLOAT):
-    doc: "Overall angular resolution (FWHM)"
+    doc: "Angular resolution of the electron analyser (FWHM)"
     unit: NX_ANGLE
   spatial_resolution(NX_FLOAT):
-    doc: "Overall spatial resolution (Airy disk radius)"
+    doc: "Spatial resolution of the electron analyser (Airy disk radius)"
     unit: NX_LENGTH
   fast_axes(NX_CHAR):
     doc: |
-      List of the axes that are acquired simultaneously by the detector.
-      These refer only to the experimental variables recorded by the electron analyser.
-      Other variables such as temperature, manipulator angles etc. are labeled as fast or slow in the data.
+            List of the axes that are acquired simultaneously by the detector.
+            These refer only to the experimental variables recorded by the electron analyser.
+            Other variables such as temperature, manipulator angles etc. are labeled as fast or slow in the data.
 
-      .. csv-table:: Examples
-        :header: "Mode", "fast_axes", "slow_axes"
+            .. csv-table:: Examples
+              :header: "Mode", "fast_axes", "slow_axes"
 
-        Hemispherical in ARPES mode,  "['energy', 'kx']",""
-        "Hemispherical with channeltron, sweeping energy mode", "", [\"energy\"]
-        "Tof", "['energy', 'kx', 'ky']",""
-        "Momentum microscope, spin-resolved", "['energy', 'kx', 'ky']", "['spin up-down', 'spin left-right']"
+              Hemispherical in ARPES mode,  "['energy', 'kx']",""
+              "Hemispherical with channeltron, sweeping energy mode", "", [\"energy\"]
+              "Tof", "['energy', 'kx', 'ky']",""
+              "Momentum microscope, spin-resolved", "['energy', 'kx', 'ky']", "['spin up-down', 'spin left-right']"
 
-      | Axes may be less abstract than this, i.e. ['detector_x', 'detector_y'].
-      If energy_scan_mode=sweep, fast_axes: ['energy', 'kx']; slow_axes: ['energy'] is allowed.
+            | Axes may be less abstract than this, i.e. ['detector_x', 'detector_y'].
+            If energy_scan_mode=sweep, fast_axes: ['energy', 'kx']; slow_axes: ['energy'] is allowed.
     dimensions:
       dim: [[1, nfa]]
       rank: 1
   slow_axes(NX_CHAR):
     doc:
       "List of the axes that are acquired by scanning a physical parameter, listed
-      in order of decreasing speed. See fast_axes for examples."
+      in order of decreasing speed."
     dimensions:
       dim: [[1, nsa]]
       rank: 1
+  depends_on(NX_CHAR):
+    doc: "Refers to the last transformation specifying the positon of the manipulator in the NXtransformations chain."
+  (NXtransformations):
+    doc:
+      "Collection of axis-based translations and rotations to describe the location and geometry of the manipulator as a component in the instrument.
+      Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used.
+      The first transformation has to point either to another component of the system or . (for pointing to the reference frame) to relate it relative to the experimental setup.
+      Typically, the components of a system should all be related relative to each other and only one component should relate to the reference coordinate system."
   (NXcollectioncolumn):
     doc:
       "class to describe the electron collection (spatial and momentum imaging)

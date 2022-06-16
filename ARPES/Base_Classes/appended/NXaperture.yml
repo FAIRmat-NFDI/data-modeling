@@ -16,8 +16,8 @@ doc: "A beamline aperture"
     doc: "Shape of the aperture."
     enumeration:
       [
-        "straight slits",
-        "curved slits",
+        "straight slit",
+        "curved slit",
         "pinhole",
         "circle",
         "square",

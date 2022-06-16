@@ -16,7 +16,8 @@ category: base
   (NXdistortion):
     doc: "Describes the operations of image distrortion correction"
   (NXcalibration):
-    doc: "Describes the operations of calibration"
+    doc: "Describes the operations of calibration procedures,
+      e.g. axis calibrations."
   (NXnote):
     doc: "Notes contain information about how the data was processed
       or anything about the data provenance.

@@ -143,8 +143,8 @@ category: base
     enumeration: [sample, sample+can, can, sample+buffer, buffer, calibration sample, normalisation sample, simulated data, none, sample environment]
   situation:
     doc: "The atmosphere will be one of the components, which is where 
-			its details will be stored; the relevant components will be 
-			indicated by the entry in the sample_component member."
+      its details will be stored; the relevant components will be 
+      indicated by the entry in the sample_component member."
     enumeration: [air, vacuum, inert atmosphere, oxidising atmosphere, reducing atmosphere, sealed can, other]
   description:
     doc: "Description of the sample"
@@ -250,18 +250,14 @@ category: base
     doc: "Material of the substrate in direct contact with the sample."
   substrate_state(NX_CHAR):
     doc: "Physical state of the substrate, similar options to sample_state"
-  sample_temperature(NX_FLOAT):
-    doc: "Temperature at the closest point to the sample.
-      This field may also be found in NXsample if present."
-    unit: NX_TEMPERATURE
   drain_current(NX_FLOAT):
     doc: "Current to neutralize the photoemission current.
-      This field may also be found in NXsample if present."
+      This field may also be found in NXmanpulator if present."
     unit: NX_CURRENT
-  sample_bias(NX_FLOAT):
-    doc: "Possible bias of the sample with trespect to analyser ground.
-      This field may also be found in NXsample if present."
-    unit: NX_CURRENT
+  bias_voltage(NX_FLOAT):
+    doc: "Possible bias of the sample with respect to analyser ground.
+      This field may also be found as sample_bias in NXmanipulator if present."
+    unit: NX_VOLTAGE
   notes(NXnote):
     doc: "Further notes."
   transmission(NXdata):
@@ -298,6 +294,14 @@ category: base
     doc: "Translation of the sample along the Z-direction of the laboratory coordinate system"
   (NXpositioner):
     doc: "Any positioner (motor, PZT, ...) used to locate the sample"
+  depends_on(NX_CHAR):
+    doc: "Refers to the last transformation specifying the positon of the manipulator in the NXtransformations chain."
+  (NXtransformations):
+    doc:
+      "Collection of axis-based translations and rotations to describe the location and geometry of the manipulator as a component in the instrument.
+      Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used.
+      The first transformation has to point either to another component of the system or . (for pointing to the reference frame) to relate it relative to the experimental setup.
+      Typically, the components of a system should all be related relative to each other and only one component should relate to the reference coordinate system."
   \@default:
     doc: |
       .. index:: plotting

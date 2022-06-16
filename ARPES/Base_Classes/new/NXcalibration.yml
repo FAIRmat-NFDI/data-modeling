@@ -6,7 +6,7 @@ symbols:
   ncal: "Number of points of the calibrated and uncalibrated axes"
 doc: "Subclass of NXprocess to describe post-processing calibrations."
 (NXcalibration):
-  \@depends_on(NX_CHAR):
+  last_process(NX_CHAR):
     doc: "Indicates the name of the last operation applied in the NXprocess sequence."
   applied(NX_BOOLEAN):
     doc: "Has the calibration been applied?"
@@ -20,9 +20,15 @@ doc: "Subclass of NXprocess to describe post-processing calibrations."
       dim: [[1, ncoeff]]
       rank: 1
   fit_function(NX_CHAR):
-    doc:
+    doc: |
       "For non-linear energy calibrations. Here we can store the formula of the
-      fit function."
+      fit function.
+
+      Use a0, a1, ..., an for the coefficients, corresponding to the values in the coefficients field.
+
+      Use x0, x1, ..., xn for the variables.
+
+      The formula should be numpy compliant."
   scaling(NX_FLOAT):
     doc: "For linear calibration. Scaling parameter."
     unit: NX_ANY

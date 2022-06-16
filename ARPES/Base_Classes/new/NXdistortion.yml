@@ -6,7 +6,7 @@ symbols:
   ndy: "Number of points of the matrix distortion field (y direction)"
 doc: "Subclass of NXprocess to describe post-processing distortion correction."
 (NXdistortion):
-  \@depends_on(NX_CHAR):
+  last_process(NX_CHAR):
     doc: "Indicates the name of the last operation applied in the NXprocess sequence."
   applied(NX_BOOLEAN):
     doc: "Has the distortion correction been applied?"
