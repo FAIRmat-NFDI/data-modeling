@@ -458,20 +458,22 @@ symbols:
             rank: 1
             dim: [[1, N_wavelength]]
 
-        grating_dispersion(NX_NUMBER):
+        GRATING(NXgrating):
+          doc: "One or more diffraction grating, as could be used in a
+                monochromator"
           exists: optional
-          doc: "Dispersion of the grating in nm/mm used at each wavelength.
-                This can be the same value for the entire wavelength range,
-                or might vary." 
-          dimensions:
-            rank: 1
-            dim: [[1, N_wavelength],[2,1]]
+
+          angular_dispersion(NX_NUMBER):
+            exists: optional
+            doc: "Dispersion of the grating in nm/mm used at each wavelength.
+                  This can be the same value for the entire wavelength range,
+                  or might vary."
 
         spectral_resolution(NX_NUMBER):
           exists: optional
           doc: "Spectral resolution of the instrument."
           unit: NX_WAVENUMBER
-          
+
         (NXslit):
           exists: optional
           doc: "Define the width of the monochromator slit in the subfield x_gap."
@@ -564,55 +566,64 @@ symbols:
           rank: 1
           dim: [[1, N_time]]
 
-      medium:
-        doc: "Describe what was the medium above or around the sample. The
-              common model is built up from the substrate to the medium on the
-              other side. Both boundaries are assumed infinite in the model.
-              Here, define the name of the medium (e.g. water, air, UHV, etc.)."
+      environment_conditions(NXenvironment):
+        # I think, at least stating air as medium is important
+        # exists: optional
+        # the base class comes with a sensor field, which
+        # can describe what was measured and how it was measured
 
-      medium_refractive_indices(NX_NUMBER):
-        exists: optional
-        doc: "Array of pairs of complex refractive indices of the medium for
-              every measured wavelength.
-              Only necessary if the measurement was performed not in air, or
-              something very well known, e.g. high purity water.
-              Specify the complex refractive index: n + ik"
-        unit: NX_UNITLESS
-        dimensions:
-          rank: 1
-          dim: [[1, N_wavelength]]
-
-      environment_conditions:
-        exists: optional
         doc: "Specify external parameters that have influenced the sample."
 
-      number_of_runs(NX_UINT):
-        exists: optional
-        doc: "How many measurements were done varying the parameters? This
-              forms an extra dimension beyond incident angle, time points and
-              energy/wavelength (this is the length of the 4th dimension of
-              the data). Defaults to 1."
-        unit: NX_DIMENSIONLESS
+        medium:
+          doc: "Describe what was the medium above or around the sample. The
+                common model is built up from the substrate to the medium on the
+                other side. Both boundaries are assumed infinite in the model.
+                Here, define the name of the medium (e.g. water, air, UHV, etc.)."
 
-      varied_parameters:
-        exists: optional
-        doc: "Indicates which parameter was changed. Its definition must exist
-              below. The specified variable has to be number_of_runs long,
-              providing the parameters for each data set."
-        enumeration: [optical excitation, voltage, temperature, pH, stress,
-          stage positions]
+        medium_refractive_indices(NX_NUMBER):
+          exists: optional
+          doc: "Array of pairs of complex refractive indices of the medium for
+                every measured wavelength.
+                Only necessary if the measurement was performed not in air, or
+                something very well known, e.g. high purity water.
+                Specify the complex refractive index: n + ik"
+          unit: NX_UNITLESS
+          dimensions:
+            rank: 1
+            dim: [[1, N_wavelength]]
 
-      optical_excitation(NXsubentry):
-        exists: optional
-        doc: "Was the sample modified using an optical source? Describe in this
-              group the parameters of the optical excitation used."
 
-        excitation_source(NXsource):
-          # utilizing NXsource here brings most of the fields with it
-          # I just have to remove 'excitation_'
-          doc: "Specify the source for the external excitation"
+        number_of_runs(NX_UINT):
+          exists: optional
+          doc: "How many measurements were done varying the parameters? This
+                forms an extra dimension beyond incident angle, time points and
+                energy/wavelength (this is the length of the 4th dimension of
+                the data). Defaults to 1."
+          unit: NX_DIMENSIONLESS
 
-          excitation_wavelength(NX_NUMBER):
+        varied_parameters:
+          exists: optional
+          doc: "Indicates which parameter was changed. Its definition must exist
+                below. The specified variable has to be number_of_runs long,
+                providing the parameters for each data set."
+          enumeration: [optical excitation, voltage, temperature, pH, stress,
+            stage positions]
+
+        optical_excitation(NXsource):
+          exists: optional
+          doc: "Was the sample modified using an optical source? Describe in this
+                group the parameters of the optical excitation used."
+
+          type:
+            doc: "NXsource lists already possible sources, and here we list some
+              further sources to complement the original list. Please select one or
+              more, according to the setup"
+              #enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
+              # deuterium lamp, silicon carbide globar, other]
+              # use the target to define the actual quality
+            enumeration: [arc lamp, halogen lamp, LED, other]
+
+          wavelength(NX_NUMBER):
             doc: "Wavelength value(s) or the range used for excitation.
                   In cases of continuous laser radiation, a value or a set of
                   values may do but for other illumination types, such as pulsed
@@ -623,20 +634,23 @@ symbols:
             exists: optional
             doc: "Specify the FWHM of the excitation"
             unit: NX_LENGTH
-          excitation_type:
-            doc: "CW or pulsed excitation"
-            enumeration: [CW, pulsed]
-          pulse_length(NX_NUMBER):
-            exists: optional
-            doc: "Duration of one laser pulse."
-            unit: NX_TIME
-          repetition_rate(NX_NUMBER):
-            exists: optional
-            doc: "Repetition rate of the laser."
-            unit: NX_FREQUENCY
-          excitation_duration(NX_TIME):
+
+          # the commented out ones are defined in NXsource
+          #pulse_width(NX_NUMBER):
+            #exists: optional
+            #doc: "Duration of one laser pulse."
+            #unit: NX_TIME
+          #frequency(NX_NUMBER):
+            # repetition_rate(NX_NUMBER):
+            #exists: optional
+            #doc: "Repetition rate of the laser."
+            #unit: NX_FREQUENCY
+
+          # excitation_duration(NX_TIME):
+          duration(NX_TIME):
             exists: optional
             doc: "How long was the sample excited."
+
           pulse_energy(NX_NUMBER):
             exists: optional
             doc: "The integrated energy of light pulse."
@@ -646,22 +660,25 @@ symbols:
             #doc: "The power of one laser pulse."
             #unit: NX_ENERGY
 
-      voltage(NX_NUMBER):
-        exists: optional
-        doc: "Specify the voltage if the spectra were taken under bias."
-        unit: NX_VOLTAGE
-      temperature(NX_NUMBER):
-        exists: optional
-        doc: "Temperature of the sample (or sample holder or medium)"
-        unit: NX_TEMPERATURE
-      pH(NX_NUMBER):
-        exists: optional
-        doc: "pH value of the medium (measured or set)"
-        unit: NX_UNITLESS
-      pressure(NX_NUMBER):
-        exists: optional
-        doc: "Pressure of the environment of the sample."
-        unit: NX_PRESSURE
+        #voltage(NX_NUMBER):
+          #exists: optional
+          #doc: "Specify the voltage if the spectra were taken under bias."
+          #unit: NX_VOLTAGE
+
+        #temperature(NX_NUMBER):
+          #exists: optional
+          #doc: "Temperature of the sample (or sample holder or medium)"
+          #unit: NX_TEMPERATURE
+
+        #pH(NX_NUMBER):
+          #exists: optional
+          #doc: "pH value of the medium (measured or set)"
+          #unit: NX_UNITLESS
+
+        #pressure(NX_NUMBER):
+          #exists: optional
+          #doc: "Pressure of the environment of the sample."
+          #unit: NX_PRESSURE
 
     derived_parameters(NXprocess):
       exists: optional
