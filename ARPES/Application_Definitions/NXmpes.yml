@@ -4,9 +4,6 @@
 #with higher granularity in the data description.
 
 doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
-symbols:
-  doc: The symbols used in the schema to specify e.g. dimensions of arrays
-  nfa: Number of fast axes (acquired simutaneously) e.g. emission angle, kinetic energy
 category: application 
 (NXmpes):
   (NXentry):
