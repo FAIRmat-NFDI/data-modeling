@@ -229,6 +229,11 @@ category: base
     doc: "CAS registry number of the sample chemical content."
   gas(NX_CHAR):
     doc: "Gases might be fluxed on the surface for various reasons. Chemical designation, or residual."
+  gas_pressure(NX_NUMBER):
+    doc: "In the case of a fixed pressure measurement this is the scalar pressure.
+      In the case of an experiment in which pressure changes, or anyway is recorded,
+      this is an array of length m of pressures."
+    unit: NX_PRESSURE
   surface_dopant(NX_CHAR):
     doc: "Element of evaporated surface dopant such as alkali or other"
   surface_dopant_coverage(NX_FLOAT):
@@ -245,6 +250,18 @@ category: base
     doc: "Material of the substrate in direct contact with the sample."
   substrate_state(NX_CHAR):
     doc: "Physical state of the substrate, similar options to sample_state"
+  sample_temperature(NX_FLOAT):
+    doc: "Temperature at the closest point to the sample.
+      This field may also be found in NXsample if present."
+    unit: NX_TEMPERATURE
+  drain_current(NX_FLOAT):
+    doc: "Current to neutralize the photoemission current.
+      This field may also be found in NXsample if present."
+    unit: NX_CURRENT
+  sample_bias(NX_FLOAT):
+    doc: "Possible bias of the sample with trespect to analyser ground.
+      This field may also be found in NXsample if present."
+    unit: NX_CURRENT
   notes(NXnote):
     doc: "Further notes."
   transmission(NXdata):
