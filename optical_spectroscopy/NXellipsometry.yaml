@@ -53,7 +53,7 @@ symbols:
   # suggestion from NIAC to combine N_p1 and N_time using scans...
   N_p1: "Number of sample parameters scanned, if you varied any of the parameters
         such as temperature, pressure, or pH, the length of the array specified by
-        the enum in NXsample/varied_parameters"
+        NXsample/environment_conditions/SENSOR/value if it exists"
   N_time: "Number of time points measured, the length of NXsample/time_points"
 
 (NXellipsometry):
