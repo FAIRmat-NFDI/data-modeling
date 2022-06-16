@@ -43,7 +43,7 @@ symbols:
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
   # since formating is dropped for quoted string, we can make it look nice in the file:
   N_wavelength: "Size of the energy or wavelength vector used, the length of
-                NNXinstrument/spectrometer/wavelength array"
+                NXinstrument/spectrometer/wavelength array"
   N_variables: "How many variables are saved in a measurement. e.g. 2 for Psi
                 and Delta, 16 for Mueller matrix elements, 15 for normalized
                 Mueller matrix, 3 for NCS, the length of NXsample/column_names"
@@ -102,7 +102,7 @@ symbols:
         doc: "Commercial or otherwise defined given name to the program that was
           used to generate the result file(s) with measured data and metadata.
           This program converts the measured signals to ellipsometry data. If
-          home written, one can provide the actual steps in the NOTES subfield
+          home written, one can provide the actual steps in the NOTE subfield
           here."
       version:
         doc: "Either version with build number, commit hash, or description of
@@ -178,7 +178,7 @@ symbols:
 
         target_material:
           doc: "unlike in the original, the material used to generate the light, that is
-            argon, helium, neon, gases, or merciry/cadmium vapor, etc."
+            argon, helium, neon, gases, or mercury/cadmium vapor, etc."
 
       focussing_probes(NX_BOOLEAN):
         doc: "Were focussing probes (lenses) used or not?"
@@ -422,12 +422,33 @@ symbols:
           dimensions:
             rank: 1
             dim: [[1, 2]]
+        
+        intensity_threshold(NX_NUMBER):
+          exists: optional
+          doc: "Minimum signal for which dynamic averaging is performed."
+          unit: NX_UNITLESS
+        #CE: From the WVASE manual:
+        # Threshold intensity: This is the minimum detector signal intensity 
+        # for which dynamic averaging will be performed. If the detector signal 
+        # intensity is less than this value, the maximum # of revs will be 
+        # averaged for the given data point.
+
+        min_intensity(NX_NUMBER):
+          exists: optional
+          doc: "Value for the minimum intensity chosen.
+            Data points below this value might be skipped by the instrument"
+          unit: NX_UNITLESS
+
 
       spectrometer(NXmonochromator):
         # created this and moved wavelength into it in accordance to NIAC
         # recommendation
-        doc: "the spectroscope element of the ellipsometer before the detector,
-            but often integrated to form one closed unit"
+        doc: "The spectroscope element of the ellipsometer before the detector,
+            but often integrated to form one closed unit. Information on the 
+            dispersive element can be specified in the subfield GRATING. Note 
+            that different gratings might be used for different wavelength
+            ranges. The dispersion of the grating for each wavelength range
+            can be stored in grating_dispersion."
 
         wavelength(NX_NUMBER):
           doc: "Wavelength value(s) used for the measurement.
@@ -436,6 +457,33 @@ symbols:
           dimensions:
             rank: 1
             dim: [[1, N_wavelength]]
+
+        grating_dispersion(NX_NUMBER):
+          exists: optional
+          doc: "Dispersion of the grating in nm/mm used at each wavelength.
+                This can be the same value for the entire wavelength range,
+                or might vary." 
+          dimensions:
+            rank: 1
+            dim: [[1, N_wavelength],[2,1]]
+
+        spectral_resolution(NX_NUMBER):
+          exists: optional
+          doc: "Spectral resolution of the instrument."
+          unit: NX_WAVENUMBER
+          
+        (NXslit):
+          exists: optional
+          doc: "Define the width of the monochromator slit in the subfield x_gap."
+
+          fixed_slit(NX_BOOLEAN):
+            exists: optional
+            doc: "Was the slit width fixed?"
+
+          max_gap(NX_NUMBER):
+            exists: optional
+            doc: "If slit width was not fixed, define the maximum slit width."
+            unit: NX_LENGTH
 
     (NXsample):
       doc: "Properties of the sample, its history, the sample environment and
