@@ -5,3 +5,5 @@ doc: |
   Ronchigrams are specifically used in TEM to judge the settings
   for the aberration corrections.
 (NXimage_set_em_ronchigram):
+  (NXdata):
+  (NXprocess):

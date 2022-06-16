@@ -2,4 +2,6 @@ category: base
 doc: |
   Container for reporting a set of diffraction images.
 (NXimage_set_em_diffrac):
+  (NXdata):
+  (NXprocess):
 ##MK::maybe fuse with other image_set

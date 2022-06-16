@@ -13,6 +13,8 @@ doc: |
     unit: NX_ANGLE
   field_of_view(NX_NUMBER):
     unit: NX_LENGTH
+  working_distance(NX_FLOAT):
+    unit: NX_LENGTH
   # NEW ISSUE: the KIT/SCC propose:
   # adding of the image_mode or field mode
   # imageMode: enum: [normal_image, sad, eds, nbd, cbed]

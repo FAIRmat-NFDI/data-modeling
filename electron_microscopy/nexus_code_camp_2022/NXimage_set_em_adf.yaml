@@ -1,13 +1,24 @@
 category: base
 doc: |
   Container for reporting a set of annular dark field images.
+symbols:
+  n_images: Number of images
+  n_y: Number of pixel per Kikuchi pattern in the slow direction
+  n_x: Number of pixel per Kikuchi pattern in the fast direction
 (NXimage_set_em_adf):
   (NXprocess):
     doc: Details about how the images were processed from the detector readings.
     program:
-      doc: Commercial or otherwise given name to the program which was used to process detector data into the adf image(s).
+      doc: |
+        Commercial or otherwise given name to the program which was used
+        to process detector data into the adf image(s).
       \@version:
-      doc: Program version plus build number, commit hash, or description of an ever persistent resource where the source code of the program and build instructions can be found so that the program can be configured in such a manner that the result file is ideally recreatable yielding the same results.
+        doc: |
+          Program version plus build number, commit hash, or description
+          of an ever persistent resource where the source code of the program
+          and build instructions can be found so that the program
+          can be configured in such a manner that the result file
+          is ideally recreatable yielding the same results.
     adf_inner_half_angle(NX_FLOAT):
       doc: Annulus inner half angle
       unit: NX_ANGLE
@@ -16,30 +27,27 @@ doc: |
       unit: NX_ANGLE
   (NXdata):
     doc: Annular dark field images.
-    \@signal:
-    # intensity
-    \@axes:
-    # [xpos, ypos]
-    \@xpos_indices:
-    # 0
-    \@ypos_indices:
-    # 1
+    # \@signal: intensity
+    # \@axes: [image_id, ypos, xpos]
+    # \@image_indices: 2
+    # \@ypos_indices: 1
+    # \@xpos_indices: 0
     intensity(NX_NUMBER):
       doc: Image intensity values.
       unit: NX_UNITLESS
       dimensions:
-        rank: 2
-        dim: [[1, n_x], [2, n_y]]
+        rank: 3
+        dim: [[1, n_images], [2, n_y], [3, n_x]]
     \@long_name:
       doc: Image intensities
-    xpos(NX_NUMBER):
-      doc: Pixel barycenter position x-coordinates.
-      unit: NX_LENGTH
+    image_id(NX_UINT):
+      doc: Image identifier
+      unit: NX_UNITLESS
       dimensions:
         rank: 1
-        dim: [[1, n_x]]
+        dim: [[1, n_images]]
       \@long_name:
-        doc: Label for the x axis.
+        doc: Image ID.
     ypos(NX_NUMBER):
       doc: Pixel barycenter position y-coordinates.
       unit: NX_LENGTH
@@ -48,3 +56,11 @@ doc: |
         dim: [[1, n_y]]
       \@long_name:
         doc: Label for the y axis.
+    xpos(NX_NUMBER):
+      doc: Pixel barycenter position x-coordinates.
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, n_x]]
+      \@long_name:
+        doc: Label for the x axis.

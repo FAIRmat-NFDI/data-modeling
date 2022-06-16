@@ -136,7 +136,7 @@ doc: |
   to offer an abstraction layer are limited.
   
   Instead, it is for the docstring to specify what is conceptually eventually behind
-  such aliases. The design rule we followed while drafting the applicatin definition and 
+  such aliases. The design rule we followed while drafting the application definition and 
   base classes is that there are numerous (technical) details about an EM which may warrant
   a very detailed technical disentangling of settings and reflection of numerous settings
   as deeply nested groups, fields and attributes. An application definition can offer a place
@@ -237,26 +237,28 @@ doc: |
 # NEW ISSUE: should version always be an enumeration?
 # NEW ISSUE: filter keywords \(.*?\)
 # POINTS TO DISCUSS: NXdetector adding only those fields which have changed or not?
-symbols:
+# symbols:
 # the NeXus default for application definitions wrt to the exists keyword is that it is required
 (NXem):
   (NXentry):
     exists: [min, 1, max, infty]
     ##MK the definition field and its version attribute enumeration will be added by yaml2nxdl automatically
+    \@version:
+      doc: |
+        An at least as strong as SHA256 hashvalue of the file
+        that specifies the application definition.
+    # enumeration: [sha_256_hash]
     definition:
       doc: NeXus NXDL schema to which this file conforms.
       enumeration: [NXem]
-      \@version:
-        doc: |
-          An at least as strong as SHA256 hashvalue of the file that specifies the application definition.
-          In FAIRmat, the hash is computed from the yaml file representation of the application definition.
-        enumeration: [sha_256_hash]
     experiment_identifier:
       doc: |
-        Ideally, a (globally) unique persistent identifier for referring to this experiment.
+        Ideally, a (globally) unique persistent identifier
+        for referring to this experiment.
         
-        The identifier is usually defined/issued by the facility, laboratory, or the principle investigator.
-        The identifier enables to link experiments to e.g. proposals.
+        The identifier is usually defined/issued by the facility, laboratory,
+        or the principle investigator. The identifier enables to link 
+        experiments to e.g. proposals.
     experiment_description:
       exists: optional
       doc: |
@@ -310,8 +312,8 @@ symbols:
     experiment_documentation(NXnote):
       exists: optional
       doc: |
-        Binary container for a file or a compressed collection of files which can be
-        used to add further descriptions and details to the experiment.
+        Binary container for a file or a compressed collection of files which 
+        can be used to add further descriptions and details to the experiment.
         The container can hold a compressed archive.
     thumbnail(NXnote):
       exists: recommended
@@ -359,7 +361,7 @@ symbols:
       social_media_platform:
         exists: optional
         doc: Name of the social media platform where the account under social_media_name is registered.
-    (NXsample):
+    SAMPLE(NXsample):
       # NEW ISSUE: inject the conclusion from the discussion with Andrea
       # according to SAMPLE.yaml 0f8df14 2022/06/15
       # ID: -> maps to name
@@ -386,10 +388,10 @@ symbols:
           
           In cases where multiple specimens have been loaded into the microscope
           the name has to identify the specific one, whose results are stored
-          by this NXentry, because a single NXentry should be 
-          for the characterization of a single specimen.
+          by this NXentry, because a single NXentry should be used only for
+          the characterization of a single specimen.
           
-          Details about the specimen preparation should be stored in the 
+          Details about the specimen preparation should be stored in the
           sample history.
       sample_history:
         doc: |
@@ -410,7 +412,6 @@ symbols:
           can be used but it is strongly discouraged because it leads to eventually non-machine-actionable
           data.
       preparation_date(NX_DATE_TIME):
-        exists: recommended
         doc: | 
           ISO 8601 time code with local time zone offset to UTC information when the specimen was prepared.
           
@@ -450,8 +451,8 @@ symbols:
       # if plasma cleaning is done outside the EM than its certainly history, if it happens inside the EM
       # are the ibeam description capabilities not sufficient enough?
       description:
-        doc: Discouraged free-text field in case properly designed records for the sample_history
         exists: optional
+        doc: Discouraged free-text field in case properly designed records for the sample_history are not available.
     (NXdata):
       # exists: optional
       doc: |
@@ -489,7 +490,7 @@ symbols:
         * (NXstage_lab): a collection of component for holding the specimen and
           eventual additional component for applying external stimuli on the sample
         * (NXdetector): several possible names like secondary_electron, backscattered_electron,
-          direct_electron, ebsd, edx, wds, auger, cathodolum, camera, ronchicam
+          direct_electron, ebsd, edx, wds, auger, cathodolum, camera, ronchigram
       instrument_name:
         doc: |
           Given name of the microscope at the hosting institution. This is an alias.
@@ -499,10 +500,11 @@ symbols:
         doc: |
           Location of the lab or place where the instrument is installed.
           Using GEOREF is preferred.
+      (NXmanufacturer):
       (NXebeam_column):
         exists: [min, 1, max, 1]
       (NXibeam_column):
-        exists: [min, 0, max, infty]
+        exists: [min, 0, max, 2]
       ebeam_deflector(NXscanbox_em):
       ibeam_deflector(NXscanbox_em):
         exists: optional
@@ -609,7 +611,7 @@ symbols:
               plasmons, TEM
             * auger, spectrum, (low Z contrast)
             * cathodoluminescence (optical spectra)
-            * ronchicam, image, a utility image to check the alignment specifically in TEM
+            * ronchigram, image, a utility image to check the alignment specifically in TEM
             * chamber, image taken with the control monitor from inside
               the SEM or TEM to check e.g. placing of components or educational
               purposes
@@ -645,7 +647,7 @@ symbols:
           exists: optional
         (NXspectrum_set_em_cathodolum):
           exists: optional
-        (NXimage_set_em_ronchicam):
+        (NXimage_set_em_ronchigram):
           exists: optional
         (NXimage_set_em_chamber):
           exists: optional

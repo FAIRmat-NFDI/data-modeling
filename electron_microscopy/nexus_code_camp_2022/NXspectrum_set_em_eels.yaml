@@ -2,3 +2,5 @@ category: base
 doc: |
   Container for reporting a set of energy loss spectroscopy spectra.
 (NXspectrum_set_em_eels):
+  (NXdata):
+  (NXprocess):

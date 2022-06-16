@@ -23,5 +23,7 @@ doc: |
   * Another explicit description is via theoretical models which may
     be relevant e.g. for X-ray spectroscopy
 (NXinteraction_vol_em):
+  (NXdata):
+  (NXprocess):
 # NEW ISSUE: connect to NXgrid, NXcg_triangulated_surface_mesh, NXisosurface
 # NEW ISSUE: How to handle coating

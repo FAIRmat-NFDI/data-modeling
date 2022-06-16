@@ -2,3 +2,6 @@ category: base
 doc: |
   Container for reporting a set of images taken in dark field mode.
 (NXimage_set_em_df):
+  (NXdata):
+  (NXprocess):
+

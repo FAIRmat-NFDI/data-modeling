@@ -2,3 +2,5 @@ category: base
 doc: |
   Container for reporting a set of cathodoluminescence spectra.
 (NXspectrum_set_em_cathodolum):
+  (NXdata):
+  (NXprocess):

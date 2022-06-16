@@ -3,49 +3,24 @@ doc: |
   Container for reporting a set of energy-dispersive X-ray spectra.
   
   Virtually the most important case is that spectra are collected in 
-  a scanning microscope for a collection of points. The majority of cases
-  use simple d-dimensional regular scan pattern, such as line profiles
-  or surface mappings. Surface mappings are the most frequently used ones.
+  a scanning microscope (SEM or STEM) for a collection of points.
+  The majority of cases use simple d-dimensional regular scan pattern,
+  such as line profiles or surface mappings.
+  Surface mappings are the most frequently used ones.
   
-  Also in the majority of cases such sets of points will be measured
-  with the same settings, i.e. the same binning, energy resolution.
-  
-  The container offers different possibilities to store data so that they
-  can be displayed, especially in case when the arrangement of the data
-  is trivial, i.e. simple line or X-ray mappings. Specifically, there are
-  at least two strategies to store the data in an NXspectrum_set_em_xray
-  instance:
-  * First, one can store a scan_position_type, scan_position_link, and
-    NXdata instance with a counts.
-  * Second, in cases of regular line or surface mappings, one can store
-    an NXdata instance with a two- or three-dimensional counts array
-    with related field and attributes as are required by NXdata so that
-    the line or surface mapping can be displayed as is.
+  Often such sets of scan points will be measured with the same settings,
+  i.e. the same binning, energy resolution.
 symbols:
   n_p: Number of scan points
   n_photon_energy: Number of X-ray photon energy (bins)
+  n_y: Number of pixel per Kikuchi pattern in the slow direction
+  n_x: Number of pixel per Kikuchi pattern in the fast direction
   n_elements: Number of identified elements
 (NXspectrum_set_em_xray):
-  # * Third it is possible linearized array of dissimilar long spectra,
-  # maybe store them better as individual instances of NXspectrum_set_em_xray
-  ##MK:: make a link to where the points are, should be an NXcg_point_set
-  # method 1
-  scan_position_type:
-    doc: |
-      How are the scan points distributed.
-    enumeration: [NXcg_grid, NXcg_point_set]
-  scan_position_link:
-    doc: |
-      A link to either an instance of:
-      * a NXcg_grid in the case of scan_position_type is NXcg_grid
-      * or NXcg_point_set in the case of scan_position_type is NXcg_point_set
-      It is expected that one can find in these description how the scan points
-      are distributed and how they were processed in sequence.
   (NXdata):
     doc: | 
       Collected X-ray counts.
     counts(NX_UINT):
-      doc: 
       unit: NX_UNITLESS
       dimensions:
         rank: 2
@@ -55,18 +30,17 @@ symbols:
     doc: | 
       Collected X-ray counts.
     counts(NX_UINT):
-      doc: 
       unit: NX_UNITLESS
       dimensions:
         rank: 3
         dim: [[1, n_y], [2, n_x], [3, n_photon_energy]]
       \@long_name:
-        doc: E.g. X-ray photon counts
-    \@signal: counts
-    \@axes: [ypos, xpos, photon_energy]
-    \@ypos_indices: 0
-    \@xpos_indices: 1
-    \@photon_energy_indices: 2
+        doc: X-ray photon counts
+    # \@signal: counts
+    # \@axes: [ypos, xpos, photon_energy]
+    # \@ypos_indices: 0
+    # \@xpos_indices: 1
+    # \@photon_energy_indices: 2
     ypos(NX_NUMBER):
       unit: NX_LENGTH
       dimensions:
@@ -88,33 +62,40 @@ symbols:
         dim: [[1, n_photon_energy]]
       \@long_name:
         doc: X-ray energy
-  ##MK
-  ############## one process per spectrum, or one for each spectrum?
-  edx_indexing(NXprocess):
-    doc: Details about computational steps how peaks in an EDX spectrum were indexed as atoms.
+  indexing(NXprocess):
+    doc: |
+      Details about computational steps how peaks were indexed as elements.
     program:
-      doc: Commercial or otherwise given name to the program which was used to execute this analysis.
+      doc: |
+        Given name of the program that was used to perform this computation.
       \@version:
-        doc: Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner.
+        doc: |
+          Program version plus build number, commit hash, or description of an ever persistent resource
+          where the source code of the program and build instructions can be found so that the program
+          can be configured in such a manner that the result file is ideally recreatable yielding the
+          same results.
     (NXpeak):
-      doc: Name and location of each X-ray line which was indexed as a known ion.
-      label:
-        doc: Human-readable identifier to specify which concept/entity the peak identifies.
-      position(NX_NUMBER):
-        unit: NX_ANY
-      intensity(NX_NUMBER):
-        unit: NX_ANY
+      doc: |
+        Name and location of each X-ray line which was indexed as a known ion.
     element_names(NX_CHAR):
       doc: List of the names of identified elements.
       dimensions:
         rank: 1
         dim: [[1, n_elements]]
   edx_maps(NXprocess):
-    doc: Container for reporting individually processed element-specific EDX mappings from the edx_spectra.
+    doc: |
+      Individual element-specific EDX/EDS/EDXS/SXES mapping
     program:
-      doc: Commercial or otherwise given name to the program which was used to execute this analysis.
+      doc: |
+        Given name of the program that was used to perform this computation.
       \@version:
-        doc: Ideally program version plus build number, or commit hash or description of ever persistent resources where the source code of the program and build instructions can be found so that the program can be configured ideally in such a manner that the result of this computational process is recreatable in the same deterministic manner.
-  #############
-  ##MK
-  ##add results from own sprint
+        doc: |
+          Program version plus build number, commit hash, or description of an ever persistent resource
+          where the source code of the program and build instructions can be found so that the program
+          can be configured in such a manner that the result file is ideally recreatable yielding the
+          same results.
+    (NXdata):
+      doc: |
+        Individual element-specific maps. Individual maps should
+        each be a group and be named according to element_names
+    # NEW ISSUE:

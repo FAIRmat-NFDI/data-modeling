@@ -1,4 +1,8 @@
 category: base
+symbols:
+  n_p: Number of scan points, one pattern per scan point.
+  n_y: Number of pixel per Kikuchi pattern in the slow direction
+  n_x: Number of pixel per Kikuchi pattern in the fast direction
 doc: |
   Electron backscatter diffraction (EBSD) Kikuchi pattern
   
@@ -26,11 +30,7 @@ doc: |
   volume element. Several software packages are available for this
   post-processing. For now we do not consider these post-processing step a
   part of this base class.
-# NEW ISSUE: it could be added though via a (NXprocess)
-symbols:
-  n_p: Number of scan points, one pattern per scan point.
-  n_y: Number of pixel per Kikuchi pattern in the slow direction
-  n_x: Number of pixel per Kikuchi pattern in the fast direction
+# NEW ISSUE: the above-mentioned post-processing could be added though via a (NXprocess)
 (NXimage_set_em_kikuchi):
   # a collection of pattern-related metadata
   (NXdata):
@@ -43,12 +43,12 @@ symbols:
         dim: [[1, n_p], [2, n_y], [3, n_x]]
       \@long_name:
         doc: Kikuchi pattern intensity
-    \@signal: intensity
-    \@axes: [pattern_id, ypos, xpos]
-    \@pattern_indices: 0
-    \@ypos_indices: 1
-    \@xpos_indices: 2
-    pattern_id(NX_NUMBER):
+    # \@signal: intensity
+    # \@axes: [image_id, ypos, xpos]
+    # \@image_id_indices: 0
+    # \@ypos_indices: 1
+    # \@xpos_indices: 2
+    image_id(NX_NUMBER):
       unit: NX_UNITLESS
       dimensions:
         rank: 1
@@ -234,7 +234,7 @@ symbols:
       unit: NX_UNITLESS
       dimensions:
         rank: 1
-        dim: [[1, 2]
+        dim: [[1, 2]]
   hough_transformation(NXprocess):
     resolution(NX_NUMBER):
       unit: NX_UNITLESS

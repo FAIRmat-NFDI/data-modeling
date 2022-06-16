@@ -16,14 +16,14 @@ symbols:
   (NXentry):
     # the NeXus default for application definitions wrt to the exists keyword is that it is required
     # so writing exists required can be omitted unless exists should be set to e.g. optional, recommended, or the [min, .., max, ..] syntax
+    \@version:
+      doc: |
+        An at least as strong as SHA256 hashvalue of the file
+        that specifies the application definition.
+    # enumeration: [sha_256_hash]
     definition:
       doc: NeXus NXDL schema to which this file conforms.
       enumeration: [NXapm]
-      \@version:
-        doc: |
-          An at least as strong as SHA256 hashvalue of the file
-          that specifies the application definition.
-        # enumeration: [sha_256_hash]
     experiment_identifier:
       doc: |
         Ideally, a (globally) unique persistent identifier 
@@ -352,6 +352,7 @@ symbols:
         doc: |
           A local electrode guiding the ion flight path.
         (NXaperture):
+          exists: optional
       # but the local_electrode does not really on purpose create a magnetic field,
       # specific for an electro-magnetic lens is the symmetry of its field
       # NEW ISSUE: for now keep that we have what is an NXlens
@@ -362,7 +363,6 @@ symbols:
         doc: |
           Detector for taking raw time-of-flight nd ion/hit impact positions data.
         type:
-          exists: recommended
           doc: |
             Description of the detector type. Specify if the detector is
             not the usual type of delay-line detectors.
@@ -393,6 +393,10 @@ symbols:
             rank: 1
             dim: [[1, n_ions]]
       pulser(NXpulser_apm):
+        pulse_mode:
+        pulse_frequency(NX_NUMBER):
+        pulse_fraction(NX_NUMBER):
+        pulsed_voltage(NX_FLOAT):
       ##MK will the symbols be carried through?
       (NXstage_lab):
         # NEW ISSUE: consider more detailed opportunities for specifying holders like cryo-controller holder, type of holder, material for pucks make a difference for studies which hunt for hydrogen signal, equally dwell time in buffer and load lock chamber and environmental transfer, the application definition does not account for this at the moment, would need a class representing stage and specimen holder hierarchy of the entire sample loading and transfer system and the contributions or not these components make wrt to contamination.
@@ -924,3 +928,6 @@ symbols:
                 can be configured in such a manner that the result file is ideally recreatable yielding the
                 same results.
           (NXion):
+            isotope_vector(NX_UINT):
+            charge_state(NX_UINT):
+            mass_to_charge_range(NX_FLOAT):

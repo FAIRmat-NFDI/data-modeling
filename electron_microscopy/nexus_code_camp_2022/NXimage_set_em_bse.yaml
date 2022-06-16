@@ -2,5 +2,7 @@ category: base
 doc: |
   Container for reporting a set of back-scattered electron images.
 (NXimage_set_em_bse):
+  (NXdata):
+  (NXprocess):
 # NEW ISSUE: The container can also store data related to 
 # electron channeling contrast imaging (ECCI).
