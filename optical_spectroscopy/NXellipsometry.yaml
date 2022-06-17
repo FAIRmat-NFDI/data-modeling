@@ -192,7 +192,7 @@ symbols:
                       modulator on analyzer side, dual compensator, phase modulation,
                       imaging ellipsometry, null ellipsometry]
 
-      calibration_status(NX_DATE_TIME):
+      calibration_status:
         doc: "Was a calibration performed? If yes, when was it done?"
         enumeration: [calibration time provided, no calibration, within 1 hour,
           within 1 day, within 1 week]
