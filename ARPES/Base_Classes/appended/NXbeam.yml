@@ -9,7 +9,8 @@ doc: |
   scattering by the sample, e.g., energy transfer, polarizations.
 symbols:
   doc: "The symbols used in the schema to specify e.g. dimensions of arrays"
-  nx: "Number of pixels of the frequency axis of a FROG trace"
+  nx: "Number of pixels of the horizontal axis (e.g. delay) of a FROG trace"
+  ny: "Number of pixels of the vertical axis (e.g. frequency) of a FROG trace"
 category: base
 (NXbeam):
   distance(NX_FLOAT):

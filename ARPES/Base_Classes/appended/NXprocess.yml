@@ -14,7 +14,7 @@ category: base
   (NXregistration):
     doc: "Describes the operations of image registration"
   (NXdistortion):
-    doc: "Describes the operations of image distrortion correction"
+    doc: "Describes the operations of image distortion correction"
   (NXcalibration):
     doc: "Describes the operations of calibration procedures,
       e.g. axis calibrations."
