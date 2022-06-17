@@ -158,7 +158,7 @@ symbols:
         \@url:
           doc: "Website of the software."
 
-      light_source(NXsubentry):
+      light_source(NXsource):
         doc: "Specify the used light source. Multiple selection possible."
 
         type:
@@ -167,13 +167,13 @@ symbols:
             more, according to the setup"
           enumeration: [arc lamp, halogen lamp, LED, other]
 
-        other_light_source (NXsource):
-          exists: optional
-          doc: "If you specified 'other' as light source type, please write down what it is."
-
         target_material:
           doc: "unlike in the original, the material used to generate the light, that is
             argon, helium, neon, gases, or mercury/cadmium vapor, etc."
+
+      other_light_source (NXsource):
+        exists: optional
+        doc: "If you specified 'other' as light source type, please write down what it is."
 
       focussing_probes(NX_BOOLEAN):
         doc: "Were focussing probes (lenses) used or not?"
