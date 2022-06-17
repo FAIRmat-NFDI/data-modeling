@@ -11,8 +11,8 @@ category: application
     start_time(NX_DATE_TIME):
       doc: "ISO8601 formatted date time of the start of the measurement."
     definition:
+      \@version:
       enumeration: ["NXmpes"]
-      \@version: 
     (NXinstrument):
       energy_resolution(NX_FLOAT):
       (NXsource):
