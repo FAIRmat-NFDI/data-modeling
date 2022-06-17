@@ -365,7 +365,9 @@ symbols:
         doc: "Which type of detector was used, and what is known about it?
               A detector can be a photomultiplier (PMT), a CCD in a camera, or
               an array in a spectrometer. If so, the whole detector unit goes
-              in here."
+              in here.
+              Integration time is the count time field, or the real time
+              field. See their definition."
 
         detector_type:
           doc: "What kind of detector module is used, e.g. CCD-spectrometer,
@@ -377,11 +379,6 @@ symbols:
           exists: optional
           doc: "If you specified 'other' as detector type, please write down
             what it is."
-
-        integration_time(NX_NUMBER):
-          doc: "Integration time for the measurement. Single number or array
-            if it was varied."
-          unit: NX_TIME
 
         revolution(NX_NUMBER):
           exists: optional
