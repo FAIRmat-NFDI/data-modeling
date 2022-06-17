@@ -41,7 +41,6 @@ doc: |
 
 symbols:
   doc: "Variables used throughout the document, e.g. dimensions and important parameters"
-  # since formating is dropped for quoted string, we can make it look nice in the file:
   N_wavelength: "Size of the energy or wavelength vector used, the length of
                 NXinstrument/spectrometer/wavelength array"
   N_variables: "How many variables are saved in a measurement. e.g. 2 for Psi
@@ -50,7 +49,6 @@ symbols:
   N_angles: "Number of incident angles used, the length of
             NXinstrument/angle_of_incidence array"
 
-  # suggestion from NIAC to combine N_p1 and N_time using scans...
   N_p1: "Number of sample parameters scanned, if you varied any of the parameters
         such as temperature, pressure, or pH, the maximal length of the arrays 
         specified by NXsample/environment_conditions/SENSOR/value if it exists."
@@ -167,9 +165,6 @@ symbols:
           doc: "NXsource lists already possible sources, and here we list some
             further sources to complement the original list. Please select one or
             more, according to the setup"
-            #enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
-            # deuterium lamp, silicon carbide globar, other]
-            # use the target to define the actual quality
           enumeration: [arc lamp, halogen lamp, LED, other]
 
         other_light_source (NXsource):
@@ -278,13 +273,6 @@ symbols:
           dim: [[1, N_angles]]
 
       stage(NXsubentry):
-        # if we wanted to bring this one level higher in agreement with NIAC
-        # suggestions, then I would say use:
-        # stage
-        # stage_description
-        # stage_transformations
-        # stage_transformations_alternative
-        # as names
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
               (Cartesian) coordinate system and at an orientation defined
               by three Euler angles (alpha, beta, gamma).
@@ -427,11 +415,6 @@ symbols:
           exists: optional
           doc: "Minimum signal for which dynamic averaging is performed."
           unit: NX_UNITLESS
-        #CE: From the WVASE manual:
-        # Threshold intensity: This is the minimum detector signal intensity 
-        # for which dynamic averaging will be performed. If the detector signal 
-        # intensity is less than this value, the maximum # of revs will be 
-        # averaged for the given data point.
 
         min_intensity(NX_NUMBER):
           exists: optional
@@ -439,10 +422,7 @@ symbols:
             Data points below this value might be skipped by the instrument"
           unit: NX_UNITLESS
 
-
       spectrometer(NXmonochromator):
-        # created this and moved wavelength into it in accordance to NIAC
-        # recommendation
         doc: "The spectroscope element of the ellipsometer before the detector,
             but often integrated to form one closed unit. Information on the 
             dispersive element can be specified in the subfield GRATING. Note 
@@ -478,12 +458,6 @@ symbols:
           grating_wavelength_max(NX_NUMBER):
             exists: optional
             doc: "Maximum wavelength of the grating."
-
-          #GRATING[grating1]/angular_dispersion = 
-          #GRATING[grating2]/angular_dispersion = 
-
-          #grating 1 - 400-600: 2 nm/mm
-          #grating 2 - 600-800: 4 nm/mm
 
         spectral_resolution(NX_NUMBER):
           exists: optional
@@ -583,11 +557,6 @@ symbols:
           dim: [[1, N_time]]
 
       environment_conditions(NXenvironment):
-        # I think, at least stating air as medium is important
-        # exists: optional
-        # the base class comes with a sensor field, which
-        # can describe what was measured and how it was measured
-
         doc: "Specify external parameters that have influenced the sample."
 
         medium:
@@ -640,9 +609,6 @@ symbols:
             doc: "NXsource lists already possible sources, and here we list some
               further sources to complement the original list. Please select one or
               more, according to the setup"
-              #enumeration: [UV light, quartz tungsten halogen lamp, xenon arc lamp,
-              # deuterium lamp, silicon carbide globar, other]
-              # use the target to define the actual quality
             enumeration: [arc lamp, halogen lamp, LED, other]
 
           wavelength(NX_NUMBER):
@@ -657,18 +623,6 @@ symbols:
             doc: "Specify the FWHM of the excitation"
             unit: NX_LENGTH
 
-          # the commented out ones are defined in NXsource
-          #pulse_width(NX_NUMBER):
-            #exists: optional
-            #doc: "Duration of one laser pulse."
-            #unit: NX_TIME
-          #frequency(NX_NUMBER):
-            # repetition_rate(NX_NUMBER):
-            #exists: optional
-            #doc: "Repetition rate of the laser."
-            #unit: NX_FREQUENCY
-
-          # excitation_duration(NX_TIME):
           duration(NX_TIME):
             exists: optional
             doc: "How long was the sample excited."
@@ -677,36 +631,12 @@ symbols:
             exists: optional
             doc: "The integrated energy of light pulse."
             unit: NX_ENERGY
-          #excitation_power(NX_NUMBER):
-            #exists: optional
-            #doc: "The power of one laser pulse."
-            #unit: NX_ENERGY
 
         (NXsensor):
           exists: optional
           doc: "A sensor used to monitor an external condition. The value
                 field contains the measured values. If it is constant within
                 error for every run then use only a an array of length one."
-                
-        #voltage(NX_NUMBER):
-          #exists: optional
-          #doc: "Specify the voltage if the spectra were taken under bias."
-          #unit: NX_VOLTAGE
-
-        #temperature(NX_NUMBER):
-          #exists: optional
-          #doc: "Temperature of the sample (or sample holder or medium)"
-          #unit: NX_TEMPERATURE
-
-        #pH(NX_NUMBER):
-          #exists: optional
-          #doc: "pH value of the medium (measured or set)"
-          #unit: NX_UNITLESS
-
-        #pressure(NX_NUMBER):
-          #exists: optional
-          #doc: "Pressure of the environment of the sample."
-          #unit: NX_PRESSURE
 
     derived_parameters(NXprocess):
       exists: optional
