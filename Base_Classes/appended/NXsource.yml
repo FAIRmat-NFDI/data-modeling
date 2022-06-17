@@ -28,7 +28,10 @@ category: base
       Optical Laser, 
       Ion Source, 
       UV Plasma Source, 
-      Metal Jet X-ray
+      Metal Jet X-ray,
+      arc lamp,
+      halogen lamp,
+      LED
     ]
   probe:
     doc: "Type of radiation probe (pick one from the enumerated list and spell exactly)"
@@ -69,8 +72,9 @@ category: base
     unit: NX_PERIOD
     doc: "Period of pulsed source"
   target_material:
-    doc: "Pulsed source target material"
-    enumeration: [Ta, W, depleted_U, enriched_U, Hg, Pb, C]
+    doc: "Pulsed source target material or other material used to generate light, e.g.
+          He, Ar gas for lasers, Xe or Hg/Cd vapor for arc lamps, etc."
+    enumeration: [Ta, W, depleted_U, enriched_U, Hg, Pb, C, Ar, He, Xe, Hg/Cd, H]
   notes(NXnote):
     doc: "Any source/facility related messages/events that 
 			occurred during the experiment"
