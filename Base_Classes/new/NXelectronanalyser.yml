@@ -38,7 +38,7 @@ symbols:
               "Tof", "['energy', 'kx', 'ky']",""
               "Momentum microscope, spin-resolved", "['energy', 'kx', 'ky']", "['spin up-down', 'spin left-right']"
 
-            | Axes may be less abstract than this, i.e. ['detector_x', 'detector_y'].
+            Axes may be less abstract than this, i.e. ['detector_x', 'detector_y'].
             If energy_scan_mode=sweep, fast_axes: ['energy', 'kx']; slow_axes: ['energy'] is allowed.
     dimensions:
       dim: [[1, nfa]]
