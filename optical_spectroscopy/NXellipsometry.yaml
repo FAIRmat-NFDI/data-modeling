@@ -192,8 +192,10 @@ symbols:
                       modulator on analyzer side, dual compensator, phase modulation,
                       imaging ellipsometry, null ellipsometry]
 
-      calibration_status:
-        doc: "Was a calibration performed? If yes, when was it done?"
+      calibration_status(NX_CHAR):
+        doc: "Was a calibration performed? If yes, when was it done? If the
+              calibration time is provided, it should be specified in
+              calibration/calibration_time."
         enumeration: [calibration time provided, no calibration, within 1 hour,
           within 1 day, within 1 week]
 
@@ -274,7 +276,10 @@ symbols:
               by three Euler angles (alpha, beta, gamma).
               The stage may be motorized or manual, special for liquids or gas
               environment."
-        enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
+        stage_type(NX_CHAR):
+          doc: "Specify what type of stage was used."
+          enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
+        
         description:
           doc: "A free-text field to provide information about the stage."
           exists: recommended
