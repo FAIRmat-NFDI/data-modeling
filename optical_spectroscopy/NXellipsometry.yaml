@@ -50,7 +50,7 @@ symbols:
             NXinstrument/angle_of_incidence array"
 
   N_p1: "Number of sample parameters scanned, if you varied any of the parameters
-        such as temperature, pressure, or pH, the maximal length of the arrays 
+        such as temperature, pressure, or pH, the maximal length of the arrays
         specified by NXsample/environment_conditions/SENSOR/value if it exists."
   N_time: "Number of time points measured, the length of NXsample/time_points"
 
@@ -410,7 +410,7 @@ symbols:
           dimensions:
             rank: 1
             dim: [[1, 2]]
-        
+
         intensity_threshold(NX_NUMBER):
           exists: optional
           doc: "Minimum signal for which dynamic averaging is performed."
@@ -424,8 +424,8 @@ symbols:
 
       spectrometer(NXmonochromator):
         doc: "The spectroscope element of the ellipsometer before the detector,
-            but often integrated to form one closed unit. Information on the 
-            dispersive element can be specified in the subfield GRATING. Note 
+            but often integrated to form one closed unit. Information on the
+            dispersive element can be specified in the subfield GRATING. Note
             that different gratings might be used for different wavelength
             ranges. The dispersion of the grating for each wavelength range
             can be stored in grating_dispersion."
@@ -444,8 +444,8 @@ symbols:
                 If two or more gratings were used, define a the angular
                 dispersion and the wavelength range (min/max wavelength)
                 for each grating and make sure that the wavelength ranges
-                do not overlap. The dispersion should be defined for the 
-                entire wavelength range of the experiment." 
+                do not overlap. The dispersion should be defined for the
+                entire wavelength range of the experiment."
 
           angular_dispersion(NX_NUMBER):
             exists: optional
@@ -591,7 +591,7 @@ symbols:
                 below. The specified variable has to be number_of_runs long,
                 providing the parameters for each data set. If you vary more than
                 one parameter simultaneously use one signal instance for each.
-                Record every parameter value in a linear manner, so N_p1 is the 
+                Record every parameter value in a linear manner, so N_p1 is the
                 number of measurements taken.
                 For example, if you measure at two temperatures and three pressures
                 the temperature signal value looks like [T1, T1, T1, T2, T2, T2]
