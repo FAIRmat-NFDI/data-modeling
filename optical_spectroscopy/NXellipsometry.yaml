@@ -460,9 +460,12 @@ symbols:
 
         (NXgrating):
           exists: optional
-          doc: "One or more diffraction grating, as could be used in a
-                monochromator." # doc strings.
-                #specify in doc string of grating or min/max: no wavelength overlap, cover full wavl range of experiment
+          doc: "Diffraction grating, as could be used in a monochromator.
+                If two or more gratings were used, define a the angular
+                dispersion and the wavelength range (min/max wavelength)
+                for each grating and make sure that the wavelength ranges
+                do not overlap. The dispersion should be defined for the 
+                entire wavelength range of the experiment." 
 
           angular_dispersion(NX_NUMBER):
             exists: optional
@@ -470,11 +473,11 @@ symbols:
 
           grating_wavelength_min(NX_NUMBER):
             exists: optional
-            doc: ""
+            doc: "Minimum wavelength of the grating."
 
           grating_wavelength_max(NX_NUMBER):
             exists: optional
-            doc: ""
+            doc: "Maximum wavelength of the grating."
 
           #GRATING[grating1]/angular_dispersion = 
           #GRATING[grating2]/angular_dispersion = 
