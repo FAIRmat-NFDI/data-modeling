@@ -52,8 +52,8 @@ symbols:
 
   # suggestion from NIAC to combine N_p1 and N_time using scans...
   N_p1: "Number of sample parameters scanned, if you varied any of the parameters
-        such as temperature, pressure, or pH, the length of the array specified by
-        NXsample/environment_conditions/SENSOR/value if it exists"
+        such as temperature, pressure, or pH, the maximal length of the arrays 
+        specified by NXsample/environment_conditions/SENSOR/value if it exists."
   N_time: "Number of time points measured, the length of NXsample/time_points"
 
 (NXellipsometry):
@@ -458,16 +458,29 @@ symbols:
             rank: 1
             dim: [[1, N_wavelength]]
 
-        GRATING(NXgrating):
-          doc: "One or more diffraction grating, as could be used in a
-                monochromator"
+        (NXgrating):
           exists: optional
+          doc: "One or more diffraction grating, as could be used in a
+                monochromator." # doc strings.
+                #specify in doc string of grating or min/max: no wavelength overlap, cover full wavl range of experiment
 
           angular_dispersion(NX_NUMBER):
             exists: optional
-            doc: "Dispersion of the grating in nm/mm used at each wavelength.
-                  This can be the same value for the entire wavelength range,
-                  or might vary."
+            doc: "Dispersion of the grating in nm/mm used."
+
+          grating_wavelength_min(NX_NUMBER):
+            exists: optional
+            doc: ""
+
+          grating_wavelength_max(NX_NUMBER):
+            exists: optional
+            doc: ""
+
+          #GRATING[grating1]/angular_dispersion = 
+          #GRATING[grating2]/angular_dispersion = 
+
+          #grating 1 - 400-600: 2 nm/mm
+          #grating 2 - 600-800: 4 nm/mm
 
         spectral_resolution(NX_NUMBER):
           exists: optional
@@ -592,7 +605,6 @@ symbols:
             rank: 1
             dim: [[1, N_wavelength]]
 
-
         number_of_runs(NX_UINT):
           exists: optional
           doc: "How many measurements were done varying the parameters? This
@@ -605,7 +617,14 @@ symbols:
           exists: optional
           doc: "Indicates which parameter was changed. Its definition must exist
                 below. The specified variable has to be number_of_runs long,
-                providing the parameters for each data set."
+                providing the parameters for each data set. If you vary more than
+                one parameter simultaneously use one signal instance for each.
+                Record every parameter value in a linear manner, so N_p1 is the 
+                number of measurements taken.
+                For example, if you measure at two temperatures and three pressures
+                the temperature signal value looks like [T1, T1, T1, T2, T2, T2]
+                and the pressure signal value looks like [p1, p2, p3, p1, p2, p3],
+                and N_p1 = 6."
           enumeration: [optical excitation, voltage, temperature, pH, stress,
             stage positions]
 
@@ -660,6 +679,12 @@ symbols:
             #doc: "The power of one laser pulse."
             #unit: NX_ENERGY
 
+        (NXsensor):
+          exists: optional
+          doc: "A sensor used to monitor an external condition. The value
+                field contains the measured values. If it is constant within
+                error for every run then use only a an array of length one."
+                
         #voltage(NX_NUMBER):
           #exists: optional
           #doc: "Specify the voltage if the spectra were taken under bias."
