@@ -34,5 +34,5 @@ doc:
 
   (NXdeflector):
     doc: "Deflectors in the spin dispersive section"
-  (NXlens):
+  (NXlens_em):
     doc: "Individual lenses in the spin dispersive section"

@@ -1,6 +1,13 @@
 category: base
-doc: "Class definition for electro-optical lenses as they are used e.g. in an electron analyser."
-(NXlens):
+doc: |
+  Description of an electro-magnetic lens or a compound lens.
+
+  Details of an [electro-magnetic lens](https://dx.doi.org/10.1007/978-3-540-38967-5).
+
+  For NXtransformations the origin of the coordinate system is placed
+  in the center of the lens (its polepiece, pinhole, or another point of
+  reference. The origin should be specified in the NXtransformations.
+(NXlens_em):
   type:
     doc: "Qualitative type of lens with respect to the number of pole pieces"
     enumeration: ["single", "double", "quadrupole", "hexapole", "octupole"]
@@ -8,6 +15,7 @@ doc: "Class definition for electro-optical lenses as they are used e.g. in an el
     doc: "Colloquial or short name for the lens. For manufacturer names and identifiers use respective manufacturer fields."
   manufacturer_name:
     doc: "Name of the manufacturer who built/constructed the lens."
+  (NXmanufacturer):
   model:
     doc: "Hardware name, hash identifier, or serial number that was given by the manufacturer to identify the lens."
   description:
@@ -22,7 +30,5 @@ doc: "Class definition for electro-optical lenses as they are used e.g. in an el
     doc: "Specifies the position of the lens by pointing to the last transformation in the transformation chain in the NXtransformations group."
   (NXtransformations):
     doc:
-      "Collection of axis-based translations and rotations to describe the location and geometry of the deflector as a component in the instrument.
-      Conventions from the NXtransformations base class are used. In principle, the McStas coordinate system is used.
-      The first transformation has to point either to another component of the system or . (for pointing to the reference frame) to relate it relative to the experimental setup.
+      "Collection of axis-based translations and rotations to describe the location and geometry of the lens as a component in the instrument.
       Typically, the components of a system should all be related relative to each other and only one component should relate to the reference coordinate system."

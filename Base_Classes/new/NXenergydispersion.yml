@@ -33,5 +33,5 @@ doc: "Subclass of NXelectronanalyser to describe the energy dispersion section
     unit: NX_LENGTH
   (NXdeflector):
     doc: "Deflectors in the energy dispersive section"
-  (NXlens):
+  (NXlens_em):
     doc: "Individual lenses in the energy dispersive section"
