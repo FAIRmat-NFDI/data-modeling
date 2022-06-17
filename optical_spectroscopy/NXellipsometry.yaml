@@ -158,7 +158,7 @@ symbols:
         \@url:
           doc: "Website of the software."
 
-      light_source:
+      light_source(NXsubentry):
         doc: "Specify the used light source. Multiple selection possible."
 
         type:
