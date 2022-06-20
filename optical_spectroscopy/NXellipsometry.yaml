@@ -11,31 +11,34 @@ doc: |
   Ellipsometry, complex systems, up to variable angle spectroscopy.
   
   Information on ellipsometry is provided, e.g. in:
-  - H. Fujiwara, Spectroscopic ellipsometry: principles and applications,
+
+  * H. Fujiwara, Spectroscopic ellipsometry: principles and applications,
     John Wiley & Sons, 2007.
-  - R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light,
+  * R. M. A. Azzam and N. M. Bashara, Ellipsometry and Polarized Light,
     North-Holland Publishing Company, 1977.
-  - H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry,
+  * H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry,
     William Andrew, 2005.
   
-  Open acces sources:
-  - https://www.angstromadvanced.com/resource.asp
-  - https://pypolar.readthedocs.io/en/latest/
+  Open access sources:
+
+  * https://www.angstromadvanced.com/resource.asp
+  * https://pypolar.readthedocs.io/en/latest/
   
   Review articles:
-  - T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry",
+
+  * T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry",
     J. Phys. D: Appl. Phys. 32, R45 (1999)
     https://doi.org/10.1088/0022-3727/32/9/201
-  - D. E. Aspnes, "Spectroscopic ellipsometry - Past, present, and future",
+  * D. E. Aspnes, "Spectroscopic ellipsometry - Past, present, and future",
     Thin Solid Films 571, 334-344 (2014)
     https://doi.org/10.1016/j.tsf.2014.03.056
-  - R. M. A. Azzam, "Mueller-matrix ellipsometry: a review",
+  * R. M. A. Azzam, "Mueller-matrix ellipsometry: a review",
     Proc. SPIE 3121, (1997)
     https://doi.org/10.1117/12.283870
-  - E. A. Irene, "Applications of spectroscopic ellipsometry to microelectronics",
+  * E. A. Irene, "Applications of spectroscopic ellipsometry to microelectronics",
     Thin Solid Films 233, 96-111 (1993)
     https://doi.org/10.1016/0040-6090(93)90069-2
-  - S. Zollner et al., "Spectroscopic ellipsometry from 10 to 700 K",
+  * S. Zollner et al., "Spectroscopic ellipsometry from 10 to 700 K",
     Adv. Opt. Techn. (2022)
     https://doi.org/10.1515/aot-2022-0016
 
@@ -615,9 +618,10 @@ symbols:
             doc: "Specify the FWHM of the excitation"
             unit: NX_LENGTH
 
-          duration(NX_TIME):
+          duration(NX_NUMBER):
             exists: optional
             doc: "How long was the sample excited."
+            unit: NX_TIMETH
 
           pulse_energy(NX_NUMBER):
             exists: optional
