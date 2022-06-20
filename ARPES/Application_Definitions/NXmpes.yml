@@ -73,7 +73,7 @@ category: application
           contrast_aperture(NXaperture):
             exists: optional
             doc: "The size and position of the contrast aperture inserted in the column.
-              To add additional or other apertures use the APERTURE group of Nxcollectioncolumn."
+              To add additional or other apertures use the APERTURE group of NXcollectioncolumn."
         (NXenergydispersion):
           scheme:
             enumeration:

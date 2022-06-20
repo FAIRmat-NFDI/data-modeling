@@ -11,10 +11,12 @@ doc: "Subclass of NXprocess to describe post-processing distortion correction."
   applied(NX_BOOLEAN):
     doc: "Has the distortion correction been applied?"
   symmetry(NX_INT):
-    doc:
-      "For symmetry-guided distortion correction (https://www.sciencedirect.com/science/article/abs/pii/S0304399118303474?via%3Dihub),
+    doc: |
+      For `symmetry-guided distortion correction`_,
       where a pattern of features is mapped to the regular geometric structure expected
-      from the symmetry. Here we record the number of elementary symmetry operations."
+      from the symmetry. Here we record the number of elementary symmetry operations.
+
+        .. _symmetry-guided distortion correction: https://www.sciencedirect.com/science/article/abs/pii/S0304399118303474?via%3Dihub
     unit: NX_UNITLESS
   original_centre(NX_FLOAT):
     doc:
