@@ -10,40 +10,74 @@ SAMPLE:
     ...
     ...
   COMPONENT:
-      ... see material.yaml
+      ... see COMPONENT.yaml
+    QUANTIFY: # extension of a substance when it is part of a component
+      fabrication_date:
+        doc: |
+          Date of preparation
+      mass:
+        unit: mg
+        doc: |
+          Mass of the powder precursor weighted out in the glove box
+      amount_type:
+        doc: |
+          How was the substance provided? By mass, by volume, by molar amount, in solution,
+          in a mixture...
+        enumeration: [by mass, by volume, molar]
+      amount:
+        unit: mmol
+        doc: |
+          Amount of substance of precursor powder weighted out
+      volume_solvent:
+        unit: ml
+        doc: |
+          Volume of solvent used to solve the powder precursor
+      mass_concentration:
+        unit: g/L
+        doc: |
+          Mass concentration of the prepared precursor-solvent solution
+      concentration_type:
+        doc: |
+          what concentration was used?
+        enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
+      concentration:
+        doc: |
+          Amount of substance concentration of the prepared precursor-solvent solution
+        unit: mmol/L
     SUBSTANCE:
+      ... see SUBSTANCE.yaml
       link_to_substance_archive_file: ...
-      ...
-      ...
       QUANTIFY: # extension of a substance when it is part of a component
-          amount_type:
-            doc: |
-              How was the substance provided? By mass, by volume, by molar amount, in solution,
-              in a mixture..."
-            enumeration: [by mass, by volume, molar]
-          amount:
-            doc: "Amount with a unit corresponding to the above amount type"
-
-          concentration_type:
-            doc: "what concentration was used?"
-            enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-          concentration:
-    doc: "and the corresponding number"
-    QUANTIFY:  # extension of a component when it is part of a sample
+        fabrication_date:
+          doc: |
+            Date of preparation
+        mass:
+          unit: mg
+          doc: |
+            Mass of the powder precursor weighted out in the glove box
         amount_type:
           doc: |
             How was the substance provided? By mass, by volume, by molar amount, in solution,
-            in a mixture..."
+            in a mixture...
           enumeration: [by mass, by volume, molar]
         amount:
-          doc: "Amount with a unit corresponding to the above amount type"
-
+          unit: mmol
+          doc: |
+            Amount of substance of precursor powder weighted out
+        volume_solvent:
+          unit: ml
+          doc: |
+            Volume of solvent used to solve the powder precursor
+        mass_concentration:
+          unit: g/L
+          doc: |
+            Mass concentration of the prepared precursor-solvent solution
         concentration_type:
-          doc: "what concentration was used?"
+          doc: |
+            what concentration was used?
           enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
         concentration:
-          doc: "and the corresponding number"
-  property_1: characterization needed for this sample as reference
-  property_2:
-  ...
-  other properties: "..."
+          doc: |
+            Amount of substance concentration of the prepared precursor-solvent solution
+          unit: mmol/L
+

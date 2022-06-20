@@ -1,5 +1,6 @@
 Process:
   global:
+    tags:
     description:
     experiment_identifier:
     experiment_location:
