@@ -60,14 +60,14 @@ symbols:
       Typically, the components of a system should all be related relative to each other and only one component should relate to the reference coordinate system."
   (NXcollectioncolumn):
     doc:
-      "class to describe the electron collection (spatial and momentum imaging)
+      "Describes the electron collection (spatial and momentum imaging)
       column"
   (NXenergydispersion):
-    doc: "class to describe the energy dispersion section"
+    doc: "Describes the energy dispersion section"
   (NXspindispersion):
-    doc: "class to describe the spin dispersion section"
+    doc: "Describes the spin dispersion section"
   (NXdetector):
-    doc: "class to describe the electron detector"
+    doc: "Describes the electron detector"
   (NXdeflector):
     doc: "Deflectors outside the main optics ensambles described by the subclasses"
   (NXlens_em):

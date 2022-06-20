@@ -9,7 +9,7 @@ category: application
   (NXentry):
     title:
     start_time(NX_DATE_TIME):
-      doc: "ISO8601 formatted date time of the start of the measurement."
+      doc: "Datetime of the start of the measurement."
     definition:
       \@version:
       enumeration: ["NXmpes"]
@@ -165,7 +165,7 @@ category: application
         In the case these are not available, free-text description."
       preparation_date(NX_DATE_TIME):
         exists: recommended
-        doc: "ISO 8601 date of preparation of the sample for the XPS experiment (i.e. cleaving, last annealing)."
+        doc: "Date of preparation of the sample for the XPS experiment (i.e. cleaving, last annealing)."
       preparation_description(NXnote):
         doc: "Description of the surface preparation technique for the XPS experiment, i.e. UHV cleaving, in-situ growth, sputtering/annealing etc.
         Ideally, a full report of the previous operations, in any format(NXnote allows to add pictures, audio, movies).

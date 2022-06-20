@@ -21,14 +21,14 @@ doc: "Subclass of NXprocess to describe post-processing calibrations."
       rank: 1
   fit_function(NX_CHAR):
     doc: |
-      "For non-linear energy calibrations. Here we can store the formula of the
+      For non-linear energy calibrations. Here we can store the formula of the
       fit function.
 
       Use a0, a1, ..., an for the coefficients, corresponding to the values in the coefficients field.
 
       Use x0, x1, ..., xn for the variables.
 
-      The formula should be numpy compliant."
+      The formula should be numpy compliant.
   scaling(NX_FLOAT):
     doc: "For linear calibration. Scaling parameter."
     unit: NX_ANY
