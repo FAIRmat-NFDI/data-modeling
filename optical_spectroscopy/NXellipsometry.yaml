@@ -9,7 +9,7 @@
 category: application
 doc: |
   Ellipsometry, complex systems, up to variable angle spectroscopy.
-  
+
   Information on ellipsometry is provided, e.g. in:
 
   * H. Fujiwara, Spectroscopic ellipsometry: principles and applications,
@@ -18,12 +18,12 @@ doc: |
     North-Holland Publishing Company, 1977.
   * H. G. Tompkins and E. A. Irene, Handbook of Ellipsometry,
     William Andrew, 2005.
-  
+
   Open access sources:
 
   * https://www.angstromadvanced.com/resource.asp
   * https://pypolar.readthedocs.io/en/latest/
-  
+
   Review articles:
 
   * T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry",
@@ -61,7 +61,7 @@ symbols:
   (NXentry):
     doc: |
       This is the application definition describing ellipsometry experiments.
-      
+
       Such experiments may be as simple as identifying how a reflected
       beam of light with a single wavelength changes its polarization state,
       to a variable angle spectroscopic ellipsometry experiment.
@@ -282,7 +282,7 @@ symbols:
         stage_type(NX_CHAR):
           doc: "Specify what type of stage was used."
           enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
-        
+
         description:
           doc: "A free-text field to provide information about the stage."
           exists: recommended
