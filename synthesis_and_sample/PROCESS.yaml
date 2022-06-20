@@ -1,5 +1,6 @@
 Process:
-  global:
+
+  GLOBAL:
     tags:
     description:
     experiment_identifier:
@@ -8,55 +9,58 @@ Process:
     end_time:
     synthesis_category:
     synthesis_method:
-  user:
-  instrument:
-  samples:
+
+  USER:
+
+  INSTRUMENT:
+
+  REAGENTS:
     doc: |
-      Define all the materials and samples that are used in the process,
-      they belong to the sample class and you can reference it through your process
+      list here all the materials and samples that are used in the process,
+      they may belong to SAMPLE, COMPONENT, or SUBSTANCE classes
+      It is either possible to define here for the first time 
+      or to reference an archive file containing the data.
+      Even more: the reagents can be listed here and be referenced in the STEPS, 
+      or can be defined in the STEP itself.
     rod:
     consumables:
     precursor:
     substrate:
-  process_step:
+
+  STEPS:
     doc: |
       Each action pursued during the process should be placed here with a timestamp pin.
       A step can be a preparation step or even a monitoring measurement carried out after the start of the process.
       The timestamp is fundamental as it allows to plot all the quantities one would like to monitor in the same time abscissa.
     step_type: Enum [pre-process, process, post-process, monitoring-measure] # individually nameable
     timestamp:
-    input_sample:
-    output_sample:
-    time_independent_settings:
-      film:
-      substrate:
-        doc: |
-          you can reference here your material
-      t_substrate:
-      o2_ar:
-      thickness:
-      roughness: RMS link to AFM app def
-    time_dependent_settings_user_filled: # user
-      timestamp: and/or duration
-      duration: and/or duration
-      temperature: # all processes, put RT if not measured
-      gas_atmosphere: # all processes
-      atmosphere_pressure: # atmospheric pressure (AP) if not measured, or n.a.
-      other properties: # dependent on methode/process
-      reference to sample used: --> see samples section
-      goal_of_step: what is the purpose of the step? desired outcome of step --> link to sample description
-      #deposition_control:
-      #gas ambient: -> Iryna
-      #  gas_pressure:
-      #  gas_inflow_rate:
-      #  gas_outflow_rate:
-      #  gas_composition:
-      #  doping:
-    time_dependent_settings_digital_filled: # machine
-      # drag and dropped / digital data
-      - process log
-      - in situ measurement (e.g. T_surface)
-sample_description or SUMMARY: # summary of sample for characterization
+    duration:
+    REAGENTS: 
+    
+    PRODUCTS:
+
+    # USER DEFINED LIST OF TIMESTAMPED PROPERTIES, they can be plotted against timestamp
+    t_substrate:
+    o2_ar:
+    thickness:
+    roughness: RMS link to AFM app def
+    temperature:
+    gas_atmosphere:
+    atmosphere_pressure: # atmospheric pressure (AP) if not measured, or n.a.
+    other properties: # dependent on methode/process
+    reference to sample used: --> see samples section
+    goal_of_step: what is the purpose of the step? desired outcome of step --> link to sample description
+    gas_pressure:
+    gas_inflow_rate:
+    gas_outflow_rate:
+    gas_composition:
+    doping:
+
+    CHARACTERIZATION:
+      doc: |
+        list of measurements performed
+
+sample_description or SUMMARY: # summary of sample 
   Every quantity that is "ticked" is being reported here
     - GaAs layer, thickness of layer, doping, etc.
     - or crystal body with x lenght and y diameter
@@ -65,7 +69,5 @@ sample_description or SUMMARY: # summary of sample for characterization
     # issues:
       # detach the pieces of our experiment (Measure, simulation, synthesis, sample)
       # make sample the central, link the experiment to it through the SAMPLE ID
-Characterization:
-  ....
 
 
