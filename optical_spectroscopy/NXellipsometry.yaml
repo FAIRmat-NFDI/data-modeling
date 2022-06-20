@@ -27,19 +27,20 @@ doc: |
   Review articles:
 
   * T. E. Jenkins, "Multiple-angle-of-incidence ellipsometry",
-    J. Phys. D: Appl. Phys. 32, R45 (1999)
+    J. Phys. D: Appl. Phys. 32, R45 (1999),
     https://doi.org/10.1088/0022-3727/32/9/201
   * D. E. Aspnes, "Spectroscopic ellipsometry - Past, present, and future",
-    Thin Solid Films 571, 334-344 (2014)
+    Thin Solid Films 571, 334-344 (2014),
     https://doi.org/10.1016/j.tsf.2014.03.056
   * R. M. A. Azzam, "Mueller-matrix ellipsometry: a review",
-    Proc. SPIE 3121, (1997)
+    Proc. SPIE 3121, Polarization: Measurement, Analysis, and Remote Sensing,
+    (3 October 1997),
     https://doi.org/10.1117/12.283870
   * E. A. Irene, "Applications of spectroscopic ellipsometry to microelectronics",
-    Thin Solid Films 233, 96-111 (1993)
+    Thin Solid Films 233, 96-111 (1993),
     https://doi.org/10.1016/0040-6090(93)90069-2
   * S. Zollner et al., "Spectroscopic ellipsometry from 10 to 700 K",
-    Adv. Opt. Techn. (2022)
+    Adv. Opt. Techn., (2022),
     https://doi.org/10.1515/aot-2022-0016
 
 symbols:
@@ -175,11 +176,11 @@ symbols:
        #    argon, helium, neon, gases, or mercury/cadmium vapor, etc."
 
       focussing_probes(NX_BOOLEAN):
-        doc: "Were focussing probes (lenses) used or not?"
+        doc: "Were focussing probes (lenses) used?"
 
       data_correction(NX_BOOLEAN):
         exists: optional
-        doc: "Were the recorded data corrected by the window effects of the lenses or not?"
+        doc: "Were the recorded data corrected by the window effects of the lenses?"
 
       angular_spread(NX_NUMBER):
         exists: optional
@@ -442,7 +443,7 @@ symbols:
         (NXgrating):
           exists: optional
           doc: "Diffraction grating, as could be used in a monochromator.
-                If two or more gratings were used, define a the angular
+                If two or more gratings were used, define the angular
                 dispersion and the wavelength range (min/max wavelength)
                 for each grating and make sure that the wavelength ranges
                 do not overlap. The dispersion should be defined for the
@@ -455,10 +456,12 @@ symbols:
           grating_wavelength_min(NX_NUMBER):
             exists: optional
             doc: "Minimum wavelength of the grating."
+            unit: NX_LENGTH
 
           grating_wavelength_max(NX_NUMBER):
             exists: optional
             doc: "Maximum wavelength of the grating."
+            unit: NX_LENGTH
 
         spectral_resolution(NX_NUMBER):
           exists: optional
@@ -621,7 +624,7 @@ symbols:
           duration(NX_NUMBER):
             exists: optional
             doc: "How long was the sample excited."
-            unit: NX_TIMETH
+            unit: NX_TIME
 
           pulse_energy(NX_NUMBER):
             exists: optional
@@ -632,7 +635,7 @@ symbols:
           exists: optional
           doc: "A sensor used to monitor an external condition. The value
                 field contains the measured values. If it is constant within
-                error for every run then use only a an array of length one."
+                an error for every run then use only an array of length one."
 
     derived_parameters(NXprocess):
       exists: optional
