@@ -68,6 +68,7 @@ symbols:
       to a variable angle spectroscopic ellipsometry experiment.
 
       The application definition defines:
+
       * elements of the experimental instrument
       * calibration information if available
       * parameters used to tune the state of the sample

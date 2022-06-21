@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
-<definition category="application" extends="NXobject" name="NXellipsometry" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+<definition category="application" extends="NXobject" name="NXellipsometry" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
     <symbols>
         <doc>
              Variables used throughout the document, e.g. dimensions and important
@@ -84,10 +84,11 @@
              to a variable angle spectroscopic ellipsometry experiment.
              
              The application definition defines:
-             - elements of the experimental instrument
-             - calibration information if available
-             - parameters used to tune the state of the sample
-             - sample description
+             
+             * elements of the experimental instrument
+             * calibration information if available
+             * parameters used to tune the state of the sample
+             * sample description
         </doc>
         <field name="definition" type="NX_CHAR">
             <doc>
