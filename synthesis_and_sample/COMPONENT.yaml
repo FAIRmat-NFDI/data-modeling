@@ -1,6 +1,6 @@
 category: base
 doc: |
-  Draft base class to describe a chemical element
+  Draft base class to describe a component
 (COMPONENT):
   doc: |
     A base class draft to describe a chemical compound formed from chemical substances
@@ -32,15 +32,15 @@ doc: |
         for example if it might have been contaminated during an experiment
 
   STRUCTURAL_DATA:
-    structure: 
+    structure:
       doc: |
         e.g., monoclinic, ...
     density:
-    cristalline: 
+    cristalline:
       doc: |
         Whether or not the materials in the layer present crystalline properties.
         i.e. `false` for amorphous materials
-      type: bool 
+      type: bool
     degree_of_crystallinity:
       doc: |
         https://goldbook.iupac.org/terms/view/D01565
@@ -48,7 +48,7 @@ doc: |
       doc: |
         Specifies the International Union of Crystallography (IUC) number of the 3D space
         group of this system.
-      type: int 
+      type: int
     lattice_params:
           a:
             doc: Length of the first basis vector.
@@ -100,7 +100,7 @@ doc: |
       unit: degrees
       doc: |
         Off-cut angle to the substrates surface
-    shape: 
+    shape:
       doc: |
         e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
     thickness: # in mm
@@ -155,7 +155,7 @@ doc: |
         concentration: # cm^-3, e.g., 3e18
     doping_level:
     doc: |
-      Chemical doping level 
+      Chemical doping level
     doping_species:
       doc: |
         Doping species in the substrates
@@ -175,7 +175,7 @@ doc: |
       reduced_formula:
         doc: The reduced chemical formula for a structure as a string with element symbols and
              integer chemical proportion numbers. The proportion number MUST be omitted if it is 1.
-             e.g. 'SiO2'        
+             e.g. 'SiO2'
         type: str
 
   OPTOELECTRONICS:  # putting here also purely electric properties
@@ -188,7 +188,7 @@ doc: |
       type: str
     absorption_coefficient:
       doc: Absorption coefficient array.
-      shape: [photon_energy_array]  # not sure how we are supposed to define shapes here yet. 
+      shape: [photon_energy_array]  # not sure how we are supposed to define shapes here yet.
       type: float
       unit: m**(-1)
     refractive_index:
@@ -206,7 +206,7 @@ doc: |
   COMPOSITION:
     SUBSTANCE:
     doc: A REFERENCE to the chemical archive entry
-    # extensions to the substance class to define the amount used in the component 
+    # extensions to the substance class to define the amount used in the component
       QUANTIFY: # extension of a substance when it is part of a component
         fabrication_date:
           doc: |
