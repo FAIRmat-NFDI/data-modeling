@@ -26,7 +26,10 @@ Process:
     consumables:
     precursor:
     substrate:
+  SAMPLE: #?
     intended_sample: to be defined
+      doc: targeted/intended sample with optional properties
+      bool: True/False
     final_sample:
       layers_reference1:
         process_step_link:
@@ -43,6 +46,9 @@ Process:
     step_type: Enum [pre-process, process, post-process, monitoring-measure, storage] # individually nameable
     timestamp:
     duration:
+    elapsed_time:
+    step_sequence:
+    step_information: could be information about a layer
     REAGENTS:
 
     PRODUCTS:
