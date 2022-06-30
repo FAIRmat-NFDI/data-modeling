@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<definition category="base" extends="NXobject" name="NXtimedata" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <symbols>
+        <symbol name="N_time">
+            <doc>
+                 number of timepoints recorded
+            </doc>
+        </symbol>
+        <symbol name="N_channels">
+            <doc>
+                 number of channels of the same type recorded together
+            </doc>
+        </symbol>
+    </symbols>
+    <doc>
+         Time dependent data array base class definition When describing any time
+         dependent physical quantity recorded at common time points, use one instance of
+         this base class
+    </doc>
+    <field name="start_time" type="NX_DATE_TIME">
+        <doc>
+             the start time point of the experiment, every time point in time_array are
+             relative to this time point
+        </doc>
+    </field>
+    <group name="time_array" type="NX_TIME">
+        <doc>
+             An array containing the time spent since the start time point
+        </doc>
+        <dimensions rank="1">
+            <dim index="1" value="N_time"/>
+        </dimensions>
+    </group>
+    <field name="measured_data" type="NX_NUMBER">
+        <doc>
+             N_channels number of measured data
+        </doc>
+        <dimensions rank="2">
+            <dim index="2" value="N_channels"/>
+            <dim index="1" value="N_time"/>
+        </dimensions>
+    </field>
+    <field name="measured_unit" type="NX_CHAR">
+        <doc>
+             Physical unit belonging to the measured_data. Use possibly SI unit.
+        </doc>
+    </field>
+</definition>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<definition category="base" extends="NXobject" name="NXcorrector_cs" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <doc>
+         Corrector for spherical aberrations in an electron microscope.
+         
+         Different vendors use a different naming scheme for the
+         spherical aberration factors. It is the users responsibility
+         to map to the best matching values.
+         
+         The spherical aberration corrector is a component in modern
+         TEMs that is controlled via instructing the microscope to
+         achieve set point values. Users can use the base class as
+         a group below which eventually the individual lenses and
+         components of the corrector can be specified; however
+         usually this is not necessary, most often not even possible
+         because of vendor-specific undisclosed details.
+         In the case of Nion Co. microscopes the coefficients
+         of the corrector can be retrieved, which is why currently
+         the Nion convention for the coefficients is used.
+    </doc>
+    <field name="applied" type="NX_BOOLEAN">
+        <doc>
+             Was the spherical aberration corrector used?
+        </doc>
+    </field>
+    <field name="name" type="NX_CHAR">
+        <doc>
+             Given name.
+        </doc>
+    </field>
+    <group type="NXmanufacturer"/>
+    <field name="description" type="NX_CHAR">
+        <doc>
+             Ideally, a (globally) unique persistent identifier, link,
+             or text to a resource which gives further details.
+        </doc>
+    </field>
+    <group type="NXaberration"/>
+    <group type="NXlens"/>
+    <group type="NXtransformations"/>
+</definition>
