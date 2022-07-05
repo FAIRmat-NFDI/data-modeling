@@ -1,121 +1,203 @@
-# One or several SUBSTANCES are making a COMPONENT.
-# One or several COMPONENTS are making a SAMPLE
-SAMPLE:
+(SAMPLE):
   doc: |
-    the measurable
-  ID:
-  name:
-  user:
-  citation: doi
-  method: [experimental, simulation, declared by vendor]
-  CONSTITUENT(SAMPLE(COMPONENT)): #
-    ... another SAMPLE can be part of our SAMPLE
-    CONSTITUENT(COMPONENT):
-      CONSTITUENT(SUBSTANCE):
-    QUANTIFY: # extension of a substance when it is part of a component
-      fabrication_date:
-        doc: |
-          Date of preparation
-      mass:
-        unit: mg
-        doc: |
-          Mass of the powder precursor weighted out in the glove box
-      amount_type:
-        doc: |
-          How was the substance provided? By mass, by volume, by molar amount, in solution,
-          in a mixture...
-        enumeration: [by mass, by volume, molar]
-      amount:
-        unit: mmol
-        doc: |
-          Amount of substance of precursor powder weighted out
-      volume_solvent:
-        unit: ml
-        doc: |
-          Volume of solvent used to solve the powder precursor
-      mass_concentration:
-        unit: g/L
-        doc: |
-          Mass concentration of the prepared precursor-solvent solution
-      concentration_type:
-        doc: |
-          what concentration was used?
-        enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-      concentration:
-        doc: |
-          Amount of substance concentration of the prepared precursor-solvent solution
-        unit: mmol/L
-    GEOMETRY:
-  CONSTITUENT(COMPONENT):
-      ... see COMPONENT.yaml
-    CONSTITUENT(SUBSTANCE):
-    QUANTIFY: # extension of a substance when it is part of a component
-      fabrication_date:
-        doc: |
-          Date of preparation
-      mass:
-        unit: mg
-        doc: |
-          Mass of the powder precursor weighted out in the glove box
-      amount_type:
-        doc: |
-          How was the substance provided? By mass, by volume, by molar amount, in solution,
-          in a mixture...
-        enumeration: [by mass, by volume, molar]
-      amount:
-        unit: mmol
-        doc: |
-          Amount of substance of precursor powder weighted out
-      volume_solvent:
-        unit: ml
-        doc: |
-          Volume of solvent used to solve the powder precursor
-      mass_concentration:
-        unit: g/L
-        doc: |
-          Mass concentration of the prepared precursor-solvent solution
-      concentration_type:
-        doc: |
-          what concentration was used?
-        enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-      concentration:
-        doc: |
-          Amount of substance concentration of the prepared precursor-solvent solution
-        unit: mmol/L
-  CONSTITUENT(SUBSTANCE):
-    ... see SUBSTANCE.yaml
-    link_to_substance_archive_file: ...
-    QUANTIFY: # extension of a substance when it is part of a component
-      fabrication_date:
-        doc: |
-          Date of preparation
-      mass:
-        unit: mg
-        doc: |
-          Mass of the powder precursor weighted out in the glove box
-      amount_type:
-        doc: |
-          How was the substance provided? By mass, by volume, by molar amount, in solution,
-          in a mixture...
-        enumeration: [by mass, by volume, molar]
-      amount:
-        unit: mmol
-        doc: |
-          Amount of substance of precursor powder weighted out
-      volume_solvent:
-        unit: ml
-        doc: |
-          Volume of solvent used to solve the powder precursor
-      mass_concentration:
-        unit: g/L
-        doc: |
-          Mass concentration of the prepared precursor-solvent solution
-      concentration_type:
-        doc: |
-          what concentration was used?
-        enumeration: [mass %, volume %, mass/volume %, mol %, molarity, molality]
-      concentration:
-        doc: |
-          Amount of substance concentration of the prepared precursor-solvent solution
-        unit: mmol/L
+    Draft base class to describe a sample
+
+  GLOBAL:
+    id:
+      doc: |
+        can be the layer id,the wafer id, or your id
+    given_name:
+      doc: |
+        A given name for the layer. i.e. 'Fused quartz glass by Weidner'
+        Or for our general component
+    user:
+      doc: | 
+        who is responsible of this SAMPLE
+    supplier:
+      doc: |
+        Fabricating company, supplier, or vendor
+    citation: 
+      doc: |
+        doi
+    method: 
+      enumeration: [experimental, simulation, declared by vendor, nominal]
+      doc: |
+        the source of the info that populate this SAMPLE file
+    state_or_phase:
+      enumeration: [solid, liquid, gas, plasma, solution]
+      doc: |
+        State of the compound, e.g. solid, liquid, gas, plasma
+    creation_datetime:
+      doc: |
+        the date of creation
+    comment:
+      doc: |
+        Remarks about the chemical beyond the typically collected information.
+        Here you can collect information about your experience using this chemical,
+        for example if it might have been contaminated during an experiment
+
+  STRUCTURAL_DATA:
+    structure:
+      doc: |
+        e.g., monoclinic, ...
+    density:
+    cristalline:
+      doc: |
+        Whether or not the materials in the layer present crystalline properties.
+        i.e. `false` for amorphous materials
+      type: bool
+    degree_of_crystallinity:
+      doc: |
+        https://goldbook.iupac.org/terms/view/D01565
+    space_group_number:
+      doc: |
+        Specifies the International Union of Crystallography (IUC) number of the 3D space
+        group of this system.
+      type: int
+    lattice_params:
+      a:
+        doc: Length of the first basis vector.
+        type: float
+        unit: m,
+        description: Length of the first basis vector.
+      b:
+        doc: Length of the first basis vector.
+        type: float
+        unit: m,
+        description: Length of the first basis vector.
+      c:
+        doc: Length of the first basis vector.
+        type: float
+        unit: m,
+        description: Length of the first basis vector.
+      alpha:
+        doc: Angle between second and third basis vector.
+        type: float
+        unit: degree,
+        description: Length of the first basis vector.
+      beta:
+        doc: Angle between first and third basis vector.
+        type: float
+        unit: degree,
+        description: Length of the first basis vector.
+      gamma:
+        doc: Angle between first and second basis vector.
+        type: float
+        unit: degree,
+        description: Length of the first basis vector.
+    surface orientation:
+      doc: |
+        crystallographic orientation of the material in [hkl]
+      hkl: # e.g. (100)
+      offcut:
+        degrees: #, e.g. 2
+        towards: #e.g. (001)      
+    off_cut:
+      unit: degrees
+      doc: |
+        Off-cut angle to the substrates surface
+
+  GEOMETRY_INFO:
+    size:
+      doc: |
+        dimensions, need to be better defined
+    width:
+      doc: "for a rectangular substrate, use this for one dimension"
+      type: float
+      unit: m
+    length:
+      doc: "for a rectangular substrate, use this for one dimension"
+      type: float
+      unit: m
+    shape:
+      doc: |
+        e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
+    thickness: # in mm
+      doc: The thickness of the laye
+    substrate_size:
+      doc: "if the substrate is circular, use this as diam. If not, use the next two fields"
+      type: float
+      unit: m
+
+  THERMAL_RADIATION:
+    emissivity:
+    absorption_coefficient:
+    refraction_index:
+
+  THERMAL_PROPERTIES:
+    thermal_expansion_coeff:
+    heat_capacity:
+    heat_conductivity:
+    interphase_solid_liquid:
+      melting_point_temperature:
+      latent_heat:
+    interphase_liquid_gas:
+      boiling_point_temperature:
+      boiling_heat:
+
+  MECHANICAL_PROPERTIES:
+    elastic_stiffness:
+    critical_resolved_shear_stress:
+    termocapillary_coefficient:
+    viscosity:
+
+  ELECTRO_MAGNETIC_PROPERTIES:
+    electrical_conductivity:
+    magnetic_susceptibility:
+
+  SUBSTRATE_PROPERTIES:
+    polishing: # 1sp = single sided, 2sp = double sided
+
+  LAYER_PROPERTIES:
+    layer_type: substrate
+      doc: the type of layer. i.e. 'absorber', 'substrate', 'metal_contact'.
+      type: str
+    position: 0
+      doc: Position of a layer within a stack
+      type: int
+
+  OPTOELECTRONICS:  # putting here also purely electric properties
+    bandgap:
+      doc: Bandgap value of the layer.
+      type: float
+      unit: eV
+    bandgap_origin:
+      doc: Description or link to how the bangdap is derived or where is derived from.
+      type: str
+    absorption_coefficient:
+      doc: Absorption coefficient array.
+      shape: [photon_energy_array]  # not sure how we are supposed to define shapes here yet.
+      type: float
+      unit: m**(-1)
+    refractive_index:
+      doc: Refractive index of the compounds in the layer
+      type: float
+    sheet_resistance:
+      doc: Measure of resistance in thin film that are nominally uniform in thickness
+      type: float
+      unit: ohm
+    conductivity_type:
+      doc: Conductivity type of the compound
+      type: Enum('n-type', 'p-type', 'intrinsic', 'unknown')  # fell free to add more options
+    # TODO: instrinsic_carrier_concentration, majority_carrier_concentration...
+
+  COMPOSITION:
+    doc: |
+      three cases are depicted:
+      * a component is a certain amount of a SAMPLE, itself composed by COMPONENTS
+      * a component is a SUBSTANCE
+      * a whole SAMPLE is directly picked
+    component_1(COMPONENT):
+      amount: 
+      precursor(SAMPLE):
+        solvent(COMPONENT):
+          amount: 
+          Ethanol(SUBSTANCE):
+        solute(COMPONENT):
+          amount: 
+          HCl(SUBSTANCE):
+    component_2(COMPONENT):
+      amount: 
+      HCl(SUBSTANCE):
+    component_3(SAMPLE):
 
