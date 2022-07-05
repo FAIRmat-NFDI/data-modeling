@@ -36,6 +36,48 @@
         Here you can collect information about your experience using this chemical,
         for example if it might have been contaminated during an experiment
 
+  COMPOSITION:
+    doc: |
+      three cases are depicted:
+      * a component is a certain amount of a SAMPLE, itself composed by COMPONENTS
+      * a component is a SUBSTANCE
+      * a whole SAMPLE is directly picked
+    component_1(COMPONENT):
+      amount: 
+      precursor(SAMPLE):
+        solvent(COMPONENT):
+          amount: 
+          Ethanol(SUBSTANCE):
+        solute(COMPONENT):
+          amount: 
+          HCl(SUBSTANCE):
+    component_2(COMPONENT):
+      amount: 
+      HCl(SUBSTANCE):
+    component_3(SAMPLE):
+  
+  GEOMETRY_INFO:
+    size:
+      doc: |
+        dimensions, need to be better defined
+    width:
+      doc: "for a rectangular substrate, use this for one dimension"
+      type: float
+      unit: m
+    length:
+      doc: "for a rectangular substrate, use this for one dimension"
+      type: float
+      unit: m
+    shape:
+      doc: |
+        e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
+    thickness: # in mm
+      doc: The thickness of the laye
+    substrate_size:
+      doc: "if the substrate is circular, use this as diam. If not, use the next two fields"
+      type: float
+      unit: m
+
   STRUCTURAL_DATA:
     structure:
       doc: |
@@ -89,35 +131,15 @@
       doc: |
         crystallographic orientation of the material in [hkl]
       hkl: # e.g. (100)
-      offcut:
-        degrees: #, e.g. 2
-        towards: #e.g. (001)      
+    offcut:
+      degrees: #, e.g. 2
+      towards: #e.g. (001)      
     off_cut:
       unit: degrees
       doc: |
         Off-cut angle to the substrates surface
 
-  GEOMETRY_INFO:
-    size:
-      doc: |
-        dimensions, need to be better defined
-    width:
-      doc: "for a rectangular substrate, use this for one dimension"
-      type: float
-      unit: m
-    length:
-      doc: "for a rectangular substrate, use this for one dimension"
-      type: float
-      unit: m
-    shape:
-      doc: |
-        e.g., 2" dia, 10mm x 10mm or piece, e.g., 1/4 2" or 3mm x 5mm
-    thickness: # in mm
-      doc: The thickness of the laye
-    substrate_size:
-      doc: "if the substrate is circular, use this as diam. If not, use the next two fields"
-      type: float
-      unit: m
+# addictional quantities
 
   THERMAL_RADIATION:
     emissivity:
@@ -140,6 +162,11 @@
     critical_resolved_shear_stress:
     termocapillary_coefficient:
     viscosity:
+      doc:
+      type:
+      unit:
+      value:
+      link:
 
   ELECTRO_MAGNETIC_PROPERTIES:
     electrical_conductivity:
@@ -180,24 +207,3 @@
       doc: Conductivity type of the compound
       type: Enum('n-type', 'p-type', 'intrinsic', 'unknown')  # fell free to add more options
     # TODO: instrinsic_carrier_concentration, majority_carrier_concentration...
-
-  COMPOSITION:
-    doc: |
-      three cases are depicted:
-      * a component is a certain amount of a SAMPLE, itself composed by COMPONENTS
-      * a component is a SUBSTANCE
-      * a whole SAMPLE is directly picked
-    component_1(COMPONENT):
-      amount: 
-      precursor(SAMPLE):
-        solvent(COMPONENT):
-          amount: 
-          Ethanol(SUBSTANCE):
-        solute(COMPONENT):
-          amount: 
-          HCl(SUBSTANCE):
-    component_2(COMPONENT):
-      amount: 
-      HCl(SUBSTANCE):
-    component_3(SAMPLE):
-
