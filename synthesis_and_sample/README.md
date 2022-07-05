@@ -21,7 +21,7 @@ For example: sample and its related subclasses (chemical_substances, process_ste
 
 after the 23rd of may task force meeting, this is the updated shape of sample class
 
-![Sample examples](https://box.hu-berlin.de/f/ef3e2eca64b94b8396b5/?dl=1)
+![Sample examples](https://box.hu-berlin.de/f/b15794edd7d04f5bba97/?dl=1)
 
 Summary:
 
@@ -29,7 +29,7 @@ What should be described in the SUBSTANCE Section:
 
 - simple substance (element or chemical compound)
 
-What should be described in MATERIAL Section:
+What should be described in SAMPLE Section:
 
 - mixture (or single phase mixture, solution, suspension, alloy or colloid)
 - multi phase sample (multi domain or composite)
@@ -39,9 +39,9 @@ What should be described in MATERIAL Section:
 - dispersion
 - policrystalline powder
 
-What should be described in SAMPLE Section:
+What should be described in COMPONENT Section:
 
-- general attributes (ID, name, etc)
+ - it decorates the SAMPLE or SUBSTANCE classes with non-intrinsic features, such as the amount or concentration used in a specific experiment
 
 # 2 Application definitions
 
@@ -51,4 +51,4 @@ The app def should be as flexible as the user wants but it should be composed of
 
 We want to combine our base classes to design an app def, we also want to link app defs inside our own
 
-![App Def examples](https://box.hu-berlin.de/f/9661b5d0f9ab40d1a929/?dl=1)
+![App Def examples](https://box.hu-berlin.de/f/be1c952371b74eeebc57/?dl=1)

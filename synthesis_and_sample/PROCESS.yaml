@@ -16,41 +16,55 @@ Process:
 
   MATERIALS:
     doc: |
-      list here all the materials and samples that are used in the process,
-      they may belong to SAMPLE, COMPONENT, or SUBSTANCE classes
-      It is either possible to define here for the first time
-      or to reference an archive file containing the data.
-      Even more: the reagents can be listed here and be referenced in the STEPS,
-      or can be defined in the STEP itself.
+      list here all the materials that are used in the process,
+      they may belong to SAMPLE or SUBSTANCE classes.
+      Several kinds of materials are shown below.
     rod:
-    consumables:
-    precursor:
-    substrate:
-  SAMPLE: #?
-    intended_sample: to be defined
+    consumables(SAMPLE):
+    precursor(SAMPLE):
+    Ethanol(SUBSTANCE):
+    Iridium(SUBSTANCE):
+    HCl(SUBSTANCE):
+    solution(SAMPLE):
+      composition:
+        component_1(COMPONENT):
+          amount: 
+          Ethanol(SUBSTANCE):
+        component_1(COMPONENT):
+          amount: 
+          HCl(SUBSTANCE):
+    substrate(SAMPLE):
+      dopant(COMPONENT):
+          concentration: 
+          Iridium(SUBSTANCE):
+    intended_sample(SAMPLE): to be defined
       doc: targeted/intended sample with optional properties
       bool: True/False
-    final_sample:
-      layers_reference1:
-        process_step_link:
-        measurement_link:
-      layers_reference2:
-        process_step_link:
-        measurement_link:
+    final_sample(SAMPLE):
+      composition:
+        layer_1(SAMPLE):
+          process_step_link: we may link the single layer to a specific step in the process
+        layer_2(SAMPLE):
+          process_step_link: we may link the single layer to a specific step in the process
 
   STEPS:
     doc: |
       Each action pursued during the process should be placed here with a timestamp pin.
       A step can be a preparation step or even a monitoring measurement carried out after the start of the process.
       The timestamp is fundamental as it allows to plot all the quantities one would like to monitor in the same time abscissa.
-    step_type: Enum [pre-process, process, post-process, monitoring-measure, storage] # individually nameable
+    step_type: Enum [pre-process, process, post-process, measurement, storage] 
+      doc: |
+        Each step should belong to a step type
     timestamp:
     duration:
     elapsed_time:
     step_sequence:
     step_information: could be information about a layer
     REAGENTS:
-
+      substrate(SAMPLE):
+      my_step_specific_reagent(COMPONENT):
+        amount:
+        precursor(SAMPLE):
     PRODUCTS:
 
     # USER DEFINED LIST OF TIMESTAMPED PROPERTIES, they can be plotted against timestamp
@@ -69,19 +83,4 @@ Process:
     gas_outflow_rate:
     gas_composition:
     doping:
-
-    CHARACTERIZATION:
-      doc: |
-        list of measurements performed
-
-sample_description or SUMMARY: # summary of sample
-  Every quantity that is "ticked" is being reported here
-    - GaAs layer, thickness of layer, doping, etc.
-    - or crystal body with x lenght and y diameter
-    - link layer to process step
-  # HARMONIZE this section with the material library "layer" tick button
-    # issues:
-      # detach the pieces of our experiment (Measure, simulation, synthesis, sample)
-      # make sample the central, link the experiment to it through the SAMPLE ID
-
 
