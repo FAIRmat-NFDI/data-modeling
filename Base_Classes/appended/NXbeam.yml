@@ -170,7 +170,7 @@ category: base
     doc: "FROG trace of the pulse."
     dimensions:
       rank: 2
-      dim: [[nx, ny]]
+      dim: [[1, nx], [1, ny]]
   frog_delays(NX_FLOAT):
     unit: NX_TIME
     doc: "Horizontal axis of a FROG trace, i.e. delay."
