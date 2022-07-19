@@ -1,0 +1,85 @@
+# FAIRmat consortium 07/2022
+# Draft version of a NeXus application definition
+# for x-ray scattering experiments.
+
+doc: This is a general application definition for x-ray scattering experiments
+symbols:
+  wlens: Number of wavlengths in the monochromated beam
+  nDet: Number of detection channels
+category: application
+(NXxrd):
+  (NXentry):
+    title(NX_CHAR):
+    start_time(NX_DATE_TIME):
+      doc: "Datetime of the start of the measurement"
+    definition:
+      \@version:
+      enumeration: ["NXxrd"]
+    (NXinstrument):
+      (NXsource):
+        type(NX_CHAR):
+        name(NX_CHAR):
+        probe(NX_CHAR):
+          enumeration: ["x-ray"]
+      (NXbeam):
+        incident_energy(NX_FLOAT):
+          unit: NX_ENERGY
+      (NXcrystal):
+        wavelength(NX_FLOAT):
+          doc: Optimal diffracted wavelengths
+          dimensions:
+            rank: 1
+            dim: [[1, wlens]]
+          unit: NX_WAVELENGTH
+      (NXdetector):
+        raw_data(NX_NUMBER):
+          exists: optional
+          dimensions:
+            rank: 1
+            dim: [[1, nDet]]
+          unit: NX_ANY
+        polar_angle(NX_FLOAT):
+          dimensions:
+            rank: 1
+            dim: [[1, nDet]]
+          unit: NX_ANGLE
+        data(NX_INT):
+          doc: Detector signal
+          dimensions:
+            rank: 1
+            dim: [[1, nDet]]
+    (NXsample):
+      name(NX_CHAR):
+        doc: Descriptive name of sample
+      rotation_angle(NX_FLOAT):
+        doc: |
+          Optional rotation angle for the case when the powder 
+          diagram has been obtained through an omega-2theta scan 
+          like from a traditional single detector powder 
+          diffractometer
+        unit: NX_ANGLE
+    (NXmonitor):
+      mode(NX_CHAR):
+        enumeration: ["monitor", "timer"]
+        doc: |
+          Count to a preset value based on either clock time (timer) 
+          or received monitor counts (monitor).
+      preset(NX_FLOAT):
+        doc: Preset value for time or monitor
+      integral(NX_FLOAT):
+        doc: Total integral monitor counts
+        unit: NX_ANY
+    (NXdata):
+      polar_angle(link):
+        doc: Should contain a link to polar angle in /NXentry/NXinstrument/NXdetector
+      data(link):
+        doc: Should contain a link to data in /Nxentry/Nxinstrument/Nxdetector
+    (NXprocess):
+      exists: optional
+      doc: |
+        Description of a processing or analysis step, such as the 
+        baseline extraction or azimuth integration.
+        Add additional fields as needed to describe value(s) of 
+        any variable, parameter, or term related to 
+        the NXprocess step. Be sure to include units attributes 
+        for all numerical fields.
