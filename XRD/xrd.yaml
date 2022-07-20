@@ -2,18 +2,27 @@
 # Draft version of a NeXus application definition
 # for x-ray scattering experiments.
 
+# the doc needs to be a general block, first line providing a short summary, the
+# rest details, and possibly references.
 doc: This is a general application definition for x-ray scattering experiments
 symbols:
+# I would recommend using a bit more verbose symbol names, e.g.
+# N_wavelengths, N_detectors
   wlens: Number of wavlengths in the monochromated beam
   nDet: Number of detection channels
 category: application
 (NXxrd):
   (NXentry):
+    # to me title makes no sense... acn we drop it?
     title(NX_CHAR):
+    # move the time after the definition part
+    # because that part describes this document, all after it the experiment
     start_time(NX_DATE_TIME):
       doc: "Datetime of the start of the measurement"
     definition:
       \@version:
+      #\@url:
+      #   doc: "URL where to find further material (documentation, examples) relevant to the application definition"
       enumeration: ["NXxrd"]
     (NXinstrument):
       (NXsource):
@@ -22,8 +31,14 @@ category: application
         probe(NX_CHAR):
           enumeration: ["x-ray"]
       (NXbeam):
+        # if you expect to have wlens or N_wavelengts number of wavelength in the output,
+        # how can this be a single number?
         incident_energy(NX_FLOAT):
           unit: NX_ENERGY
+      # I think NXmonochromator would be a better choice here
+      # see: https://manual.nexusformat.org/classes/base_classes/NXmonochromator.html#nxmonochromator
+      # it also contains a crystal or grating
+      # we may name it as monochromator(NXmonochromator):
       (NXcrystal):
         wavelength(NX_FLOAT):
           doc: Optimal diffracted wavelengths
@@ -31,13 +46,29 @@ category: application
             rank: 1
             dim: [[1, wlens]]
           unit: NX_WAVELENGTH
+      # do we have NXslit? Does the monochromator have the NXslit for input and output?
+      # do we allow one or more detectors?
       (NXdetector):
         raw_data(NX_NUMBER):
           exists: optional
           dimensions:
             rank: 1
             dim: [[1, nDet]]
+          # we have the problem that unit depends on the detector type
           unit: NX_ANY
+          # I cannot see the NXdetector having the option for counters etc.
+          # maybe we should add an item: detector_type
+          # and enum listing something like:
+          # [diode array, CCD array, 2D CMOS, 2D CCD, PMT, scintillation counter, ...]
+          # they may have further parameters, such as:
+          # operation voltage (PMT, MCP, scintillation detectors)
+          
+        # it may be handy to add here NXtransformations
+        # to provide the position of the detector
+        # however the sample comes first, thus
+        # the transformation may rely on something
+        # defined later in the text. It should be no problem,
+        # but some may find it confusing at the first sight.
         polar_angle(NX_FLOAT):
           dimensions:
             rank: 1
@@ -49,6 +80,16 @@ category: application
             rank: 1
             dim: [[1, nDet]]
     (NXsample):
+      # name is good, but we need sample ID for sure
+      # and some description of the chemistry
+      # state of the material:
+      # [powder, solid, liquid, solution]
+      # it may have:
+      # dimensions, such as width, height, thickness
+      # volume
+      # concentration
+      #
+      # we may want to have situation mandatory (atmosphere)
       name(NX_CHAR):
         doc: Descriptive name of sample
       rotation_angle(NX_FLOAT):
@@ -58,6 +99,7 @@ category: application
           like from a traditional single detector powder 
           diffractometer
         unit: NX_ANGLE
+    # should not this (monitor) more belong to the instrument / detector part?
     (NXmonitor):
       mode(NX_CHAR):
         enumeration: ["monitor", "timer"]
@@ -69,6 +111,7 @@ category: application
       integral(NX_FLOAT):
         doc: Total integral monitor counts
         unit: NX_ANY
+    # NXdata is about the default look of your data
     (NXdata):
       polar_angle(link):
         doc: Should contain a link to polar angle in /NXentry/NXinstrument/NXdetector
