@@ -1,0 +1,109 @@
+# A draft of a new base class to describe a beam path consisting of one or
+# more optical elements (e.g. a beam path in a luminescence setup).
+
+category: base
+doc: |
+  A beam path consisting of one or more optical elements.
+
+  NXbeam_path is used in NXluminescence to describe the beam path, i.e. the
+  arrangement of optical elements between the excitation source and the 
+  sample or between the sample and the detector unit.
+
+(NXbeam_path):
+  doc: "Describe the relevant optical elements in the beam path by using
+        the appropriate sub classes. You may use as many elements as needed,
+        also several elements of the same type."
+
+  # Should we define intensity (loss), polarization state (before/after),
+  #   beam profile etc.?
+
+  # Define or use base classes NXlens_opt, NXfilter (defined), NXfiber, 
+  #     NXmirror (defined), NXprism, NXpolarizer_opt (NXpolarizer is spin 
+  #     polarizer), NXaperture (defined), NXpinhole (defined), 
+  #     NXdisk_chopper (defined), NXgrating (defined), waveplate/retarder
+  # Some of the classes might be similar, so one has to decide which one to use
+
+  (NXpinhole):
+    exists: optional
+    # doc: "A simple pinhole."
+
+  (NXslit):
+    exists: optional
+    # doc: "A simple slit."
+    # For more complex geometries, NXaperture should be used.
+
+  (NXaperture):
+    exists: optional
+    # NeXus manual: 'A beamline aperture. This group is deprecated, use NXslit
+    # instead.'
+
+  (NXcrystal):
+    exists: optional
+    # doc: "A crystal monochromator or analyzer."
+
+  (NXmirror):
+    exists: optional
+
+  (NXfilter): # Should we merge NXpolarizer and NXfilter?
+    exists: optional
+
+  (NXattenuator):
+    exists: optional
+    # doc: "A device that reduces the intensity of a beam by attenuation."
+
+  (NXgrating):
+    exists: optional
+    doc: "A diffraction grating. Define relevant parameters in the
+          corresponding fields, e.g. order of diffration (diffraction_order)
+          or angular dispersion (angular_dispersion)."
+
+    type:
+      exists: recommended
+      doc: "Define the type of the grating (e.g. SR or VPH grating)."
+
+    angular_dispersion(NX_NUMBER):
+      exists: optional
+      doc: "Dispersion of the grating in nm/mm."
+
+  (NXdisk_chopper): 
+    exists: optional
+    # doc: "A chopper, i.e. a device blocking the beam in a temporal periodic
+    #      pattern."
+
+  (NXpolarizer):
+    exists: optional
+    #CE: Should we define a new base class, e.g. NXpolarizer_opt?
+    # NXpolarizer is the base class that describes a spin polarizer, so the
+    # base class would have to be modified.
+  
+  # ====== New base classes (need to be created): ======
+
+  (NXpolarizer_opt):
+    exists: optional
+    #CE: Instead of using NXpolarizer
+    # define: type (dichroic, linear, circular etc.), angle/position,
+    #         transmissivity, reflectivity, coating, Brewster angle, ...
+
+  (NXbeam_splitter):
+    exists: optional
+    doc: "A beam splitter splitting the light beam in two."
+
+  (NXwaveplate): # or NXretarder?
+    exists: optional
+    doc: "A device that changes the polarization state of a light beam."
+    # define: type (lambda/2, lambda/4 etc.), material, index of refraction
+
+  (NXlens_opt):
+    exists: optional
+    doc: "An optical lens."
+    # define: type (convex, concave etc.), material, index of refraction,
+    #         focal length, curvature, thickness, coating, reflection ...
+    # Note: NXlens_em is a new base class defined for electro-magnetic or
+    #       compund lenses (used in e.g. NXapm)
+
+  (NXfiber): # or NXwaveguide? Can we use/modify NXguide?
+    exists: optional
+    doc: "An optical fiber."
+    # define: type/mode, material, refractive index, length, wavelength range,
+    #         bandwidth or transfer rate, numerical aperture (angle)
+  
