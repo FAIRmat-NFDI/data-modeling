@@ -72,6 +72,7 @@ symbols:
         doc: The current source being used
       switch_matrix(NX_CHAR):
         doc: The switch matrix being used
+      # ToDo: Representation for magnet
       software(NX_CHAR):
         doc: The software being used
       (NXcontact):
