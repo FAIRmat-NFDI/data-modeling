@@ -1,0 +1,41 @@
+category: base
+(NXcontact):
+  name(NX_CHAR):
+    doc: Name of this contact
+  polarity(NX_CHAR):
+    doc: The polarity of this specfic contact
+    enumeration: [plus, minus]
+  device(NX_CHAR):
+    doc: This should point to the device which is attached to this contact
+  post_annealing(NX_CHAR):
+    doc: Description of the post annealing steps.
+    exists: optional
+  pre_treatment(NX_CHAR):
+    doc: Description of the pre treatment of the contact surface
+    exists: optional
+  implantation(NX_CHAR):
+    doc: Description of contact implantation
+    exists: optional
+  regrowth(NX_CHAR):
+    doc: Description of regrowth of the contact
+    exists: optional
+  shape(NXoff_geometry):
+    doc: Description of the shape of the contact
+    exists: optional
+  position(NXtransformations):
+    doc: Description of the position of the contact
+    exists: optional
+  depends_on(NX_CHAR):
+    doc: Pointing to the last transformation matrix.
+    exists: optional
+  contact_layer(NXmaterial):
+    doc: The layer in contact with the sample
+    name:
+    chemical_formula:
+    thickness:
+    depends_on:
+  (NXmaterial):
+    name:
+    chemical_formula:
+    thickness:
+    depends_on:

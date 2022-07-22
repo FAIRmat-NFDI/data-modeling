@@ -1,0 +1,14 @@
+category: base
+(NXmaterial):
+  name(NX_CHAR):
+    doc: The colloquial name of the sample
+  chemical_formula(NX_CHAR):
+    doc: The chemical description of the sample
+  thickness(NX_NUMBER):
+    doc: The thickness of the layer
+    unit: NX_LENGTH
+  depends_on(NX_CHAR):
+    doc: |
+      The name of the material below this.
+      A material with this name should be present within this group.
+      The substrate is indicated with a `.`.

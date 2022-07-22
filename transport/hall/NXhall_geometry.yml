@@ -1,0 +1,24 @@
+category: base
+(NXhall_geometry):
+  type:
+    doc: |
+      Determines the measurement geometry.
+      This distingushes between van der Pauw and hall bar measurement, too.
+      The geometries `square`, `rectangular` and `arbitrary` refer to 
+      a van der Pauw type of measurement and the hb-1221 and hb-1311 refer
+      to a hall bar measurement in the 1-2-2-1 and 1-3-1-1 geometry, respectivly.
+    enumeration: [square, rectangular, arbitrary, hb-1221, hb-1311]
+  description(NX_CHAR):
+    doc: Description of the shape if it is arbitrary
+    exists: optional
+  edge_width(NX_NUMBER):
+    doc: The width of sample or hall bar
+    exits: recommended
+    unit: NX_LENGTH
+  edge_length(NX_NUMBER):
+    doc: |
+      This refers to the distance between the voltage probe for
+      hall bar measurements and to the vertical edge length of the sample
+      for van der Pauw measurements.
+    exists: recommended
+    unit: NX_LENGTH

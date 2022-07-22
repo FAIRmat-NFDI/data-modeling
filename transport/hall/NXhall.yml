@@ -1,0 +1,145 @@
+# FAIRmat consortium 22.07.2022
+# Draft NeXus application definition for hall measurements
+
+category: application
+doc: Application definition for hall measurements
+symbols:
+  doc: Variables used throughout the experiment
+  N_temp: Number of temperature points
+  N_temp_columns: Number of measured values in temperature series
+  N_iv: Number IV curve points
+(NXhall):
+  (NXentry):
+    definition:
+      doc: An application definition for hall measurements
+      \@version:
+        doc: |
+          Version number to identify which definition of this application
+          definition was used for this entry/data.
+        \@url:
+          doc: |
+            URL where to find further material (documentation, examples)
+            relevant to the application definition.
+        enumeration: [NXhall]
+    start_time(NX_DATE_TIME):
+      doc: "Start time of the experiment."
+    operator(NXuser):
+      exists: [min, 1]
+      doc: "Contact information of at least the user of the instrument or the
+        investigator who performed this experiment.
+        Adding multiple users if relevant is recommended."
+      name:
+        doc: "Name of the user."
+      affiliation:
+        doc: "Name of the affiliation of the user at the point in time when the
+          experiment was performed."
+      address:
+        doc: "Street address of the user's affiliation."
+      email:
+        doc: "Email address of the user."
+      orcid:
+        exists: recommended
+        doc: "Author ID defined by https://orcid.org/."
+      telephone_number:
+        exists: recommended
+        doc: "Telephone number of the user."
+    sample(NXsample):
+      doc: Properties of the sample measured
+      name(NX_CHAR):
+        doc: "Name of the sample."
+      # ToDo:
+      # Here we have to add additional fields
+      # to make the chemical composition, orientation
+      # and sample type (i.e. bulk or layer) mandatory
+      # These should already be represented in NXsample
+      # so we only have to cite them here to make them
+      # required.
+      temperature:
+        exists: recommended
+      gas_pressure:
+        exists: recommended
+      gas:
+        exists: recommended
+    instrument(NXinstrument):
+      # ToDo:
+      # Probably its helpful to create base classes for
+      # the devices
+      voltmeter(NX_CHAR):
+        doc: The voltmeter being used
+      amperemeter(NX_CHAR):
+        doc: The amperemeter being used
+      current_source(NX_CHAR):
+        doc: The current source being used
+      switch_matrix(NX_CHAR):
+        doc: The switch matrix being used
+      software(NX_CHAR):
+        doc: The software being used
+      (NXcontact):
+        doc: The contacts attached to the sample
+        name:
+        contact_layer:
+        polarity:
+        device:
+      # For hall we have four classes
+      # of measurements:
+      # iv-curve, variable-field, variable-temperature
+      resistance_measurement(NXsubentry):
+        # ToDo:
+        # This basically only represents one contact set
+        # But we could have arbitrary ones of these...
+        doc: Represents a resistance measurement
+        switch_matrix(NX_CHAR):
+          # ToDo: refine this, because we don't use fixed settings
+          # for the contacts so we should set it here
+          doc: Switch matrix setting for the measurement
+        current(NX_NUMBER):
+          doc: Current applied to the sample
+          unit: NX_CURRENT
+          dimensions:
+            rank: 1
+            dim: [[1, N_iv]]
+        voltage(NX_NUMBER):
+          doc: Voltage applied to the sample
+          unit: NX_VOLTAGE
+          dimensions:
+            rank: 1
+            dim: [[1, N_iv]]
+        magnetic_field(NX_NUMBER):
+          doc: Field during the measurement
+          unit: NX_MAGNETIC_FIELD
+          dimensions:
+            rank: 1
+            dim: [[1, N_iv]]
+        temperature(NX_NUMBER):
+          doc: Temperature at each measurement point
+          unit: NX_TEMPERATURE
+          dimensions:
+            rank: 1
+            dim: [[1, N_iv]]
+      temperature_dependent_measurement(NXsubentry):
+        doc: Represents a temperature dependent measurement
+        temperatures(NX_NUMBER):
+          doc:
+          dimensions:
+            rank: 1
+            dim: [[1, N_temp]]
+        columns(NX_CHAR):
+          doc: Name of the parameters
+          enumeration:
+            [
+              hall_excitation_current,
+              magnetic_field,
+              resistivity,
+              hall_coefficient,
+              charge_carrier_concentration,
+              hall_mobility,
+            ]
+          dimensions:
+            rank: 1
+            dim: [[1, N_temp_columns]]
+        data(NX_NUMBER):
+          doc: Extracted data values
+          dimensions:
+            rank: 1
+            dim: [[2, N_temp_columns], [1, N_temp]]
+    data(NXdata):
