@@ -33,6 +33,7 @@ doc: |
   (NXaperture):
     # NeXus manual: 'A beamline aperture. This group is deprecated, use NXslit
     # instead.'
+    # also, duplicates NXpinhole?
 
   (NXcrystal):
     # doc: "A crystal monochromator or analyzer."
@@ -43,6 +44,7 @@ doc: |
 
   (NXattenuator):
     # doc: "A device that reduces the intensity of a beam by attenuation."
+    # another variant of NXfilter? i.e. neutral density filter
 
   (NXgrating):
     doc: "A diffraction grating. Define relevant parameters in the
@@ -74,6 +76,7 @@ doc: |
 
   (NXbeam_splitter):
     doc: "A beam splitter splitting the light beam in two."
+    # could infer that two independent NXbeam_path follow (unless it is part of a confocal setup splitting the excitation and detection paths)
 
   (NXwaveplate): # or NXretarder?
     doc: "A device that changes the polarization state of a light beam."
