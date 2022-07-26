@@ -36,6 +36,9 @@
         Here you can collect information about your experience using this chemical,
         for example if it might have been contaminated during an experiment
 
+  ENVIRONMENT:
+    enumeration: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
+
   COMPOSITION:
     doc: |
       three cases are depicted:
