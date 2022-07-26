@@ -157,14 +157,17 @@ symbols:
           x-rays, sonoluminescence, chemiluminescence, bioluminescence]
       # 'x-ray fluorescence' instead of 'x-rays'?
 
-      excitation(NXsubentry):
+      excitation(NXsubentry): # 
         doc: "Properties of the excitation source. The user has to define at
           least one of the excitation sources, i.e. at least one of the
           subclasses describing various sources has to be filled out. 
           The beam path between the excitation source and the sample should be
           described in beam_path_before."
-      # 'beam_path_excitation' instead of 'beam_path_before'?
-        
+        # 'beam_path_excitation' instead of 'beam_path_before'?
+
+        # An alternative could be that 'beam_path_excitation' actually moves up in the hierarchy,
+        # and then the source is the first element in the beam path
+      
         type:
           doc: "Type of excitation source."
           enumeration: [laser, lamp, X-rays, silicon carbide globar,
@@ -222,10 +225,13 @@ symbols:
         doc: "The detection unit usually consists of a spectrometer, dispersive
               element/monochromator, and a detector. Describe the beam path 
               between the sample and the detection unit in beam_path_after."
-
         # 'beam_path_detection' instead of 'beam_path_after'?
         # optical elements can be before or after the spectrometer (which can also be left out
         # when working with filters only -> so maybe move spectrometer to the beam path>)
+
+        # An alternative could be that 'beam_path_detection' actually moves up in the hierarchy,
+        # and then the detector is the last element in the beam path
+        
         beam_path_after(NXbeam_path):
           exists: optional
           doc: "Description of the beam path between the sample and the
@@ -316,6 +322,7 @@ symbols:
         dimensions:
           rank: 1
           dim: [[1, N_wavelength]]
+        # even though wavelength may be recommended, signal axis could also be in energy or wavenumber and then calling it wavelength is confusing
 
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type."
@@ -448,7 +455,7 @@ symbols:
                   in a free-text description, e.g. 'center of sample, long edge parallel to
                   plane of incidence'."
       
-        window(NXaperture):
+        window(NXaperture): # part of the beam path?
           exists: optional
           doc: "For environmental measurements, the environment (liquid, vapor etc.)
               is enclosed in a cell, which has windows both in the direction
