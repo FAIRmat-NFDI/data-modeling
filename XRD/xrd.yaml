@@ -85,13 +85,13 @@ category: application
         polar_angle(NX_FLOAT):
           dimensions:
             rank: 1
-            dim: [[1, nDet]]
+            dim: [[1, N_detectors]]
           unit: NX_ANGLE
         data(NX_INT):
           doc: Detector signal
           dimensions:
             rank: 1
-            dim: [[1, nDet]]
+            dim: [[1, N_detectors]]
     (NXsample):
       # name is good, but we need sample ID for sure
       # and some description of the chemistry
