@@ -24,7 +24,7 @@ symbols:
       enumeration: [NXtransmission]
     start_time(NX_DATE_TIME):
       doc: "Start time of the experiment."
-    (NXinstrument):
+    instrument(NXinstrument):
       common_beam_mask(NXslit):
         doc: Common beam mask to shape the incident beam
         x_gap(NX_NUMBER):
@@ -105,7 +105,7 @@ symbols:
       (NXsample):
         doc: Properties of the sample measured
         name(NX_CHAR):
-      (NXdata):
+      data(NXdata):
         # ToDo: The actual maesurement data should be somewhere else.
         # This should only be here to point to plotable data
         \@signal:
