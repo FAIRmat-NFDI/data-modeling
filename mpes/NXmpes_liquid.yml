@@ -187,7 +187,7 @@ category: application
         enumeration: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
       # Similar situation here, ca be a single number or a log.
       gas_pressure(NX_FLOAT):
-      electirc_field(NX_FLOAT):
+      electric_field(NX_FLOAT):
         unit: NX_VOLTAGE / NX_LENGTH
       geometry(NXoff_geometry):
       thickness(NX_FLOAT):
