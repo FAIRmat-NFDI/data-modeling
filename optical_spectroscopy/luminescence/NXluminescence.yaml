@@ -40,7 +40,9 @@ category: application
 doc: "Draft application definition for luminescence experiments"
 symbols:
   doc: Variables used throughout the document, e.g. dimensions or parameters
-  N_wavelength: Size of the energy / wavelength vector used
+  N_wavelength_detection: Size of the energy / wavelength vector used
+  N_wavelength_excitation: "Size of the array of wavelengths used for 
+                            excitation in the case of photoluminescence"
   N_parameters: Number of sample parameters scanned
   N_time: Number of time points measured
   # N_excitation_elements: "Number of (relevant) optical elements between the
@@ -91,7 +93,7 @@ symbols:
     start_time(NX_DATE_TIME):
       doc: "Start time of the experiment. UTC offset should be specified."
 
-    acquisition_program(NXprocess):
+    acquisition_program:
       exists: optional
       program:
         doc: "Commercial or otherwise defined given name to the program that was
@@ -145,7 +147,7 @@ symbols:
         doc: "ISO8601 date when the instrument was constructed.
               UTC offset should be specified."
 
-      software:
+      firmware:
         doc: "Name of the software that was used for the measurement"
         \@version:
           doc: "Version and build or commit number of the software source code."
@@ -153,8 +155,13 @@ symbols:
           doc: "Website of the software."
       
       luminescence_type:
+        doc: "[Photoluminescence](https://en.wikipedia.org/wiki/Photoluminescence)
+              includes x-ray fluorescence."
         enumeration: [photoluminescence, cathodoluminescence, electroluminescence,
-          x-rays, sonoluminescence, chemiluminescence, bioluminescence]
+          sonoluminescence, chemiluminescence, bioluminescence]
+      # add comment that we need input for bioluminescence, chemiluminescence, sonoluminescence
+      # x-rays: NeXus already includes many base classes
+      #   NXfluo limited/basic app def
 
       excitation(NXsubentry):
         doc: "Properties of the excitation source. The user has to define at
@@ -167,7 +174,7 @@ symbols:
           doc: "Type of excitation source."
           enumeration: [laser, lamp, X-rays, silicon carbide globar,
             super continuum, chemical reaction, ultrasound, living organism,
-            other]
+            power supply, electron source, other]
         other_source:
           exists: optional
           doc: "If you specified 'other' as excitation source type, please
@@ -177,9 +184,20 @@ symbols:
         # counting, spektralaufgelöst (j/n), polarisationsaufgelöst,
         # Anregunswellenlängenabhängig....
 
-        optical_source(NXsource):
+        RADIATION_SOURCE(NXsource):
           exists: optional
-          doc: "Describes any light sources (lasers, lamps etc.)."
+          doc: "For electromagnetic or particle sources."
+        
+          wavelength_excitation(NX_NUMBER):
+            doc: "Wavelength (wavenumber, energy) array of excitation source."
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[1, N_wavelength_excitation]]
+
+        #optical_source(NXsource):
+         # exists: optional
+          #doc: "Describes any light sources (lasers, lamps etc.)."
           
           # (NXopticalelement): # redundant; now using NXbeam_path
           #   doc: "Describes the beam path between the excitation source and the sample."
@@ -207,6 +225,9 @@ symbols:
                 the sample ('before' the sample). Describe all relevant optical
                 elements and their parameters in the appropriate subclasses."
 
+      (NXmanipulator):
+        doc: "..."
+
       detection(NXsubentry):
         doc: "The detection unit usually consists of a spectrometer, dispersive
               element/monochromator, and a detector. Describe the beam path 
@@ -218,12 +239,62 @@ symbols:
             detector unit ('after' the sample). Describe all relevant optical
             elements and their parameters in the appropriate subclasses."
 
-        spectrometer(NXdetector):
-          doc: "Which type of spectrometer/detector and dispersive element."
-          
-        dispersive_element(NXmonochromator):  # NXgrating?
-          doc: "Which type of dispersive element was used."
-          enumeration: [diffraction grating, chirped mirror, other]
+        spectrometer(NXmonochromator):
+          doc: "The spectroscope element of the ellipsometer before the detector,
+              but often integrated to form one closed unit. Information on the
+              dispersive element can be specified in the subfield GRATING. Note
+              that different gratings might be used for different wavelength
+              ranges. The dispersion of the grating for each wavelength range
+              can be stored in grating_dispersion."
+
+          wavelength(NX_NUMBER):
+            doc: "Wavelength value(s) used for the measurement.
+                  An array of 1 or more elements. Length defines N_wavelength"
+            unit: NX_LENGTH
+            dimensions:
+              rank: 1
+              dim: [[1, N_wavelength]]
+
+          (NXgrating):
+            exists: optional
+            doc: "Diffraction grating, as could be used in a monochromator.
+                  If two or more gratings were used, define the angular
+                  dispersion and the wavelength range (min/max wavelength)
+                  for each grating and make sure that the wavelength ranges
+                  do not overlap. The dispersion should be defined for the
+                  entire wavelength range of the experiment."
+
+            angular_dispersion(NX_NUMBER):
+              exists: optional
+              doc: "Dispersion of the grating in nm/mm used."
+
+            grating_wavelength_min(NX_NUMBER):
+              exists: optional
+              doc: "Minimum wavelength of the grating."
+              unit: NX_LENGTH
+
+            grating_wavelength_max(NX_NUMBER):
+              exists: optional
+              doc: "Maximum wavelength of the grating."
+              unit: NX_LENGTH
+
+          spectral_resolution(NX_NUMBER):
+            exists: optional
+            doc: "Spectral resolution of the instrument."
+            unit: NX_WAVENUMBER
+
+          (NXslit):
+            exists: optional
+            doc: "Define the width of the monochromator slit in the subfield x_gap."
+
+            fixed_slit(NX_BOOLEAN):
+              exists: optional
+              doc: "Was the slit width fixed?"
+
+            max_gap(NX_NUMBER):
+              exists: optional
+              doc: "If slit width was not fixed, define the maximum slit width."
+              unit: NX_LENGTH
 
         (NXdetector):
           doc: "Which type of detector was used, and what is known about it?
@@ -235,7 +306,8 @@ symbols:
             doc: "What kind of detector module is used, e.g. CCD spectrometer,
                   CCD camera, PMT, photodiode, etc."
             enumeration: [PMT, photodiode, avalanche diode, CCD camera,
-                          CCD spectrometer, bolometer, other]
+                          CCD spectrometer, CMOS, bolometer, streak camera,
+                          multichannel plate, other]
           # x-ray detector?
           # which kind of CCD
           # base class for optical detectors: details about CCD, PMT etc. 
@@ -244,6 +316,16 @@ symbols:
           other_detector:
             exists: optional
             doc: "If you specified 'other' as detector type, please write down what it is."
+          
+          quantum_efficiency(NX_NUMBER):
+            exists: optional
+            doc: "Number between 0 and 1. Possibly provide for every used wavelength
+                  value."
+            unit: NX_UNITLESS
+
+          # add: pixel size, dimension, time resolution, measurement mode (e.g. photocounting mode)
+          #     gain, readout time, averaging
+          # need physical dimensions of detector
 
 ################################################################################################
       
@@ -277,10 +359,6 @@ symbols:
         exists: recommended
         doc: "ISO8601 date with time zone (UTC offset) specified."
 
-      layer_structure:
-        doc: "Qualitative description of the layer structure for the sample.
-              For example: Si/native oxide/thermal oxide/polymer/peptide"
-
       angle_of_incidence(NX_NUMBER):
         doc: "Incident angle of the beam vs. the normal of the bottom
               reflective (substrate) surface in the sample."
@@ -294,27 +372,27 @@ symbols:
               if several were used in this measurement;
               typically an index of 0 - N"
 
-      wavelength(NX_NUMBER):
+      wavelength_detection(NX_NUMBER):
         doc: "Wavelength value(s) used for the measurement.\n
               An array of 1 or more elements. Length defines N_wavelength"
         unit: NX_LENGTH
         dimensions:
           rank: 1
-          dim: [[1, N_wavelength]]
+          dim: [[1, N_wavelength_detection]]
 
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type."
         dimensions:
-          rank: 3
-          dim: [[3, N_time], [2, N_parameters], [1, N_wavelength]]
+          rank: 4
+          dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
 
-      data_error(NX_NUMBER):
+      measured_data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
               The structure is the same as for the measured data."
-        exists: recommended
+        exists: optional
         dimensions:
-          rank: 3
-          dim: [[3, N_time], [2, N_parameters], [1, N_wavelength]]
+          rank: 4
+          dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
 
       time_points(NX_NUMBER): # can this also be shifted to varied parameters?
         exists: optional
@@ -324,7 +402,40 @@ symbols:
           rank: 1
           dim: [[1, N_time]]
 
-      environment_conditions(NXenvironment):
+      sample_stage(NXsubentry):
+        doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
+              (Cartesian) coordinate system and at an orientation defined
+              by three Euler angles (alpha, beta, gamma)."
+        stage_type:
+          enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
+        (NXtransformations):
+          exists: recommended
+          doc: "The stage coordinate system vs. the incident beam.
+                The Z-axis of the stage is considered to point along the
+                normal of the substrate (bottom reflecting surface) from the stage
+                towards the general direction of the light source. The beam
+                comes with angle of incidence towards this Z-axis, but in opposite
+                direction, thus they are connected with a rotation of 
+                180 - angle of incidence (in degrees).
+
+                This transformation brings us from the NEXUS coordinates to the stage coordinates.
+
+                Then provide the set of translations (if there are any). These all
+                have a vector defining their relative direction in the current
+                coordinate system. (This current coordinate system changes with
+                every transformation if you set the parameter 'depends' to the
+                name of the previous step.)
+
+                Last, provide the rotations of the sample"
+
+          alternative:
+            exists: optional
+            doc: "If there is no motorized stage, we should at least qualify
+                  where the beam hits the sample and in what direction the sample stands
+                  in a free-text description, e.g. 'center of sample, long edge parallel to
+                  plane of incidence'."
+
+        environment_conditions(NXenvironment):
         doc: "Specify external parameters that have influenced the sample."
 
         medium:
@@ -401,39 +512,7 @@ symbols:
                 field contains the measured values. If it is constant within
                 an error for every run then use only an array of length one."
 
-      stage(NXsubentry):
-        doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
-              (Cartesian) coordinate system and at an orientation defined
-              by three Euler angles (alpha, beta, gamma)."
-        enumeration: [manual stage, scanning stage, liquid stage, gas cell, cryostat]
-        (NXtransformations):
-          exists: recommended
-          doc: "The stage coordinate system vs. the incident beam.
-                The Z-axis of the stage is considered to point along the
-                normal of the substrate (bottom reflecting surface) from the stage
-                towards the general direction of the light source. The beam
-                comes with angle of incidence towards this Z-axis, but in opposite
-                direction, thus they are connected with a rotation of 
-                180 - angle of incidence (in degrees).
-
-                This transformation brings us from the NEXUS coordinates to the stage coordinates.
-
-                Then provide the set of translations (if there are any). These all
-                have a vector defining their relative direction in the current
-                coordinate system. (This current coordinate system changes with
-                every transformation if you set the parameter 'depends' to the
-                name of the previous step.)
-
-                Last, provide the rotations of the sample"
-
-          alternative:
-            exists: optional
-            doc: "If there is no motorized stage, we should at least qualify
-                  where the beam hits the sample and in what direction the sample stands
-                  in a free-text description, e.g. 'center of sample, long edge parallel to
-                  plane of incidence'."
-      
-        window(NXaperture):
+        WINDOW(NXaperture):
           exists: optional
           doc: "For environmental measurements, the environment (liquid, vapor etc.)
               is enclosed in a cell, which has windows both in the direction

@@ -23,6 +23,14 @@ doc: |
   #     NXdisk_chopper (defined), NXgrating (defined), waveplate/retarder
   # Some of the classes might be similar, so one has to decide which one to use
 
+  # order of elements: use NXtransformations
+  #   
+
+  (NXsource):
+    # link to RADIATION_SOURCE(NXsource)
+
+  WINDOW(NXaperture): # link to WINDOW in sample_stage
+
   (NXpinhole):
     # doc: "A simple pinhole."
 
@@ -65,6 +73,8 @@ doc: |
     # NXpolarizer is the base class that describes a spin polarizer, so the
     # base class would have to be modified.
   
+  (NXmonochromator):
+
   # ====== New base classes (need to be created): ======
 
   (NXpolarizer_opt):
@@ -90,4 +100,5 @@ doc: |
     doc: "An optical fiber."
     # define: type/mode, material, refractive index, length, wavelength range,
     #         bandwidth or transfer rate, numerical aperture (angle)
+    #         core diameter, clad diameter
   
