@@ -111,15 +111,15 @@ category: application
               enumeration: ['raw']
             raw(NX_NUMBER): # There is a block of numbers named raw.
               doc: "Raw data before calibration."
-        (NXmanipulator):
-          exists: optional
-          doc: "Manipulator for positioning of the sample."
-          sample_temperature(NX_FLOAT):
-            exists: recommended
-          drain_current(NX_FLOAT):
-            exists: recommended
-          sample_bias(NX_FLOAT):
-            exists: recommended
+      (NXmanipulator):
+        exists: optional
+        doc: "Manipulator for positioning of the sample."
+        sample_temperature(NX_FLOAT):
+          exists: recommended
+        drain_current(NX_FLOAT):
+          exists: recommended
+        sample_bias(NX_FLOAT):
+          exists: recommended
     (NXprocess):
         doc: "Document an event of data processing, reconstruction, or analysis for this data.
           Describe the appropriate axis calibrations for your experiment using 
