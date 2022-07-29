@@ -2,8 +2,8 @@
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 <definition category="application" extends="NXobject" name="NXmpes" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
     <doc>
-         This is the most general application definition for multidimensional
-         photoelectron spectroscopy.
+         This is the application definition for multidimensional photoelectron
+         spectroscopy on liquids
     </doc>
     <group type="NXentry">
         <field name="title" type="NX_CHAR"/>
@@ -15,7 +15,7 @@
         <field name="definition" type="NX_CHAR">
             <attribute name="version" type="NX_CHAR"/>
             <enumeration>
-                <item value="NXmpes"/>
+                <item value="NXmpes_liquid"/>
             </enumeration>
         </field>
         <group type="NXinstrument">
@@ -229,8 +229,9 @@
                 </field>
             </group>
         </group>
-        <group type="NXsample">
+        <group name="LIQUID_JET" type="NXsample">
             <field name="name" type="NX_CHAR"/>
+            <field name="description" type="NX_CHAR"/>
             <field name="chemical_formula" recommended="true" type="NX_CHAR">
                 <doc>
                      The chemical formula of the sample. For mixtures use the NXsample_component
@@ -278,6 +279,41 @@
                 </enumeration>
             </field>
             <field name="gas_pressure" type="NX_FLOAT"/>
+            <field name="electric_field" type="NX_FLOAT" units="NX_VOLTAGE / NX_LENGTH"/>
+            <group name="geometry" type="NXoff_geometry"/>
+            <field name="thickness" type="NX_FLOAT" units="NX_LENGTH"/>
+            <field name="type" type="NX_CHAR"/>
+            <field name="flow_rate" type="NX_FLOAT" units="NX_VOLUME / NX_TIME"/>
+            <field name="shape" type="NX_CHAR">
+                <enumeration>
+                    <item value="round"/>
+                    <item value="flat"/>
+                </enumeration>
+            </field>
+            <group name="leaf_geometry" type="NXtransformations">
+                <field name="leaf_normal" type="NX_NUMBER"/>
+                <field name="vector" type="NX_NUMBER"/>
+                <field name="depends_on" type="NX_CHAR"/>
+            </group>
+            <group name="SOLVENT" type="NX_SAMPLE">
+                <field name="description" type="NX_CHAR"/>
+                <field name="name" type="NX_CHAR"/>
+                <field name="chemical_formula" type="NX_CHAR"/>
+                <field name="chem_id_cas" type="NX_CHAR"/>
+                <field name="flow_rate" type="NX_FLOAT" units="NX_VOLUME / NX_TIME"/>
+                <field name="nozzle_angle" type="NX_FLOAT" units="NX_ANGLE"/>
+                <field name="ph_value" type="NX_FLOAT" units="NX_UNITLESS"/>
+                <field name="temperature" type="NX_FLOAT"/>
+                <field name="unit" type="NX_CHAR" units="NX_TEMPERATURE"/>
+            </group>
+            <group name="SOLUTE" type="NX_SAMPLE">
+                <field name="description" type="NX_CHAR"/>
+                <field name="name" type="NX_CHAR"/>
+                <field name="chemical_formula" type="NX_CHAR"/>
+                <field name="chem_id_cas" type="NX_CHAR"/>
+                <field name="mol_fraction" type="NX_FLOAT"/>
+                <field name="solvent" type="NX_CHAR"/>
+            </group>
         </group>
         <group type="NXdata">
             <attribute name="signal">

@@ -3,7 +3,7 @@
 #It is designed to be extended by other application definitions
 #with higher granularity in the data description.
 
-doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
+doc: This is the application definition for multidimensional photoelectron spectroscopy on liquids
 category: application 
 (NXmpes):
   (NXentry):
@@ -12,7 +12,7 @@ category: application
       doc: "Datetime of the start of the measurement."
     definition:
       \@version:
-      enumeration: ["NXmpes"]
+      enumeration: ["NXmpes_liquid"]
     (NXinstrument):
       energy_resolution(NX_FLOAT):
       (NXsource):
@@ -152,8 +152,9 @@ category: application
           calibrated_axis(NX_FLOAT):
             exists: recommended
             doc: "This is the momentum axis to be used for data plotting."
-    (NXsample):
+    LIQUID_JET(NXsample):
       name:
+      description:
       chemical_formula:
         exists: recommended
         doc: "The chemical formula of the sample. For mixtures use the NXsample_component group in NXsample instead."
@@ -186,6 +187,40 @@ category: application
         enumeration: ["vacuum", "inert atmosphere", "oxidising atmosphere", "reducing atmosphere"]
       # Similar situation here, ca be a single number or a log.
       gas_pressure(NX_FLOAT):
+      electric_field(NX_FLOAT):
+        unit: NX_VOLTAGE / NX_LENGTH
+      geometry(NXoff_geometry):
+      thickness(NX_FLOAT):
+        unit: NX_LENGTH
+      type(NX_CHAR):
+      flow_rate(NX_FLOAT):
+        unit: NX_VOLUME / NX_TIME
+      shape(NX_CHAR):
+        enumeration: [round, flat]
+      leaf_geometry(NXtransformations):
+        leaf_normal(NX_NUMBER):
+        vector(NX_NUMBER):
+        depends_on(NX_CHAR):
+      SOLVENT(NX_SAMPLE):
+        description:
+        name:
+        chemical_formula:
+        chem_id_cas(NX_CHAR):
+        flow_rate(NX_FLOAT):
+          unit: NX_VOLUME / NX_TIME
+        nozzle_angle(NX_FLOAT):
+          unit: NX_ANGLE
+        ph_value(NX_FLOAT):
+          unit: NX_UNITLESS
+        temperature(NX_FLOAT):
+        unit: NX_TEMPERATURE
+      SOLUTE(NX_SAMPLE):
+        description:
+        name:
+        chemical_formula:
+        chem_id_cas(NX_CHAR):
+        mol_fraction(NX_FLOAT):
+        solvent(NX_CHAR):
     (NXdata):
       \@signal:
         enumeration: ["data"] # There is an object named data that contains the signal
