@@ -1,66 +1,54 @@
-# Basic class to define a point or better the end point of a vector
-# in a 1-4 D space. This is a fundamental class in any geometry systems.
-
 category: base
-doc: "Base class for a vector / point in space"
-# which space, restrict us to Euclidean?
+doc: |
+  A set of points or point-like objects in d-dimensional Euclidean space.
+  
+  The relevant coordinate system should be referred to in the NXtransformations
+  instance. Points may have an associated time value; however users are advised
+  to store time data of point sets rather as instances of time events, where
+  for each point in time there is an NXcg_point_set instance which specifies the
+  points locations. This is a frequent situations in experiments and computer
+  simulations, where positions of points are taken at the same point in time
+  and therefore an additional time array would demand to store redundant pieces
+  of information for each point.
+symbols:
+  d: The dimensionality, which has to be at least 1.
+  c: The cardinality of the set, i.e. the number of points.
 (NXcg_point_set):
-  symbols:
-    d: "Dimensionality, i.e. the length of the coordinate array, which has to be at least 1."
-    c: "Cardinality of the set, which has to be at least 1."
-  # does it make sense to store the cardinality of the set also explicitly?
-  # and if so how to assure that a field value like the one for cardinality == c ?
-  doc: |
-    A base class to define a point in a d-dimensional space
-     
-    A point is the end point of a vector from the origin to the point
-    defined by its coordinates. This class allows the user to give this
-    array. The zero point i.e. the coordinate system has to be defined
-    independently at a higher level.
-    If is_spatiotemporal is True time is specified, which is always 
-    the last coordinate!
   dimensionality(NX_POSINT):
-  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
-  # spatiotemporal(NX_BOOLEAN):
-  #  doc: "True if each coordinate comes with a time value.
-  #  In this case, time is the last coordinate."
-  # for 3D Euclidean with time information d = d_spatial + 1
-  identifier_offset(NX_UINT):
-    doc: "Integer which specifies the first index to be used for distinguishing points. Points can have identifiers. These are defined either implicit or explicit. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the identifier array has to be used.  The identifier_offset can used to communicate if object IDs are expected to start from 1 (also referred to as the Fortran-) or from 0 (also referred to as C-, Python-style notation) respectively."
-  # is implicit the right word?
-  identifier(NX_UINT):
-    doc: "Integer used to distinguish points for explicit indexing."
+    unit: NX_UNITLESS
+  cardinality(NX_POSINT):
+    unit: NX_UNITLESS
+  identifier_offset(NX_INT):
+    doc: |
+      Integer which specifies the first index to be used for distinguishing
+      identifiers for points. Identifiers are defined either implicitly
+      or explicitly. For implicit indexing the identifiers are defined on the
+      interval [identifier_offset, identifier_offset+c-1].
+      For explicit indexing the identifier array has to be defined.
+      
+      The identifier_offset field can for example be used to communicate if the
+      identifiers are expected to start from 1 (referred to as Fortran-/Matlab-)
+      or from 0 (referred to as C-, Python-style index notation) respectively.
+    unit: NX_UNITLESS
+  identifier(NX_INT):
+    doc: Integer used to distinguish points for explicit indexing.
+    unit: NX_UNITLESS
     dimensions:
       rank: 1
       dim: [[1, c]]
-  vertices(NX_NUMBER):
-    doc: "An array of coordinates."
-    unit: NX_LENGTH  #, NX_TIME
-  # is it possible to have in NeXus an array with different units that is not split into
-  # columns, if not we need to split it up, also having a time is really relevant
-  # when points are measured at different points in time
-  # oftentimes though one collects many points for the same simulated time
-  # in which case time should rather be placed in an NXsnapshot that has
-  # a sub-instance like NXcg_point_set
+  position(NX_NUMBER):
+    doc: The array of point coordinates.
+    unit: NX_LENGTH
     dimensions:
       rank: 2
       dim: [[1, c], [2, d]]
   time(NX_NUMBER):
-    doc: "An array of time for each vertex"
+    doc: The optional array of time for each vertex.
     unit: NX_TIME
     dimensions:
       rank: 1
       dim: [[1, c]]
-
-# example 1:
-#(NXcg_point_set):
-#  # d: 3
-#  # c: 2
-#  dimensionality: 3
-#  cardinality: 2
-#  spatiotemporal: False
-#  # either use
-#  identifier_offset: 3 # so points are named 3 and 4
-#  # or
-#  identifier: [4, 8]
-#  vertices: [[1., 2, 3.], [4., 5., 6.]]
+  (NXtransformations):
+    doc: |
+      Reference to or definition of a coordinate system with
+      which the positions and directions are interpretable.

@@ -1,0 +1,8 @@
+category: base
+doc: |
+  Base class representing a graphic processing unit (GPU) of a computer.
+# symbols:
+(NXcs_gpu):
+  name:
+    doc: Given name of the GPU. Users should be as specific as possible.
+  MANUFACTURER(NXmanufacturer):

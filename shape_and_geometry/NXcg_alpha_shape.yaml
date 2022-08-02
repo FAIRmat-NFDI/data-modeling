@@ -1,40 +1,49 @@
 category: base
+doc: |
+  A base class for documenting an alpha shape to a point cloud.
+  
+  For details see:
+  
+  * https://dx.doi.org/10.1109/TIT.1983.1056714 for 2D,
+  * https://dx.doi.org/10.1145/174462.156635 for 3D,
+  * https://dl.acm.org/doi/10.5555/871114 for weighted, and
+  * https://doc.cgal.org/latest/Alpha_shapes_3 for 3D implementation
+  
+  in CGAL, the Computational Geometry Algorithms Library.
+  We follow as a starting point the conventions of the CGAL library.
+# weighted alpha shapes
+# The so-called spectrum or sets of (weighted) 
+# alpha shapes includes the
+# convex hull of a point set.
+symbols:
+  d: The dimensionality of the alpha shape, for now 2 or 3.  # generalize to d > 3
+  n_e: The number of edges.
+  n_f: The number of faces.
+  n_c: The number of cells.
 (NXcg_alpha_shape):
-  doc: |
-    A base class for documenting a alpha shape to a point cloud.
-    
-    For details see:
-    * https://doi.org/10.1109/TIT.1983.1056714 for 2D,
-    * https://doi.org/10.1145/174462.156635 for 3D,
-    * https://dl.acm.org/doi/10.5555/871114 for weighted, and
-    * https://doc.cgal.org/latest/Alpha_shapes_3 for 3D implementation in CGAL,
-    the Computational Geometry Algorithms Library
-  # we follow for now the conventions of the CGAL library
-  # weighted alpha shapes
-  # The so-called spectrum or sets of (weighted) 
-  # alpha shapes includes the
-  #  convex hull of a point set.
-  symbols:
-    d: "Dimensionality, for now 2 or 3."  # generalize to d > 3
-    n_c: "Number of cells."
-    n_f: "Number of faces."
-    n_e: "Number of edges."
-  dimensionality(NX_UINT): # 2 or 3
+  dimensionality(NX_UINT):
+    unit: NX_UNITLESS
+    enumeration: [2, 3]
   version:
+    doc: |
+      Specify which general type of alpha shape is computed.
+      Using for now the CGAL terminology.
     enumeration: [basic] # , weighted]
   mode:
-    doc: "Specifically when computed with the CGAL, the mode specifies if singular faces are removed (regularized)." # or not. CHECK THIS AGAIN CAREFULLY
+    doc: |
+      Specifically when computed with the CGAL, the mode specifies if singular faces are removed (regularized) of the alpha complex.
+    # CHECK THIS AGAIN CAREFULLY
     enumeration: [general, regularized]
-  s(NXcg_point_set):
-  # this could also just be implemented as a link but how would this be possible
-  # unfold the NXcg_point_set and add a 
-  # weight(NX_NUMBER):
-  #   doc: "Weights for each point"
   alpha(NX_NUMBER):
     doc: "Real number whose reciprocal values defines the radius of the d-sphere."
     # check again carefully the CGAL documentation talks about, 
     # for 3D, the square of the radius!
     # unit: reciprocal length
+  s(NXcg_point_set):
+  # this could also just be implemented as a link but how would this be possible
+  # unfold the NXcg_point_set and add a 
+  # weight(NX_NUMBER):
+  #   doc: "Weights for each point"
   # In general, an alpha complex is a disconnected and non-pure complex, 
   # meaning in particular that the alpha complex may have singular faces.
   # so the number of cells, faces and edges depends on how a specific alpha complex,
@@ -54,6 +63,6 @@ category: base
   # as the interior, may not even exist for a given alpha value
   # more specifically it is the set of filtrated cells acknowledging mode
   # e.g. the interior cells of the regularized alpha complex
-  interior_cells(NXcg_tetrahedra_set):
+  interior_cells(NXcg_tetrahedron_set):
   # document the alpha status
   # https://doc.cgal.org/latest/Alpha_shapes_3/classCGAL_1_1Alpha__status.html

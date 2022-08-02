@@ -1,12 +1,15 @@
 category: base
+doc: |
+  Base class wrapping data of a system characterized at a specific time/iteration.
 (NXms_snapshot):
-  doc: |
-    Base class wrapping data of a system characterized at a specific time/iteration.
-  time(NX_TIME):
-    doc: "Measured or simulated physical time stamp for this snapshot. Not to be confused with wall-clock timing or profiling data of the software tools."
+  comment:
+    doc: Is this time for a measurement or a simulation.
+    enumeration: [measurement, simulation]
+  time(NX_NUMBER):
+    doc: |
+      Measured or simulated physical time stamp for this snapshot.
+      Not to be confused with wall-clock timing or profiling data.
     unit: NX_TIME
-    \@comment:
-      doc: "Specify if the time was measured or simulated."
-  iteration(NX_UINT):
-    doc: "Iteration or increment."
+  iteration(NX_INT):
+    doc: Iteration or increment counter.
     unit: NX_UNITLESS

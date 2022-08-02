@@ -1,0 +1,6 @@
+category: base
+doc: |
+  Base class for an input/output sub-system of a computer.
+# symbols:
+(NXcs_io_sys):
+  (NXcs_io_obj):

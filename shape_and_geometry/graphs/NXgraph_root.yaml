@@ -1,7 +1,8 @@
 category: base
+doc: |
+  An instance of a graph.
+# symbols:
 (NXgraph_root):
-  doc: |
-    A graph.
   nodes(NXgraph_node_set):
   relation(NXgraph_edge_set):
   # further attributes

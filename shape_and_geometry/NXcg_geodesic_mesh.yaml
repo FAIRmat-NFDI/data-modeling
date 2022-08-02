@@ -1,17 +1,26 @@
 category: base
 (NXcg_geodesic_mesh):
   doc: |
-    Base class to describe details about a specific geodesic mesh.
+    Metadata and data about a geodesic mesh.
     
-    People from geodesic/surveyors will likely have specific demands and 
-    different views what should be included in such a base class, given that
-    nested geodesic mesh are a key component of climate modelling tools.
-    Discussions with NFDI-Earth could make this base class more meaty and detailed.
+    People from geodesic/surveyors will likely have specific demands and
+    different views about what should be included in such a base class, given
+    that nested geodesic meshes are a key component of climate modelling tools.
+    For now we propose to use this base class as a container to organize metadata
+    and data related to geodesic meshes.
     
-    For the time being, we use the base class as a wrapper to specify how a 
-    geodesic surface mesh was instantiated, as there are many possibilities
-    and a geodesic surface mesh is in this sense a triangulated surface mesh
-    with special meta data. See e.g. E. S. Popko and C. J. Kitrick for details
-    https://doi.org/10.1201/9781003134114 
-    (especially the section on subdivision schemata)
+    Specifically an instance of this base class should detail the rule set how
+    how the geodesic (surface) mesh was instantiated as there are many
+    possibilities. A geodesic surface mesh is in this sense a triangulated
+    surface mesh with metadata. For additional details as an introduction
+    into the topic see e.g.:
+    
+    * `E. S. Popko and C. J. Kitrick <https://doi.org/10.1201/9781003134114>`_  
+    
+    Here, especially the section on subdivision schemes is relevant.
+  (NXtransformations):
+    doc: |
+      Reference to or definition of a coordinate system with
+      which the positions and directions are interpretable.
   (NXcg_triangulated_surface_mesh_set):
+# Discussions with NFDI-Earth could make this base class more meaty and detailed.

@@ -1,0 +1,8 @@
+category: base
+doc: |
+  Base class representing a main memory sub-system of a computer.
+# symbols:
+(NXcs_mmsys):
+  total_physical_memory(NX_NUMBER):
+    doc: How much physical memory does the system provide.
+    # unit: NX_BIT

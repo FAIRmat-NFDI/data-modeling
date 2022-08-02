@@ -1,42 +1,75 @@
+# redundant as there is NXcsg, and NXquadric but easier to understand
 category: base
-# which space, should we restrict us to the Euclidean?
-# spheres, their volume only ? their surface, both, is
-# redundant as there is NXcsg, and NXquadric
-(NXcg_sphere_set):
-  symbols:
-    c: "Cardinality of the set, which has to be at least 1."
-  # does it make sense to store the cardinality of the set also explicitly?
-  doc: |
-    A set of spheres with possibly different radius.
-  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
-  identifier_offset(NX_UINT):
-    doc: "Integer which specifies the first index to be used for distinguishing
-    identifiers for spheres. Identifier are defined 
-    either implicitly or explicitly. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
-    if object IDs start from 1 (also referred to as the Fortran-), 
-    from 0 (also referred to as C-, Python-style notation), or from a different offset, which is best suited to support the description respectively."
-  # is implicit the right word?
-  identifier(NX_UINT):
-    doc: "Integer used to distinguish spheres of the set using explicit indexing."
-    dimensions:
-      rank: 1
-      dim: [[1, c]]
-  # do we need/wish to describe the triangle set by just giving point coordinates directly?
-  # the benefit is that when all points are disjoint such a description is more efficient
-  # for connected triangle sets though vertices are shared which makes the splitting
-  # eventually more efficient
-  # how to assure that if for an NXcg-triangle_set instance with d == 2 that the 
-  # NXcg_point_set also has d == 2 ?
-  center(NXcg_point_set):
-    doc: "The set of unique vertices which support the triangle set."
-  radius(NX_NUMBER):
-    dimensions:
-      rank: 1
-      dim: [[1, c]]
-  # should we not better make this a hollow sphere that and add an
-  # is filled boolean, or should a hollow sphere be an own primitive
-  # this makes in so far sense as otherwise a hollow sphere, has to be
-  # describe via CSG with a nested pair of sphere quadrics
-  # volume(NX_NUMBER): but these quantities are so trivial...
-  # surface_area(NX_NUMBER): ... should they just be computed on-the-fly?
+doc: |
+  Set of d-dimensional circles/spheres in Euclidean space.
   
+  Each sphere can have a different radius.
+symbols:
+  d: The dimensionality, which has to be at least 2.
+  c: The cardinality of the set, i.e. the number of circles or spheres.
+(NXcg_sphere_set):
+  dimensionality(NX_POSINT):
+    unit: NX_UNITLESS
+  cardinality(NX_POSINT):
+    unit: NX_UNITLESS
+  identifier_offset(NX_INT):
+    doc: |
+      Integer which specifies the first index to be used for distinguishing
+      identifiers for spheres. Identifiers are defined either implicitly
+      or explicitly. For implicit indexing the identifiers are defined on the
+      interval [identifier_offset, identifier_offset+c-1].
+      For explicit indexing the identifier array has to be defined.
+      
+      The identifier_offset field can for example be used to communicate if the
+      identifiers are expected to start from 1 (referred to as Fortran-/Matlab-)
+      or from 0 (referred to as C-, Python-style index notation) respectively.
+    unit: NX_UNITLESS
+  identifier(NX_INT):
+    doc: Integer used to distinguish spheres for explicit indexing.
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  center(NX_NUMBER):
+    doc: |
+      Geometric center of the spheres. This can be the center of mass.
+      Dimensionality and cardinality of the point and sphere set have to match.
+      The identifier_offset and identifier field of NXcg_point_set do not need
+      to be used as they should be same as the identifier_offset and the
+      identifier for the spheres.
+    unit: NX_LENGTH
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]
+  radius(NX_NUMBER):
+    doc: |
+      In the case that all spheres have the same radius.
+    unit: NX_LENGTH
+  radii(NX_NUMBER):
+    doc: |
+      In the case that spheres have different radius use this
+      instead of the radius field.
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  (NXtransformations):
+    doc: |
+      Reference to or definition of a coordinate system with
+      which the positions and directions are interpretable.
+  # properties of spheres
+  is_closed(NX_BOOLEAN):
+    doc: Are the spheres closed or hollow?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  volume(NX_NUMBER):
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  surface_area(NX_NUMBER):
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, c]]

@@ -1,46 +1,86 @@
+# redundant as there is NXcsg, and NXquadric but easier to understand
 category: base
-# which space, should we restrict us to the Euclidean?
-# spheres, their volume only ? their surface, both, is
-# redundant as there is NXcsg, and NXquadric
+doc: |
+  Set of (d-dimensional) ellipsoids in Euclidean space.
+  
+  Individual ellipsoids can have different half axes.
+symbols:
+  d: The dimensionality, which has to be at least 2.
+  c: The cardinality of the set, i.e. the number of ellipses, or ellipsoids.
 (NXcg_ellipsoid_set):
-  symbols:
-    c: "Cardinality of the set, which has to be at least 1."
-    d: "Dimensionality, should be at least 2."
-  # does it make sense to store the cardinality of the set also explicitly?
-  doc: |
-    A set of (tri-axial) ellipsoids with possibly different half-axes radii.
-  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
   dimensionality(NX_POSINT):
-  identifier_offset(NX_UINT):
-    doc: "Integer which specifies the first index to be used for distinguishing
-    identifiers for ellipsoids. Identifier are defined 
-    either implicitly or explicitly. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the identifier array has to be used.  The identifier_offset describes e. g. 
-    if object IDs start from 1 (also referred to as the Fortran-), 
-    from 0 (also referred to as C-, Python-style notation), or from a different offset, which is best suited to support the description respectively."
-  # is implicit the right word?
-  identifier(NX_UINT):
-    doc: "Integer used to distinguish ellipsoids of the set using explicit indexing."
+    unit: NX_UNITLESS
+  cardinality(NX_POSINT):
+    unit: NX_UNITLESS
+  identifier_offset(NX_INT):
+    doc: |
+      Integer which specifies the first index to be used for distinguishing
+      identifiers for ellipsoids. Identifiers are defined either implicitly
+      or explicitly. For implicit indexing the identifiers are defined on the
+      interval [identifier_offset, identifier_offset+c-1].
+      For explicit indexing the identifier array has to be defined.
+      
+      The identifier_offset field can for example be used to communicate if the
+      identifiers are expected to start from 1 (referred to as Fortran-/Matlab-)
+      or from 0 (referred to as C-, Python-style index notation) respectively.
+    unit: NX_UNITLESS
+  identifier(NX_INT):
+    doc: Integer used to distinguish ellipsoids for explicit indexing.
+    unit: NX_UNITLESS
     dimensions:
       rank: 1
       dim: [[1, c]]
-  halfaxes_radii(NX_NUMBER):
-    doc: "d-many half-axes radii for each ellipsoid."
+  center(NX_NUMBER):
+    doc: |
+      Geometric center of the ellipsoids. This can be the center of mass.
+      Dimensionality and cardinality of the point and ellipsoid set have to match.
+      The identifier_offset and identifier field of NXcg_point_set do not need
+      to be used as they should be same as the identifier_offset and the
+      identifier for the ellipsoids.
+    unit: NX_LENGTH
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]
+  half_axes_radius(NX_NUMBER):
+    doc: |
+      If all ellipsoids in the set have the same half-axes.
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+  half_axes_radii(NX_NUMBER):
+    doc: |
+      In the case that ellipsoids have different radii use this field
+      instead of half_axes_radius.
     unit: NX_LENGTH
     dimensions:
       rank: 1
       dim: [[1, c], [2, d]]
-  barycenter(NXcg_point_set):
-    doc: "List of barycenter positions for each ellipsoid."
+  (NXtransformations):
+    doc: |
+      Reference to or definition of a coordinate system with
+      which the positions and directions are interpretable.
+  # properties of ellipsoids
+  is_closed(NX_BOOLEAN):
+    doc: Are the ellipsoids closed or hollow?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
   volume(NX_NUMBER):
-    doc: "Volume of each ellipsoid."
-    unit: NX_VOLUME  # d-dimensional, what happens if d==2 would it conflict then with NX_AREA?
+    unit: NX_ANY
     dimensions:
       rank: 1
       dim: [[1, c]]
   surface_area(NX_NUMBER):
-    doc: "Surface area of each ellipsoid."
-    unit: NX_AREA  # d-dimensional?, circuference if d==2 though... conflicting names?
+    unit: NX_ANY
     dimensions:
       rank: 1
       dim: [[1, c]]
-  orientation(NXms_orientation_set):
+  # NXcg_orientation_set
+  orientation(NX_NUMBER):  
+    doc: |
+      Direction unit vector which points along the largest half-axes.
+    unit: NX_DIMENSIONLESS
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]

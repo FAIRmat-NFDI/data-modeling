@@ -1,6 +1,5 @@
+# eventually redundant NXsolid_geometry?
 category: base
 (NXcg_roi_set):
   doc: |
     A base class to hold geometric primitives.
-  # this base class should really be a container only and it should be discussed if one could not use use NXsolid_geometry
-  # but if want to make a change on the docstring of that base class would the result than be a new base class?

@@ -1,87 +1,129 @@
 category: base
-# which space, should we restrict us to the Euclidean?
+doc: |
+  A set of polylines in d-dimensional Euclidean space.
+  
+  Each polyline is built from a sequence of vertices (points with identifiers).
+  Each polyline must have a start and an end point.
+  The sequence describes the positive traversal along the polyline when walking
+  from the start vertex to the end/last vertex.
+symbols:
+  d: The dimensionality, which has to be at least 1.
+  c: The cardinality of the set, i.e. the number of polylines.
+  # n_unique: The number of unique vertices supporting the polyline.
+  # multiple vertices possible with the same point coordinates but different names.
+  n_v: |
+    The number of vertices, supporting the polylines. If vertices are reduced to
+    the unique, this is not necessarily equal to the total number of vertices.
+  n_total: The total number of vertices traversed when visiting every polyline.
 (NXcg_polyline_set):
-  symbols:
-    d: "Dimensionality, i.e. the length of the coordinate array, which has to be at least 1."
-    c: "Cardinality of the set, which has to be at least 1."
-  #  n: "Number of unique points supporting the polylines, which has to be at least one."
-    ntotal: "Number of total nodes visited to define each polyline."
-  # does it make sense to store the cardinality of the set also explicitly?
-  # and if so how to assure that a field value like the one for cardinality == c ?
-  doc: |
-    A set of polylines in d-dimensional space.
-    
-    Each polyline is built of either a sequence of point/vertices
-    described by a sequence of identifiers for vertices.
-    Each polyline needs to have a start and an end point though.
-    The sequence describes the traversal along the line from the start to the end.
   dimensionality(NX_POSINT):
-  cardinality(NX_POSINT): #can the set be empty, in this case NX_UINT?
-  number_of_unique_points(NX_POSINT): #n
-  number_of_total_points(NX_POSINT): #ntotal
-  identifier_offset(NX_UINT):
-    # somewhat a global offset polyline 2, polyline 3 when offset is 2
-    doc: "Integer which specifies the first index to be used for distinguishing
-    identifiers for polylines. These identifiers need to be distinguished
-    from identifiers of (unique) points. Identifier for polylines are defined 
-    either implicit or explicit. For implicit indexing identifiers are on the interval [identifier_offset, identifier_offset+c-1]. For explicit indexing the 
-    identifier array has to be used.  The identifier_offset describes e. g. 
-    if object IDs start from 1 (also referred to as the Fortran-), 
-    from 0 (also referred to as C-, Python-style notation), or from a different
-    offset, which is best suited to support the description respectively."
-  # is implicit the right word?
-  identifier(NX_UINT):
-    doc: "Integer used to distinguish polylines of the set using explicit indexing."
+    unit: NX_UNITLESS
+  cardinality(NX_POSINT):
+    unit: NX_UNITLESS
+  # number_of_unique_vertices(NX_POSINT):
+  #   unit: NX_UNITLESS
+  number_of_total_vertices(NX_POSINT):
+    doc: |
+      The total number of vertices, irrespective of their eventual uniqueness,
+      i.e. the total number of vertices that have to be visited when walking
+      along each polyline.
+    unit: NX_UNITLESS
+  number_of_vertices(NX_POSINT):
+    doc: |
+      The number of vertices, if vertices are reduced to the unique, this is
+      not necessarily equal to the total number of vertices.
+  (NXtransformations):
+    doc: |
+      Reference to or definition of a coordinate system with
+      which the qualifiers and polyline data are interpretable.
+  identifier_offset(NX_INT):
+    doc: |
+      Integer which specifies the first index to be used for distinguishing
+      polylines. Identifiers are defined either implicitly
+      or explicitly. For implicit indexing the identifiers are defined on the
+      interval [identifier_offset, identifier_offset+c-1].
+      For explicit indexing the identifier array has to be defined.
+      
+      The identifier_offset field can for example be used to communicate if the
+      identifiers are expected to start from 1 (referred to as Fortran-/Matlab-)
+      or from 0 (referred to as C-, Python-style index notation) respectively.
+    unit: NX_UNITLESS
+  identifier(NX_INT):
+    doc: Integer used to distinguish polylines for explicit indexing.
     dimensions:
       rank: 1
       dim: [[1, c]]
-  closed(NX_BOOLEAN):
-    doc: "If true that polyline is closed so there is a connection pointing from the end to the start."
+  vertices(NX_NUMBER):
+    doc: |
+      Positions of the vertices which support the members of the polyline set.
+      
+      Users are encouraged to reduce the vertices to unique set of positions
+      and vertices as this supports a more efficient storage of the geometry data.
+      It is also possible though to store the vertex positions naively in which
+      case vertices_are_unique is likely False.
+      Naively here means that one for example stores each vertex of a triangle
+      mesh even though many vertices are shared between triangles and thus
+      the positions of these vertices do not have to be duplicated.
+    # Users are encouraged to reduce the vertex set to the unique vertices.
+    # Unique means not necessarily unique in position only but also unique in
+    # identifier. In fact, it is possible to distinguish two vertices as two when
+    # they share the same position in space but have different identifiers.
+    dimensions:
+      rank: 2
+      dim: [[1, n_v], [2, d]]
+    vertices_are_unique(NX_BOOLEAN):
+      doc: |
+        If true indicates that the vertices are all placed at different
+        positions and have different identifiers, i.e. no points overlap
+        or are counted twice.
+  number_of_vertices(NX_POSINT):
+    doc: |
+      Array which specifies of how many vertices each polyline is built.
+      The number of vertices represent the total number of vertices for
+      each polyline, irrespectively whether vertices are shared or not.
+      See the docstring for polylines for further details about how
+      a set with different polyline members should be stored.
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dimensions: [[1, c]]
+  polylines(NX_INT):
+    doc: |
+      Sequence of vertex identifiers which describe each polyline.
+      
+      A trivial example is a set with two polylines with three vertices each.
+      If the polylines meet in a junction, say the second vertex is shared
+      and marking the junction between the two polylines, it is possible that
+      there are only five unique positions suggesting five unique vertices.
+      
+      A non-trivial example is a set with several polylines, each of which with
+      eventually different number of vertices. The array stores the vertex
+      identifiers in the order how the polylines are visited:
+      
+      The first entry is the identifier of the start vertex of the first polyline,
+      followed by the second vertex of the first polyline, until the last vertex
+      of the polyline. Thereafter, the start vertex of the second polyline, and
+      so on and so forth. Using the (cumulated) counts in number_of_vertices,
+      the vertices of the n-th polyline can be accessed on the following 
+      array index interval:
+      [$\sum_i = 0}^{i = n-1}$, $\sum_{i=0}^{i = n}$].
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, n_total]]
+  # properties of the polyline primitives
+  length(NX_NUMBER):
+    doc: The length of each polyline.
+    unit: NX_LENGTH
     dimensions:
       rank: 1
       dim: [[1, c]]
-  # either we use an instance of a NXcg_point_set to describe the unique
-  # vertices, but how can we then assure that the identifier_offset for the
-  # point identifiers matches those used here?
-  unique_vertices(Nxcg_point_set):
-    doc: "The set of unique vertices which support the polyline set."
-  vertices_sequence(NX_UINT):
-    doc: "Array of indices referring vertices from unique_vertices 
-    to describe each polyline."
+  is_closed(NX_BOOLEAN):
+    doc: |
+      If true specifies that a polyline is closed, i.e. its end point is
+      connected to the start point.
     dimensions:
       rank: 1
-      dim: [[1, ntotal]]
-  # should we always leave this a one dimensional array or should we
-  # make it a 2D array such that for a set of polylines which have all
-  # the same number of support vertices we can more intuitively describe
-  # the polyline set?
-
-
-# example 1
-# dimensionality: 3
-# cardinality: 2
-# number_of_unique_points: 5
-# number_of_total_points: 3 + 2 = 5
-# either or
-# identifier_offset:
-# or
-# identifier: [3, 7] # we want two polylines, one named 3 the other one 7
-# closed: [True, False] # polyline 3 is closed, polyline 7 not
-# unique_vertices: [coordinates of the five points, offset for points 1]
-# vertices_sequence:
-#   polyline 3: 1 -> 2 -> 3 -> (1) so a closed three line, a "triangle"
-#   polyline 7: 2 -> 4 -> a straight line from junction point 2 to point 4
-
-# example 2
-# dimensionality: 2
-# cardinality: 2
-# number_of_unique_points: 4
-# number_of_total_points: 4
-# identifier_offset: 0
-# or
-# identifier:
-# closed: [False, False]
-# unique_vertices: [coordinates of the five points, offset for points 1]
-# vertices_sequence:
-#   polyline 0: 0 -> 1
-#   polyline 1: 2 -> 3
+      dim: [[1, c]]
+  vertex_normal(NXcg_unit_normal_set):
+  edge_normal(NXcg_unit_normal_set):
