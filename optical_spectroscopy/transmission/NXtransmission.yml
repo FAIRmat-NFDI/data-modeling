@@ -27,7 +27,9 @@ symbols:
     instrument(NXinstrument):
       common_beam_mask(NXslit):
         doc: Common beam mask to shape the incident beam
-        x_gap(NX_NUMBER):
+        y_gap(NX_NUMBER):
+          doc: "The height of the common beam in percentage of the beam"
+          unit: NX_UNITLESS
       common_beam_depolarizer(NX_BOOLEAN):
         doc: |
           If true, the incident beam is depolarized.
@@ -75,6 +77,9 @@ symbols:
             rank: 1
             dim: [[1, 2]]
           unit: NX_LENGTH
+        type(NX_CHAR):
+          doc: Detector type
+          enumeration: [Photomultiplier tube, PbS, InGaAs]
         response_time(NX_NUMBER):
           doc: Response time of the detector
           exists: optional
@@ -82,6 +87,10 @@ symbols:
         gain(NX_NUMER):
           doc: Detector gain
           exists: optional
+        slit(NXslit):
+          doc: Slit setting used for measurement with this detector
+          type(NX_CHAR):
+            enumeration: [fixed, servo]
       (NXsource):
         doc: The lamp used for illumination
         type(NX_CHAR):
@@ -98,10 +107,6 @@ symbols:
             rank: 1
             dim: [[1, 2]]
           unit: NX_LENGTH
-        slit(NXslit):
-          doc: Slit setting used for measurement with this detector
-          type(NX_CHAR):
-            enumeration: [fixed, servo]
     (NXsample):
       doc: Properties of the sample measured
       name(NX_CHAR):
