@@ -1,0 +1,62 @@
+category: base
+doc: |
+  A goniometer to positon source, detector and sample with respect to each other.
+# TODO: Decide if we want to use a seperata goniometer or use the NXmanipulator from ARPES instead
+# General pattern for how we deal with measurement parameters is needed.
+(NXgoniometer):
+  (NXtransformations):
+    doc: |
+      The transformation chain to position the goniometer.
+      This should also include the derived positions of chi, psi, omega and twotheta
+      transformations to supply reference endpoints for the respective positioning arrays.
+    \@depends_on(NX_CHAR):
+  chi_angles(NXtransformations):
+    doc: Chi angles of the goniometer.
+    \@transformation_type(NX_CHAR):
+      enumeration: [rotation]
+    \@vector(NX_NUMBER):
+    \@unit: NX_ANGLE
+    dimensions:
+      rank: 1
+      dim: [[1, N_chi]]
+    depends_on(NX_CHAR):
+      doc: |
+        This should point to the transformation placing the chi_angles
+        in the NXgoniometer NXtransformations groups.
+  psi_angles(NXtransformations):
+    doc: Psi angles of the goniometer
+    transformation_type: rotation
+    unit: NX_ANGLE
+    dimensions:
+      rank: 1
+      dim: [[1, N_phi]]
+    depends_on(NX_CHAR):
+      doc: |
+        This should point to the transformation placing the psi_angles
+        in the NXgoniometer NXtransformations groups.
+  omega_angles(NXtransformations):
+    doc: Omega angles of the goniometer
+    \@transformation_type(NX_CHAR):
+      enumeration: [rotation]
+    \@vector(NX_NUMBER):
+    \@unit: NX_ANGLE
+    dimensions:
+      rank: 1
+      dim: [[1, N_omega]]
+    \@depends_on(NX_CHAR):
+      doc: |
+        This should point to the transformation placing the omega_angles
+        in the NXgoniometer NXtransformations groups.
+  twotheta(NXtransformations):
+    doc: Two-theta-theta angles of the goniometer
+    \@transformation_type(NX_CHAR):
+      enumeration: [rotation]
+    \@vector(NX_NUMBER):
+    \@unit: NX_ANGLE
+    dimensions:
+      rank: 1
+      dim: [[1, N_twotheta]]
+    \@depends_on(NX_CHAR):
+      doc: |
+        This should point to the transformation placing the twotheta_angles
+        in the NXgoniometer NXtransformations groups.
