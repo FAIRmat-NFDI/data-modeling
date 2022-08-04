@@ -102,50 +102,9 @@ symbols:
           doc: Slit setting used for measurement with this detector
           type(NX_CHAR):
             enumeration: [fixed, servo]
-      (NXsample):
-        doc: Properties of the sample measured
-        name(NX_CHAR):
-      data(NXdata):
-        # ToDo: The actual maesurement data should be somewhere else.
-        # This should only be here to point to plotable data
-        \@signal:
-          enumeration: ["data"]
-        type:
-          doc: "Type of the measured signal"
-          enumeration: [transmission, absorption, reflection]
-        wavelength(NX_NUMBER):
-          doc: Wavelengths of the measurement
-          unit: NX_LENGTH
-          dimensions:
-            rank: 1
-            dim: [[1, N_wavelengths]]
-        time_points(NX_NUMBER):
-          doc: |
-            An array of relative time points with respect to the 
-            measurement start time.
-          exists: optional
-          unit: NX_TIME
-          dimensions:
-            rank: 1
-            dim: [[1, N_time]]
-        parameter_type(NX_CHAR):
-          doc: Explanation of the additionally scanned parameter
-          exists: optional
-        parameter_points(NX_NUMBER):
-          doc: |
-            An array of parameter points.
-            The type of parameter is specified in the parameter_type field.
-          exists: optional
-          dimensions:
-            rank: 1
-            dim: [[1, N_parameters]]
-        signal(NX_NUMBER):
-          doc: |
-            Resulting signal of the measurement.
-            The type of the data is specified in the NXdata type field.
-            If N_time or N_parameters are greater than 1, it is highly
-            recommended to supply the axis values in the time_points
-            or parameter_points fields, respectively.
-          dimensions:
-            rank: 3
-            dim: [[3, N_time], [2, N_parameters], [1, N_wavelengths]]
+    (NXsample):
+      doc: Properties of the sample measured
+      name(NX_CHAR):
+    data(NXdata):
+      # ToDo: The actual maesurement data should be somewhere else.
+      # This should only be here to point to plotable data
