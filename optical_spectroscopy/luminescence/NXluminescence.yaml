@@ -1,4 +1,4 @@
-# 20/07/2022
+# 08/2022
 # a draft version of a NeXus application definition for luminescence experiments
 #
 # _____________________________________________________________________________
@@ -34,6 +34,9 @@
 #       See also issue #28:
 #       https://github.com/FAIRmat-Experimental/data-modeling/issues/28
 # _____________________________________________________________________________
+#
+# 27/07/2022 meeting Jonas, Chris, Tamás, Florian, and Carola. Comments below.
+# _____________________________________________________________________________
 
 
 category: application
@@ -45,12 +48,6 @@ symbols:
                             excitation in the case of photoluminescence"
   N_parameters: Number of sample parameters scanned
   N_time: Number of time points measured
-  # N_excitation_elements: "Number of (relevant) optical elements between the
-  #   excitation source and the sample."
-  # N_detection_elements: "Number of (relevant) optical elements between the
-  #   sample and the detection unit."
-  # N_excitation_elements and N_detection_elements redundant because of using
-  # the newly defined base class NXbeam_path.
 
 (NXluminescence):
   (NXentry):
@@ -155,20 +152,21 @@ symbols:
           doc: "Website of the software."
       
       luminescence_type:
-        doc: "[Photoluminescence](https://en.wikipedia.org/wiki/Photoluminescence)
-              includes x-ray fluorescence."
+        doc: "Specify the type of the luminescence experiment.
+              [Photoluminescence](https://en.wikipedia.org/wiki/Photoluminescence)
+              includes x-ray fluorescence. More input is needed for:
+              bioluminescence, chemiluminescence, and sonoluminescence."
         enumeration: [photoluminescence, cathodoluminescence, electroluminescence,
           sonoluminescence, chemiluminescence, bioluminescence]
-      # add comment that we need input for bioluminescence, chemiluminescence, sonoluminescence
       # x-rays: NeXus already includes many base classes
       #   NXfluo limited/basic app def
 
       excitation(NXsubentry):
         doc: "Properties of the excitation source. The user has to define at
           least one of the excitation sources, i.e. at least one of the
-          subclasses describing various sources has to be filled out. 
+          subclasses describing various sources has to be filled out.
           The beam path between the excitation source and the sample should be
-          described in beam_path_before."
+          described in beam_path_excitation."
         
         type:
           doc: "Type of excitation source."
@@ -181,31 +179,21 @@ symbols:
                 write down what it is."
 
         # What do we have? time-resolved, CW, real or k space, lock-in, photon
-        # counting, spektralaufgelöst (j/n), polarisationsaufgelöst,
-        # Anregunswellenlängenabhängig....
+        # counting, spectrally resolved (y/n), polarization dependent,
+        # depending on excitation wavelength etc.
 
         RADIATION_SOURCE(NXsource):
           exists: optional
-          doc: "For electromagnetic or particle sources."
+          doc: "Describes electromagnetic or particle sources."
         
           wavelength_excitation(NX_NUMBER):
-            doc: "Wavelength (wavenumber, energy) array of excitation source."
+            doc: "Wavelength (or wavenumber or energy) array of excitation
+                  source."
             unit: NX_LENGTH
             dimensions:
               rank: 1
               dim: [[1, N_wavelength_excitation]]
 
-        #optical_source(NXsource):
-         # exists: optional
-          #doc: "Describes any light sources (lasers, lamps etc.)."
-          
-          # (NXopticalelement): # redundant; now using NXbeam_path
-          #   doc: "Describes the beam path between the excitation source and the sample."
-          #   \@minOccurs: 0
-          #   dimensions: 
-          #     rank: 1
-          #     dim: [[0,N_excitation_elements]]
-        
         chemical_source(NX_CHAR): #  we need a base class for this (Area A...)
           exists: optional
           doc: "Describes a chemical reaction."
@@ -219,24 +207,24 @@ symbols:
           doc: "Source for bioluminescence. Describe what organism was used and
                 under what conditions."
 
-        beam_path_before(NXbeam_path):
+        beam_path_excitation(NXbeam_path):
           exists: optional
           doc: "Description of the beam path between the excitation source and
-                the sample ('before' the sample). Describe all relevant optical
+                the sample (before the sample). Describe all relevant optical
                 elements and their parameters in the appropriate subclasses."
 
       (NXmanipulator):
-        doc: "..."
+        # see: https://github.com/FAIRmat-Experimental/data-modeling/blob/main/Base_Classes/new/NXmanipulator.yml
 
       detection(NXsubentry):
         doc: "The detection unit usually consists of a spectrometer, dispersive
               element/monochromator, and a detector. Describe the beam path 
-              between the sample and the detection unit in beam_path_after."
+              between the sample and the detection unit in beam_path_detection."
 
-        beam_path_after(NXbeam_path):
+        beam_path_detection(NXbeam_path):
           exists: optional
           doc: "Description of the beam path between the sample and the
-            detector unit ('after' the sample). Describe all relevant optical
+            detector unit (after the sample). Describe all relevant optical
             elements and their parameters in the appropriate subclasses."
 
         spectrometer(NXmonochromator):
@@ -304,7 +292,8 @@ symbols:
 
           detector_type:
             doc: "What kind of detector module is used, e.g. CCD spectrometer,
-                  CCD camera, PMT, photodiode, etc."
+                  CCD camera, PMT, photodiode, etc. If detector type is not
+                  listed choose 'other' and specify in 'other_detector'."
             enumeration: [PMT, photodiode, avalanche diode, CCD camera,
                           CCD spectrometer, CMOS, bolometer, streak camera,
                           multichannel plate, other]
@@ -315,17 +304,55 @@ symbols:
 
           other_detector:
             exists: optional
-            doc: "If you specified 'other' as detector type, please write down what it is."
+            doc: "If you specified 'other' as detector type, please write down
+                  what it is."
           
+          # Fields to be added: 
+          # [x] quantum efficiency
+          # [x] pixel size => NXdetector has x_pixel_size and y_pixel_size 
+          # [x] dimension
+          # [x] time resolution
+          # [ ] measurement mode (e.g. photocounting mode) - should we use
+          #     aquisition_mode included in NXdetector?
+          # [x] gain
+          # [x] readout time => NXdetector has detector_readout_time
+          # [ ] averaging
+          # [x] need physical dimensions of detector
+          # Other quantities needed to specify the detector?
+
           quantum_efficiency(NX_NUMBER):
             exists: optional
             doc: "Number between 0 and 1. Possibly provide for every used wavelength
                   value."
             unit: NX_UNITLESS
 
-          # add: pixel size, dimension, time resolution, measurement mode (e.g. photocounting mode)
-          #     gain, readout time, averaging
-          # need physical dimensions of detector
+          dimension(NX_NUMBER):
+            exists: optional
+            doc: "Dimension of the detector."
+            unit: NX_LENGTH
+          
+          time_resolution(NX_NUMBER):
+            exists: optional
+            doc: "Time resolution of the detector."
+            unit: NX_TIME
+
+          gain(NX_NUMBER):
+            exists: optional
+            doc: "Gain of the detector. For example, in a photon detector this
+                  is the number of generated photoelectrons for each absorbed
+                  photon."
+            unit: NX_UNITLESS
+
+          averaging(NX_NUMBER):
+            exists: optional
+            doc: "Number of measurement cycles to be averaged."
+            unit: NX_UNITLESS
+
+          measurement_mode:
+            exists: recommended
+            doc: "Measurement mode of the detector (e.g. photocounting mode)."
+            # enumeration?
+
 
 ################################################################################################
       

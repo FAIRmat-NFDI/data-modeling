@@ -28,29 +28,47 @@ doc: |
 
   (NXsource):
     # link to RADIATION_SOURCE(NXsource)
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   WINDOW(NXaperture): # link to WINDOW in sample_stage
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXpinhole):
     # doc: "A simple pinhole."
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXslit):
     # doc: "A simple slit."
     # For more complex geometries, NXaperture should be used.
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXaperture):
     # NeXus manual: 'A beamline aperture. This group is deprecated, use NXslit
     # instead.'
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXcrystal):
     # doc: "A crystal monochromator or analyzer."
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXmirror):
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
-  (NXfilter): # Should we merge NXpolarizer and NXfilter?
+  (NXfilter):
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXattenuator):
     # doc: "A device that reduces the intensity of a beam by attenuation."
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXgrating):
     doc: "A diffraction grating. Define relevant parameters in the
@@ -64,30 +82,37 @@ doc: |
     angular_dispersion(NX_NUMBER):
       doc: "Dispersion of the grating in nm/mm."
 
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
+
   (NXdisk_chopper): 
     # doc: "A chopper, i.e. a device blocking the beam in a temporal periodic
     #      pattern."
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
-  (NXpolarizer):
-    #CE: Should we define a new base class, e.g. NXpolarizer_opt?
-    # NXpolarizer is the base class that describes a spin polarizer, so the
-    # base class would have to be modified.
-  
   (NXmonochromator):
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   # ====== New base classes (need to be created): ======
 
   (NXpolarizer_opt):
-    #CE: Instead of using NXpolarizer
     # define: type (dichroic, linear, circular etc.), angle/position,
     #         transmissivity, reflectivity, coating, Brewster angle, ...
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXbeam_splitter):
     doc: "A beam splitter splitting the light beam in two."
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXwaveplate): # or NXretarder?
     doc: "A device that changes the polarization state of a light beam."
     # define: type (lambda/2, lambda/4 etc.), material, index of refraction
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXlens_opt):
     doc: "An optical lens."
@@ -95,10 +120,14 @@ doc: |
     #         focal length, curvature, thickness, coating, reflection ...
     # Note: NXlens_em is a new base class defined for electro-magnetic or
     #       compund lenses (used in e.g. NXapm)
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
 
   (NXfiber): # or NXwaveguide? Can we use/modify NXguide?
     doc: "An optical fiber."
     # define: type/mode, material, refractive index, length, wavelength range,
     #         bandwidth or transfer rate, numerical aperture (angle)
     #         core diameter, clad diameter
+    (NXtransformations):
+      doc: "Use NXtransformations to specify the order of the optical elements."
   
