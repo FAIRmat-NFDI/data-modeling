@@ -1,0 +1,25 @@
+# A draft of a new base class to describe an optical polarizer
+# (NXpolarizer describes a spin polarizer)
+
+category: base
+doc: |
+  An optical polarizer.
+
+(NXpolarizer_opt):
+  doc: "Specify the properties of a polarizer."
+    # define: type (dichroic, linear, circular etc.), angle/position,
+    #         transmissivity, reflectivity, coating, Brewster angle, ...
+  type:
+    exists: required
+    doc: "Type of the polarizer (e.g. dichroic, linear, circular etc.)"
+    #enumeration: ["dichroic", "linear", "circular"]
+  
+  polarizer_angle(NX_NUMBER):
+    exists: recommended
+    doc: "Angle of the polarizer"
+    unit: NX_ANGLE
+  
+  coating:
+    doc: "Is the polarizer coated? If yes, specify the coating."
+
+  # add what's missing

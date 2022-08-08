@@ -1,0 +1,110 @@
+# A draft of a new base class to describe an optical fiber (e.g. glass fiber)
+
+category: base
+symbols:
+  N_wavelength_core: "Size of the wavelength array for which the refractive
+                      index of the core material is given."
+  N_wavelength_clad: "Size of the wavelength array for which the refractive
+                      index of the cladding material is given."
+  N_wavelength_attenuation: "Size of the wavelength array for which the
+                      attenuation curve is given."
+doc: |
+  An optical fiber, e.g. glass fiber.
+
+  Specify the quantities that define the fiber. For example, the dimension of a
+  fiber can be given as 60/100/200 which refers to a core diameter of 60 micro
+  meter, a clad diameter of 100 micro meter, and a coating diameter of 200
+  micro meter. 
+  Fiber optics is described in detail 
+  [here](https://www.photonics.com/Article.aspx?AID=25151&PID=4), for example.
+
+(NXfiber):
+  type:
+    exists: required
+    doc: "Type/mode of the fiber. Modes of fiber transmission are shown in
+          Fig. 5 [here](https://www.photonics.com/Article.aspx?AID=25151&PID=4)."
+    enumeration: ["single mode", "multimode graded index", "multimode step index"]
+  
+  dispersion_type:
+    doc: "Type of dispersion."
+    enumeration: ["modal", "material", "chromatic"]
+  dispersion(NX_NUMBER):
+    doc: "Wavelength- (refractive index-) dependent dispersion of the fiber.
+          Specify in ps/nm*km."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength_core],[2, 1]]
+
+  core(NXcollection):
+    doc: "Core of the fiber, i.e. the part of the fiber which transmits the
+          light."
+    core_material:
+      doc: "Specify the material of the core of the fiber."
+    core_diameter(NX_NUMBER):
+      doc: "Core diameter of the fiber (e.g. given in micrometer)."
+      unit: NX_LENGTH
+    core_index_of_refraction(NX_NUMBER):
+      doc: "Complex index of refraction of the fiber. Specify at given
+            wavelength (or energy, wavenumber etc.) values."
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength_core],[2, 2]]
+  
+  cladding(NXcollection):
+    doc: "Core of the fiber, i.e. the part of the fiber which transmits the
+          light."
+    clad_material:
+      doc: "Specify the material of the core of the fiber."
+    clad_diameter(NX_NUMBER):
+      doc: "Clad diameter of the fiber (e.g. given in micrometer)."
+      unit: NX_LENGTH
+    clad_index_of_refraction(NX_NUMBER):
+      doc: "Complex index of refraction of the fiber. Specify at given
+            wavelength (or energy, wavenumber etc.) values."
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength_clad],[2, 2]]
+
+  coating(NXcollection):
+    doc: "Coating of the fiber."
+    coating_material:
+      doc: "Specify the material of the coating of the fiber."
+    coating_diameter(NX_NUMBER):
+      doc: "Outer diameter of the fiber (e.g. given in micrometer)."
+      unit: NX_LENGTH
+
+  length(NX_NUMBER):
+    doc: "Length of the fiber."
+    units: NX_LENGTH
+  
+  wavelength_range(NX_NUMBER):
+    exists: recommended
+    doc: "Wavelength range for which the fiber is designed. Enter the minimum
+          and maximum values (lower and upper limit) of the wavelength range."
+    dimensions:
+      rank: 1
+      dim: [[1,2]]
+
+  transfer_rate(NX_NUMBER):
+    doc: "Transfer rate of the fiber (e.g. in GB per second)."
+    unit: NX_UNITLESS # which unit to describe bits per second?
+
+  numerical_aperture(NX_NUMBER):
+    doc: "Numerical aperture (NA) of the fiber."
+    unit: NX_UNITLESS 
+  
+  attenuation(NX_NUMBER):
+    doc: "Wavelength-dependent attenuation of the fiber (specify in dB/km)."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength_attenuation],[2, 1]]
+
+  power_loss(NX_NUMBER):
+    doc: "Power loss of the fiber in percentage."
+    unit: NX_UNITLESS
+
+  acceptance_anlge(NX_NUMBER):
+    doc: "Acceptance angle of the fiber."
+    unit: NX_ANGLE

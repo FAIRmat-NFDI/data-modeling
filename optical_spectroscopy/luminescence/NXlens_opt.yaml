@@ -1,0 +1,29 @@
+# A draft of a new base class to describe an optical lens
+# (NXlens_em describes an electro-magnetic lens or a compound lens)
+
+category: base
+symbols:
+  N_wavelength: "Size of the wavelength for which the refractive index of the
+                  material is given."
+doc: |
+  An optical lens.
+
+(NXlens_opt):
+  doc: "Specify the properties of the lens."
+
+    # define: type (convex, concave etc.), material, index of refraction,
+    #         focal length, curvature, thickness, coating, reflection ...
+  
+  type:
+    doc: "Type of the lens (e.g. concave, convex etc.)"
+    #enumeration: ["concave", "convex"]
+  
+  material:
+    doc: "Material of the lens."
+  
+  index_of_refraction(NX_NUMBER):
+    doc: "Complex index of refraction of the lens. Specify at given
+          wavelength (or energy, wavenumber etc.) values."
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength],[2, 2]]

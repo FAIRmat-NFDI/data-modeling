@@ -1,0 +1,31 @@
+# A draft of a new base class to describe a waveplate
+
+category: base
+symbols:
+  N_wavelength: "Size of the wavelength for which the refractive index of the
+                  material is given."
+doc: |
+  A waveplate or retarder.
+
+(NXwaveplate):
+  doc: "Specify the properties of the waveplate."
+
+  type:
+    exists: required
+    doc: "Type of the waveplate (e.g. full-wave, half-wave (lambda/2), 
+          quarter-wave (lambda/4) plate)."
+    enumeration: ["full-wave plate", "half-wave plate", "quarter-wave plate"]
+    # other types?
+  
+  material:
+    doc: "Specify the material of the waveplate."
+
+  index_of_refraction(NX_NUMBER):
+    # do we need a higher dimension (different refractive indices in 
+    # different directions)?
+    doc: "Complex index of refraction of the waveplate. Specify at given
+          wavelength (or energy, wavenumber etc.) values."
+
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength],[2, 2]]

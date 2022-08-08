@@ -1,0 +1,40 @@
+# A draft of a new base class to describe a beam splitter
+
+category: base
+symbols:
+  N_wavelength: "Length of wavelength array for which the refractive index of
+                  of the beam splitter material is defined."
+doc: |
+  A beam splitter, i.e. a device splitting the light into two or more beams.
+
+(NXbeam_splitter):
+  type: 
+    exists: required
+    doc: "Beam splitter type, e.g. prism, plate, polarizing beam splitter,
+          pellicle beam splitter etc."
+    enumeration: ["prism", "plate beam splitter", "polarizing beam splitter",
+                  "pellicle beam splitter", "dielectric mirror"]
+  # other types?
+
+  wavelength_range(NX_NUMBER):
+    exists: recommended
+    doc: "Wavelength range for which the beam splitter is designed. Enter the
+          minimum and maximum values of the wavelength range."
+    dimensions:
+      rank: 1
+      dim: [[1,2]]
+  
+  optical_loss(NX_NUMBER):
+    doc: "Optical loss of the beam splitter."
+    unit: NX_UNITLESS
+  
+  material:
+    doc: "Material of the beam splitter. If the beam splitter has a coating
+          specify what it is."
+  
+  index_of_refraction(NX_NUMBER):
+    doc: "Complex index of refraction of the beam splitter material. Specify at
+          given wavelength (or energy, wavenumber etc.) values."
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength],[2, 2]]
