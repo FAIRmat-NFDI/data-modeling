@@ -29,6 +29,7 @@ symbols:
     definition:
       doc: NeXus NXDL schema to which this file conforms.
       enumeration: [NXxrd]
+      \@version:
       \@url:
         doc: |
           URL where to find further material (documentation, examples)
@@ -135,7 +136,7 @@ symbols:
       # etc and a structuring where people could store additional technician/bookkeeping/accounting relevant data
       (NXsource):
         type:
-          doc:
+          doc: ""
           enumeration:
             [
               Synchrotron X-ray source,
@@ -145,14 +146,14 @@ symbols:
               Metal Jet X-ray,
             ]
         name:
-          doc:
+          doc: ""
         probe:
-          doc:
+          doc: ""
           enumeration: [x-ray]
       (NXbeam):
         incident_energy(NX_FLOAT):
-          doc:
-          unit:
+          doc: ""
+          unit: NX_ENERGY
       (NXmonochromator):
         exists: optional
         wavelength(NX_FLOAT):
@@ -174,7 +175,7 @@ symbols:
             \@transformation_type(NX_CHAR):
               enumeration: [rotation]
             \@vector(NX_NUMBER):
-            \@unit: NX_ANGLE
+            unit: NX_ANGLE
             dimensions:
               rank: 1
               dim: [[1, N_chi]]
@@ -198,7 +199,7 @@ symbols:
             \@transformation_type(NX_CHAR):
               enumeration: [rotation]
             \@vector(NX_NUMBER):
-            \@unit: NX_ANGLE
+            unit: NX_ANGLE
             dimensions:
               rank: 1
               dim: [[1, N_omega]]
@@ -211,7 +212,7 @@ symbols:
             \@transformation_type(NX_CHAR):
               enumeration: [rotation]
             \@vector(NX_NUMBER):
-            \@unit: NX_ANGLE
+            unit: NX_ANGLE
             dimensions:
               rank: 1
               dim: [[1, N_twotheta]]
@@ -312,10 +313,6 @@ symbols:
     # deeply inside the application but given the graph traversal with the @default
     # links that plot is resolvable?
     data(NXdata):
-      polar_angle(link):
-        doc: Should contain a link to polar angle in /NXentry/NXinstrument/NXdetector
-      data(link):
-        doc: Should contain a link to data in /Nxentry/Nxinstrument/NXdetector
     # there is likely not only one NXprocess but an entire array of
     # NXprocesses involved?
     (NXprocess):
