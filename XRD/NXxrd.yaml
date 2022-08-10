@@ -163,15 +163,62 @@ symbols:
           unit: NX_WAVELENGTH
         (NXslit):
           doc: Slits of the monochromator
-      goniometer(NXgoniometer):
+      goniometer(NXmanipulator):
         # there should be a figure where all the angles are defined to guide the user
         doc: The goniometer to positon source, detector and sample with respect to each other.
         # TODO: Are these the common names? Should we name them something more general?
         # For example polar, azimuthal etc.
-        chi_angles(NXtransformations):
-        psi_angles(NXtransformations):
-        omega_angles(NXtransformations):
-        twotheta(NXtransformations):
+        (NXtransformations):
+          chi_angles(NX_TRANSFORMATION):
+            doc: Chi angles of the goniometer.
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            \@unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_chi]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the chi_angles
+                in the NXgoniometer NXtransformations groups.
+          psi_angles(NX_TRANSFORMATION):
+            doc: Psi angles of the goniometer
+            transformation_type: rotation
+            unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_phi]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the psi_angles
+                in the NXgoniometer NXtransformations groups.
+          omega_angles(NX_TRANSFORMATION):
+            doc: Omega angles of the goniometer
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            \@unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_omega]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the omega_angles
+                in the NXgoniometer NXtransformations groups.
+          twotheta(NX_TRANSFORMATION):
+            doc: Two-theta-theta angles of the goniometer
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            \@unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_twotheta]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the twotheta_angles
+                in the NXgoniometer NXtransformations groups.
       detector(NXdetector):
         # we have the problem that unit depends on the detector type
         # I cannot see the NXdetector having the option for counters etc.
@@ -220,7 +267,7 @@ symbols:
         # TODO: Do we want to support scanning of detector positions?
         position(NXtransformations):
           doc: Position of the beam center
-          depends_on(NX_CHAR):
+          \@depends_on(NX_CHAR):
         beam_center_x(NX_FLOAT):
           doc: |
             This is the x position where the direct beam would hit the detector.
