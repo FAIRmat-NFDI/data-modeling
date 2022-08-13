@@ -169,9 +169,9 @@
                 <doc>
                      Manipulator for positioning of the sample.
                 </doc>
-                <field name="sample_temperature" recommended="true" type="NX_FLOAT"/>
-                <field name="drain_current" recommended="true" type="NX_FLOAT"/>
-                <field name="sample_bias" recommended="true" type="NX_FLOAT"/>
+                <field name="sample_temperature" recommended="true" type="NX_FLOAT" units="NX_TEMPERATURE"/>
+                <field name="drain_current" recommended="true" type="NX_FLOAT" units="NX_CURRENT"/>
+                <field name="sample_bias" recommended="true" type="NX_FLOAT" units="NX_CURRENT"/>
             </group>
         </group>
         <group type="NXprocess">

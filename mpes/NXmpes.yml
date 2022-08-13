@@ -123,10 +123,13 @@ category: application
         doc: "Manipulator for positioning of the sample."
         sample_temperature(NX_FLOAT):
           exists: recommended
+          unit: NX_TEMPERATURE
         drain_current(NX_FLOAT):
           exists: recommended
+          unit: NX_CURRENT
         sample_bias(NX_FLOAT):
           exists: recommended
+          unit: NX_CURRENT
     (NXprocess):
         doc: "Document an event of data processing, reconstruction, or analysis for this data.
           Describe the appropriate axis calibrations for your experiment using
