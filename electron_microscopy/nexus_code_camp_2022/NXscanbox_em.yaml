@@ -1,10 +1,10 @@
 category: base
 doc: |
-  Scan box and coils which deflect the electron beam in a controlled manner.
+  Scan box and coils which deflect an electron beam in a controlled manner.
   
   In electron microscopy, the scan box is instructed by the microscope
-  control software. This component directs the probe to controlled locations
-  according to a scan scheme and plan.
+  control software. This component directs the probe to controlled
+  locations according to a scan scheme and plan.
 (NXscanbox_em):
   calibration_style:
   center(NX_NUMBER):
@@ -13,8 +13,6 @@ doc: |
     #  enumeration: nm
   flyback_time(NX_FLOAT):
     unit: NX_TIME
-  field_of_view(NX_FLOAT):
-    unit: NX_LENGTH
   line_time(NX_FLOAT):
     unit: NX_TIME
   pixel_time(NX_FLOAT):

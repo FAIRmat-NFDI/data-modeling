@@ -4,6 +4,8 @@ doc: |
   
   Documenting which specific version was used can help to understand how robust
   the results are with respect to the topology of the triangulation.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
 (NXcg_marching_cubes):
   grid(NXcg_grid):
     doc: |
@@ -17,10 +19,10 @@ doc: |
       DOI which specifies the implementation used:
       
       * `W. E. Lorensen <https://doi.org/10.1109/MCG.2020.2971284>`_  
-      * `T. S. Newman and H. Yi <https://doi.org/10.1016/j.cag.2006.07.021`>_  
+      * `T. S. Newman and H. Yi <https://doi.org/10.1016/j.cag.2006.07.021>`_  
       
       The value placed here should be a DOI. If there are no specific DOI or
-      details write "not further specified", or give at least a free-text
+      details write not_further_specified, or give at least a free-text
       description.
   program:
     doc: |

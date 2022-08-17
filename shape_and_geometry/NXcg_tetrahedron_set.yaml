@@ -11,18 +11,19 @@ doc: |
   As tetrahedral elements they are among hexahedral elements one of the most
   frequently used geometric primitive for meshing and describing volumetric
   and surface descriptions of objects at the continuum scale.
-
+  
   A set of tetrahedra in 3D Euclidean space.
   
   The tetrahedra do not have to be connected, can have different size,
   can intersect, and be rotated.
-
+  
   Tetrahedra are the simplest and thus important geometrical primitive.
   They are frequently used as elements in finite element meshing/modeling.
   
   Tetrahedra have to be non-degenerated, closed, and built of triangles
   which are not self-intersecting.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of tetrahedra.
 (NXcg_tetrahedron_set):
   dimensionality(NX_POSINT):

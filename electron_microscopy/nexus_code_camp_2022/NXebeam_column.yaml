@@ -1,6 +1,6 @@
 category: base
 doc: |
-  Container for components of forming a controlled electron beam.
+  Container for components to form a controlled electron beam.
 # symbols:
 #   doc: The symbols used in the schema to specify e.g. variables.
 (NXebeam_column):
@@ -8,7 +8,7 @@ doc: |
   electron_gun(NXsource):
     doc: The source which creates the electron beam.
     name:
-      doc: Given name/alias for the electron gun.
+      doc: Given name/alias.
     (NXmanufacturer):
     voltage(NX_FLOAT):
       doc: | 
@@ -22,10 +22,11 @@ doc: |
       doc: | 
         Emitter type used to create the beam.
         
-        If the emitter type is other, give further details in the description field.
+        If the emitter type is other, give further details
+        in the description field.
       enumeration: [filament, schottky, cold_cathode_field_emitter, other]
     emitter_material:
-      doc: Material of which the emitter is build.
+      doc: Material of which the emitter is build, e.g. the filament material.
       ##MK could be made an instance of NXsample
     description:
       doc: |
@@ -34,29 +35,11 @@ doc: |
     # NEW ISSUE: details about the life/up-time of the source
     # relevant from maintenance point of view
     (NXtransformations):
-      doc: Affine transformation which detail the arrangement in the microscope relative to the optical axis and beam path.
-  (NXaperture):
-    doc: |
-      Details of an individual aperture of the instrument.
-    name:
-      doc: Given name/alias of the aperture.
-    (NXmanufacturer):
-    value(NX_NUMBER):
       doc: |
-        Relevant value from the control software.
-        
-        This is not always just the diameter of (not even in the case)
-        of a circular aperture. Usually it is a mode setting value which
-        is selected in the control software.
-        Which settings are behind the value should be defined
-        for now in the description field, if these are known
-        in more detail.
-      unit: NX_ANY
-    description:
-      doc: Ideally, a (globally) unique persistent identifier, link, or text to a resource which gives further details.
-    (NXtransformations):
-      doc: Affine transformation which detail the arrangement in the microscope relative to the optical axis and beam path.
-  (NXlens):
+        Affine transformation which detail the arrangement in the
+        microscope relative to the optical axis and beam path.
+  (NXaperture_em):
+  (NXlens_em):
   (NXcorrector_cs):
   # ebeam_deflector(NXscan_box_em):
   (NXstage_lab):

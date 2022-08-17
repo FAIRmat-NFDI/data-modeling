@@ -1,6 +1,6 @@
 category: base
 doc: |
-  Laser-, voltage-, or combined- pulsing to trigger field evaporation.
+  Metadata for laser-, voltage-, or combined pulsing triggering field evaporation.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_ions: Total number of ions collected.
@@ -8,7 +8,7 @@ symbols:
   pulse_mode:
     doc: |
       How is field evaporation physically triggered.
-      enumeration: [laser, high_voltage, laser_and_high_voltage]
+    enumeration: [laser, high_voltage, laser_and_high_voltage]
   pulse_frequency(NX_NUMBER):
     doc: Frequency with which the high voltage or laser pulser fires.
     unit: NX_FREQUENCY
@@ -32,12 +32,12 @@ symbols:
       rank: 1
       dim: [[1, n_ions]]
 
-  laser_pulser(NXsource):
+  laser_gun(NXsource):
     doc: |
       Atom probe microscopes use controlled laser, voltage,
       or a combination of pulsing strategies to trigger the
       excitation and eventual field evaporation/emission of
-      an ion in an atom probe microscopy experiment.
+      an ion during an atom probe microscopy experiment.
     name:
       doc: Given name/alias.
     (NXmanufacturer):

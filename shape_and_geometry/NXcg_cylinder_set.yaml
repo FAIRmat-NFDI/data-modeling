@@ -9,9 +9,10 @@ doc: |
   in the radius field or by filling both the upper and the lower radius field.
   The latter case can be used to represent truncated cones.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of cylinders or cones.
 (NXcg_cylinder_set):
-  dimensionalizy(NX_POSINT):
+  dimensionality(NX_POSINT):
     unit: NX_UNITLESS
     enumeration: [3]
   cardinality(NX_POSINT):
@@ -38,7 +39,7 @@ symbols:
       The geometric center of each member.
     unit: NX_LENGTH
     dimensions:
-      rank: 1
+      rank: 2
       dim: [[1, c], [2, 3]]
   height(NX_NUMBER):
     doc: |

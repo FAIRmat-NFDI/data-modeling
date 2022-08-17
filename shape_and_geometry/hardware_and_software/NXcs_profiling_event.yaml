@@ -2,6 +2,7 @@ category: base
 doc: |
   A record of profiling data as measured via e.g. sampling.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_processes: Number of processes.
 (NXcs_profiling_event):
   start_time(NX_DATE_TIME):

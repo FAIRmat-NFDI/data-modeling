@@ -3,8 +3,8 @@ doc: |
   Container for reporting a set of secondary electron images.
   
   Secondary electron images are one of the most important signal especially
-  for scanning electron microscopy in materials science and materials engineering
-  for analyses of surface topography, getting an overview of the analysis region,
+  for scanning electron microscopy in materials science and engineering, for
+  analyses of surface topography, getting an overview of the analysis region,
   or fractography.
 symbols:
   n_images: Number of images.
@@ -14,7 +14,7 @@ symbols:
   # NEW ISSUE: (NXcg_polygon_set):
   (NXdata):
     doc: | 
-      Collected secondary electron images as a eventually stack.
+      Collected secondary electron images (eventually as an image stack).
     intensity(NX_NUMBER):
       unit: NX_UNITLESS
       dimensions:
@@ -65,7 +65,7 @@ symbols:
     doc: How many frames were averaged to obtain the image.
     unit: NX_UNITLESS
     dimensions:
-      rank: 2
+      rank: 1
       dim: [[1, n_images]]
   bias_voltage(NX_FLOAT):
     doc: |
@@ -77,9 +77,9 @@ symbols:
   # energy spectrum
   # location of the se detector
   # direction dependence
-  # magnification relevant for leakage of SE and BSE into multiple in NXoptical_system
+  # magnification relevant for leakage of SE and BSE
   # bse in-lens quadrat detector collection angles
-  (NXoptical_system):
+  (NXoptical_system_em):
     exists: optional
     doc: |
       Container to store relevant settings affecting beam path,

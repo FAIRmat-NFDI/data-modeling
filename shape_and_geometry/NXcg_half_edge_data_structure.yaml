@@ -6,6 +6,7 @@ doc: |
   and iterate over vertices of a planar graph.
 # holes in the polygon mesh can be handled
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   n_v: The number of vertices.
   n_f: The number of faces.

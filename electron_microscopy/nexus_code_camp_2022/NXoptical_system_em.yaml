@@ -1,7 +1,7 @@
 category: base
 doc: |
-   A container for qualifying an optical system.
-(NXoptical_system):
+   A container for qualifying an electron optical system.
+(NXoptical_system_em):
   # NEW ISSUE: for now used to store difficult to place entries
   camera_length(NX_NUMBER):
     unit: NX_LENGTH

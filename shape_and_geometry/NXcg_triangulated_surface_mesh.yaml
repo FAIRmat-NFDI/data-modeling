@@ -4,6 +4,8 @@ doc: |
   
   The mesh may be self-intersecting and have holes but the
   triangles must not be degenerated.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
 (NXcg_triangulated_surface_mesh):
 #  (NXtransformations):
 #     doc: |
@@ -18,7 +20,7 @@ doc: |
 #     doc: |
 #       A simple approach to describe the mesh when the main intention is to
 #       store its triangles for visualization.
-  (NX_triangle_set):
+  (NXcg_triangle_set):
   (NXcg_half_edge_data_structure):
     doc: |
       A graph-based approach to describe the mesh when it is also desired

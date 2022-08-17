@@ -1,4 +1,4 @@
-# duplicate of an NXoff_geometry
+# duplicate of an NXoff_geometry ?
 category: base
 doc: |
   Simple class for storing vertices and face lists for geometric primitives.
@@ -23,6 +23,7 @@ doc: |
   and face-list based representation and thus offer a more efficient route
   to serve applications where topological and graph-based operations are key.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   n_v: The number of vertices.
   n_e: The number of edges.
@@ -31,12 +32,16 @@ symbols:
   n_weinberg: The total number of Weinberg vector values of all faces.
 (NXcg_face_list_data_structure):
   dimensionality(NX_POSINT):
+    doc: Dimensionality.
     unit: NX_UNITLESS
   number_of_vertices(NX_POSINT):
+    doc: Number of vertices.
     unit: NX_UNITLESS
   number_of_edges(NX_POSINT):
+    doc: Number of edges.
     unit: NX_UNITLESS
   number_of_faces(NX_POSINT):
+    doc: Number of faces.
     unit: NX_UNITLESS
   vertex_identifier_offset(NX_INT):
     doc: |
@@ -103,12 +108,14 @@ symbols:
       Naively here means that one for example stores each vertex of a triangle
       mesh even though many vertices are shared between triangles and thus
       the positions of these vertices do not have to be duplicated.
+    unit: NX_LENGTH
     dimensions:
       rank: 2
       dim: [[1, n_v], [2, d]]
   edges(NX_INT):
     doc: |
       The edges are stored as a pairs of vertex identifier values.
+    unit: NX_UNITLESS
     dimensions:
       rank: 2
       dim: [[1, n_e], [2, 2]]
@@ -121,7 +128,7 @@ symbols:
     unit: NX_UNITLESS
     dimensions:
       rank: 1
-      dimensions: [[1, n_f]]
+      dim: [[1, n_f]]
   faces(NX_INT):
     doc: |
       Array of identifiers from vertices which describe each face.

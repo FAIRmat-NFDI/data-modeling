@@ -2,6 +2,7 @@ category: base
 doc: |
   A set of (eventually directed) edges which connect nodes/vertices of a graph.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_edges: The number of edges.
 (NXgraph_edge_set):
   number_of_edges(NX_POSINT):

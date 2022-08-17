@@ -1,9 +1,8 @@
 category: base
 doc: |
-  A container to structure a set of events.
+  Container to hold NXevent_data_em instances of an electron microscope session.
   
-  An event is a time interval during which the microscope
-  was configured, considered stable, and used for
-  characterization.
+  An event is a time interval during which the microscope was configured,
+  considered stable, and used for characterization.
 (NXevent_data_em_set):
-  EVENT_DATA_EM(NXevent_data_em):
+  (NXevent_data_em):

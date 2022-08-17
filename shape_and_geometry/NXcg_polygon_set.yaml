@@ -26,10 +26,11 @@ doc: |
 # when using the defines_plc and related topological and boundary constraint
 # descriptors.
 symbols:
-    d: The dimensionality, which has to be either 2 or 3.
-    c: The cardinality of the set, i.e. the number of polygons.
-    # n_unique: Number of unique points supporting the polygons.
-    n_total: The total number of vertices when visiting every polygon.
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
+  d: The dimensionality, which has to be either 2 or 3.
+  c: The cardinality of the set, i.e. the number of polygons.
+  # n_unique: Number of unique points supporting the polygons.
+  n_total: The total number of vertices when visiting every polygon.
 (NXcg_polygon_set):
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS

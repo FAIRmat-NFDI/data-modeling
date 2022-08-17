@@ -54,6 +54,7 @@ doc: |
   rotated. Exact and substantially faster in practice approximate algorithms
   exist for computing optimal or near optimal bounding boxes for point sets.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of hexahedra.
 (NXcg_hexahedron_set):
   dimensionality(NX_POSINT):
@@ -156,7 +157,7 @@ symbols:
       rank: 1
       dim: [[1, c]]
   # substantially more detailed descriptors of the shape, the mesh
-  orientation(NXorientation_set):
+  orientation(NXms_orientation_set):
   vertex_normal(NXcg_unit_normal_set):
   edge_normal(NXcg_unit_normal_set):
   face_normal(NXcg_unit_normal_set):

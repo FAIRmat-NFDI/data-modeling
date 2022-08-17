@@ -21,6 +21,7 @@ doc: |
   (eventually customized) instances of an NXcg_polygon_set, which can be
   extended for the description of piecewise-linear complexes.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of polyhedra.
   n_e_total: The total number of edges for all polyhedra.
   n_f_total: The total number of faces for all polyhedra.
@@ -121,7 +122,7 @@ symbols:
       represents. Such a description simplifies topological processing
       or analyses of mesh primitive operations and neighborhood queries.
 #   face_type(NX_UINT): #maybe a better name maybe topology, although this is misleading for the above-mentioned reasons
-#     doc: "A concatenated array, for each polygon face the number of vertices."
+#     doc: A concatenated array, for each polygon face the number of vertices.
 #     unit: NX_UNITLESS
 #     dimensions:
 #       rank: 1

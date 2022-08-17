@@ -3,6 +3,7 @@ doc: |
   A set of nodes/vertices in space representing members of a graph.
 # a graph in which space d-dimensional, categorical, at all a metric one?
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality of the graph. Eventually use one for categorical.
   c: The cardinality of the set, i.e. the number of nodes/vertices of the graph.
 (NXgraph_node_set):

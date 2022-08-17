@@ -6,11 +6,12 @@ doc: |
   instance. Points may have an associated time value; however users are advised
   to store time data of point sets rather as instances of time events, where
   for each point in time there is an NXcg_point_set instance which specifies the
-  points locations. This is a frequent situations in experiments and computer
-  simulations, where positions of points are taken at the same point in time
+  points locations. This is a frequent situation in experiments and computer
+  simulations, where positions of points are taken at the same point in time;
   and therefore an additional time array would demand to store redundant pieces
   of information for each point.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 1.
   c: The cardinality of the set, i.e. the number of points.
 (NXcg_point_set):

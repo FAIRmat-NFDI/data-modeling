@@ -7,6 +7,7 @@ doc: |
   computing of point density, composition, or concentration values, obtain
   scalar fields, and compute gradients of these fields.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_p: Number of points/objects.
   n_m: Number of mark data per point/object.
   n_atoms: Number of atoms in the whitelist.
@@ -64,7 +65,7 @@ symbols:
       (second entry).
     unit: NX_UNITLESS
     dimensions:
-      rank: 1
+      rank: 2
       dim: [[1, n_isotopes], [2, 2]]
   mark(NX_NUMBER):
     doc: |

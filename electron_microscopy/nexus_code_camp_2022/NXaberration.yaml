@@ -1,37 +1,63 @@
 category: base
 doc: |
-  A container to store details about relevant aberrations.
+  Models for aberrations of electro-magnetic lenses in electron microscopy.
+  
+  The notation follows `O. Krivanek et al. (1999) <https://doi.org/10.1016/S0304-3991(99)00013-3>`_
+  and `O. Krivanek et al. (2003) <https://doi.org/10.1016/S0304-3991(03)00090-1>`_
+  See also `S. J. Pennycock and P. D. Nellist <https://doi.org/10.1007/978-1-4419-7200-2>`_ (page 44ff, and page 118ff)
+  for further details, additional literature, and the unit of the coefficients.
+  Consult Table 7-2 of Ibid. publication on how to convert between
+  conventions of different groups/vendors.
 (NXaberration):
+  # spherical(NXcollection):
   c_1_0(NX_FLOAT):
+    doc: Defocus
     unit: NX_LENGTH
   c_1_2_a(NX_FLOAT):
+    doc: Two-fold astigmatism
     unit: NX_LENGTH
   c_1_2_b(NX_FLOAT):
+    doc: Two-fold astigmatism
     unit: NX_LENGTH
   c_2_1_a(NX_FLOAT):
+    doc: Second-order axial coma
     unit: NX_LENGTH
   c_2_1_b(NX_FLOAT):
+    doc: Second-order axial coma
     unit: NX_LENGTH
   c_2_3_a(NX_FLOAT):
+    doc: Threefold astigmatism
     unit: NX_LENGTH
   c_2_3_b(NX_FLOAT):
+    doc: Threefold astigmatism
     unit: NX_LENGTH
   c_3_0(NX_FLOAT):
+    doc: Spherical aberration
     unit: NX_LENGTH
   c_3_2_a(NX_FLOAT):
+    doc: Star aberration
     unit: NX_LENGTH
   c_3_2_b(NX_FLOAT):
+    doc: Star aberration
     unit: NX_LENGTH
   c_3_4_a(NX_FLOAT):
+    doc: Fourfold astigmatism
     unit: NX_LENGTH
   c_3_4_b(NX_FLOAT):
+    doc: Fourfold astigmatism
     unit: NX_LENGTH
   c_5_0(NX_FLOAT):
+    doc: Fifth-order spherical aberration
     unit: NX_LENGTH
-# spherical
-# chromatic
-# astigmatism
-# diffraction error
-# coma
-# distortion
-# off-axis errors
+  # chromatic(NXcollection):
+  #   doc: Details about chromatic aberrations.
+  # astigmatism(NXcollection):
+  #   doc: Details about astigmatism errors.
+  # diffraction_error(NXcollection):
+  #   doc: Details about diffraction errors.
+  # coma(NXcollection):
+  #   doc: Details about coma aberrations.
+  # distortion(NXcollection):
+  #   doc: Details about lens distortions.
+  # off_axis_error(NXcollection):
+  #  doc: Details about off-axis errors.

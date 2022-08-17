@@ -3,7 +3,7 @@ doc: |
   A base class to wrap details about a set of crystals (grains, precipitates).
   
   Both experiments and computer simulations support that atoms organize into regions
-  which is are often separated and interconnected by different types of crystal defects.
+  which are often separated and interconnected by different types of crystal defects.
   Crystalline regions show a long-range periodic arrangement (compared to the 
   length scale of nearest neighbor distances).
   Although the group of atoms forming a crystal is virtually never static, due
@@ -17,11 +17,12 @@ doc: |
   crystals can be coarse-grained into continuum objects or not. In the second case
   they need a more advanced internal description of defects inside the grains
   which convinces many that eventually a grain has to be viewed from its
-  individual atoms and the hierarchy of structural motifs they form.
+  individual atoms, its material points, and the hierarchy of structural motifs
+  local arrangements in the crystal.
   
-  Despite these details this is a labeling tasks. Atoms are clustered into
-  structural motifs and (noise) and these motif are again clustered. Crystals
-  represent one possible view on such cluster.
+  Despite these details, identifying crystals is foremost a labeling task.
+  Atoms are clustered into structural motifs and (noise) and these motifs
+  are again clustered into crystals.
   
   There are two main approaches how crystals are described in mesoscale
   microstructure evolution simulations. Assuming for now transformations in the
@@ -69,7 +70,6 @@ doc: |
     in a snapshot a description has to be computed what are most likely the
     atoms that belong to the volume of the crystal or the interface/defect 
     network.
-    
 # for implicitly tracking simulation one can also argue that as
 # one anyway needs to do post-processing to extract at all what the grains
 # one could also group fields from this base class into an NXprocess
@@ -88,6 +88,7 @@ doc: |
 # a general enough phase-field description needs to account for the 
 # fact that not necessarily each region is crystalline
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality of the description.
   n_objects: The number of objects, which can be crystals, grains, phases or phase field regions.
 # how can we elegantly implement that in simulations and situations where the number

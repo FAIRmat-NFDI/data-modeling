@@ -1,7 +1,8 @@
 category: base
 doc: |
   Base class representing a main memory sub-system of a computer.
-# symbols:
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
 (NXcs_mmsys):
   total_physical_memory(NX_NUMBER):
     doc: How much physical memory does the system provide.

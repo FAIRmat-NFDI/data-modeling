@@ -4,32 +4,36 @@ symbols:
   n_y: Number of pixel per Kikuchi pattern in the slow direction
   n_x: Number of pixel per Kikuchi pattern in the fast direction
 doc: |
-  Electron backscatter diffraction (EBSD) Kikuchi pattern
+  Electron backscatter diffraction (EBSD) Kikuchi pattern.
   
   The container can also store data related to a post-processing of these
   Kikuchi pattern, which is the backbone of orientation microscopy
   especially in materials science and materials engineering.
   
-  Based on a fuse of the [h5ebsd](https://doi.org/10.1186/2193-9772-3-4)
+  Based on a fuse of the `M. A. Jackson et al. <https://doi.org/10.1186/2193-9772-3-4>`_
   of the DREAM.3D community and the open H5OINA format of Oxford Instruments
-  [H5OINA](https://doi.org/10.1017/S1431927621006103).
+  `P. Pinard et al. <https://doi.org/10.1017/S1431927621006103>`_
   
-  EBSD can be used, usually FIB/SEM microscopes, provided for three-dimensional
+  EBSD can be used, usually with FIB/SEM microscopes, for three-dimensional
   orientation microscopy. So-called serial section analyses. For a detailed
-  overview of these techniques see e.g.:
-  * [M. A. Groeber](https://doi.org/10.1186/2193-9772-3-5)
-  * [A. J. Schwartz](https://doi.org/10.1007/978-1-4757-3205-4)
-  * [P. A. Rottman](https://doi.org/10.1016/j.mattod.2021.05.003)
-  With serial-sectioning this involves however always a sequence of
-  measuring, milling. In this regard each serial section (measuring) and milling
-  is an own event and thus there is in this base class not a need to
-  store a three-dimensional n_z, n_y, n_x dataset but only an image.
+  overview of these techniques see e.g.
   
-  These measured serial sectioning images need virtually always a post-processing
-  to arrive at the aligned and clean image stack respective microstructure
-  volume element. Several software packages are available for this
-  post-processing. For now we do not consider these post-processing step a
-  part of this base class.
+  * `M. A. Groeber et al. <https://doi.org/10.1186/2193-9772-3-5>`_  
+  * `A. J. Schwartz et al. <https://doi.org/10.1007/978-1-4757-3205-4>`_  
+  * `P. A. Rottman et al. <https://doi.org/10.1016/j.mattod.2021.05.003>`_  
+  
+  With serial-sectioning this involves however always a sequence of
+  measuring, milling. In this regard, each serial section (measuring) and milling
+  is an own NXevent_data_em instance and thus there such a three-dimensional
+  characterization should be stored as a set of two-dimensional data,
+  with as many NXevent_data_em instances as sections were measured.
+  
+  These measured serial sectioning images need virtually always post-processing
+  to arrive at the aligned and cleaned image stack respective digital
+  microstructure representation as (a representative) volume element.
+  Several software packages are available for this post-processing.
+  For now we do not consider metadata of these post-processing steps
+  as a part of this base class.
 # NEW ISSUE: the above-mentioned post-processing could be added though via a (NXprocess)
 (NXimage_set_em_kikuchi):
   # a collection of pattern-related metadata
@@ -81,7 +85,9 @@ doc: |
     doc: Which pixel primitive shape is used.
     enumeration: [square, hexagon]
   step_size(NX_NUMBER):
-    doc: The prescribed step size. First the slow changing, second the fast changing dimension.
+    doc: |
+      The prescribed step size. First value is for the slow changing, 
+      second value is for the fast changing dimension.
     unit: NX_LENGTH
     dimensions:
       rank: 1
@@ -164,7 +170,7 @@ doc: |
           doc: Name of the phase/alias.
         number_of_reflectors(NX_UINT):
         miller_indices(NX_NUMBER):
-          doc: Miller indices "("hkl")""["uvw"]".
+          doc: Miller indices :math:`(hkl)[uvw]`.
           unit: NX_UNITLESS
           dimensions:
             rank: 2
@@ -181,12 +187,14 @@ doc: |
       status(NX_NUMBER):
         doc: |
           Which return value did the indexing algorithm yield for each pattern.
-          * Details about bad pixels
-          * Too high angular deviation
-          * no solution
-          * not analyzed
-          * success
-          * unexpected errors
+          
+          * Details about bad pixels  
+          * Too high angular deviation  
+          * No solution  
+          * Not analyzed  
+          * Success  
+          * Unexpected errors  
+          
         unit: NX_UNITLESS
         dimensions:
           rank: 1

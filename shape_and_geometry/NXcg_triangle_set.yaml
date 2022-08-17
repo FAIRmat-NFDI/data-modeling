@@ -2,6 +2,7 @@ category: base
 doc: |
   A set of d-dimensional triangles in Euclidean space.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   c: The cardinality of the set, i.e. the number of triangles.
   n_unique: The number of unique vertices supporting the triangles.

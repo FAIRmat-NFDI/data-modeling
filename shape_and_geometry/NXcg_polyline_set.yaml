@@ -7,13 +7,12 @@ doc: |
   The sequence describes the positive traversal along the polyline when walking
   from the start vertex to the end/last vertex.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 1.
   c: The cardinality of the set, i.e. the number of polylines.
   # n_unique: The number of unique vertices supporting the polyline.
   # multiple vertices possible with the same point coordinates but different names.
-  n_v: |
-    The number of vertices, supporting the polylines. If vertices are reduced to
-    the unique, this is not necessarily equal to the total number of vertices.
+  n_v: The number of vertices, supporting the polylines.
   n_total: The total number of vertices traversed when visiting every polyline.
 (NXcg_polyline_set):
   dimensionality(NX_POSINT):
@@ -30,8 +29,9 @@ symbols:
     unit: NX_UNITLESS
   number_of_vertices(NX_POSINT):
     doc: |
-      The number of vertices, if vertices are reduced to the unique, this is
-      not necessarily equal to the total number of vertices.
+      The number of vertices. If vertices are reduced to the unique ones, this
+      number_of_vertices is not necessarily equal to the total number of vertices.
+    unit: NX_UNITLESS
   (NXtransformations):
     doc: |
       Reference to or definition of a coordinate system with
@@ -50,6 +50,7 @@ symbols:
     unit: NX_UNITLESS
   identifier(NX_INT):
     doc: Integer used to distinguish polylines for explicit indexing.
+    unit: NX_UNITLESS
     dimensions:
       rank: 1
       dim: [[1, c]]
@@ -68,14 +69,15 @@ symbols:
     # Unique means not necessarily unique in position only but also unique in
     # identifier. In fact, it is possible to distinguish two vertices as two when
     # they share the same position in space but have different identifiers.
+    unit: NX_LENGTH
     dimensions:
       rank: 2
       dim: [[1, n_v], [2, d]]
-    vertices_are_unique(NX_BOOLEAN):
-      doc: |
-        If true indicates that the vertices are all placed at different
-        positions and have different identifiers, i.e. no points overlap
-        or are counted twice.
+  vertices_are_unique(NX_BOOLEAN):
+    doc: |
+      If true indicates that the vertices are all placed at different
+      positions and have different identifiers, i.e. no points overlap
+      or are counted twice.
   number_of_vertices(NX_POSINT):
     doc: |
       Array which specifies of how many vertices each polyline is built.
@@ -86,7 +88,7 @@ symbols:
     unit: NX_UNITLESS
     dimensions:
       rank: 1
-      dimensions: [[1, c]]
+      dim: [[1, c]]
   polylines(NX_INT):
     doc: |
       Sequence of vertex identifiers which describe each polyline.
@@ -106,7 +108,7 @@ symbols:
       so on and so forth. Using the (cumulated) counts in number_of_vertices,
       the vertices of the n-th polyline can be accessed on the following 
       array index interval:
-      [$\sum_i = 0}^{i = n-1}$, $\sum_{i=0}^{i = n}$].
+      :math:`$[\sum_i = 0}^{i = N-1}, \sum_{i=0}^{i=N}]$`.
     unit: NX_UNITLESS
     dimensions:
       rank: 1
@@ -120,8 +122,8 @@ symbols:
       dim: [[1, c]]
   is_closed(NX_BOOLEAN):
     doc: |
-      If true specifies that a polyline is closed, i.e. its end point is
-      connected to the start point.
+      If true specifies that a polyline is closed, i.e.
+      its end point is connected to the start point.
     dimensions:
       rank: 1
       dim: [[1, c]]

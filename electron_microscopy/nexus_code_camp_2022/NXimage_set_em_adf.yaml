@@ -3,8 +3,8 @@ doc: |
   Container for reporting a set of annular dark field images.
 symbols:
   n_images: Number of images
-  n_y: Number of pixel per Kikuchi pattern in the slow direction
-  n_x: Number of pixel per Kikuchi pattern in the fast direction
+  n_y: Number of pixel per image in the slow direction
+  n_x: Number of pixel per image in the fast direction
 (NXimage_set_em_adf):
   (NXprocess):
     doc: Details about how the images were processed from the detector readings.
@@ -23,7 +23,7 @@ symbols:
       doc: Annulus inner half angle
       unit: NX_ANGLE
     adf_outer_half_angle(NX_FLOAT):
-      doc: HAADF annulus outer half angle
+      doc: Annulus outer half angle
       unit: NX_ANGLE
   (NXdata):
     doc: Annular dark field images.
@@ -49,7 +49,7 @@ symbols:
       \@long_name:
         doc: Image ID.
     ypos(NX_NUMBER):
-      doc: Pixel barycenter position y-coordinates.
+      doc: Pixel center of mass position y-coordinates.
       unit: NX_LENGTH
       dimensions:
         rank: 1
@@ -57,7 +57,7 @@ symbols:
       \@long_name:
         doc: Label for the y axis.
     xpos(NX_NUMBER):
-      doc: Pixel barycenter position x-coordinates.
+      doc: Pixel center of mass position x-coordinates.
       unit: NX_LENGTH
       dimensions:
         rank: 1

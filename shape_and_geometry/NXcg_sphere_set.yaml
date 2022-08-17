@@ -5,6 +5,7 @@ doc: |
   
   Each sphere can have a different radius.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   c: The cardinality of the set, i.e. the number of circles or spheres.
 (NXcg_sphere_set):

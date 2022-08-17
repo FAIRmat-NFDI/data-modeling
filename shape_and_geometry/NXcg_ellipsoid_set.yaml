@@ -5,6 +5,7 @@ doc: |
   
   Individual ellipsoids can have different half axes.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   c: The cardinality of the set, i.e. the number of ellipses, or ellipsoids.
 (NXcg_ellipsoid_set):
@@ -54,7 +55,7 @@ symbols:
       instead of half_axes_radius.
     unit: NX_LENGTH
     dimensions:
-      rank: 1
+      rank: 2
       dim: [[1, c], [2, d]]
   (NXtransformations):
     doc: |

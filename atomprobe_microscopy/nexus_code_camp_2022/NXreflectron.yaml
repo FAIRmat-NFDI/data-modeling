@@ -8,7 +8,7 @@ doc: |
   description:
     doc: |
       Free-text field to specify further details about the reflectron.
-      The field inform e.g. if the reflectron is flat or curved.
+      The field can be used to inform e. g. if the reflectron is flat or curved.
   (NXtransformations):
     doc: |
       Affine transformation(s) which detail where the reflectron

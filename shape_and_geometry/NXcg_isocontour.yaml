@@ -17,6 +17,7 @@ doc: |
   data could be described with NeXus, provided base classes such as the this one
   get further extend according to the liking of the phase-field community.
 symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality of the description.
 (NXcg_isocontour):
   dimensionality(NX_POSINT):
