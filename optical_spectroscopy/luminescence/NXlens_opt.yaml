@@ -3,27 +3,74 @@
 
 category: base
 symbols:
-  N_wavelength: "Size of the wavelength for which the refractive index of the
-                  material is given."
+  N_wavelength: "Size of the wavelength array for which the refractive index of
+                the material is given."
+  N_wavelength_coating: "Size of the wavelength array for which the refractive
+                index of the coating is given."
+  N_wavelength_RT: "Size of the wavelength array for which the reflection or
+                transmission of the lens is given."
 doc: |
   An optical lens.
 
 (NXlens_opt):
   doc: "Specify the properties of the lens."
-
-    # define: type (convex, concave etc.), material, index of refraction,
-    #         focal length, curvature, thickness, coating, reflection ...
   
   type:
     doc: "Type of the lens (e.g. concave, convex etc.)"
-    #enumeration: ["concave", "convex"]
+    enumeration: ["biconcave", "plano-concave", "convexo-concave", "biconvex",
+                  "plano-convex", "concavo-convex"]
   
   material:
     doc: "Material of the lens."
+    index_of_refraction(NX_NUMBER):
+      doc: "Complex index of refraction of the lens. Specify at given
+            wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength],[2, 2]]
+
+  coating:
+    doc: "Was the lens coated with something? If yes, describe the coating,
+          e.g. MgF2 anti-reflection coating. Some basic information can be
+          found here:
+          https://www.opto-e.com/basics/reflection-transmission-and-coatings"
+    index_of_refraction_coating(NX_NUMBER):
+      doc: "Complex index of refraction of the lens. Specify at given
+            wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength_coating],[2, 2]]
   
-  index_of_refraction(NX_NUMBER):
-    doc: "Complex index of refraction of the lens. Specify at given
-          wavelength (or energy, wavenumber etc.) values."
+  reflection:
+    doc: "Reflection of the lens at given wavelength values."
+    unit: NX_UNITLESS
     dimensions:
       rank: 2
-      dim: [[1, N_wavelength],[2, 2]]
+      dim: [[1, N_wavelength_RT],[2, 1]]
+  
+  transmission:
+    doc: "Transmission of the lens at given wavelength values."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 2
+      dim: [[1, N_wavelength_RT],[2, 1]]
+
+  focal_length(NX_NUMBER):
+    doc: "Focal length of the lens."
+    unit: NX_LENGTH
+    
+  curvature_radius_front(NX_NUMBER):
+    doc: "Curvature radius of the front surface, i.e. the surface on which the
+          light beam is incident to the lens."
+    unit: NX_LENGTH
+
+  curvature_radius_back(NX_NUMBER):
+    doc: "Curvature radius of the back surface, i.e. the surface from which the
+          light beam exits the lens."
+    unit: NX_LENGTH
+    
+  thickness(NX_NUMBER):
+    doc: "Thickness of the lens at the optical axis."
+    unit: NX_LENGTH
