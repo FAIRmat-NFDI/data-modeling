@@ -42,7 +42,7 @@ doc: |
     doc: "Does the beam have multiple outputs (diffractive optical element),
           i.e. more than two outputs?"
   
-  geometry:
+  geometry(NXcollection):
     exists: recommended
     doc: "Describe the geometry (shape, dimension etc.) of the beam splitter.
           The thickness or depth of the beam splitter should be defined in
@@ -79,7 +79,7 @@ doc: |
     unit: NX_UNITLESS
     # Would it be better to provide the clear aperture as length?
 
-  substrate:
+  substrate(NXcollection):
     doc: "Describe the material of the substrate of the beam splitter in
           substrate/substrate_material and provide its index of refraction
           in substrate/index_of_refraction_substrate, if known."
@@ -104,7 +104,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  coating:
+  coating(NXcollection):
     doc: "Is the beam splitter coated? If yes, specify the type and material
           of the coating and the wavelength range for which it is designed.
           If known, you may also provide its index of refraction. For a beam
