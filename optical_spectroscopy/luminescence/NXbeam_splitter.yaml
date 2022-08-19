@@ -1,25 +1,144 @@
-# A draft of a new base class to describe a beam splitter
+# A draft of a new base class to describe a beam splitting device.
 
 category: base
 symbols:
   N_wavelength: "Length of wavelength array for which the refractive index of
-                  of the beam splitter material is defined."
+                 of the beam splitter material and/or coating is defined."
+  N_wavelength_refl: "Length of the wavelength array for which the reflectance
+                      of the beam splitter is given."
 doc: |
   A beam splitter, i.e. a device splitting the light into two or more beams.
+
+  Information about types and properties of beam splitters is provided e.g.
+  [here](https://www.rp-photonics.com/beam_splitters.html).
 
 (NXbeam_splitter):
   type: 
     exists: required
-    doc: "Beam splitter type, e.g. prism, plate, polarizing beam splitter,
-          pellicle beam splitter etc."
-    enumeration: ["prism", "plate beam splitter", "polarizing beam splitter",
-                  "pellicle beam splitter", "dielectric mirror"]
-  # other types?
+    doc: "Specify the beam splitter type (e.g. dielectric mirror, pellicle,
+          dichroic mirror etc.). Shape (e.g. prism, plate, cube) and dimension
+          should be described in 'geometry'. Define if the beam splitter is
+          polarizing or not in the field 'polarizing(NX_BOOLEAN)'."
+    enumeration: ["dichroic mirror",
+                  "dielectric mirror",
+                  "metal-coated mirror",
+                  "Nicol prism",
+                  "Glan-Thompson prism",
+                  "pellicle mirror",
+                  "Polka dot beam splitter",
+                  "fiber optic splitter",
+                  "other"]
+    # Are there any other common types of beam splitters?
+  other_type:
+    doc: "If you selected 'other' in 'type' specify which type of beam splitter
+          was used."
+  
+  polarizing(NX_BOOLEAN):
+    exists: required
+    doc: "Is the beam splitter polarizing?"
 
+  multiple_outputs(NX_BOOLEAN):
+    exists: required
+    doc: "Does the beam have multiple outputs (diffractive optical element),
+          i.e. more than two outputs?"
+  
+  geometry:
+    exists: recommended
+    doc: "Describe the geometry (shape, dimension etc.) of the beam splitter.
+          The thickness or depth of the beam splitter should be defined in
+          'geometry/dimension/depth', while the thickness of the substrate and
+          coating should be specified in 'substrate/substrate_thickness' and
+          'coating/coating_thickness'."
+    shape:
+      doc: "Describe the shape (plate, cube, rhombohedral, wedged, prism etc.)."
+    dimension:
+      doc: "Specify the length and height if the surface facing the incident
+            beam is a square or rectangle. Otherwise, if the device has a round
+            geometry (disc), sepcify the diameter instead."
+      height(NX_NUMBER):
+        doc: "Height of the beam splitter of the incident beam surface."
+        unit: NX_LENGTH
+      length(NX_NUMBER):
+        doc: "Length of the beam splitter of the incident beam surface."
+        unit: NX_LENGTH
+      depth(NX_NUMBER):
+        doc: "Specify the depth of the beam splitter. If the beam splitter has
+              a wedged shape provide the minimum and maximum thickness/depth of
+              the device. Otherwise, if the beam splitter has a homogeneous
+              thicknes, the two values are equal."
+        dimensions:
+          rank: 1
+          dim: [[1,2]]
+      diameter(NX_NUMBER):
+        doc: "Specify the diameter of the beam splitter if it is a disc."
+        unit: NX_LENGTH
+
+  clear_aperture(NX_NUMBER):
+    doc: "Clear aperture of the device (e.g. 90% of diameter for a disc
+          of 90% of length and height for square geometry)."
+    unit: NX_UNITLESS
+    # Would it be better to provide the clear aperture as length?
+
+  substrate:
+    doc: "Describe the material of the substrate of the beam splitter in
+          substrate/substrate_material and provide its index of refraction
+          in substrate/index_of_refraction_substrate, if known."
+    substrate_material:
+      doc: "Specify the material of the beam splitter. If the device has a
+            coating it should be described in coating/coating_material. Is the
+            material birefringent?"
+    substrate_thickness(NX_NUMBER):
+      doc: "Thickness of the beam splitter substrate. Define the minimum and
+            maximum thickness (for a wedged geomtry). For a homogeneous
+            thickness (e.g. as in plate beam splitters) the minimum and maximum
+            values are equal."
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1,2]]
+    index_of_refration_substrate(NX_NUMBER):
+      doc: "Complex index of refraction of the beam splitter substrate. Specify
+            at given wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength],[2, 2]]
+
+  coating:
+    doc: "Is the beam splitter coated? If yes, specify the type and material
+          of the coating and the wavelength range for which it is designed.
+          If known, you may also provide its index of refraction. For a beam
+          splitter cube consisting of two prisms which are glued together, you
+          may want to specify the the glue and the coatings of each prism."
+    coating_type:
+      doc: "Specify the coating type (e.g. dielectric, anti-reflection (AR),
+            multilayer coating etc.)."
+    coating_material:
+      doc: "Specify the coating material."
+    coating_thickness(NX_NUMBER):
+      doc: "Thickness of the coating."
+      unit: NX_LENGTH
+    wavelength_range_coating(NX_NUMBER):
+      exists: recommended
+      doc: "Wavelength range for which the coating is designed. Enter the
+            minimum and maximum values of the wavelength range."
+      dimensions:
+        rank: 1
+        dim: [[1,2]]
+    index_of_refraction_coating(NX_NUMBER):
+      doc: "Complex index of refraction of the coating. Specify at given
+            wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
+      dimensions:
+        rank: 2
+        dim: [[1, N_wavelength],[2, 2]]
+  
   wavelength_range(NX_NUMBER):
     exists: recommended
     doc: "Wavelength range for which the beam splitter is designed. Enter the
-          minimum and maximum values of the wavelength range."
+          minimum and maximum values of the wavelength range. Alternatively
+          or additionally, you may define the wavelength range for the coating
+          in coating/wavelength_range_coating."
     dimensions:
       rank: 1
       dim: [[1,2]]
@@ -27,14 +146,37 @@ doc: |
   optical_loss(NX_NUMBER):
     doc: "Optical loss of the beam splitter."
     unit: NX_UNITLESS
-  
-  material:
-    doc: "Material of the beam splitter. If the beam splitter has a coating
-          specify what it is."
-  
-  index_of_refraction(NX_NUMBER):
-    doc: "Complex index of refraction of the beam splitter material. Specify at
-          given wavelength (or energy, wavenumber etc.) values."
+
+  splitting_ratio(NX_NUMBER): # Is there a better way to enter that ratio?
+    doc: "Beam splitting ratio (e.g. 50:50 = 1)."
+    unit: NX_UNITLESS
+
+  incident_anlge(NX_NUMBER):
+    doc: "Optimized angle of incidence for the desired splitting ratio."
+    unit: NX_ANGLE
+
+  deflection_anlge(NX_NUMBER):
+    doc: "Angle of deflection corresponding to the optimized angle of incidence
+          defined in incident_angle."
+    unit: NX_ANGLE
+
+  AOI_range(NX_NUMBER):
+    doc: "Range of the angles of incidence (AOI) for which the beam splitter
+          can be operated. Specify the minimum and maximum angles of the range."
+    unit: NX_ANGLE
+    dimensions:
+      rank: 1
+      dim: [[1,2]]
+  #CE: Aren't some beamsplitters defined for specific angles? Should we instead
+  # use dim: [[1,N_angles]], N_angles being the number of angles for which the
+  # beam splitter can be operated? 
+  # If this is the case for some devices, we might also have to define a field
+  # for the corresponding defelction angles...
+    
+  reflectance:
+    doc: "Reflectance of the beam splitter at given wavelength values."
+    unit: NX_UNITLESS
     dimensions:
       rank: 2
-      dim: [[1, N_wavelength],[2, 2]]
+      dim: [[1, N_wavelength_refl],[2, 1]]
+  
