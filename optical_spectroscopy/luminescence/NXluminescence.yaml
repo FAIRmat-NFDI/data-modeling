@@ -104,7 +104,7 @@ symbols:
       \@url:
         doc: "Website of the software."
 
-    operator(NXuser):
+    (NXuser):
       exists: [min, 1]
       doc: "Contact information of at least the user of the instrument or the
             investigator who performed this experiment.
