@@ -10,14 +10,20 @@ symbols:
 doc: |
   An optical polarizer.
 
+  Information on the properties of polarizer is provided e.g.
+  [here](https://www.rp-photonics.com/polarizers.html).
 (NXpolarizer_opt):
   doc: "Specify the properties of a polarizer."
   type:
     exists: required
     doc: "Type of the polarizer (e.g. dichroic, linear, circular etc.)"
-    # enumeration: ["dichroic", "linear", "circular", "Glan-Thompson prism",
-    #               "Nicol prism"]
-    # other types?
+    enumeration: ["dichroic", "linear", "circular", "Glan-Thompson prism",
+                  "Nicol prism", "Glan-Taylor prism", "Glan-Focault prism",
+                  "Wollaston prism", "Normarski prism", "Senarmont prism", 
+                  "other"]
+    # Any other common polarizer types?
+  type_other:
+    doc: "If you selected 'other' in type specify what it is."
   
   polarizer_angle(NX_NUMBER):
     exists: recommended
