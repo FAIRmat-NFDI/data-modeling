@@ -47,6 +47,7 @@ doc: |
     core_index_of_refraction(NX_NUMBER):
       doc: "Complex index of refraction of the fiber. Specify at given
             wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
       dimensions:
         rank: 2
         dim: [[1, N_wavelength_core],[2, 2]]
@@ -62,6 +63,7 @@ doc: |
     clad_index_of_refraction(NX_NUMBER):
       doc: "Complex index of refraction of the fiber. Specify at given
             wavelength (or energy, wavenumber etc.) values."
+      unit: NX_UNITLESS
       dimensions:
         rank: 2
         dim: [[1, N_wavelength_clad],[2, 2]]
@@ -76,19 +78,21 @@ doc: |
 
   length(NX_NUMBER):
     doc: "Length of the fiber."
-    units: NX_LENGTH
+    unit: NX_LENGTH
   
   wavelength_range(NX_NUMBER):
     exists: recommended
     doc: "Wavelength range for which the fiber is designed. Enter the minimum
           and maximum values (lower and upper limit) of the wavelength range."
+    unit: NX_LENGTH
     dimensions:
       rank: 1
       dim: [[1,2]]
 
   transfer_rate(NX_NUMBER):
-    doc: "Transfer rate of the fiber (e.g. in GB per second)."
-    unit: NX_UNITLESS # which unit to describe bits per second?
+    doc: "Transfer rate of the fiber (in GB per second)."
+    unit: NX_ANY
+    \@units: "GB/s"
 
   numerical_aperture(NX_NUMBER):
     doc: "Numerical aperture (NA) of the fiber."
@@ -96,7 +100,8 @@ doc: |
   
   attenuation(NX_NUMBER):
     doc: "Wavelength-dependent attenuation of the fiber (specify in dB/km)."
-    unit: NX_UNITLESS
+    unit: NX_ANY
+    \@units: "dB/km"
     dimensions:
       rank: 2
       dim: [[1, N_wavelength_attenuation],[2, 1]]

@@ -20,23 +20,40 @@ doc: |
     enumeration: ["biconcave", "plano-concave", "convexo-concave", "biconvex",
                   "plano-convex", "concavo-convex"]
   
-  material:
-    doc: "Material of the lens."
+  substrate(NXcollection):
+    doc: "Properties of the substrate material of the lens. If the lens has a
+          coating specify the coating material and its properties in 'coating'."
+    substrate_material:
+      doc: "Specify the substrate material of the lens."
+    thickness(NX_NUMBER):
+      doc: "Thickness of the lens at the optical axis."
+      unit: NX_LENGTH
     index_of_refraction(NX_NUMBER):
-      doc: "Complex index of refraction of the lens. Specify at given
+      doc: "Complex index of refraction of the lens material. Specify at given
             wavelength (or energy, wavenumber etc.) values."
       unit: NX_UNITLESS
       dimensions:
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  coating:
-    doc: "Was the lens coated with something? If yes, describe the coating,
-          e.g. MgF2 anti-reflection coating. Some basic information can be
-          found here:
-          https://www.opto-e.com/basics/reflection-transmission-and-coatings"
+  COATING(NXcollection): 
+  # Used captial letters for COATING so that more than one can be defined if
+  # the lens has different coatings on the front and back side.
+    doc: "If the lens has a coating describe the material and its properties.
+          Some basic information can be found e.g. [here]
+          (https://www.opto-e.com/basics/reflection-transmission-and-coatings).
+          If the back and front side of the lens are coated with different
+          materials, you may define "
+    coating_type:
+      doc: "Specify the coating type (e.g. dielectric, anti-reflection (AR),
+            multilayer coating etc.)."
+    coating_material:
+      doc: "Describe the coating material (e.g. MgF2)."
+    coating_thickness(NX_NUMBER):
+      doc: "Thickness of the coating."
+      unit: NX_LENGTH
     index_of_refraction_coating(NX_NUMBER):
-      doc: "Complex index of refraction of the lens. Specify at given
+      doc: "Complex index of refraction of the coating. Specify at given
             wavelength (or energy, wavenumber etc.) values."
       unit: NX_UNITLESS
       dimensions:
@@ -70,7 +87,7 @@ doc: |
     doc: "Curvature radius of the back surface, i.e. the surface from which the
           light beam exits the lens."
     unit: NX_LENGTH
-    
-  thickness(NX_NUMBER):
-    doc: "Thickness of the lens at the optical axis."
-    unit: NX_LENGTH
+  
+  Abbe_number(NX_NUMBER):
+    doc: "Abbe number (or V-number) of the lens."
+    unit: NX_UNITLESS 
