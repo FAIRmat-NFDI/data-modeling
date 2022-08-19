@@ -20,7 +20,7 @@ doc: |
     enumeration: ["dichroic", "linear", "circular", "Glan-Thompson prism",
                   "Nicol prism", "Glan-Taylor prism", "Glan-Focault prism",
                   "Wollaston prism", "Normarski prism", "Senarmont prism", 
-                  "other"]
+                  "thin-film polarizer", "wire grid polarizer", "other"]
     # Any other common polarizer types?
   type_other:
     doc: "If you selected 'other' in type specify what it is."
@@ -102,7 +102,7 @@ doc: |
           Some basic information can be found e.g. [here]
           (https://www.opto-e.com/basics/reflection-transmission-and-coatings).
           If the back and front side of the polarizer are coated with different
-          materials, you may define "
+          materials, you may define two coatings (e.g. COATING1 and COATING2)."
     coating_type:
       doc: "Specify the coating type (e.g. dielectric, anti-reflection (AR),
             multilayer coating etc.)."
