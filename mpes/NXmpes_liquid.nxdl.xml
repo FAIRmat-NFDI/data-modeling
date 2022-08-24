@@ -229,7 +229,7 @@
                 </field>
             </group>
         </group>
-        <group name="LIQUID_JET" type="NXsample">
+        <group name="sample" type="NXsample">
             <field name="name" type="NX_CHAR"/>
             <field name="description" type="NX_CHAR"/>
             <field name="chemical_formula" recommended="true" type="NX_CHAR">
@@ -291,11 +291,36 @@
                 </enumeration>
             </field>
             <group name="leaf_geometry" type="NXtransformations">
-                <field name="leaf_normal" type="NX_NUMBER"/>
-                <field name="vector" type="NX_NUMBER"/>
-                <field name="depends_on" type="NX_CHAR"/>
+                <doc>
+                     Transformations describing the transformation chain to the
+                     liqudjet leaf.
+                </doc>
+                <field name="leaf_normal" type="NX_NUMBER">
+                    <doc>
+                         The normal of the liquidjet leaf.
+                    </doc>
+                    <attribute name="vector" type="NX_NUMBER">
+                        <doc>
+                             The vector normal to the liquidjet leaf.
+                        </doc>
+                    </attribute>
+                    <attribute name="depends_on" type="NX_CHAR">
+                        <doc>
+                             Pointer to the previous matrices in the transformation chain
+                             to relate the normal to the rest of the instrument.
+                             If this is '.' the vector attribute only specifies the normal vector
+                             without specifying the position of the liquidjet leaf with respect
+                             to the instrument.
+                        </doc>
+                    </attribute>
+                </field>
             </group>
             <group name="SOLVENT" type="NX_SAMPLE">
+                <doc>
+                     Solvent material of the liquidjet. 
+                     This also accounts for multiple jets if more
+                     than one solvent is given.
+                </doc>
                 <field name="description" type="NX_CHAR"/>
                 <field name="name" type="NX_CHAR"/>
                 <field name="chemical_formula" type="NX_CHAR"/>

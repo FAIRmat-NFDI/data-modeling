@@ -152,7 +152,7 @@ category: application
           calibrated_axis(NX_FLOAT):
             exists: recommended
             doc: "This is the momentum axis to be used for data plotting."
-    LIQUID_JET(NXsample):
+    sample(NXsample):
       name:
       description:
       chemical_formula:
@@ -198,10 +198,27 @@ category: application
       shape(NX_CHAR):
         enumeration: [round, flat]
       leaf_geometry(NXtransformations):
+        doc: |
+          Transformations describing the transformation chain to the
+          liqudjet leaf.
         leaf_normal(NX_NUMBER):
-        vector(NX_NUMBER):
-        depends_on(NX_CHAR):
+          doc: The normal of the liquidjet leaf.
+          \@vector(NX_NUMBER):
+            doc: The vector normal to the liquidjet leaf.
+          \@depends_on(NX_CHAR):
+            doc: |
+              Pointer to the previous matrices in the transformation chain
+              to relate the normal to the rest of the instrument.
+              If this is '.' the vector attribute only specifies the normal vector
+              without specifying the position of the liquidjet leaf with respect
+              to the instrument.
       SOLVENT(NX_SAMPLE):
+        # FD 24.08.22: Should we also add transformations here to 
+        # describe the directions of the liquidjets?
+        doc: |
+          Solvent material of the liquidjet. 
+          This also accounts for multiple jets if more
+          than one solvent is given.
         description:
         name:
         chemical_formula:
