@@ -42,36 +42,34 @@ doc: |
     doc: "Does the beam have multiple outputs (diffractive optical element),
           i.e. more than two outputs?"
   
-  geometry(NXcollection):
+  (NXshape):
     exists: recommended
     doc: "Describe the geometry (shape, dimension etc.) of the beam splitter.
-          The thickness or depth of the beam splitter should be defined in
-          'geometry/dimension/depth', while the thickness of the substrate and
-          coating should be specified in 'substrate/substrate_thickness' and
-          'coating/coating_thickness'."
-    shape:
+          Specify the length and height if the surface facing the incident
+          beam is a square or rectangle. Otherwise, if the device has a round
+          geometry (disc), sepcify the diameter instead.
+          The thickness or depth of the device should be defined in 'depth',
+          while the thickness of the substrate and coating should be specified
+          in 'substrate/substrate_thickness' and 'coating/coating_thickness'."
+    beam_splitter_shape:
       doc: "Describe the shape (plate, cube, rhombohedral, wedged, prism etc.)."
-    dimension:
-      doc: "Specify the length and height if the surface facing the incident
-            beam is a square or rectangle. Otherwise, if the device has a round
-            geometry (disc), sepcify the diameter instead."
-      height(NX_NUMBER):
-        doc: "Height of the beam splitter of the incident beam surface."
-        unit: NX_LENGTH
-      length(NX_NUMBER):
-        doc: "Length of the beam splitter of the incident beam surface."
-        unit: NX_LENGTH
-      depth(NX_NUMBER):
-        doc: "Specify the depth of the beam splitter. If the beam splitter has
-              a wedged shape provide the minimum and maximum thickness/depth of
-              the device. Otherwise, if the beam splitter has a homogeneous
-              thicknes, the two values are equal."
-        dimensions:
-          rank: 1
-          dim: [[1,2]]
-      diameter(NX_NUMBER):
-        doc: "Specify the diameter of the beam splitter if it is a disc."
-        unit: NX_LENGTH
+    height(NX_NUMBER):
+      doc: "Height of the device of the incident beam surface."
+      unit: NX_LENGTH
+    length(NX_NUMBER):
+      doc: "Length of the device of the incident beam surface."
+      unit: NX_LENGTH
+    diameter(NX_NUMBER):
+      doc: "Specify the diameter of the device if it is a disc."
+      unit: NX_LENGTH
+    depth(NX_NUMBER):
+      doc: "Specify the depth of the beam splitter. If the device has a wedged
+            shape provide the minimum and maximum thickness/depth of the
+            device. Otherwise, if the beam splitter has a homogeneous thickness,
+            the two values are equal."
+      dimensions:
+        rank: 1
+        dim: [[1,2]]
 
   clear_aperture(NX_NUMBER):
     doc: "Clear aperture of the device (e.g. 90% of diameter for a disc
@@ -79,7 +77,7 @@ doc: |
     unit: NX_UNITLESS
     # Would it be better to provide the clear aperture as length?
 
-  substrate(NXcollection):
+  substrate(NXsample):
     doc: "Describe the material of the substrate of the beam splitter in
           substrate/substrate_material and provide its index of refraction
           in substrate/index_of_refraction_substrate, if known."
@@ -104,7 +102,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  coating(NXcollection):
+  coating(NXsample):
     doc: "Is the beam splitter coated? If yes, specify the type and material
           of the coating and the wavelength range for which it is designed.
           If known, you may also provide its index of refraction. For a beam

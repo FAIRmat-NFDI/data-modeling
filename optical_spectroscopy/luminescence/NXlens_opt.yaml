@@ -7,7 +7,7 @@ symbols:
                 the material is given."
   N_wavelength_coating: "Size of the wavelength array for which the refractive
                 index of the coating is given."
-  N_wavelength_RT: "Size of the wavelength array for which the reflection or
+  N_wavelength_RT: "Size of the wavelength array for which the reflectance or
                 transmission of the lens is given."
 doc: |
   An optical lens.
@@ -16,17 +16,18 @@ doc: |
   doc: "Specify the properties of the lens."
   
   type:
-    doc: "Type of the lens (e.g. concave, convex etc.)"
+    exists: recommended
+    doc: "Type of the lens (e.g. concave, convex etc.)."
     enumeration: ["biconcave", "plano-concave", "convexo-concave", "biconvex",
                   "plano-convex", "concavo-convex"]
   
-  substrate(NXcollection):
+  substrate(NXsample):
     doc: "Properties of the substrate material of the lens. If the lens has a
           coating specify the coating material and its properties in 'coating'."
     substrate_material:
       doc: "Specify the substrate material of the lens."
-    thickness(NX_NUMBER):
-      doc: "Thickness of the lens at the optical axis."
+    substrate_thickness(NX_NUMBER):
+      doc: "Thickness of the lens substrate at the optical axis."
       unit: NX_LENGTH
     index_of_refraction(NX_NUMBER):
       doc: "Complex index of refraction of the lens material. Specify at given
@@ -36,7 +37,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  COATING(NXcollection): 
+  COATING(NXsample): 
   # Used captial letters for COATING so that more than one can be defined if
   # the lens has different coatings on the front and back side.
     doc: "If the lens has a coating describe the material and its properties.
@@ -60,8 +61,8 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength_coating],[2, 2]]
   
-  reflection:
-    doc: "Reflection of the lens at given wavelength values."
+  reflectance:
+    doc: "Reflectance of the lens at given wavelength values."
     unit: NX_UNITLESS
     dimensions:
       rank: 2
@@ -75,17 +76,17 @@ doc: |
       dim: [[1, N_wavelength_RT],[2, 1]]
 
   focal_length(NX_NUMBER):
+    exists: recommended
     doc: "Focal length of the lens."
     unit: NX_LENGTH
     
-  curvature_radius_front(NX_NUMBER):
-    doc: "Curvature radius of the front surface, i.e. the surface on which the
-          light beam is incident to the lens."
-    unit: NX_LENGTH
-
-  curvature_radius_back(NX_NUMBER):
-    doc: "Curvature radius of the back surface, i.e. the surface from which the
-          light beam exits the lens."
+  curvature_radius_FACE(NX_NUMBER):
+    exists: recommended
+    doc: "Curvature radius of the lens. Instead of FACE, the user is advised to
+          specify for which surface (e.g. front or back) the curvature is
+          provided: e.g. curvature_front or curvature_back. The front face is
+          the surface on which the light beam is incident, while the back face
+          is the one from which the light beam exits the lens."
     unit: NX_LENGTH
   
   Abbe_number(NX_NUMBER):

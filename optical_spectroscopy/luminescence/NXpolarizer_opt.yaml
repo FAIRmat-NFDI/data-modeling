@@ -38,36 +38,34 @@ doc: |
       rank: 2
       dim: [[1, 2]]
 
-  geometry(NXcollection):
+  (NXshape):
     exists: recommended
     doc: "Describe the geometry (shape, dimension etc.) of the polarizer.
-          The thickness or depth of the polarizer should be defined in
-          'geometry/dimension/depth', while the thickness of the substrate and
-          coating should be specified in 'substrate/substrate_thickness' and
-          'coating/coating_thickness'."
-    shape:
+          Specify the length and height if the surface facing the incident
+          beam is a square or rectangle. Otherwise, if the device has a round
+          geometry (disc), sepcify the diameter instead.
+          The thickness or depth of the polarizer should be defined in 'depth',
+          while the thickness of the substrate and coating should be specified
+          in 'substrate/substrate_thickness' and 'coating/coating_thickness'."
+    polarizer_shape:
       doc: "Describe the shape (plate, cube, rhombohedral, wedged, prism etc.)."
-    dimension:
-      doc: "Specify the length and height if the surface facing the incident
-            beam is a square or rectangle. Otherwise, if the device has a round
-            geometry (disc), sepcify the diameter instead."
-      height(NX_NUMBER):
-        doc: "Height of the device of the incident beam surface."
-        unit: NX_LENGTH
-      length(NX_NUMBER):
-        doc: "Length of the device of the incident beam surface."
-        unit: NX_LENGTH
-      depth(NX_NUMBER):
-        doc: "Specify the depth of the polarizer. If the device has a wedged
-              shape provide the minimum and maximum thickness/depth of the
-              device. Otherwise, if the polarizer has a homogeneous thickness,
-              the two values are equal."
-        dimensions:
-          rank: 1
-          dim: [[1,2]]
-      diameter(NX_NUMBER):
-        doc: "Specify the diameter of the device if it is a disc."
-        unit: NX_LENGTH
+    height(NX_NUMBER):
+      doc: "Height of the device of the incident beam surface."
+      unit: NX_LENGTH
+    length(NX_NUMBER):
+      doc: "Length of the device of the incident beam surface."
+      unit: NX_LENGTH
+    diameter(NX_NUMBER):
+      doc: "Specify the diameter of the device if it is a disc."
+      unit: NX_LENGTH
+    depth(NX_NUMBER):
+      doc: "Specify the depth of the polarizer. If the device has a wedged
+            shape provide the minimum and maximum thickness/depth of the
+            device. Otherwise, if the polarizer has a homogeneous thickness,
+            the two values are equal."
+      dimensions:
+        rank: 1
+        dim: [[1,2]]
 
   wavelength_range(NX_NUMBER):
     exists: recommended
@@ -78,13 +76,13 @@ doc: |
       rank: 1
       dim: [[1,2]]
 
-  substrate(NXcollection):
+  substrate(NXsample):
     doc: "Properties of the substrate material of the polarizer. If the device
           has a coating specify the coating material and its properties in
           'coating'."
     substrate_material:
       doc: "Specify the substrate material of the polarizer."
-    thickness(NX_NUMBER):
+    substrate_thickness(NX_NUMBER):
       doc: "Thickness of the polarizer substrate."
       unit: NX_LENGTH
     index_of_refraction(NX_NUMBER):
@@ -95,7 +93,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  COATING(NXcollection): 
+  COATING(NXsample): 
   # Used captial letters for COATING so that more than one can be defined if
   # the device has different coatings on the front and back side.
     doc: "If the device has a coating describe the material and its properties.

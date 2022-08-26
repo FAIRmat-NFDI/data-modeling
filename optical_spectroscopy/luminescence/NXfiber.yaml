@@ -36,7 +36,7 @@ doc: |
       rank: 2
       dim: [[1, N_wavelength_core],[2, 1]]
 
-  core(NXcollection):
+  core(NXsample):
     doc: "Core of the fiber, i.e. the part of the fiber which transmits the
           light."
     core_material:
@@ -52,7 +52,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength_core],[2, 2]]
   
-  cladding(NXcollection):
+  cladding(NXsample):
     doc: "Core of the fiber, i.e. the part of the fiber which transmits the
           light."
     clad_material:
@@ -68,7 +68,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength_clad],[2, 2]]
 
-  coating(NXcollection):
+  coating(NXsample):
     doc: "Coating of the fiber."
     coating_material:
       doc: "Specify the material of the coating of the fiber."

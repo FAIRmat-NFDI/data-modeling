@@ -54,7 +54,7 @@ doc: |
     unit: NX_UNITLESS
     # Would it be better to provide the clear aperture as length?
 
-  substrate(NXcollection):
+  substrate(NXsample):
     doc: "Describe the material of the substrate of the wave plate in
           substrate/substrate_material and provide its index of refraction
           in substrate/index_of_refraction_substrate, if known."
@@ -72,7 +72,7 @@ doc: |
         rank: 2
         dim: [[1, N_wavelength],[2, 2]]
 
-  coating(NXcollection):
+  coating(NXsample):
     doc: "Is the wave plate coated? If yes, specify the type and material
           of the coating and the wavelength range for which it is designed.
           If known, you may also provide its index of refraction."
