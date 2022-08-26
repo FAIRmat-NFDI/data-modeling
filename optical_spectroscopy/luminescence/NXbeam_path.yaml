@@ -12,7 +12,9 @@ doc: |
 (NXbeam_path):
   doc: "Describe the relevant optical elements in the beam path by using
         the appropriate sub classes. You may use as many elements as needed,
-        also several elements of the same type."
+        also several elements of the same type. Capital letters in the names
+        of fields can be replaced, e.g. lens_NUMBER can be lens_1, lens_2
+        or lens_first etc."
 
   # Should we define intensity (loss), polarization state (before/after),
   #   beam profile etc.?
@@ -23,111 +25,132 @@ doc: |
   #     NXdisk_chopper (defined), NXgrating (defined), waveplate/retarder
   # Some of the classes might be similar, so one has to decide which one to use
 
-  # order of elements: use NXtransformations
-  #   
+  # [x] Use NXtransformations once (not for each element) and add \@depends_on
+  #     to each element which refers to the previous element to define a chain
+  # [ ] do not use NXcollection (empty base class; throws an error message)
+  # [x] Name elements e.g. "lens_NUMBER" or "lens_INDEX". Capital letters can
+  #     be replaced (so we can have lens_1, lens_2, ... for example)
+  # [ ] use NXgeometry instead of describing the substrate and coating (or in
+  #     addition?) to describe more complex cases (layer structures etc.)
+  # [ ] Check already existing NeXus base classes if they properly describe
+  #     optical elements
 
-  (NXsource):
+  (NXtransformations):
+    doc: "Specify the order of the optical elements."
+    
+  RADIATION_SOURCE(NXsource):
     # link to RADIATION_SOURCE(NXsource)
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
 
   WINDOW(NXaperture): # link to WINDOW in sample_stage
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    doc: "This is the same as 'WINDOW' in SAMPLE/sample_stage/varied_parameters
+          in NXluminescence."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXpinhole):
+  pinhole_NUMBER(NXpinhole):
     # doc: "A simple pinhole."
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXslit):
+  slit_NUMBER(NXslit):
     # doc: "A simple slit."
     # For more complex geometries, NXaperture should be used.
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXaperture):
-    # NeXus manual: 'A beamline aperture. This group is deprecated, use NXslit
-    # instead.'
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+  aperture_NUMBER(NXaperture):
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXcrystal):
+  crystal_NUMBER(NXcrystal):
     # doc: "A crystal monochromator or analyzer."
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXmirror):
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+  mirror_NUMBER(NXmirror):
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXfilter):
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+  filter_NUMBER(NXfilter):
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXattenuator):
+  attenuator_NUMBER(NXattenuator):
     # doc: "A device that reduces the intensity of a beam by attenuation."
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXgrating):
+  dispersive_element_NUMBER(NXgrating):
     doc: "A diffraction grating. Define relevant parameters in the
           corresponding fields, e.g. order of diffration (diffraction_order)
           or angular dispersion (angular_dispersion)."
-
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
     type:
       exists: recommended
       doc: "Define the type of the grating (e.g. SR or VPH grating)."
-
     angular_dispersion(NX_NUMBER):
       doc: "Dispersion of the grating in nm/mm."
 
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
-
-  (NXdisk_chopper): 
+  chopper_NUMBER(NXdisk_chopper): 
     # doc: "A chopper, i.e. a device blocking the beam in a temporal periodic
     #      pattern."
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
   (NXmonochromator):
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
   # ====== New base classes (need to be created): ======
 
-  (NXpolarizer_opt):
+  polarizer_NUMBER(NXpolarizer_opt):
     # define: type (dichroic, linear, circular etc.), angle/position,
     #         transmissivity, reflectivity, coating, Brewster angle, ...
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXbeam_splitter):
+  beam_splitter_NUMBER(NXbeam_splitter):
     doc: "A beam splitter splitting the light beam in two."
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXwaveplate): # or NXretarder?
+  waveplate_NUMBER(NXwaveplate): # or NXretarder?
     doc: "A device that changes the polarization state of a light beam."
     # define: type (lambda/2, lambda/4 etc.), material, index of refraction
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXlens_opt):
+  lens_NUMBER(NXlens_opt):
     doc: "An optical lens."
     # define: type (convex, concave etc.), material, index of refraction,
     #         focal length, curvature, thickness, coating, reflection ...
     # Note: NXlens_em is a new base class defined for electro-magnetic or
     #       compund lenses (used in e.g. NXapm)
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
 
-  (NXfiber): # or NXwaveguide? Can we use/modify NXguide?
+  fiber_NUMBER(NXfiber): # or NXwaveguide? Can we use/modify NXguide?
     doc: "An optical fiber."
     # define: type/mode, material, refractive index, length, wavelength range,
     #         bandwidth or transfer rate, numerical aperture (angle)
     #         core diameter, clad diameter
-    (NXtransformations):
-      doc: "Use NXtransformations to specify the order of the optical elements."
+    \@depends_on: "Use this attribute to point to the previous optical element.
+                  The first element after the excitation source should point to
+                  RADIATION_SOURCE(NXsource)."
   
