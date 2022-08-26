@@ -37,7 +37,14 @@
 #
 # 27/07/2022 meeting Jonas, Chris, Tamás, Florian, and Carola. Comments below.
 # _____________________________________________________________________________
-
+# 
+# TF-MEETING 23/08/2022 
+#   - DISCUSSING NXluminescence, NXbeam_path, (and briefly) NXlens_opt
+#
+# [ ] Suggestion: define 'detection' and 'excitation' as base classes
+# [x] Replace NXcollection (in base classes)
+# [ ] NXbeam_path: see comments inside yaml file
+# _____________________________________________________________________________
 
 category: application
 doc: "Draft application definition for luminescence experiments"
@@ -105,7 +112,7 @@ symbols:
         doc: "Website of the software."
 
     (NXuser):
-      exists: [min, 1]
+      exists: [min, 1] # AT least one user/operator must be provided. 
       doc: "Contact information of at least the user of the instrument or the
             investigator who performed this experiment.
             Adding multiple users if relevant is recommended."
