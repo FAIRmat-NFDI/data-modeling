@@ -32,11 +32,11 @@ category: application
     definition(NX_CHAR):
       doc: | 
         NeXus NXDL schema to which this file conforms.
-      enumeration: [NXiv_temp]
       \@url:
         doc: | 
           URL where to find further material (documentation, examples)
           relevant to the application definition
+      enumeration: [NXiv_temp]
     experiment_identifier(NX_CHAR):
       doc: | 
         Unique identifier of the experiment, such as a (globally persistent)
@@ -68,7 +68,7 @@ category: application
         \@program_url:
           doc: | 
             Website of the software.
-    operator(NXuser):
+    (NXuser):
       exists: [min, 1, max, unbounded]
       doc: | 
         Contact information of at least the user of the instrument or the
