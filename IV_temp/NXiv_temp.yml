@@ -120,6 +120,13 @@ category: application
             Free-text describing the type of voltage setting: an internal sweep
             using the functionality of the voltage supply, or a
             set/wait/read/repeat mechanism.
+        set_voltages(NX_NUMBER):
+          doc: | 
+            An array of voltages that were set using this controller for every
+            data point recorded.
+          dimensions:
+            rank: 1
+            dim: [[1, N_different_voltages]]
       IVcurrent_source(NXsensor):
         doc: | 
           Specify the used current source used in the voltage sweep
@@ -195,11 +202,18 @@ category: application
             For example resistance of a Pt1000.
           dimensions:
             rank: 1
-            dim: [[1, N_raw_temp_data]]
+            dim: [[1, N_different_voltages]]
         conversion_function(NX_CHAR):
           doc: | 
             Algebraic function that is used to determine temperature from the
             raw_temp_data. All values should be given in SI units.
+        set_temperatures(NX_NUMBER):
+          doc: | 
+            An array of temperatures that were set using this controller for every
+            data point recorded.
+          dimensions:
+            rank: 1
+            dim: [[1, N_different_temperatures]]
     (NXsample):
       doc: | 
         Properties of the sample, its history, the sample environment and
@@ -229,9 +243,15 @@ category: application
       measured_data(NX_NUMBER):
         doc: | 
           Resulting data from the measurement, described by data type.
+          
+          [Temp,Temp_raw,Current,Timestamp]
         dimensions:
           rank: 3
           dim: [[1, N_different_temperatures], [2, N_different_voltages], [3, N_variables]]
+        \@variable_names:
+          doc: | 
+            An array of strings to list all the variables in the data
+            in order of appearance in the last index of the 3D array.
       environment_conditions(NX_CHAR):
         doc: | 
           Information about external parameters that have influenced the sample.
