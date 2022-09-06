@@ -1,0 +1,7 @@
+
+doc: |
+  Any information on the sample history.
+category: base
+(NXsample_history):
+  steps:
+
