@@ -1,0 +1,778 @@
+# Markus Kühbach, 2022/03
+# Building on existing work in the literature:
+# DOI: 10.1007/978-3-319-57864-4
+# DOI: 10.1017/S1431927621006103
+# DOI: 10.1186/2193-9772-3-4
+# DOI: 10.1088/1361-651X/aa9a01
+# DOI: 10.1088/1742-5468/abb6e3
+# DOI: 10.1038/s41563-019-0402-8
+# DOI: 10.1080/09506608.2021.1930734
+# DOI: 10.1080/14686996.2016.1194166
+# DOI: 10.1088/0965-0393/18/1/015012
+# DOI: 10.1007/s40192-017-0084-5
+# arXiv:2201.13441v1
+# DOI: 10.1016/j.matchar.2020.110814
+# DOI: 10.1126/science.abj3210
+# DOI: 10.1038/nature23472
+
+
+# in coarse-grained/homogenizing models of microstructures, descript(ions)/(ors) are often feature/object-specific properties.
+# These descriptors can be NeXus fields because they are "is_assumed_to_have_a", i.e. "has_a" relations of a base class instance.
+
+(NXmat_point_defect_set):
+  doc: "A set of object which can be used to describe missing positions in a lattice in d-dimensional space."  # which space, which dimensionality
+  symbols:
+    d: "Dimensionality of the set."
+    c: "Cardinality, number of point defects."
+  dimensionality(NX_UINT):
+    doc: "The number of dimensions which all members of the set have."
+    unit: NX_UNITLESS
+  cardinality(NX_UINT):
+    doc: "Number of members in the set."
+    unit: NX_UNITLESS
+  type(NX_UINT):
+    doc: "Integer which specifies classical interpretation of what this defect is e.g. vacancy, Frenkel pair, crowd ion, etc."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing point defect. Enables users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations an communicate if identifier follow Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+    unit: NX_UNITLESS
+  identifier(NX_UINT):
+    doc: "Array of identifiers for each member of the set."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  position_barycenter(NXcg_point_set):
+    doc: "Array of positions where the center of the vacancy is expected or equivalently where a model for the size and extend of the defect is positioned."
+    unit: NX_POSITION
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]
+  position_global_extend(NXmat_kernel_set):
+    doc: "Kernel centered at the position_barycenter of each defect - assumed to be the same for each defect - to describe the probability/time-averaged position."
+  position_global_error(NXmat_kernel_set):
+    doc: "Kernel centered at the position of each defect to describe - assumed to be the same for each defect - to describe the probability are really on average located at their barycenter positions."  # make this and the previous more distinct (one for e.g. anharmonic effects time-averaged position, one for errors.)
+  position_local_extend(NXmat_kernel_set):
+    doc: "Array of kernels centered at the position_barycenter of each defect to describe the probability/time-averaged position."
+  position_local_error(NXmat_kernel_set):
+    doc: "Array of kernels centered at the position of each defect to describe (if available) how the probability that the defect was/is really at this position."
+  charge_state(NX_INT):
+    doc: "Charge of the point defect."
+    unit: NX_CHARGE
+    \@units: "eV"
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+    # spin_vector
+    # rho
+    # eventually (NXgraph_set) to describe the detailed atomic arrangement about the defect ?
+
+
+NX(mat_atom_set):
+  doc: "A set of atoms in d-dimensional space."  # d == 3, but some computer simulations (older are 2d)
+  symbols:
+    d: "Dimensionality of the set."
+    c: "Cardinality, number of atoms."
+  dimensionality(NX_UINT):
+    doc: "The number of dimensions which all members of the set have."
+    unit: NX_UNITLESS
+  cardinality(NX_UINT):
+    doc: "Number of members in the set."
+    unit: NX_UNITLESS
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing atoms. Enables users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations an communicate if identifier follow Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+    unit: NX_UNITLESS
+  identifier(NX_UINT):
+    doc: "Array of identifiers for each member of the set."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  n_protons(NX_UINT):
+    doc: "Integer which specifies the number of protons for each atom. When the (NXmat_atom_set) is used it is always necessary to specify the n_protons. If also the isotope should be specified n_neutrons need to be used."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  n_neutrons(NX_UINT):
+    doc: "Integer which specifies the number of neutrons for each atom. When the (NXmat_atom_set) is used it is always necessary to specify the n_protons. If also the isotope should be specified n_neutrons need to be used."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  position_barycenter(NXcg_point_set):
+    doc: "Array of positions where the center of the atom is expected or equivalently where a model for the size and extend of the atom is positioned."
+    unit: NX_POSITION
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]
+  position_global_extend(NXmat_kernel_set):
+    doc: "Kernel centered at the position_barycenter of each atom - assumed to be the same for each atom - to describe the probability/time-averaged position."
+  position_global_error(NXmat_kernel_set):
+    doc: "Kernel centered at the position of each atom to describe - assumed to be the same for each atom - to describe the probability that the atoms are really on average located at their barycenter positions."  # make this and the previous more distinct (one for e.g. anharmonic effects time-averaged position, one for errors.)
+  position_local_extend(NXmat_kernel_set):
+    doc: "Array of kernels centered at the position_barycenter of each atom to describe the probability/time-averaged position."
+  position_local_error(NXmat_kernel_set):
+    doc: "Array of kernels centered at the position of each atom to describe (if available how the probability that the atom was/is really at this position."
+  charge_state(NX_INT):
+    doc: "Charge of the atom."
+    unit: NX_CHARGE
+    \@units: "eV"
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  spin_vector(NX_NUMBER):
+    doc: "Array of spin vector for each atom."
+  # rho electron density if needed
+  # potential energy field
+  # (NXcg_polyhedron_set), dome or other models the extend of the atoms explicitly ?
+  # dome models ?
+
+# A future-proof and -focused understanding of microstructures needs to be able to account for the fact that classical continuum models become more and more replaced by models where the detailed atomic arrangement in assumed quasi-static so-called defect states, i.e. specific
+# localized atomic configurations with thermodynamically rationalizable and attributable properties occur at other crystal defects. These can be described essentially as a cluster of atoms, i.e. via an instance of an (NXmat_atom_set)
+# eventually supplemented by an (NXgraph) (NXcg_*) set of base class and (NXmat_tensor_set).
+
+# Not yet clear to me is and I know this is also heavily discussed in area A and C, how to describe or better to say what do we need to describe about molecules and their interaction with e.g.
+# defects (statistically represented or explicitly spatio-temporally) resolved defects at surfaces and line defects on the surface or surface step.
+
+# (NXmat_molecule):
+#   isotope_composition
+#   charge_state
+#   position
+#     point
+#     gaussian
+#   shape
+#     point
+#     gaussian
+#   # spin_vector
+#   # explicit structure
+
+
+# Not yet clear to be is at which level of detail surface defects have to be conceptualized and supported with specific base classes.
+# This should be discussed maybe with our colleagues in area A and catalysts, i.e. also area C and area E.
+
+# Another question is if interactions of radiation with materials which trigger physical effects should be represented.
+
+# Another important group of base classes would be required to describe the structure of cracks and pores, i.e. the extension of (NXmat_point_defect_set).
+
+# Descriptor to store arbitrary ensemble "properties":
+
+(NXmat_stats):
+  doc: "A base class which can be used as a container to store (coarse-grained/homogenized) statistics about a descriptor for a property of a microstructural feature. Examples include spatial statistics, distributions of ensembles of microstructural features, like orientation distribution function, grain volume distribution, atom nearest neighbor distribution, two-point statistics."  # should these be all represented with one very covering base class or should they be made all specific instances of (NXmat_stats) base classes to allow for having more application specific names?
+  symbols:
+    n_q: "Number of quantiles."
+  dimensionality(NX_UINT):
+  name(NX_CHAR):
+    doc: "Which type of statistics and or quantity, e.g. nearest neighbor distribution."
+  value(NX_NUMBER):
+    doc: "Placeholder for e.g. a specific quantity like average size of an object."
+  probability_density:  # do we need a base class for a function?
+  quantile_values(NX_NUMBER):
+    doc: "List of pairs of quantile and resulting value, for instance the volume at the specific quantile in the case of a volume distribution."
+    unit: NX_ANY  # because this can be case dependent, for instance for a volume distribution the unit for the quantile would be e.g. m^3 but the value NX_DIMENSIONLESS."
+    dimensions:
+      rank: 2
+      dim: [[1, n_q], [2, 2]]
+
+# E. E. Underwood's book about Stereology and S. Torquato's work should be reflected also, this is something to discuss with members from MatWerk, like Thomas Hammerschmidt, Christian Pauly is needed here, IUC09 is a possible candidate.
+
+
+# Components of almost every more detailed description of the microstructure for a sample, which we should link or with which we may start with extending NXsample, eventually through adding an (NXmat_snapshot_set).
+
+(NXspecimen)/(NXsample):
+  # take eventually the usual ones which come with NXsample, also to assure backwards compatibility
+  identifier:
+  # reference_frame:
+  # ... continue as you so far did
+  microstructure(NXmat_snapshot_set):
+
+# this is effectively how I would interface the existent NXsample with my proposal for the microstructure.
+
+(NXmat_snapshot_set):
+  doc: "A set of sampled spatio-temporal data which describe the microstructure."
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing snapshots. Enables users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations an communicate if identifier follow Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+  # it might be beneficial if the user can add base class instances here. In this case these should be quantities which do not change. For instance, back in the past I did research on explicit tracking of spatio-temporal grain growth simulations. In this case the initial set of grains had properties which were assumed to remain the same like their orientation but during the course of the simulation several thousand snapshot data of the entire microstructure were taken. In this situation it would be useful not to repetitive store static quantities but just refer to them. The here proposed structure of a layer wrapping the snapshot allows for having this.
+  snapshot(NXmat_snapshot):
+    identifier(NX_UINT):
+    time(NX_NUMBER):
+      doc: "Simulated or measured physical time when the snapshot was taken. This time should not be confused with the time on a clock when an experimentalists or user performed the simulation. The field should rather describe for instance how much time has elapsed since a given point in time. Examples are one nanosecond simulation time in an molecular dynamics simulation, or one hour of annealing of a specimen in a furnace."
+      unit: NX_TIME
+    # in what follows the snapshot can carry as detailed data as possible include sets of (NXmat_stats), (NXcg_*) etc.
+
+
+# for a general enough description of microstructures we cannot assume that the entire specimen is always the region-of-interest. So it is useful to conceptualize what is a region-of-interest. This is also useful in the context of 
+# mesoscale computer simulations of microstructure evolution and crystal plasticity where (one of the) central upper layers of a hierarchical description (often also the root of the description) is the so-called representative volume element.
+# the notation of a representative volume element is, although the term is used regularly, problematic as where a ensemble of crystal defect, i.e. chosen region-of-interest of the microstructure is representative depends strongly on the quantities
+# analyzed and the research question studied. Thus, I propose the following, more general and hopefully embracing base class, which can be used in a scale-invariant manner to describe either an RVE or a region-of-interest without making a particular
+# distinction at different length (and time) scales.
+
+(NXmat_roi_set):
+  doc: "A general base class to represent a set a region-of-interests (ROIs) or (representative) volume element(s) (RVE or VE) in a computer simulation of microstructure evolution in d-dimensional space."
+  symbols:
+    d: "Dimensionality of the set."
+    c: "Cardinality, number of ROIs."
+  dimensionality(NX_UINT):
+    doc: "The number of dimensions which all members of the set have."
+    unit: NX_UNITLESS
+  cardinality(NX_UINT):
+    doc: "Number of members in the set."
+    unit: NX_UNITLESS
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing ROIs. Enables users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations an communicate if identifier follow Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+  reference_frame(NXtransformations):
+  (NXorientation_set):
+  reference_position(NX_NUMBER):  # (NXtransformations) would also work, what should we settle on?
+    doc:
+    dimensions:
+      rank: 1
+      dim: [[1, c], [2, d]]
+  volume(NX_NUMBER):
+    doc: "Array of volume of the ROI."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # different type of geometric primitives can be used to model the shape and extend, i.e. represent the volume of space occupied by the ROI, maybe using (NXcg_*) primitive instances like:
+  # representation(NXcg_polyhedron_set): can be used for this purpose
+  # each ROI/RVE comes usually with metadata, or properties these could for instance be added in a NXcollection but should better be thought through to create base classes
+
+  # also useful would be to have an instance of (NXmat_roi_bc) to describe boundary conditions of the simulation or the experiment, take for instance channel-die compression or rolling, all this is processing under distinct boundary conditions, at least conceptually.
+  # (NXmat_features):
+
+
+# I think it is useful to offer a possibility for grouping features of the microstructure separately, for this one could use a lean group such as (NXmat_features)
+
+(NXmat_features):
+  doc: "A container to store descriptions of identified or tracked microstructural features (atoms, point_defects, dislocation lines, grain and phase boundaries, precipitates)."
+  # ... add (NXmat_*) instances
+
+# for now I would refrain from using (NXtransformations) too aggressively to represent features in a microstructure, 
+# especially as many individual groups can be inefficient. Think about having one (NXtransformations) for each grain in a grain growth simulation with 0.5mio grains...
+# this is why I suggest to make rather use of the (NX_*_set) base class instances, which enable for a more efficient storage of predictably-shaped (but not only) geometrical metadata.
+
+
+# Also we need to think about descriptions for storing the composition measurements.
+
+(NXmat_constituent_set):
+  doc: "A base class to store metadata and numerical data for a constituent/thermodynamic phase."
+  symbols:
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing constituent phases. Enables users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations an communicate if identifier follow Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+  identifier(NX_UINT):
+    doc: "Array of identifier for each constituent phase."
+  name(NX_CHAR):
+    doc: "Array of name strings for each constituent phase."
+  phase_state(NX_CHAR):
+    doc: "Description of the phase."
+    # enumeration: ?
+  crystallinity_type(NX_CHAR):
+    doc: "Qualitative description if the phase is crystalline or not."
+    # boolean or enum ?
+  (NXmat_composition):
+
+
+(NXmat_composition):
+  doc: "A measured or simulated composition of a constituent in a specimen, the entire specimen, or a ROI in the specimen. Use this base class as a sub-group to e.g. these groups."
+  symbols:
+    n_compounds: "Number of compounds. Needs to be at least two. The last needs to be named balance/remainder."
+  compound_name(NX_CHAR):
+    doc: "Array of names for the compounds. Compounds can be chemicals, elements, or isotopes to name but a few. The last name needs to be named balance/remainder."  # balance, remainder?
+    dimensions:
+      rank: 1
+      dim: [[1, n_compounds]]
+  compound_composition(NX_NUMBER):
+    doc: "Array of compositions. If quantities are written in percent all values together with balance/remainder need to add up to 100 %."
+    unit: NX_ANY  # at.-%, wt.-%, 
+    dimensions:
+      rank: 1
+      dim: [[1, n_compounds]]
+
+# should we then also include a listing for (NXmat_concentration) ?
+
+# here we see the conceptual challenge, for some applications the composition of the specimen is required irregardless of the phases, for others
+# the composition of the individual phases, but phases debateably are not only 3D features, e.g. defect phases sitting in dislocation cores ...
+
+# how is a microstructural feature different from a microstructural defect ? Observe that each higher-dimensional feature can have again a set of 
+# other defects of the dimensionality and also lower-dimensional features, often scientists want to express relations between features.
+# Ultimately all of features are built from atomic configurations, therefore we need to have a set of base classes to describe sets of 
+# frequently used and discused microstructural features in multi-scale materials modelling.
+
+# Examples of features are dislocation, disconnection, (disclination), stacking fault, triple line, quadruple junction, grain and phase boundary, grain
+# precipitates. A grain is a crystal, a precipitate, is conceptually similar to a grain, can be a single crystal but often is polycrystalline and
+# has crystals of different phases docking on one another. Describing these differences can be required or not depending on the available spatial resolution
+# and/or relevance for a research question at hand. Dispersoids and second-phase particles are precipitates, with the main difference the thermo-mechanical
+# processing when they are observed, and the order of magnitude difference between their diameter.
+
+# lets inspect base class drafts for common features
+
+# FEATURE SETS can explicitly describe the extend, size, shape and geometry of microstructural features using instances of (NXcg_*) base class as the building blocks
+# 3D
+NXmat_grain:
+  identifier:
+  phase:
+  composition:
+  geometry:
+  position:
+  orientation:
+  FEATURE_SET:
+
+NXmat_precipitate:
+  identifier:
+  phase:
+  composition:
+  geometry:
+  position:
+  orientation:
+  FEATURE_SET:
+
+NXmat_pore:
+  identifier:
+  # ad atoms, atmosphere ?
+  geometry:
+  position:
+  orientation:
+  FEATURE_SET:
+
+2D
+# Baluffi's discussion about incommensurable interface
+NXmat_interface:
+  identifier:
+  macroscopic_degrees_of_freedom:
+  # geometry one should not need to enforce that it is either a NXcg_surface, NXcg_mesh but have the option to do either none, one, or both
+  # not a problem of NeXus demanding for a hierarchical description but the question how to include
+  # alternatively coarse-grained view
+  separates_two_entities
+  geometry
+    type  # NURBS, triangle mesh
+  "intrinsic properties"
+    energy:
+    excess volume:
+    mobility:
+    # suggests to have e.g. (NXmat_tensor) and/or (NXmat_value) as a type for colleagues to store the above-mentioned quantities ?
+    (NXmat_stats):
+    curvature:
+    # again fine hierarchy, average Gaussian mean curvature over surface patch, curvature tensor at each geometric primitive or voxel of the simulation
+  FEATURE_SET:
+
+# an (NXmat_stacking_fault) base class should also exist ... like other common defects like
+
+NXmat_dislocation:
+  identifier:
+  type:
+  burgers_vector:
+  line_element:
+  is_a_segment: # mean not infinite, maybe encode this in the type though
+  connects_two_entities:
+  FEATURE_SET:
+
+NXmat_dislocation_junction:
+  identifier:
+  type:
+  connects_which_entities:
+  geometry:
+  position:
+  FEATURE_SET:
+
+NXmat_triple_line:
+  identifier:
+  line_element:
+  is_a_segment:
+  connects_three_entities:
+  FEATURE_SET:
+
+NXmat_quadruple_junction:
+  identifier:
+  # similarly as (NXmat_point_defect_set)
+  geometry:
+    point:
+    gaussian:
+    graph set of points and gaussian:
+    discretization:
+    position:
+    "intrinsic" properties:
+    connects_three_entities:
+
+NXmat_dislocation_interface_junction:
+NXmat_dislocation_triple_line_junction:
+
+# is a physically relevant Gd-Gd cluster at a grain boundary a feature of the grain boundary or a one_dimensional_two_dimensional defect ?
+
+# if the dislocation is of a simple type, e.g. perfect edge or screw and
+# specifically of a very simple geometry, e.g. straight it is sufficient to
+# have a field named line_element, for a DDD simulation though it would be necessary
+# to resolve the FEATURE_SET of each dislocation, or vice versa, the set of
+# dislocation junctions with incidence relations of the adjoining dislocations,
+# similarly for grain and phase boundaries
+
+(NXmat_discretization):
+  doc: "A base class to describe how a d-dimensional region of the material or eventually even the entire specimen is described with a d-dimensional grid."
+  symbols:
+    d: "Dimensionality."
+  dimensionality(NX_UINT):
+  reference(NXtransformations):
+    doc: "Coordinate system and reference point."
+  # use e.g. one of the NXcg_*_set classes to represent the ROI that is discretized.
+  origin(NXtransformations):
+    doc: "Physical reference point."
+  # how to describe how the pixel is centered
+  cell_size(NX_NUMBER):
+    doc: "Physical length which each pixel/voxel represents."
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+  number_of_cells(NX_UINT):
+    doc: "Number of cells in each dimension."
+    dimensions:
+      rank: 1
+      dim: [[1, d]]
+
+# an onject can either connect to a given discretization via a link or define a
+# local feature-specific discretization, as again, a feature is nothing more than
+# a useful logical construct that describes a set of atoms
+
+# Field quantities, intrinsic state variables:
+
+# use a (NXmat_tensor_set). One tensor for each material point a material point set can use (NXcg_point_set)
+
+# <<descriptor>>_density
+# <<descriptor>>_composition
+# <<descriptor>>_concentration
+# stress
+# strain
+# temperature
+# pressure
+# chemical potential
+# counts
+
+
+# Orientations:
+(NXorientation_set):
+  symbols:
+    n_p: "Number of parameters for the chosen parameterization. Will be used to specify the number of e.g. columns of a C-style matrix of Bunge-Euler angles, where each row is one Bunge-Euler angle triple."
+    c: "Cardinality, number of orientations."
+  doc: "A base class with the intention to be used as a container which holds attribute data to a set of objects. The container stores a set of specifically parameterized NXtransformations which describe how each object is oriented/rotated with respect to a reference coordinate system."
+  reference(NXtransformations):
+  parameterization(NX_CHAR):
+    enumeration: [bunge-euler (ZXZ), quaternion]  # there are many more ways of parameterizing orientations and for each of them different conventions to be used. many scientists do not recall by hard which rule set is associated with an e.g. ZXZ Bunge-Euler angles vers ZXY so there are at least two ways how to encode these metadata: Either to have different enumerations like bunge-euler-zxz, bunge-euler-zxy, etc. or a base class NXori_bunge_euler and then internally here a rule set...?
+  # implicit_identifier(NX_BOOLEAN):  # storage efficient strategy and at  the same time a distinct marker which informs users if the order is indeed as expected. Take for instance a set of grains with identifier values from 1, 2, 3, if the grain set has a field wich is an (NXorientation_set) and if implicit_identifier == true we know that the 0-th row of the orientation array quantifies the orientation of the 1 grain, the 1-th entry that of the 2 grain and so forth...
+    doc: "If true, the identifiers run from a to b ?? what are useful values for a and b ???, and follow the order in the orientation list."  # needs better explanation.
+  identifier(NX_UINT):
+    doc: "List of identifier which specify which orientation (row of array orientation) matches to which object.
+  orientation(NX_NUMBER):
+    doc: "Parameter values for each orientation."
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, n_p]]  # e.g. in this way one could easily, efficiently, store and map familiar habits of microscopists to store e.g. orientations of measurement points or of grains via a (c := Ngrains, n_p := 3) matrix of Bunge-Euler angles, or of (c := Ngrains, n_p := 4) matrix of quaternions.
+
+# the benefit of such a representation is that with a known NXorientation_set base class one can implement a common parameterization transformation library (of which several already exist) in the microstructure modelling communities so that a program can read the information in the (NXorientation_set) dataset portion instance and automatically transform/compute different parameterizations. Super relevant for interoperability e.g. in SEM/EBSD, where this was a long standing issue and right now the most frequently accepted "consensus" is to report either Bunge-Euler angles or quaternions and then use existent transformation libraries (as implemented by e.g. Marc de Graeff for SEM/EBSD and used by most people in the computational materials modelling community within crystal plasticity, crystal growth modeling, DREAM.3D.
+
+# Geometric primitives and base classes relevant for a computational-geometry-based description of spatial features in the microstructure:
+(NXcg_point_set):
+  symbols:
+    doc: "These symbols ##MK::"
+    d: "Dimensionality of the set."
+    c: "Cardinality of the set."
+  doc: "A set of points in d-dimensional space."  # which space, which metric $\mathcal{R}^{dimensionality}$
+  dimensionality(NX_UINT):
+    doc: "The number of dimensions which all members of the set have."
+    unit: NX_UNITLESS
+  cardinality(NX_UINT):
+    doc: "Number of points in the set."
+    unit: NX_UNITLESS
+  # identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+    doc: "Array of identifiers for each member of the set."
+    unit: NX_UNITLESS
+  position(NX_NUMBER):
+    doc: "Array of positions."
+    unit: NX_LENGTH  # depends on the concept of distance, here assuming Euclidean
+    dimensions:
+      rank: 2
+      dim: [[c, d]]  # is it adaptable or do we need to define instances, inheriting classes for different d ?
+
+(NXcg_point_tuple_set):
+  symbols:  #
+    doc:  #
+    d: "Dimensionality of the set."
+    s: "Size of each tuple, which is the same for each member of the set."
+    c: "Number of tuples."
+  doc: "A set of point tuple (i.e. set of list of points, with each list the same number of entries), with each point in d-dimensional space."  #
+  dimensionality(NX_UINT):  #
+  size(NX_UINT):  #
+  cardinality(NX_UNIT):  #
+
+(NXcg_line_set):
+  symbols:
+    # "implicitly defining the cardinality by specifying two (NXcg_point_set) or explicitly."
+  doc: "A set of lines in d-dimensional space. | Lines can either be specified implicitly by two sets of identifier which refer to points or explicitly through two sets of points."  # ##MK
+  dimensionality(NX_UINT): #
+  cardinality(NX_UINT): #
+  start_and_end_position(NXcg_point_tuple_set):
+    doc: 
+  start_and_end_point(NX_UINT):
+    doc: "Array of pairs of point identifier."
+    dimensions:
+      rank: 2
+      dim: [[1, 2], [2, c]]
+
+(NXcg_polyline_set):
+  doc: "A set of polylines in d-dimensional space. | Each polyline can be built of a different number of points. Each polyline needs to have a start and an end point though. Polylines can be defined either by an array of lists of point identifiers or an array of lists of point positions. Connectivity is implicit, i.e. the order of the identifiers and/or point in each list represents a traversal of the polyline from its start point to its end point."
+  symbols:
+    c: "Cardinality, i.e. number of polylines."
+    n: "Total number of points to visit when traversing each polyline."
+  dimensionality(NX_UINT): #
+  cardinality(NX_UINT): #
+  # identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  number_of_points(NX_UINT):
+    doc: "List which specifies the number of points per polyline."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  position(NXcg_point_set):
+    doc: "Set of list of points, one member for each polyline."  # only one set but the set needs to have an internal structure, the number of points is not necessarily n because there can be duplicate points."
+  polyline(NX_UINT):
+    doc: "Set of lists of points. One list for each polyline."
+    dimensions:
+      rank: 1
+      dim: [[1, n]]
+
+(NXcg_polygon_set):
+  doc: "A set of closed polylines. Each polyline forms a polygon in d-dimensional space, i.e. the polyline is flat the d-dimensional plane. | Each polygon can be built of a different number but at least three points. Polygons can be defined either by an array of lists of point identifiers or an array of lists of point positions. Connectivity is implicit, i.e. the order of the identifiers and/or point in each list represents a traversal of the polyline from its start point to its end point. The lists can be used to encode the (winding) order of how to traverse the edges of the polygon to store such implicit connectivity information."
+  symbols:
+    c: "Cardinality, i.e. number of polygons."
+    n: "Total number of points to visit when traversing each polygon. Closure of the polygon is implicit."
+  dimensionality(NX_UINT):
+  cardinality(NX_UINT):
+  # identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  number_of_points(NX_UINT):
+    doc: "List which specifies the number of points per polygon."
+    unit: NX_UNITLESS
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  position(NXcg_point_set):
+    doc: "Set of list of points, one member for each polygon."  # similar comments like see in (NXcg_polyline_set)
+  polygon(NX_UINT):
+    doc: "Set of lists of points. One list for each polygon."
+    dimensions:
+      rank: 1
+      dim: [[1, n]]
+  # attribute data for each vertex of the polygon, each edge, each face
+
+
+# (NXcg_vertex_set) similar than (NXcg_point_set) but a vertex has connectivity information.
+
+#(NXcg_edge) similar than (NXcg_line_set) but an edge has connectivity information.
+
+# (NXcg_face) can be a super set of (NXcg_surface_mesh) or (NXcg_polygon).
+
+# (NXcg_triangle_set) is a special (NXcg_polygon_set) in that each polygon has three points. 
+# But it makes sense to define a triangle set as this can then be used to represent triangle strips and triangle fans and surface meshes.
+
+# (NXcg_quadrilateral) is a special (NXcg_polygon_set) in that each polygon has four points.
+
+(NXcg_polyhedron_set):
+  doc: "A set of polyhedra in three-dimensional space."  # d-dimensional space, which space
+  symbols:
+    c: "Cardinality, number of polyhedra."
+    offset: "Identifier offset."
+  dimensionality(NX_UINT):
+  cardinality(NX_UINT):
+  identifier_offset(NX_UINT):
+    doc: "Integer which specifies the first index to be used for distinguishing polyhedra. The purpose of this field is to enable users to use all identifiers on the interval [0, identifier_offset-1] as markers to flag specific situations. I where a polyhedron intersects with the boundaries of e.g. a cuboidal computational domain, where for instance one could use the identifier 0 to mark some special polyhedron (e.g. the polyhedron representing the computational domain) and then use identifiers [1, number_of_faces_special_polyhedron] to store if a polyhedron makes contact with that face. A hexahedron, specifically an axis-aligned bounding box, such as even more specifically a cube is often used in computer simulations for modelling crystal aggregates. The identifier_offset can also be used to communicate if object IDs use Fortran- or C-style notation, i.e. whether identifiers start at 1 or 0 respectively."
+  identifier(NX_UINT):
+    doc: "List of identifiers. Can be used to name e.g. cells from Voronoi tessellations of domain in Euclidean space, can be used to name crystals in a computer simulation."
+    dimensions:
+      rank: 1
+      dim: [[1, c+identifier_offset]]  # how to do additions etc.
+  vertices(NXcg_point_set):
+  edges(NXcg_line_set):
+  faces(NXcg_polygon_set):
+  is_closed(NX_BOOLEAN):
+    doc: "List which specifies if each polyhedron is closed or not."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  volume(NX_NUMBER):
+    doc: "List of volume of each polyhedron. Is zero in case the polyhedron is not closed because each polyhedron must not be degenerated and thus it has at least a volume of epsilon."  # or NaN for open polyhedra (i.e. polyhedra with holes)?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # has_face_hole(NX_BOOLEAN): ?
+  # the see we go here towards describing approximations to manifold surfaces.
+  # it would be nice to also describe alpha-shapes, which can be described for instance via triangles complexes. This would require to encode, geometrical and topological pieces of information.
+
+# (NXcg_polyhedra_set) is a special type of an (NXcg_plc_set) (a piecewise-linear complex) as e.g. used in TetGen
+# Maybe, specifying (NXcg_plc_set) right now and especially making (NXcg_polyhedron_set) a specialized (NXcg_plc_set) is too frightening for most users ?
+# (NXcg_alpha_complex_set)
+
+# (NXcg_convexhull_set) is not needed because it is just an (NXcg_polyhedron_set)
+
+# Does a polyhedron need to be closed ?
+# A frequent description for the spatial arrangement of crystals in a region-of-interest of a microstructure/specimen is as a tessellation, most frequently using
+# Voronoi and radical plane tessellation. In the special case of a Voronoi tessellation of the Euclidean space
+# with the classical distancing rule the result is a set of polyhedra.
+# For these polyhedra one can encode the adjacency relations in different ways. Either as first-order nearest neighbor lists,
+# which is a graph, or per polyhedron, thus duplicating pieces of information.
+# This representation is an example of a strategy how to store topology information 
+# (edge adjacency, face adjacency, Weinberg vector lists, etc.) how should we go about doing this?
+
+# Should it be in the (NXcg_polyhedron_set) or should we specify a base class which is a model for a generic topology which then has a member that is the (NXcg_polyhedron) set?
+
+
+
+# There are multiple ways to describe holes: through their surrounding polyline, through an open (hyper)polygon if the polyline is in (hyper)plane, or through an attribute to a face that the polygon representing the face is open. ?
+
+# (NXcg_tetrahedron_set) is a special (NXcg_polyhedron_set) in that each polyhedron has four points.
+
+# (NXcg_hexahedron_set) is a special (NXcg_polyhedron_set) in that each polyhedron has six points and three sets of opposite parallel faces.
+
+# (NXcg_mesh) could be a useful super class object which can take advantage of the above-mentioned lower-level base classes.
+
+(NXcg_mesh):
+# but here we are crossing the boundaries of eventually MarDi and definately NFDI-MatWerk consortia this is something where meshing experts should make some comments.
+
+(NXcg_ellipsoid_set):
+  doc: "A set of triaxial ellipsoids in d-dimensional space. | Each ellipsoid can have a different tuple of half-axes radii."
+  symbols:
+    d: "Dimensionality."
+    c: "Cardinality, i.e. number of ellipsoids."
+  dimensionality(NX_UINT):
+  cardinality(NX_UINT):
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  halfaxes_radii(NX_NUMBER):
+    doc: "Three half-axes radii for each ellipsoid."
+    unit: NX_LENGTH  # d-dimensional
+    dimensions:
+      rank: 1
+      dim: [[1, c], [2, d]]
+  center(NXcg_point_set):
+    doc: "List of barycenter positions for each ellipsoid."
+  volume(NX_NUMBER):
+    doc: "Volume of each ellipsoid."
+    unit: NX_VOLUME  # d-dimensional
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  surface(NX_NUMBER):
+    doc: "Surface area of each ellipsoid."
+    unit: NX_AREA  # d-dimensional?
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  orientation(NXorientation_set):
+  # other attributive data
+
+# (NXcg_sphere_set) is a special instance of a (NXcg_ellipsoid_set) with all half-axes the same length.
+# Given that spheres are so frequently used, it might make sense to give them an own (essentially copy of NXcg_ellipsoid_set base class, 
+# where the halfaxes_radii (c,3)-shaped are replaced by a radius (c,1)-shaped array.
+
+(NXcg_cylinder_set):
+  doc: "A set of tri-axial ellipsoids in d-dimensional space. | Each ellipsoid can have a different tuple of half-axes radii."
+  symbols:
+    c: "Cardinality, i.e. number of ellipsoids."
+  dimensionality(NX_UINT):
+  cardinality(NX_UINT):
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  halfaxes_radii(NX_NUMBER):
+    doc: "Three half-axes radii for each ellipsoid."
+    unit: NX_LENGTH  # d-dimensional
+    dimensions:
+      rank: 1
+      dim: [[1, c], [2, 3]]
+  center(NXcg_point_set):
+    doc: "List of barycenter positions for each ellipsoid."
+  volume(NX_NUMBER):
+    doc: "Volume of each ellipsoid."
+    unit: NX_VOLUME  # d-dimensional
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  orientation(NXtransformations):
+    # quaternion, or rotation matrices
+  # other attributive data
+
+# (NXcg_cylinder_set) is a special instance of a (NXcg_quadric_set) where the quadric is of cylinder and capped.
+# But it would read likely weird for many people, if they find only (NXcg_quadric) when all they want to describe is a simple cylinder.
+# Therefore, it makes sense to specify an own base class for a set of cylinders.
+
+# There are already NXcsg and NXquadric contributed classes in NeXus following the idea of NEF polyhedra, could be useful 
+# are definately not used though by many people. Maybe a topic of lower priority?
+
+(NXcg_hyperplane_set):
+  doc: "A set of planes in d-dimensional space. | The planes can be oriented in which case the normal vector points into the positive d-dimensional half-space which each plane splits."
+  symbols:
+    d: "Dimensionality."
+    c: "Cardinality, i.e. number of planes."
+  dimensionality(NX_UINT):
+  cardinality(NX_UINT):
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  is_oriented(NX_BOOLEAN):
+    doc: "Specifies if planes are oriented."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  hessian_normal_vector(NX_NUMBER):
+    doc: "List of (eventually oriented, inspect is_oriented field) of hessian normal vectors. One for each hyperplane."
+    dimensions:
+      rank: 2
+      dim: [[1, c], [2, d]]
+  hessian_normal_constant(NX_NUMBER):
+    doc: "List of hessian normal constants. One for each hyperplane."
+    dimensions:
+      rank: 1
+      dim: [[1, c]]
+  # other attributive data
+
+# (NXcg_hemisphere) and (NXcg_cone) could be defined but they are not so frequently used compared to the above-mentioned primitive sets.
+
+# Similarly (NXcg_spline_set) and (NXcg_nurbs_set), and (NXcg_spiral) could be defined and be extremely useful, but they are, 
+# compared to the above base classes also not of such an immediate relevance.
+
+# Multi-layered materials:
+# A set of layers can be modelled in different ways, depending on which purpose and aim the analysis has.
+# A set of layers is not necessarily a stack of layers. One idea is to define a stack of layers as a stack of oriented halfspace (i.e. as a hyperplane set).
+# Another strategy could be to define a stack of layers as an ordered list of face-aligned NXcg_hexahedra.
+# Yet another approach could be a parametric description where a stack of layers is defined as a stack of oriented parametric surfaces,
+# i.e. a specific instance of an (NXcg_nurbs_set) or (NXcg_(b)spline_set)
+
+
+# Graph entities:
+(NXgraph):
+  doc: "A graph."
+  nodes(NXgraph_vertex_set):
+  relation(NXgraph_edge_set):
+  # further attributes
+
+(NXgraph_vertex_set):
+  doc: "A set of nodes/vertices in space (d-dimensional, categorical ###?) representing members of a graph."
+  symbols:
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  position: # can be a (NXcg_point_set)
+  # attribute data
+
+(NXgraph_edge_set):
+  doc: "A set of (eventually directed) edges which connect nodes and vertices."
+  symbols:
+    n_edges: "Number of edges."
+  identifier_offset(NX_UINT):
+  identifier(NX_UINT):
+  directionality(NX_CHAR):
+    doc: "Specifier for each edge whether it is non-directional, one-directional, or bidirectional. Use the smallest available binary representation which can store three different states. State 0x00 is non-directional, state 0x01 is one-directional, state 0x02 is bi-directional."
+    dimensions:
+      rank: 1
+      dim: [[1, n_edges]]
+  node_pair(NX_UINT):
+    doc: "Array of pairs of graph vertex/node identifiers. Each pair represents the connection between the two nodes. In the case that the directionality of the connection is one-directional, the first member of the pair is the source and the second member is target, i.e. the pair encodes the information as if one traverses the edge from the source node walking to the target node."
+    dimensions:
+      rank: 2
+      dim: [[1, 2], [2, n_edges]]
+    # attribute data
