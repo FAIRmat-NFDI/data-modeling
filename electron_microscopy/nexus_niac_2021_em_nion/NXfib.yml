@@ -5,7 +5,9 @@
 # https://www.sciencedirect.com/science/article/pii/S0168583X10001862
 # https://www.osti.gov/servlets/purl/924801
 category: base
-doc: "Draft of a base class for describing focused-ion beam capabilities of an instrument. The class is designed to be used as an additional component of e.g. an electron microscope to describe sample/specimen preparation and the collecting of data and metadata for (scanning) electron microscope/focused-ion beam, (S)EM/FIB instruments."
+doc: "Set of devices adding focused-ion beam capabilities to an instrument."
+# The class is designed to be used as an additional component of e.g. an electron microscope to describe sample/specimen preparation
+# and the collecting of data and metadata for (scanning) electron microscope/focused-ion beam, (S)EM/FIB instruments."
 #symbols:
 #  doc: The symbols used in the schema to specify e.g. variables.
 (NXfib):
@@ -24,10 +26,10 @@ doc: "Draft of a base class for describing focused-ion beam capabilities of an i
       doc: "The type of source which creates the ion beam."
       enumeration: ["liquid-metal", "plasma", "gas-field"]
     ionized_species:
-      doc: "Which ionized elements or molecule are ionized to form the beam that sputters material. Examples a gallium, helium, neon, argon, krypton, or xenon, O2+."
+      doc: "Which ionized elements or molecules are ionized to form the beam which is used to probe or sputter the specimen. Examples are gallium, helium, neon, argon, krypton, or xenon, O2+."
     # NEW ISSUE: use NXion instead
     brightness(NX_FLOAT):
-      doc: "Average/nominal (discuss further with colleagues) brightness of the ion beam (at which location?)."
+      doc: "Average/nominal (DISCUSS FURTHER WITH COLLEAGUES) brightness of the ion beam (at which location?)."
       unit: NX_ANY
       # NEW ISSUE: units according to Tommaso's scheme, e.g. A/cm*sr
     flux(NX_FLOAT):
@@ -40,7 +42,7 @@ doc: "Draft of a base class for describing focused-ion beam capabilities of an i
       doc: "Ion acceleration voltage upon source exit and entering the vacuum flight path."
       unit: NX_VOLTAGE
     ion_energy_profile(NX_NUMBER):
-      doc: "Needs further discussion with colleagues how this should be defined."
+      doc: "NEEDS FURTHER DISCUSSION WITH COLLEAGUES HOW THIS SHOULD BE DEFINED."
       unit: NX_ENERGY
   (NXtransformation):
       doc: "A right-handed Cartesian coordinate system is used whose positive z-axis points in the direction of the ion beam, i.e. towards the sample. For modelling ion milling it is relevant to document the illumination vector. NXtransformations offers a place to store how the ion gun coordinate system has to be rotated to align its positive z-axis with the positive z-axis of e.g. the electron beam and ion beam respectively."
