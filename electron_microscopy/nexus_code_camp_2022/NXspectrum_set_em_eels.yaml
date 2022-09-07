@@ -1,6 +1,0 @@
-category: base
-doc: |
-  Container for reporting a set of electron energy loss spectra.
-(NXspectrum_set_em_eels):
-  (NXdata):
-  (NXprocess):
