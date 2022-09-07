@@ -37,7 +37,7 @@ symbols:
         However, details of the experiment should be defined in the specific
         fields of this application definition rather than in this experiment
         description."
-    acquisition_program(NXmanufacturer):
+    acquisition_program(NXfabrication):
       # TODO: Just used a NXmanufacturer, maybe
       # it is nicer to introduce a general NXprogram class?
       # However, a program may also be viewed as some sort
@@ -76,7 +76,7 @@ symbols:
         exists: recommended
         doc: "Telephone number of the user."
     instrument(NXinstrument):
-      manufacturer(NXmanufacturer):
+      manufacturer(NXfabrication):
         exists: recommended
         doc: "Manufacturer of the instrument."
       common_beam_mask(NXslit):
@@ -155,7 +155,7 @@ symbols:
           doc: Response time of the detector
           exists: optional
           unit: NX_TIME
-        gain(NX_NUMER):
+        gain(NX_NUMBER):
           doc: Detector gain
           exists: optional
         slit(NXslit):
