@@ -24,6 +24,10 @@ symbols:
           build instructions can be found so that the program can be configured
           ideally in such a manner that the result of this computational process
           is recreatable in the same deterministic manner.
+    time_stamp(NX_DATE_TIME):
+      doc: |
+        ISO 8601 formatted time code with local time zone offset to UTC
+        information included when this configuration file was created.
     analysis_identifier:
       exists: optional
       doc: |
@@ -32,10 +36,6 @@ symbols:
     analysis_description:
       exists: optional
       doc: Possibility for leaving a free-text description about this analysis.
-    time_stamp(NX_DATE_TIME):
-      doc: |
-        ISO 8601 formatted time code with local time zone offset to UTC
-        information included when this configuration file was created.
     number_of_processes(NX_UINT):
       doc: |
         For now a support field for the tool to identify how many individual

@@ -86,65 +86,71 @@ symbols:
       hit_multiplicity_filter(NXmatch_filter):
         exists: optional
 
-      triangle_soup(NXprocess):
-        # NEW ISSUE NXtriangle_soup
+      point_to_triangle(NXprocess):
         doc: |
-          Paraprobe-distancer enables the computation of the Euclidean shortest
-          distance for each member of a set of points against a set of triangles.
-          In contrast to comparable methods used in atom probe the here computed
-          distance is not simply the projected distance to one of the triangles
-          but the more costly but robust computation of the distance between
-          a point and a triangle.
-          
-          The triangles can represent for instance the facets of a triangulated
-          surface mesh of a model for the edge of the dataset. Such a model can
-          be computed with paraprobe-surfacer. Alternatively, the triangles can
-          be those from the set of all facets for a set of convex hulls, alpha-shapes,
-          or alpha wrappings about three-dimensional objects like precipitates
-          (computed with e.g. paraprobe-nanochem).
-          
-          Currently, the tool does not check if the respectively specified
-          triangle sets are consistent, what their topology is, or whether or
-          not they are consistently oriented.
-          Each dataset that is referred to in the list_of _dataset_names_vertices
-          should be an (Nvertices, 3) array of NX_FLOAT. Each dataset referred
-          to in the list_of_dataset_names_facet_indices should be an
-          (Nfacets, 3) array of NX_UINT.
-          Facet indices refer to vertex indices. These need to start at zero
-          and must not exceed Nvertices - 1, i.e. the identifier_offset is 0
-          and vertices are indexed thus implicitly.
-          Facet normal vectors have to be also an array
-          of shape (Nfacets, 3) of NX_FLOAT.
-        number_of_files(NX_UINT):
-          doc: How many triangle sets to consider.
-          unit: NX_UNITLESS
-        (NXprocess):  # should better be an NXprocess
+          Compute for all filtered points, e.g. ions of the point set
+          the shortest Euclidean distance to the closest triangle of the
+          set of triangles. The triangles can formed a closed surface mesh.
+          Distances are not simple distances based on normal projections but
+          giving an exact solution.
+        triangle_soup(NXprocess):
+          # NEW ISSUE NXtriangle_soup
           doc: |
-            List of triangle sets. This design allows users to combine
-            multiple triangle sets.
-          filename:
+            Paraprobe-distancer enables the computation of the Euclidean shortest
+            distance for each member of a set of points against a set of triangles.
+            In contrast to comparable methods used in atom probe the here computed
+            distance is not simply the projected distance to one of the triangles
+            but the more costly but robust computation of the distance between
+            a point and a triangle.
+            
+            The triangles can represent for instance the facets of a triangulated
+            surface mesh of a model for the edge of the dataset. Such a model can
+            be computed with paraprobe-surfacer. Alternatively, the triangles can
+            be those from the set of all facets for a set of convex hulls, alpha-shapes,
+            or alpha wrappings about three-dimensional objects like precipitates
+            (computed with e.g. paraprobe-nanochem).
+            
+            Currently, the tool does not check if the respectively specified
+            triangle sets are consistent, what their topology is, or whether or
+            not they are consistently oriented.
+            Each dataset that is referred to in the list_of _dataset_names_vertices
+            should be an (Nvertices, 3) array of NX_FLOAT. Each dataset referred
+            to in the list_of_dataset_names_facet_indices should be an
+            (Nfacets, 3) array of NX_UINT.
+            Facet indices refer to vertex indices. These need to start at zero
+            and must not exceed Nvertices - 1, i.e. the identifier_offset is 0
+            and vertices are indexed thus implicitly.
+            Facet normal vectors have to be also an array
+            of shape (Nfacets, 3) of NX_FLOAT.
+          number_of_files(NX_UINT):
+            doc: How many triangle sets to consider.
+            unit: NX_UNITLESS
+          (NXprocess):  # should better be an NXprocess
             doc: |
-              Name of the HDF5 file(s) which contain(s) vertex coordinates
-              and facet indices to describe the desired set of triangles.
-            \@version:
+              List of triangle sets. This design allows users to combine
+              multiple triangle sets.
+            filename:
               doc: |
-                Version identifier of the file such as a secure hash which
-                documents the binary state of the file to add an additional
-                layer of reproducibility.
-          dataset_name_vertices:
-            doc: |
-              Absolute HDF5 path to the dataset which
-              specifies the array of vertex positions.
-          dataset_name_facet_indices:
-            doc: |
-              Absolute HDF5 path to the dataset which
-              specifies the array of facet indices.
-          dataset_name_facet_normals:
-            exists: optional
-            doc: |
-              Absolute HDF5 path to the dataset which
-              specifies the array of facet normal vectors.
-      distancing(NXprocess):
+                Name of the HDF5 file(s) which contain(s) vertex coordinates
+                and facet indices to describe the desired set of triangles.
+              \@version:
+                doc: |
+                  Version identifier of the file such as a secure hash which
+                  documents the binary state of the file to add an additional
+                  layer of reproducibility.
+            dataset_name_vertices:
+              doc: |
+                Absolute HDF5 path to the dataset which
+                specifies the array of vertex positions.
+            dataset_name_facet_indices:
+              doc: |
+                Absolute HDF5 path to the dataset which
+                specifies the array of facet indices.
+            dataset_name_facet_normals:
+              exists: optional
+              doc: |
+                Absolute HDF5 path to the dataset which
+                specifies the array of facet normal vectors.
         method:
           doc: |
             Specifies for which ions/points the tool will compute distances.
@@ -163,3 +169,11 @@ symbols:
             Maximum distance for which distances are computed when method is skin.
           unit: NX_LENGTH
           # \@units: nm
+
+      # point_set_to_polyline_set(NXprocess):
+      #   doc: |
+      #     Compute the shortest Euclidean distance of all filtered points/ions
+      #     of a point set to the closest point on the closest polyline.
+      # polyhedra_set_to_triangle_set(NXprocess):
+      #   doc: |
+      #     Compute the (shortest Euclidean) distance of all polyhedra of a set

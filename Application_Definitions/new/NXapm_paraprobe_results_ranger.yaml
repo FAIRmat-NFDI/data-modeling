@@ -91,25 +91,27 @@ symbols:
           
 
 # ##MK::begin of the tool-specific section
-    results(NXprocess):
+    (NXprocess):
+      exists: [min, 0, max, 1]
       # ##MK::number_of_ion_types(NX_POSINT):
       # ##MK::maximum_number_of_atoms_per_molecular_ion(NX_POSINT):
-
       use_existent_ranging(NXprocess):
-        exists: [min, 0, max, 1]  # ##MK::max, 1
+        exists: [min, 0, max, 1]
         doc: |
           Paraprobe-ranger loads the iontypes and evaluates for each
           ion on which iontype it matches. If it matches on none, the
           ion is considered of the default unknown type with a 0 as its
           respective value in the iontypes array.
-        ranging(NXcollection):
-          (NXion):
-            exists: [min, 1, max, 256]
-            # ##MK::doc: |
-            # ##MK::fill what comes from NXion
+        (NXion):
+          exists: [min, 1, max, 256]
+          isotope_vector(NX_UINT):
+          nuclid_list(NX_UINT):
+            exists: recommended
+          charge_state(NX_INT):
+          mass_to_charge_range(NX_FLOAT):
         iontypes(NX_UINT):
           doc: |
-            The iontype ID for each ion in the
+            The iontype ID for each ion that was best matching, stored in the
             order of the evaporation sequence ID.
           unit: NX_UNITLESS
           dimensions:
@@ -117,7 +119,7 @@ symbols:
             dim: [[1, n_ions]]
 
       molecular_ion_search(NXprocess):
-        exists: [min, 0, max, infty]  # ##MK::max, 1 ?
+        exists: [min, 0, max, 1]
         doc: |
           Paraprobe-ranger performs a combinatorial search over
           all possible or a reduced set of nuclids to identify
