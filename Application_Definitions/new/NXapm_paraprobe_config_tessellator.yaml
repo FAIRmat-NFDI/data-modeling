@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   #  n_control_points: The number of control points for tessellating regions instead of tessellating the volume about ion positions.
-(NXapm_paraprobe_config_tessellator):
+NXapm_paraprobe_config_tessellator:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

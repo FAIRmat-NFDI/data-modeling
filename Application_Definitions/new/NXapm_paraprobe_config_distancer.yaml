@@ -3,7 +3,7 @@ doc: |
   Configuration/settings of a paraprobe-distancer software tool run.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXapm_paraprobe_config_distancer):
+NXapm_paraprobe_config_distancer:
   (NXentry):
     \@version:
       doc: Version specifier of this application definition.

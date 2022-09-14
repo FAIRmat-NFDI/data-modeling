@@ -4,7 +4,7 @@ doc: |
   Base class to hold geometric primitives.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcg_roi_set):
+NXcg_roi_set:
   CG_SPHERE_SET(NXcg_sphere_set):
   CG_ELLIPSOID_SET(NXcg_ellipsoid_set):
   CG_CYLINDER_SET(NXcg_cylinder_set):

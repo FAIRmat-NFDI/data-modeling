@@ -25,7 +25,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of tetrahedra.
-(NXcg_tetrahedron_set):
+NXcg_tetrahedron_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
     enumeration: [3]

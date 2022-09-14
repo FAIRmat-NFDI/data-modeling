@@ -22,7 +22,7 @@ symbols:
   n_photon_energy: Number of X-ray photon energy (bins)
   n_elements: Number of identified elements
   n_peaks: Number of peaks
-(NXspectrum_set_em_xray):
+NXspectrum_set_em_xray:
   (NXprocess):
     doc: |
       Details how X-ray spectra were processed from the detector readings.

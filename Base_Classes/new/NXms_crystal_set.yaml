@@ -93,7 +93,7 @@ symbols:
   n_objects: The number of objects, which can be crystals, grains, phases or phase field regions.
 # how can we elegantly implement that in simulations and situations where the number
 # of objects remains static there is no need to store identifiers several times?
-(NXms_crystal_set):
+NXms_crystal_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   number_of_objects(NX_POSINT):

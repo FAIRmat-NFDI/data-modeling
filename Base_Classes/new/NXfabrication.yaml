@@ -1,7 +1,7 @@
 category: base
 doc: |
   Details about a component as defined by its manufacturer.
-(NXfabrication):
+NXfabrication:
   vendor:
     exists: required
     doc: Company name of the manufacturer.

@@ -8,7 +8,7 @@ symbols:
   n_fct_filter_cand: How many iontypes does the interface meshing iontype filter specify.
   n_fct_iterations: How many DCOM iterations.
   n_ivec: Maximum number of atoms per molecular ion.
-(NXapm_paraprobe_config_nanochem):
+NXapm_paraprobe_config_nanochem:
   (NXentry): 
     \@version:
       doc: Version specifier of this application definition.

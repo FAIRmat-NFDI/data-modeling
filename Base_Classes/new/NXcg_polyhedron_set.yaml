@@ -25,7 +25,7 @@ symbols:
   c: The cardinality of the set, i.e. the number of polyhedra.
   n_e_total: The total number of edges for all polyhedra.
   n_f_total: The total number of faces for all polyhedra.
-(NXcg_polyhedron_set):
+NXcg_polyhedron_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
     enumeration: [3]

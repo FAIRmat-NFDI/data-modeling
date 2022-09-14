@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_edges: The number of edges.
-(NXgraph_edge_set):
+NXgraph_edge_set:
   number_of_edges(NX_POSINT):
     doc: Total number of edges, counting eventual bidirectional edges only once.
     unit: NX_UNITLESS

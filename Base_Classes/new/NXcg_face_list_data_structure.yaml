@@ -30,7 +30,7 @@ symbols:
   n_f: The number of faces.
   n_total: The total number of vertices of all faces. Faces are polygons.
   n_weinberg: The total number of Weinberg vector values of all faces.
-(NXcg_face_list_data_structure):
+NXcg_face_list_data_structure:
   dimensionality(NX_POSINT):
     doc: Dimensionality.
     unit: NX_UNITLESS

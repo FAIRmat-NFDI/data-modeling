@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_alpha_values: Number of alpha values (and offset values) to probe.
-(NXapm_paraprobe_config_surfacer):
+NXapm_paraprobe_config_surfacer:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

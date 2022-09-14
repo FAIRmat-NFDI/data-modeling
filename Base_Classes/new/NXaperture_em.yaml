@@ -2,7 +2,7 @@ category: base
 # extends: NXaperture
 doc: |
   Details of an individual aperture for beams in electron microscopy.
-(NXaperture_em):
+NXaperture_em:
   name:
     doc: Given name/alias of the aperture.
   value(NX_NUMBER):

@@ -3,7 +3,7 @@ doc: |
   Computer science description of a storage object in an input/output system.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcs_io_obj):
+NXcs_io_obj:
   technology:
     doc: Qualifier for the type of storage medium used.
     enumeration: [solid_state_disk, hard_disk, tape]

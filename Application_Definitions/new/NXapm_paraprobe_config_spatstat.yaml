@@ -6,7 +6,7 @@ symbols:
   n_ivecmax: Maximum number of atoms per molecular ion. Should be 32 for paraprobe.
   n_ion_source: Number of different sources iontypes to distinguish.
   n_ion_target: Number of different target iontypes to distinguish.
-(NXapm_paraprobe_config_spatstat):
+NXapm_paraprobe_config_spatstat:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

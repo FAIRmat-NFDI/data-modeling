@@ -6,7 +6,7 @@ symbols:
   d: The dimensionality, which has to be at least 2.
   c: The cardinality of the set, i.e. the number of triangles.
   n_unique: The number of unique vertices supporting the triangles.
-(NXcg_triangle_set):
+NXcg_triangle_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   cardinality(NX_POSINT):

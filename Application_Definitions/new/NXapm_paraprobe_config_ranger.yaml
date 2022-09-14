@@ -5,7 +5,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_isotopes: The number of isotopes to consider as building blocks for searching molecular ions.
   n_composition: The number of compositions to consider for molecular ion search tasks.
-(NXapm_paraprobe_config_ranger):
+NXapm_paraprobe_config_ranger:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

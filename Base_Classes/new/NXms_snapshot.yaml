@@ -3,7 +3,7 @@ doc: |
   Base class for data on the state of the microstructure at a given time/iteration.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXms_snapshot):
+NXms_snapshot:
   comment:
     doc: Is this time for a measurement or a simulation.
     enumeration: [measurement, simulation]

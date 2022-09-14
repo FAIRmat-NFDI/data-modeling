@@ -6,7 +6,7 @@ doc: |
   can be reproduced, like for a PRNG or not (for a true physically random source).
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcs_prng):
+NXcs_prng:
   type:
     doc: |
       Different approaches for generating random numbers with a computer exists.

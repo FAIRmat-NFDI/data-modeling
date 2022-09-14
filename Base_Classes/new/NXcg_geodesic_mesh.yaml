@@ -19,7 +19,7 @@ doc: |
   Here, especially the section on subdivision schemes is relevant.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcg_geodesic_mesh):
+NXcg_geodesic_mesh:
   (NXtransformations):
     doc: |
       Reference to or definition of a coordinate system with

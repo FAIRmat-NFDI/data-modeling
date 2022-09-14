@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_ions: Total number of ions collected.
-(NXpulser_apm):
+NXpulser_apm:
   (NXfabrication):
   pulse_mode:
     doc: |

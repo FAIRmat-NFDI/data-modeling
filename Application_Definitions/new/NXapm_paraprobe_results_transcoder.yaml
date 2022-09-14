@@ -9,7 +9,7 @@ symbols:
     Needs to match maximum_number_of_atoms_per_molecular_ion.
   n_ranges: Number of mass-to-charge-state-ratio intervals mapped on this ion type.
   n_topology: Total number of integers in the supplementary XDMF topology array.
-(NXapm_paraprobe_results_transcoder):
+NXapm_paraprobe_results_transcoder:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

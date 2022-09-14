@@ -1,7 +1,7 @@
 doc: | 
   Contains the settings of a PID controller.
 category: base
-(NXpid):
+NXpid:
   description:
     doc: | 
       Description of how the Process Value for the PID controller is produced by sensor(s) in the setup.

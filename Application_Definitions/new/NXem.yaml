@@ -331,7 +331,7 @@ doc: |
 # symbols:
 # the NeXus default for application definitions wrt to the exists keyword is 
 # that it is required
-(NXem):
+NXem:
   (NXentry):
     exists: [min, 1, max, infty]
     # NEW ISSUE: the definition field and its version attribute enumeration 

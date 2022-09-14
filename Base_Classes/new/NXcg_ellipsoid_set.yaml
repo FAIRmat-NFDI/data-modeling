@@ -8,7 +8,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality, which has to be at least 2.
   c: The cardinality of the set, i.e. the number of ellipses, or ellipsoids.
-(NXcg_ellipsoid_set):
+NXcg_ellipsoid_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   cardinality(NX_POSINT):

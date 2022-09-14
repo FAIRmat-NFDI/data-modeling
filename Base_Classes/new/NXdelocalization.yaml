@@ -12,7 +12,7 @@ symbols:
   n_m: Number of mark data per point/object.
   n_atoms: Number of atoms in the whitelist.
   n_isotopes: Number of isotopes in the whitelist.
-(NXdelocalization):
+NXdelocalization:
   grid:
     doc: Reference or link to the grid on which the delocalization is applied.
   objects:

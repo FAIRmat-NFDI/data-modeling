@@ -34,7 +34,7 @@ doc: |
   field specifies if the coordinate system is the root/reference
   (which is indicated by writing "." in the depends_on section.)
 
-(NXcoordinate_system_set):
+NXcoordinate_system_set:
   # implementing a proposal for "a common base table" along thoughts like:
   # https://manual.nexusformat.org/classes/base_classes/NXtransformations.html#nxtransformations
   # similar to a place where all transformations are stored

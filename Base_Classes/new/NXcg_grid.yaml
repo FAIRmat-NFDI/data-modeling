@@ -10,7 +10,7 @@ symbols:
   d: The dimensionality of the grid.
   c: The cardinality or total number of cells/grid points.
   n_b: Number of boundaries of the bounding box or primitive to the grid.
-(NXcg_grid):
+NXcg_grid:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
     enumeration: [1, 2, 3]

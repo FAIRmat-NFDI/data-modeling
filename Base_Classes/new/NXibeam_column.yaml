@@ -24,7 +24,7 @@ doc: |
   
 # symbols:
 #   doc: The symbols used in the schema to specify e.g. variables.
-(NXibeam_column):
+NXibeam_column:
   (NXfabrication):
   ion_gun(NXsource):
     doc: The source which creates the ion beam.

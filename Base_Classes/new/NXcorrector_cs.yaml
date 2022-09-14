@@ -13,7 +13,7 @@ doc: |
   In the case of Nion Co. microscopes the coefficients of the corrector can be
   retrieved via NionSwift, which is why currently the Nion convention for the
   aberration coefficients is used.
-(NXcorrector_cs):
+NXcorrector_cs:
   applied(NX_BOOLEAN):
     doc: Was the corrector used?
   name:

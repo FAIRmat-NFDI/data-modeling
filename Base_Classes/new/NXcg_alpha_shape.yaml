@@ -22,7 +22,7 @@ symbols:
   n_e: The number of edges.
   n_f: The number of faces.
   n_c: The number of cells.
-(NXcg_alpha_shape):
+NXcg_alpha_shape:
   dimensionality(NX_UINT):
     unit: NX_UNITLESS
     enumeration: [2, 3]

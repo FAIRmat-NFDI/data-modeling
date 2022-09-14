@@ -31,7 +31,7 @@ symbols:
   n_objs: Number of entries (e.g. number of points or objects).
   bitdepth: Number of bits assumed for the container datatype used.
   n_total: Length of mask considering the eventual need for padding.
-(NXcs_filter_boolean_mask):
+NXcs_filter_boolean_mask:
   number_of_objects(NX_UINT):
     doc: Number of objects represented by the mask.
     unit: NX_UNITLESS

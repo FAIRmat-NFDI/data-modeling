@@ -42,7 +42,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   c: The cardinality of the set, i.e. the number of parallelograms.
-(NXcg_parallelogram_set):
+NXcg_parallelogram_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
     enumeration: [2]

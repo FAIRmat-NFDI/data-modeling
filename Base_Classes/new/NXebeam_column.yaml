@@ -3,7 +3,7 @@ doc: |
   Container for components to form a controlled beam in electron microscopy.
 # symbols:
 #   doc: The symbols used in the schema to specify e.g. variables.
-(NXebeam_column):
+NXebeam_column:
   (NXfabrication):
   electron_gun(NXsource):
     doc: The source which creates the electron beam.

@@ -11,7 +11,7 @@ symbols:
   n_v: The number of vertices.
   n_f: The number of faces.
   n_he: The number of half-edges.
-(NXcg_half_edge_data_structure):
+NXcg_half_edge_data_structure:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   number_of_vertices(NX_POSINT):
