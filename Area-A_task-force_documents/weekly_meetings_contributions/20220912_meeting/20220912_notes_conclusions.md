@@ -9,7 +9,7 @@
     -	Tamás will start providing data. 
     -	Oliver could provide Bruker data. 
     -	connect to Area B
--	QCMB Quartz crystal microbalance schema/app. def.: initiated by Hampus (connect to Area B)
+-	QCM-D Quartz crystal microbalance schema/app. def.: initiated by Hampus (connect to Area B)
 -	XRF schema/app. def.: initiated by Hampus (connect to Area B)
 -	PL: Hampus connects to Area B Luminescence activities (Carola)
 -	Spin coating: Pepe develops a schema for HZB on the basis of [Tamás spin coating base class](https://github.com/FAIRmat-Experimental/Area_A_application_definitions/blob/main/surface_coating_methods/spin-coating/spin-coating.yaml)
