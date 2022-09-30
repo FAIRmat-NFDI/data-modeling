@@ -5,7 +5,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_positions: Number of position values.
   n_disjoint_clusters: Number of disjoint cluster.
-(NXapm_paraprobe_config_clusterer):
+NXapm_paraprobe_config_clusterer:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

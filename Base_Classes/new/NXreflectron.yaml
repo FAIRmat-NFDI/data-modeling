@@ -1,7 +1,7 @@
 category: base
 doc: |
   Device for reducing flight time differences of ions in ToF experiments.
-(NXreflectron):
+NXreflectron:
   name:
     doc: Given name/alias.
   (NXfabrication):

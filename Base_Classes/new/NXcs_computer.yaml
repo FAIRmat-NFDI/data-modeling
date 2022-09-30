@@ -3,7 +3,7 @@ doc: |
   Computer science description of a set of computing nodes.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcs_computer):
+NXcs_computer:
   name:
     doc: Given name/alias to the computing system, e.g. MyDesktop.
   operating_system:

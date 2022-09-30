@@ -1,7 +1,7 @@
 category: base
 doc: |
   Component of an instrument to store or place objects and specimens.
-(NXchamber):
+NXchamber:
   name:
     doc: Given name/alias.
   description:

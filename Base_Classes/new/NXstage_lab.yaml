@@ -73,7 +73,7 @@ doc: |
   * `Specimens in atom probe <https://doi.org/10.1007/978-1-4614-8721-0>`_ (page 47ff)
   * `Exemplar micro-manipulators <https://nano.oxinst.com/products/omniprobe/omniprobe-200>`_
   
-(NXstage_lab):
+NXstage_lab:
   design:
     doc: |
       Principal design of the stage.

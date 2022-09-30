@@ -5,7 +5,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_ions: The total number of ions in the reconstruction.
   n_ivec: The maximum number of atoms per molecular ion type.
-(NXapm_paraprobe_results_ranger):
+NXapm_paraprobe_results_ranger:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

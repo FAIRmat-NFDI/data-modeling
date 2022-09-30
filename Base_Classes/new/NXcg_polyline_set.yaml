@@ -14,7 +14,7 @@ symbols:
   # multiple vertices possible with the same point coordinates but different names.
   n_v: The number of vertices, supporting the polylines.
   n_total: The total number of vertices traversed when visiting every polyline.
-(NXcg_polyline_set):
+NXcg_polyline_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   cardinality(NX_POSINT):

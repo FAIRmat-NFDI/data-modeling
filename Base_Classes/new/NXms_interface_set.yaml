@@ -78,7 +78,7 @@ doc: |
   can be stored in an arbitrarily nested manner.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXms_interface_set):
+NXms_interface_set:
   doc: A starting point for the discussion.
 # needs to be extended based on the NXannealing appdef.
 

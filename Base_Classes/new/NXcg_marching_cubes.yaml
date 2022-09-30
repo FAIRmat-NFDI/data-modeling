@@ -6,7 +6,7 @@ doc: |
   the results are with respect to the topology of the triangulation.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcg_marching_cubes):
+NXcg_marching_cubes:
   grid(NXcg_grid):
     doc: |
       Reference/link to and/or details of the grid on which a specific

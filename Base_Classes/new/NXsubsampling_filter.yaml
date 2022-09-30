@@ -3,7 +3,7 @@ doc: |
   Settings of a filter to sample entries based on their value.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXsubsampling_filter):
+NXsubsampling_filter:
    linear_range_min_incr_max(NX_UINT):
     exists: required
     doc: |

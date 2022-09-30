@@ -5,7 +5,7 @@ doc: |
   In electron microscopy, the scan box is instructed by the microscope
   control software. This component directs the probe to controlled
   locations according to a scan scheme and plan.
-(NXscanbox_em):
+NXscanbox_em:
   calibration_style:
   center(NX_NUMBER):
     unit: NX_ANY

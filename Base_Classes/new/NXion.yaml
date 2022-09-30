@@ -5,7 +5,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_ivecmax: Maximum number of atoms/isotopes allowed per (molecular) ion (fragment).
   n_ranges: Number of mass-to-charge-state-ratio range intervals for ion type.
-(NXion):
+NXion:
   ion_type(NX_UINT):
     doc: | 
       Ion type (ion species) identifier. The identifier zero

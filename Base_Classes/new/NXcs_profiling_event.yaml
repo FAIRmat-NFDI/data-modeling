@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_processes: Number of processes.
-(NXcs_profiling_event):
+NXcs_profiling_event:
   start_time(NX_DATE_TIME):
     doc: |
       ISO 8601 time code with local time zone offset to UTC information

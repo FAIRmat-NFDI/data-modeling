@@ -1,7 +1,7 @@
 category: base
 doc: |
   Device to reduce an atmosphere to a controlled remaining pressure level.
-(NXpump):
+NXpump:
   (NXfabrication):
   design:
     doc: Principle type of the pump.

@@ -6,7 +6,7 @@ symbols:
   # Nityp_cand: How many iontypes does the delocalization filter specify.
   # Nivec: Maximum number of atoms per molecular ion.
   n_elements: How many elements to use for computing a composition.
-(NXapm_paraprobe_config_intersector):
+NXapm_paraprobe_config_intersector:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required unless it is explicitly specified differently
     \@version:

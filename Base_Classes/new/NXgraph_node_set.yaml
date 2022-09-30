@@ -6,7 +6,7 @@ symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   d: The dimensionality of the graph. Eventually use one for categorical.
   c: The cardinality of the set, i.e. the number of nodes/vertices of the graph.
-(NXgraph_node_set):
+NXgraph_node_set:
   dimensionality(NX_POSINT):
     unit: NX_UNITLESS
   cardinality(NX_POSINT):

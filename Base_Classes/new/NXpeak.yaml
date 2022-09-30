@@ -4,7 +4,7 @@ doc: |
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
   n_support: Number of support points
-(NXpeak):
+NXpeak:
   label:
     doc: |
       Human-readable identifier to specify which concept/entity

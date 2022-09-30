@@ -15,7 +15,7 @@ symbols:
   n_lbl_num: Number of numeral labels per object.
   n_lbl_cat: Number of categorical labels per object.
   n_cluster: Total number of clusters detected.
-(NXclustering):
+NXclustering:
   number_of_numeric_labels(NX_UINT):
     doc: How many numeric labels does each object have.
     unit: NX_UNITLESS

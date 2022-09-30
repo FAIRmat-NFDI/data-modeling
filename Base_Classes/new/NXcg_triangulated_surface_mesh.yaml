@@ -6,7 +6,7 @@ doc: |
   triangles must not be degenerated.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXcg_triangulated_surface_mesh):
+NXcg_triangulated_surface_mesh:
 #  (NXtransformations):
 #     doc: |
 #       Reference to or definition of a coordinate system with

@@ -15,7 +15,7 @@ symbols:
   n_y: Number of pixel per EELS mapping in the slow direction.
   n_x: Number of pixel per EELS mapping in the fast direction.
   n_energy_loss: Number of electron energy loss bins.
-(NXspectrum_set_em_eels):
+NXspectrum_set_em_eels:
   (NXprocess):
     doc: |
       Details how EELS spectra were processed from the detector readings.

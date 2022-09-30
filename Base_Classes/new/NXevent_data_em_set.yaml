@@ -4,5 +4,5 @@ doc: |
   
   An event is a time interval during which the microscope was configured,
   considered stable, and used for characterization.
-(NXevent_data_em_set):
+NXevent_data_em_set:
   (NXevent_data_em):

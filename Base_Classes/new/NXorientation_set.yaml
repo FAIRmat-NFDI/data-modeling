@@ -19,7 +19,7 @@ symbols:
   d: The dimensionality of the reference space/coordinate system.
   c: The cardinality of the set, i.e. the number of orientations.
   n_p: Number of parameters for the chosen parameterization.
-(NXorientation_set):
+NXorientation_set:
   # depending on the dimensionality n_p is correlated but not necessarily, e.g. for d==3 one can store quaternions (n_p==4) or Bunge-Euler angles (n_p==3)
   # clearly one could think about a single best approach that everybody should use, and indeed quaternions could be a candidate but this conflicts with the
   # expectations understanding and in fact habit by very many materials engineers who know and report their values in Euler angles so at least one would need to

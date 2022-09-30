@@ -125,7 +125,7 @@ doc: |
   registered under the top-level NXinstrument section. Its spatio-temporal
   details could be stored inside respective groups of the NXinstrument though
   inside instances of here detailed NXevent_data_em.
-(NXevent_data_em):
+NXevent_data_em:
   start_time(NX_DATE_TIME):
     doc: |
       ISO 8601 time code with local time zone offset to UTC information included

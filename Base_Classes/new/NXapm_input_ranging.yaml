@@ -2,7 +2,7 @@ category: base
 doc: |
   Metadata to ranging definitions made for a dataset in atom probe microscopy.
 # symbols:
-(NXapm_input_ranging):
+NXapm_input_ranging:
   filename:
     doc: |
       Name of (NeXus)/HDF5 file which stores ranging definitions which define

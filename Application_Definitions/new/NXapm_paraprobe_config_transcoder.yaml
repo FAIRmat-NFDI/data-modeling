@@ -3,7 +3,7 @@ doc: |
   Configurations of a paraprobe-transcoder tool run in atom probe microscopy.
 symbols:
   doc: The symbols used in the schema to specify e.g. dimensions of arrays.
-(NXapm_paraprobe_config_transcoder):
+NXapm_paraprobe_config_transcoder:
   (NXentry):
     # by default for appdefs the value of the exists keyword is required
     # unless it is explicitly specified differently

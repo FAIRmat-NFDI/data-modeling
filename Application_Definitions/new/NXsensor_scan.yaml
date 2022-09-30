@@ -4,7 +4,7 @@ doc: |
   In this application definition, times should be specified always together
   with an UTC offset.
 category: application
-(NXsensor_scan):
+NXsensor_scan:
   (NXentry):
     definition(NX_CHAR):
       \@version:

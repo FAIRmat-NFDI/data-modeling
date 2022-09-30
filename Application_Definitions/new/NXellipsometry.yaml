@@ -59,7 +59,7 @@ symbols:
     specified by NXsample/environment_conditions/SENSOR/value if it exists."
   N_time: "Number of time points measured, the length of NXsample/time_points"
 
-(NXellipsometry):
+NXellipsometry:
   (NXentry):
     doc: |
       This is the application definition describing ellipsometry experiments.

@@ -14,7 +14,7 @@ symbols:
   n_images: Number of images in the stack.
   n_y: Number of pixel per image in the slow direction.
   n_x: Number of pixel per image in the fast direction.
-(NXimage_set_em_adf):
+NXimage_set_em_adf:
   (NXprocess):
     doc: |
       Details how (HA)ADF images were processed from the detector readings.

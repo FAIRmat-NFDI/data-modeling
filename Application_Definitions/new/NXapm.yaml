@@ -14,7 +14,7 @@ symbols:
   n_y: Number of bins in the y direction.
   n_z: Number of bins in the z direction.
   n_bins: Number of bins.
-(NXapm):
+NXapm:
   (NXentry):
     \@version:
       doc: |
