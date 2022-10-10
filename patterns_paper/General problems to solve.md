@@ -96,6 +96,7 @@
 * We really have to decice if we want to stay in the context of nexus or not? Because inheritance is to different between nexus and ontologies.
 * Community standardization process
 
+
 ## What is FAIRmat doing differently
 * Our thoughts could be viewed by some people as overkill
 * Not getting lost in the literature + technical details
@@ -104,6 +105,12 @@
 * General discussion for our internal documentation vs for a general audience
 * Keeping development process easy for the users of the data representation system
 * Providing examples and guidelines
+
+
+## Introduction
+* need for ontology (also current ontology activities world-wide)
+* NeXus as an attempt for data modelling based ontology
+* challange: big data, lots of metdata
 
 
 #area-b #nexus #general-patterns 
