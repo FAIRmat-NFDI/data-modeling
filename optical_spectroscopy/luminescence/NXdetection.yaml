@@ -1,0 +1,139 @@
+# A draft of a new base class to describe the detector unit and the beam path
+# between the sample and the detector unit (e.g. in a luminescence setup).
+
+category: base
+symbols:
+  N_wavelength: "Size of the array of wavelengths used by the monochromator."
+doc: |
+  Description of the detector unit and the beam path between the sample and
+  the detector.
+
+  Applications are e.g. luminescence or Raman setups.
+
+(NXdetection):
+  doc: | 
+    Define the properties of the detector unit and the beam path between the
+    sample and the detector unit.
+    The detector unit usually consists of a spectrometer, a dispersive element
+    or monochromator, and a detector. Describe the beam path between the sample
+    and the detector unit using NXbeam_path.
+
+  (NXbeam_path):
+    doc: "Description of the beam path between the sample and the detector
+      unit. Describe all relevant optical elements and their parameters in the
+      appropriate subclasses."
+
+  spectrometer(NXmonochromator):
+    doc: "The spectroscopic element before the detector. Information on the
+        dispersive element can be specified in the subfield GRATING. Note
+        that different gratings might be used for different wavelength
+        ranges. The dispersion of the grating for each wavelength range
+        can be stored in grating_dispersion."
+
+    wavelength(NX_NUMBER):
+      exists: required
+      doc: "Wavelength value(s) used for the measurement.
+            An array of 1 or more elements. Length defines N_wavelength"
+      unit: NX_LENGTH
+      dimensions:
+        rank: 1
+        dim: [[1, N_wavelength]]
+
+    (NXgrating):
+      doc: "Diffraction grating, as could be used in a monochromator.
+            If two or more gratings were used, define the angular
+            dispersion and the wavelength range (min/max wavelength)
+            for each grating and make sure that the wavelength ranges
+            do not overlap. The dispersion should be defined for the
+            entire wavelength range of the experiment."
+
+      angular_dispersion(NX_NUMBER):
+        doc: "Dispersion of the grating in nm/mm used."
+
+      grating_wavelength_min(NX_NUMBER):
+        doc: "Minimum wavelength of the grating."
+        unit: NX_LENGTH
+
+      grating_wavelength_max(NX_NUMBER):
+        doc: "Maximum wavelength of the grating."
+        unit: NX_LENGTH
+
+    spectral_resolution(NX_NUMBER):
+      doc: "Spectral resolution of the instrument."
+      unit: NX_WAVENUMBER
+      dimensions:
+        rank: 1
+        dim: [[1, N_wavelength]]
+
+    (NXslit):
+      doc: "Define the width of the monochromator slit in the subfield x_gap."
+
+      fixed_slit(NX_BOOLEAN):
+        doc: "Was the slit width fixed?"
+
+      max_gap(NX_NUMBER):
+        doc: "If slit width was not fixed, define the maximum slit width."
+        unit: NX_LENGTH
+
+  (NXdetector):
+    doc: "Which type of detector was used, and what is known about it?
+          A detector can be a photomultiplier (PMT), a CCD in a camera,
+          or an array in a spectrometer. If so, the whole detector unit
+          goes in here."
+
+    detector_type:
+      exists: required
+      doc: "What kind of detector module is used, e.g. CCD spectrometer,
+            CCD camera, PMT, photodiode, etc. If detector type is not
+            listed choose 'other' and specify in 'other_detector'."
+      enumeration: [PMT, photodiode, avalanche diode, CCD camera,
+                    CCD spectrometer, CMOS, bolometer, streak camera,
+                    multichannel plate, other]
+    # x-ray detector?
+    # which kind of CCD
+    # base class for optical detectors: details about CCD, PMT etc. 
+    #   detection mode (lock-in, etc.)
+
+    other_detector:
+      doc: "If you specified 'other' as detector type, please write down
+            what it is."
+    
+    # Fields to be added: 
+    # [x] quantum efficiency
+    # [x] pixel size => NXdetector has x_pixel_size and y_pixel_size 
+    # [x] dimension
+    # [x] time resolution
+    # [x] measurement mode (e.g. photocounting mode) - should we use
+    #     aquisition_mode included in NXdetector?
+    # [x] gain
+    # [x] readout time => NXdetector has detector_readout_time
+    # [x] averaging
+    # [x] need physical dimensions of detector
+    # Other quantities needed to specify the detector?
+
+    quantum_efficiency(NX_NUMBER):
+      doc: "Number between 0 and 1. Possibly provide for every used wavelength
+            value."
+      unit: NX_UNITLESS
+
+    dimension(NX_NUMBER):
+      doc: "Dimension of the detector."
+      unit: NX_LENGTH
+    
+    time_resolution(NX_NUMBER):
+      doc: "Time resolution of the detector."
+      unit: NX_TIME
+
+    gain(NX_NUMBER):
+      doc: "Gain of the detector. For example, in a photon detector this
+            is the number of generated photoelectrons for each absorbed
+            photon."
+      unit: NX_UNITLESS
+
+    averaging(NX_NUMBER):
+      doc: "Number of measurement cycles to be averaged."
+      unit: NX_UNITLESS
+
+    measurement_mode:
+      doc: "Measurement mode of the detector (e.g. photocounting mode)."
+      # enumeration?
