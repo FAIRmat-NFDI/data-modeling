@@ -145,9 +145,13 @@ doc: |
     doc: "Optical loss of the beam splitter."
     unit: NX_UNITLESS
 
-  splitting_ratio(NX_NUMBER): # Is there a better way to enter that ratio?
+  splitting_ratio(NX_NUMBER): 
+  # Problem: there can be more than two paths of the beam
+  # --> should define an array or a table and need a schematic graph showing
+  #   the paths (defining the incoming beam, splitted beam(s), R or T etc.)
     doc: "Beam splitting ratio (e.g. 50:50 = 1)."
     unit: NX_UNITLESS
+  # NXdata for the option of adding a drawing of the beam splitter?
 
   incident_anlge(NX_NUMBER):
     doc: "Optimized angle of incidence for the desired splitting ratio."

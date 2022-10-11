@@ -40,6 +40,10 @@ doc: |
   #     addition?) to describe more complex cases (layer structures etc.)
   # [ ] Check already existing NeXus base classes if they properly describe
   #     optical elements
+  # [ ] How to describe an interferometer?
+  # [ ] Add: beam_shaper, modulator (or combine chopper and photo-acoustic
+  #     modulator?), pulse_picker, frequency_multiplier
+  # [ ] Base class for coating because it is important for several elements.
 
   (NXtransformations):
     doc: "Specify the order of the optical elements."

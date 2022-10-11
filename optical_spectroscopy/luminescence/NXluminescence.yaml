@@ -1,4 +1,4 @@
-# 08/2022
+# 10/2022
 # a draft version of a NeXus application definition for luminescence experiments
 #
 # _____________________________________________________________________________
@@ -97,19 +97,22 @@ symbols:
     start_time(NX_DATE_TIME):
       doc: "Start time of the experiment. UTC offset should be specified."
 
-    acquisition_program:
+    (NXprocess):
+      doc: | 
+        Define the program that was used to generate the results file(s)
+        with measured data and metadata.
       exists: optional
       program:
         doc: "Commercial or otherwise defined given name to the program that was
           used to generate the result file(s) with measured data and metadata."
-      version:
-        doc: "Either version with build number, commit hash, or description of
-          a (online) repository where the source code of the program and build
-          instructions can be found so that the program can be configured in
-          such a way that result files can be created ideally in a
-          deterministic manner."
-      \@url:
-        doc: "Website of the software."
+        \@version:
+          doc: "Either version with build number, commit hash, or description of
+            a (online) repository where the source code of the program and build
+            instructions can be found so that the program can be configured in
+            such a way that result files can be created ideally in a
+            deterministic manner."
+        \@url:
+          doc: "Website of the software."
 
     (NXuser):
       exists: [min, 1] # AT least one user/operator must be provided. 
@@ -151,7 +154,7 @@ symbols:
         doc: "ISO8601 date when the instrument was constructed.
               UTC offset should be specified."
 
-      firmware:
+      software:
         doc: "Name of the software that was used for the measurement"
         \@version:
           doc: "Version and build or commit number of the software source code."
@@ -177,9 +180,9 @@ symbols:
         
         type:
           doc: "Type of excitation source."
-          enumeration: [laser, lamp, X-rays, silicon carbide globar,
-            super continuum, chemical reaction, ultrasound, living organism,
-            power supply, electron source, other]
+          enumeration: [semiconductor laser, gas laser, other laser, lamp, 
+            X-rays, silicon carbide globar, super continuum, chemical reaction,
+            ultrasound, living organism, power supply, electron source, other]
         other_source:
           exists: optional
           doc: "If you specified 'other' as excitation source type, please
@@ -191,7 +194,12 @@ symbols:
 
         RADIATION_SOURCE(NXsource):
           exists: optional
-          doc: "Describes electromagnetic or particle sources."
+          doc: "Describes electromagnetic or particle sources. For each field,
+                specify where (e.g. after element_XY defined in beam_path) the
+                property is specified."
+              # How can we link this to the position in beam path?
+              # Or is it better to define the beam propterties right before the
+              # sample by default?
         
           wavelength_excitation(NX_NUMBER):
             doc: "Wavelength (or wavenumber or energy) array of excitation
@@ -200,6 +208,33 @@ symbols:
             dimensions:
               rank: 1
               dim: [[1, N_wavelength_excitation]]
+          
+          beam_profile: # What's the best way to enter this?
+            exists: optional
+            doc: "Two- or three-dimensional beam profile."
+          
+          cw(NX_BOOLEAN): # CW True or False?
+            doc: "Is the excitation source continuous wave (CW)?"
+
+          peak_power(NX_NUMBER):
+            exists: optional
+            doc: "Power of one light pulse."
+          
+          cw_power(NX_NUMBER):
+            exists: optional
+            doc: "Power of CW beam."
+
+          bandwidth(NX_NUMBER):
+            exists: optional
+            doc: "Bandwidth."
+            
+          coherence_length(NX_NUMBER):
+            exists: optional
+            doc: "Coherence length."
+
+          divergence(NX_NUMBER):
+            exists: optional
+            doc: "Divergence."
 
         chemical_source(NX_CHAR): #  we need a base class for this (Area A...)
           exists: optional
@@ -235,8 +270,7 @@ symbols:
             elements and their parameters in the appropriate subclasses."
 
         spectrometer(NXmonochromator):
-          doc: "The spectroscope element of the ellipsometer before the detector,
-              but often integrated to form one closed unit. Information on the
+          doc: "The spectroscope element before the detector. Information on the
               dispersive element can be specified in the subfield GRATING. Note
               that different gratings might be used for different wavelength
               ranges. The dispersion of the grating for each wavelength range
@@ -277,6 +311,9 @@ symbols:
             exists: optional
             doc: "Spectral resolution of the instrument."
             unit: NX_WAVENUMBER
+            dimensions:
+              rank: 1
+              dim: [[1, N_wavelength]]
 
           (NXslit):
             exists: optional
@@ -610,7 +647,7 @@ symbols:
       #   doc: "Pressure of the environment of the sample."
       #   unit: NX_PRESSURE
 
-    plot(NXdata):
+    (NXdata):
       exists: optional
       doc: "A default view of the data emitted intensity vs. wavelength.
         From measured_data plot intensity and wavelength."

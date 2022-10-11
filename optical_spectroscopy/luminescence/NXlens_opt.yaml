@@ -19,8 +19,17 @@ doc: |
     exists: recommended
     doc: "Type of the lens (e.g. concave, convex etc.)."
     enumeration: ["biconcave", "plano-concave", "convexo-concave", "biconvex",
-                  "plano-convex", "concavo-convex"]
+                  "plano-convex", "concavo-convex", "Fresnel lens", "other"]
+  other_type:
+    doc: "If you chose 'other' as type specify what it is."
   
+  chromatic(NX_BOOLEAN): # chromatic or achromatic
+    doc: "Is it a chromatic lens?"
+
+  lens_diameter(NX_NUMBER):
+    doc: "Diameter of the lens."
+    unit: NX_LENGTH
+
   substrate(NXsample):
     doc: "Properties of the substrate material of the lens. If the lens has a
           coating specify the coating material and its properties in 'coating'."
@@ -77,9 +86,14 @@ doc: |
 
   focal_length(NX_NUMBER):
     exists: recommended
-    doc: "Focal length of the lens."
+    doc: "Focal length of the lens on the front side (first value), i.e. where
+          beam is incident, and on the back side (second value)."
     unit: NX_LENGTH
-    
+    dimensions:
+      rank: 1
+      dim: [[1, 2]]
+  
+
   curvature_radius_FACE(NX_NUMBER):
     exists: recommended
     doc: "Curvature radius of the lens. Instead of FACE, the user is advised to
