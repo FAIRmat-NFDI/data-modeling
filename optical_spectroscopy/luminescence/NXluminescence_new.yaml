@@ -11,7 +11,8 @@
 # _____________________________________________________________________________
 # 
 # QUESTIONS:
-# * General app. def. for optical experiments? See draft for NXopt_experiment
+# * Consistency throughout optical spectroscopy/AreaB/FAIRmat
+# * Generic app. def. for optical experiments? See draft for NXopt_experiment
 # * How should we store the measured data? Currently, a multi-dimensional array
 #   measured_data is defined inside NXsample (as it's done in NXellipsometry).
 # * 
@@ -19,13 +20,16 @@
 # -----------------------------------------------------------------------------
 #
 # TF-MEETING 11/10/2022 
-# ...
+# 
 # _____________________________________________________________________________
 
 category: application
 doc: "Draft application definition for luminescence experiments"
 symbols:
   doc: Variables used throughout the document, e.g. dimensions or parameters
+  N_wavelength_detection: Size of the energy / wavelength vector used
+  N_wavelength_excitation: "Size of the array of wavelengths used for 
+                            excitation in the case of photoluminescence"
   N_parameters: Number of sample parameters scanned
   N_time: Number of time points measured
 
@@ -121,12 +125,10 @@ symbols:
       company:
         exists: optional
         doc: "Name of the company which build the instrument."
-
       construction_year(NX_DATE_TIME):
         exists: optional
         doc: "ISO8601 date when the instrument was constructed.
               UTC offset should be specified."
-
       software:
         doc: "Name of the software that was used for the measurement"
         \@version:
@@ -141,13 +143,12 @@ symbols:
               bioluminescence, chemiluminescence, and sonoluminescence."
         enumeration: [photoluminescence, cathodoluminescence, electroluminescence,
           sonoluminescence, chemiluminescence, bioluminescence]
-
       (NXexcitation):
-
+      (NXdetection):
       (NXmanipulator):
+        exists: optional
         # see: https://github.com/FAIRmat-Experimental/data-modeling/blob/main/Base_Classes/new/NXmanipulator.yml
 
-      (NXdetection):
 
     (NXsample):
       # stage, detection angle
@@ -164,7 +165,6 @@ symbols:
               fields."
       sample_name:
         doc: "Descriptive name of the sample"
-
       sample_history:
         doc: "Ideally, a reference to the location or a unique (globally
               persistent) identifier (e.g.) of e.g. another file which gives
@@ -173,19 +173,9 @@ symbols:
               In the case that such a detailed history of the sample is not
               available, use this field as a free-text description to specify
               details of the sample and its preparation."
-
       preparation_date(NX_DATE_TIME):
         exists: recommended
         doc: "ISO8601 date with time zone (UTC offset) specified."
-
-      angle_of_incidence(NX_NUMBER):
-        doc: "Incident angle of the beam vs. the normal of the bottom
-              reflective (substrate) surface in the sample."
-        unit: NX_ANGLE
-        dimensions:
-          rank: 1
-          dim: [[1, N_angles]]
-
       data_identifier(NX_NUMBER):
         doc: "An identifier to correlate data to the experimental conditions,
               if several were used in this measurement;
@@ -198,13 +188,11 @@ symbols:
         dimensions:
           rank: 1
           dim: [[1, N_wavelength_detection]]
-
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type."
         dimensions:
           rank: 4
           dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
-
       measured_data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
               The structure is the same as for the measured data."
@@ -212,14 +200,21 @@ symbols:
         dimensions:
           rank: 4
           dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
-
-      time_points(NX_NUMBER): # can this also be shifted to varied parameters?
+      time_points(NX_NUMBER):
         exists: optional
         doc: "An array of relative time points if a time series was recorded"
         unit: NX_TIME
         dimensions:
           rank: 1
           dim: [[1, N_time]]
+
+      angle_of_incidence(NX_NUMBER):
+        doc: "Incident angle of the beam vs. the normal of the bottom
+              reflective (substrate) surface in the sample."
+        unit: NX_ANGLE
+        dimensions:
+          rank: 1
+          dim: [[1, N_angles]]
 
       sample_stage(NXsubentry):
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
@@ -375,25 +370,6 @@ symbols:
           #     dimensions:
           #       rank: 4
           #       dim: [[4,2], [3, N_angles], [2, N_variables], [1, N_wavelength]]
-
-      #CE: The following parameters are not needed anymore, because
-      #     they can be defined witin environment_conditions/SENSOR
-      # voltage(NX_NUMBER):
-      #   exists: optional
-      #   doc: "Specify the voltage if the spectra were taken under bias"
-      #   unit: NX_VOLTAGE
-      # temperature(NX_NUMBER):
-      #   exists: optional
-      #   doc: "Temperature of the sample (sample holder, medium)"
-      #   unit: NX_TEMPERATURE
-      # pH(NX_NUMBER):
-      #   exists: optional
-      #   doc: "pH of medium (measured or set)"
-      #   unit: NX_UNITLESS
-      # pressure(NX_NUMBER):
-      #   exists: optional
-      #   doc: "Pressure of the environment of the sample."
-      #   unit: NX_PRESSURE
 
     (NXdata):
       exists: optional

@@ -1,11 +1,29 @@
 # 10/2022
 # Draft of a NeXus application definition for general optical experiments
 # _____________________________________________________________________________
+# 
+# QUESTIONS:
+# * Consistency throughout optical spectroscopy/AreaB/FAIRmat
+# * Generic app. def. for optical experiments? See draft for NXopt_experiment
+# * How should we store the measured data? Currently, a multi-dimensional array
+#   measured_data is defined inside NXsample (as it's done in NXellipsometry).
+# * 
+#
+# -----------------------------------------------------------------------------
+#
+# TF-MEETING 11/10/2022 
+# 
+# _____________________________________________________________________________
 
 category: application
 doc: "Draft application definition for general optical experiments."
 symbols:
   doc: Variables used throughout the document, e.g. dimensions or parameters
+  N_wavelength_detection: Size of the energy / wavelength vector used
+  N_wavelength_excitation: "Size of the array of wavelengths used for 
+                            excitation in the case of photoluminescence"
+  N_parameters: Number of sample parameters scanned
+  N_time: Number of time points measured
 
 (NXopt_experiment):
   (NXentry):
@@ -16,7 +34,7 @@ symbols:
       beam path, a sample + stage + environment, and a detection unit. Examples
       are reflection or transmission measurements, photoluminescence, Raman
       spectroscopy etc.
-      
+
       This application definition defines:
 
         * information on excitation and detection
@@ -121,7 +139,7 @@ symbols:
       (NXexcitation):
 
       (NXdetection):
-
+    
     (NXsample):
       # stage, detection angle
       doc: "Properties of the sample, its history, the sample environment and
@@ -137,7 +155,6 @@ symbols:
               fields."
       sample_name:
         doc: "Descriptive name of the sample"
-
       sample_history:
         doc: "Ideally, a reference to the location or a unique (globally
               persistent) identifier (e.g.) of e.g. another file which gives
@@ -146,19 +163,9 @@ symbols:
               In the case that such a detailed history of the sample is not
               available, use this field as a free-text description to specify
               details of the sample and its preparation."
-
       preparation_date(NX_DATE_TIME):
         exists: recommended
         doc: "ISO8601 date with time zone (UTC offset) specified."
-
-      angle_of_incidence(NX_NUMBER):
-        doc: "Incident angle of the beam vs. the normal of the bottom
-              reflective (substrate) surface in the sample."
-        unit: NX_ANGLE
-        dimensions:
-          rank: 1
-          dim: [[1, N_angles]]
-
       data_identifier(NX_NUMBER):
         doc: "An identifier to correlate data to the experimental conditions,
               if several were used in this measurement;
@@ -171,13 +178,11 @@ symbols:
         dimensions:
           rank: 1
           dim: [[1, N_wavelength_detection]]
-
       measured_data(NX_NUMBER):
         doc: "Resulting data from the measurement, described by data type."
         dimensions:
           rank: 4
           dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
-
       measured_data_error(NX_NUMBER):
         doc: "Specified uncertainties (errors) of the data described by data type.
               The structure is the same as for the measured data."
@@ -185,14 +190,21 @@ symbols:
         dimensions:
           rank: 4
           dim: [[1, N_time], [2, N_parameters], [3, N_wavelength_excitation], [4, N_wavelength_detection]]
-
-      time_points(NX_NUMBER): # can this also be shifted to varied parameters?
+      time_points(NX_NUMBER):
         exists: optional
         doc: "An array of relative time points if a time series was recorded"
         unit: NX_TIME
         dimensions:
           rank: 1
           dim: [[1, N_time]]
+
+      angle_of_incidence(NX_NUMBER):
+        doc: "Incident angle of the beam vs. the normal of the bottom
+              reflective (substrate) surface in the sample."
+        unit: NX_ANGLE
+        dimensions:
+          rank: 1
+          dim: [[1, N_angles]]
 
       sample_stage(NXsubentry):
         doc:  "Sample stage, holding the sample at a specific position in X,Y,Z
@@ -270,6 +282,33 @@ symbols:
                 and N_parameters = 6."
           enumeration: [optical excitation, voltage, temperature, pH, stress,
             stage positions]
+
+        # optical_excitation(NXsource): 
+        #   exists: optional
+        #   doc: "Was the sample modified using an optical source? Describe in this
+        #         group the parameters of the optical excitation used."
+
+        #   wavelength(NX_NUMBER):
+        #     doc: "Wavelength value(s) or the range used for excitation.
+        #           In cases of continuous laser radiation, a value or a set of
+        #           values may do but for other illumination types, such as pulsed
+        #           lasers, or lamps, a range may describe the source better."
+        #     unit: NX_LENGTH
+
+        #   broadening(NX_NUMBER):
+        #     exists: optional
+        #     doc: "Specify the FWHM of the excitation"
+        #     unit: NX_LENGTH
+
+        #   duration(NX_NUMBER):
+        #     exists: optional
+        #     doc: "How long was the sample excited."
+        #     unit: NX_TIME
+
+        #   pulse_energy(NX_NUMBER):
+        #     exists: optional
+        #     doc: "The integrated energy of light pulse."
+        #     unit: NX_ENERGY
 
         (NXsensor):
           exists: optional
