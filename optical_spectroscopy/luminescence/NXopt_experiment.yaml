@@ -7,12 +7,22 @@
 # * Generic app. def. for optical experiments? See draft for NXopt_experiment
 # * How should we store the measured data? Currently, a multi-dimensional array
 #   measured_data is defined inside NXsample (as it's done in NXellipsometry).
-# * 
 #
 # -----------------------------------------------------------------------------
 #
 # TF-MEETING 11/10/2022 
-# 
+# * confocal microscopy: covered as well
+# * in general: link to elements in the beam path before and after the sample
+# * What range? How far to the IR/UV? up to radio
+# * Include standard elements also for x-ray setups
+# * tree of base classes
+# * ultrashort pulses: modified NXbeam class can be used
+# * Where do the data go? NXdata is confusing because it is only for plots...
+#   luminescence: two data sets - excitation and measured spectrum
+#   main data: N-dimensional data block
+#   New base class? including measured_data, data_error,
+#   check out how it is done in NXsensor_scan
+# * h5web issues: FLorian will write a list
 # _____________________________________________________________________________
 
 category: application
@@ -361,10 +371,12 @@ symbols:
           #       rank: 4
           #       dim: [[4,2], [3, N_angles], [2, N_variables], [1, N_wavelength]]
 
-    (NXdata):
+    plot(NXdata): 
       exists: optional
       doc: "A default view of the data emitted intensity vs. wavelength.
         From measured_data plot intensity and wavelength."
       \@axes:
         doc: "We recommend to use wavelength as a default attribute, but it can be
               replaced by any suitable parameter along the X-axis."
+
+    (NXmeasured_data): # measured_data, reference_data, errors
