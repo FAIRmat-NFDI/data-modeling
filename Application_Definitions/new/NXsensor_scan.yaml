@@ -4,6 +4,9 @@ doc: |
   In this application definition, times should be specified always together
   with an UTC offset.
 category: application
+symbols:
+  doc: "Variables used to set a common size for collected sensor data."
+  N_scanpoints: "The number of scan points measured in this scan."
 NXsensor_scan:
   (NXentry):
     definition(NX_CHAR):
@@ -86,8 +89,18 @@ NXsensor_scan:
             doc: | 
               For each point in the scan space, either the nominal setpoint of an independently scanned controller
               or a representative average value of a measurement sensor is registered.
+
+              The length of each sensor's data value array stored in this group should be equal to the number of scan points
+              probed in this scan. For every scan point [N], the corresponding sensor value can be picked from index [N].
+              This allows the scan to be made in any order as the user describes above in the experiment. We get matching
+              values simply using the index of the scan point. 
+
               In case of a full multi-dimensional scan, the length of the scan space [n] is the product of the number
               of setpoints along all independently scanned controllers.
+            dimensions:
+              rank: 1
+              dim: [[1, N_scanpoints]]
+              
           value_timestamp(NX_DATE_TIME):
             exists: recommended
             doc: | 

@@ -1,6 +1,16 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 <definition category="application" extends="NXobject" name="NXsensor_scan" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <symbols>
+        <doc>
+             Variables used to set a common size for collected sensor data.
+        </doc>
+        <symbol name="N_scanpoints">
+            <doc>
+                 The number of scan points measured in this scan.
+            </doc>
+        </symbol>
+    </symbols>
     <doc>
          Application definition for a generic scan using sensors.
          
@@ -106,9 +116,18 @@
                         <doc>
                              For each point in the scan space, either the nominal setpoint of an independently scanned controller
                              or a representative average value of a measurement sensor is registered.
+                             
+                             The length of each sensor's data value array stored in this group should be equal to the number of scan points
+                             probed in this scan. For every scan point [N], the corresponding sensor value can be picked from index [N].
+                             This allows the scan to be made in any order as the user describes above in the experiment. We get matching
+                             values simply using the index of the scan point. 
+                             
                              In case of a full multi-dimensional scan, the length of the scan space [n] is the product of the number
                              of setpoints along all independently scanned controllers.
                         </doc>
+                        <dimensions rank="1">
+                            <dim index="1" value="N_scanpoints"/>
+                        </dimensions>
                     </field>
                     <field name="value_timestamp" recommended="true" type="NX_DATE_TIME">
                         <doc>
