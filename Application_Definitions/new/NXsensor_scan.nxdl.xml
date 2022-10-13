@@ -121,9 +121,6 @@
                              probed in this scan. For every scan point [N], the corresponding sensor value can be picked from index [N].
                              This allows the scan to be made in any order as the user describes above in the experiment. We get matching
                              values simply using the index of the scan point. 
-                             
-                             In case of a full multi-dimensional scan, the length of the scan space [n] is the product of the number
-                             of setpoints along all independently scanned controllers.
                         </doc>
                         <dimensions rank="1">
                             <dim index="1" value="N_scanpoints"/>
