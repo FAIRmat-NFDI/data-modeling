@@ -36,5 +36,5 @@ NXiv_temp(NXsensor_scan):
       voltage(NX_NUMBER):
       current(NX_NUMBER):
         dimensions:
-          rank: n_different_temperatures
-          dim: [[1, n_different_voltages]]
+          rank: 2
+          dim: [[1, n_different_temperatures], [2, n_different_voltages]]
