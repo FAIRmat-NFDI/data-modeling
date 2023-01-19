@@ -15,11 +15,15 @@
          A dispersion table denoting energy, dielectric function tabulated values.
     </doc>
     <field name="model_name" type="NX_CHAR"/>
-    <group name="convention" type="NX_BOOL">
+    <field name="convention" type="NX_CHAR">
         <doc>
-             True for the convention `n + ik`, false for `n - ik`.
+             The sign convention being used (n + or - ik)
         </doc>
-    </group>
+        <enumeration>
+            <item value="n + ik"/>
+            <item value="n - ik"/>
+        </enumeration>
+    </field>
     <field name="energy" type="NX_NUMBER" units="NX_ENERGY">
         <dimensions rank="1">
             <dim index="1" value="n_points"/>

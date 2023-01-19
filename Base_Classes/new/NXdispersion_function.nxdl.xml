@@ -18,7 +18,15 @@
     </doc>
     <field name="model_name" type="NX_CHAR"/>
     <field name="formula" type="NX_CHAR"/>
-    <group name="convention" type="NX_BOOL"/>
+    <field name="convention" type="NX_CHAR">
+        <doc>
+             The sign convention being used (n + or - ik)
+        </doc>
+        <enumeration>
+            <item value="n + ik"/>
+            <item value="n - ik"/>
+        </enumeration>
+    </field>
     <field name="single_param_names" type="NX_CHAR">
         <dimensions rank="1">
             <dim index="1" value="n_single_params"/>

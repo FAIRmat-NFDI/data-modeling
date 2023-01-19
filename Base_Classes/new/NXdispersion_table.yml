@@ -8,9 +8,10 @@ symbols:
     The number of energy and dielectric function points
 NXdispersion_table:
   model_name(NX_CHAR):
-  convention(NX_BOOL):
+  convention(NX_CHAR):
     doc: |
-      True for the convention `n + ik`, false for `n - ik`.
+      The sign convention being used (n + or - ik)
+    enumeration: ['n + ik', 'n - ik']
   energy(NX_NUMBER):
     unit: NX_ENERGY
     dimensions:

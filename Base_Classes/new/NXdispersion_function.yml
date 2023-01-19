@@ -12,7 +12,10 @@ NXdispersion_function:
     This should be a python parsable function.
     Here we should provide which keywords are available
     and a BNF of valid grammar.
-  convention(NX_BOOL):
+  convention(NX_CHAR):
+    doc: |
+      The sign convention being used (n + or - ik)
+    enumeration: ['n + ik', 'n - ik']
   single_param_names(NX_CHAR):
     dimensions:
       rank: 1
