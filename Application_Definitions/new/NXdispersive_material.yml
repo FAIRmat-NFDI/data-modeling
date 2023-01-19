@@ -1,0 +1,71 @@
+category: application
+doc: |
+  NXdispersion
+NXdispersive_material:
+  chemical_formula(NX_CHAR): |
+    The chemical formula of the dispersive material under study.
+    This should be according to the Hills system.
+  colloquial_name(NX_CHAR):
+    exists: optional
+  dispersion_x(NXdispersion):
+    doc: |
+      The dispersion along the optical axis of the material.
+      This should be the only dispersion available for isotropic materials.
+      For uniaxial materials this denotes the ordinary axis.
+      For biaxial materials this denotes the x axis or epsilon 11 tensor element
+      of the diagionalized permittivty tensor.
+    model_name(NX_CHAR):
+    (NXdispersion_table):
+      model_name:
+      convention:
+      energy:
+      dielectric_function:
+    (NXdispersion_function):
+      model_nam:
+      formula:
+      convention:
+      single_param_names:
+      single_param_values:
+      repeated_param_names:
+      repeated_param_values:
+  dispersion_y(NXdispersion):
+    doc: |
+      This should only be filled for biaxial materials.
+      It denotes the epsilon 22 direction of the diagionalized
+      permittivty tensor.
+    exists: optional
+    model_name(NX_CHAR):
+    (NXdispersion_table):
+      model_name:
+      convention:
+      energy:
+      dielectric_function:
+    (NXdispersion_function):
+      model_name:
+      formula:
+      convention:
+      single_param_names:
+      single_param_values:
+      repeated_param_names:
+      repeated_param_values:
+  dispersion_z(NXdispersion):
+    doc: |
+      This should only be filled for uniaxial or biaxial materials.
+      For uniaxial materials this denotes the extraordinary axis.
+      For biaxial materials this denotes the epsilon 33 tensor element
+      of the diagionalized perimittivty tensor.
+    exists: optional
+    model_name(NX_CHAR):
+    (NXdispersion_table):
+      model_name:
+      convention:
+      energy:
+      dielectric_function:
+    (NXdispersion_function):
+      model_nam:
+      formula:
+      convention:
+      single_param_names:
+      single_param_values:
+      repeated_param_names:
+      repeated_param_values:

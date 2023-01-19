@@ -1,0 +1,32 @@
+category: base
+doc: |
+  This describes a dispersion function for a material or layer
+symbols:
+  n_single_params: |
+    The number of single parameters
+  n_repeated_params: |
+    The number of repeated params
+NXdispersion_function:
+  model_name(NX_CHAR):
+  formula(NX_CHAR): |
+    This should be a python parsable function.
+    Here we should provide which keywords are available
+    and a BNF of valid grammar.
+  convention(NX_BOOL):
+  single_param_names(NX_CHAR):
+    dimensions:
+      rank: 1
+      dim: [[1, n_single_params]]
+  single_param_values(NX_NUMBER):
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, n_single_params]]
+  repeated_param_names(NX_CHAR):
+    dimensions:
+      rank: 1
+      dim: [[1, n_repeated_params]]
+  repeated_param_values(NX_NUMBER):
+    dimensions:
+      rank: 1
+      dim: [[1, n_repeated_params]]
