@@ -7,6 +7,33 @@ NXdispersive_material:
     This should be according to the Hills system.
   colloquial_name(NX_CHAR):
     exists: optional
+  dispersion_type(NX_CHAR):
+    doc: |
+      Denotes whether the dispersion is calculated or derived from an experiment
+    enumeration: ["measured", "simulated"]
+  literature_references(NX_CHAR):
+    doc: |
+      This fields holds a literature reference for this material.
+  literature_dois(NX_CHAR):
+    exists: recommended
+    doc: |
+      This field holds the respective doi for the literature references.
+  material_phase(NX_CHAR):
+    exists: optional
+    doc: |
+      The phase of the material
+    enumeration: [gas, liquid, solid, other]
+  material_phase_comment(NX_CHAR):
+    exists: optional
+    doc: |
+      Additional information about the phase if the
+      material phase is other.
+  additional_phase_information(NX_CHAR):
+    exists: recommended
+    doc: |
+      This field may be used to denote additional phase information,
+      such as crystalin phase of a crystal (e.g. 4H or 6H for SiC) or
+      if a measurement was done on a thin film or bulk material.
   dispersion_x(NXdispersion):
     doc: |
       The dispersion along the optical axis of the material.
