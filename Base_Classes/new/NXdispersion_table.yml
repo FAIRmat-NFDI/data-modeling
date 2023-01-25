@@ -12,8 +12,18 @@ NXdispersion_table:
     doc: |
       The sign convention being used (n + or - ik)
     enumeration: ['n + ik', 'n - ik']
+  wavelength(NX_NUMBER):
+    unit: NX_LENGTH
+    dimensions:
+      rank: 1
+      dim: [[1, n_points]]
   energy(NX_NUMBER):
     unit: NX_ENERGY
+    dimensions:
+      rank: 1
+      dim: [[1, n_points]]
+  refractive_index(NX_COMPLEX):
+    unit: NX_DIMENSIONLESS
     dimensions:
       rank: 1
       dim: [[1, n_points]]

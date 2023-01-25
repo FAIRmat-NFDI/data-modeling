@@ -1,0 +1,20 @@
+category: base
+doc: |
+  A repeated parameter for a dispersion function
+symbols:
+  n_repetitions: |
+    The number of parameter repetitions
+NXdispersion_repeated_parameter:
+  name(NX_CHAR):
+    doc: |
+      The name of the parameter
+  description(NX_CHAR):
+    doc: |
+      A description of what this parameter represents
+  values(NX_NUMBER):
+    doc: |
+      The value of the parameter
+    unit: NX_ANY
+    dimensions:
+      rank: 1
+      dim: [[1, n_repetitions]]

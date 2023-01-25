@@ -55,16 +55,21 @@ NXdispersive_material:
       (NXdispersion_table):
         model_name:
         convention:
-        energy:
+        wavelength:
         dielectric_function:
+          exists: recommended
+        refractive_index:
+          exists: recommended
       (NXdispersion_function):
-        model_nam:
+        model_name:
         formula:
         convention:
-        single_param_names:
-        single_param_values:
-        repeated_param_names:
-        repeated_param_values:
+        (NXdispersion_single_parameter):
+          name:
+          value:
+        (NXdispersion_parameter):
+          name:
+          values:
     dispersion_y(NXdispersion):
       doc: |
         This should only be filled for biaxial materials.
@@ -75,16 +80,18 @@ NXdispersive_material:
       (NXdispersion_table):
         model_name:
         convention:
-        energy:
+        wavelength:
         dielectric_function:
       (NXdispersion_function):
         model_name:
         formula:
         convention:
-        single_param_names:
-        single_param_values:
-        repeated_param_names:
-        repeated_param_values:
+        (NXdispersion_single_parameter):
+          name:
+          value:
+        (NXdispersion_parameter):
+          name:
+          values:
     dispersion_z(NXdispersion):
       doc: |
         This should only be filled for uniaxial or biaxial materials.
@@ -96,13 +103,15 @@ NXdispersive_material:
       (NXdispersion_table):
         model_name:
         convention:
-        energy:
+        wavelength:
         dielectric_function:
       (NXdispersion_function):
-        model_nam:
+        model_name:
         formula:
         convention:
-        single_param_names:
-        single_param_values:
-        repeated_param_names:
-        repeated_param_values:
+        (NXdispersion_single_parameter):
+          name:
+          value:
+        (NXdispersion_parameter):
+          name:
+          values:
