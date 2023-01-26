@@ -270,6 +270,15 @@
                      group in NXsample instead.
                 </doc>
             </field>
+            <field name="atom_types" recommended="true" type="NX_CHAR">
+                <doc>
+                     Use Hill's system for listing existing elements of periodic table which are
+                     inside or attached to the surface of the specimen and thus relevant from a
+                     scientific point. The purpose of this field is to allow material databases to
+                     parse the relevant elements without having to interpret the sample history or
+                     other fields.
+                </doc>
+            </field>
             <group name="sample_history" recommended="true" type="NXnote">
                 <doc>
                      A descriptor to keep track of the treatment of the sample before entering the
