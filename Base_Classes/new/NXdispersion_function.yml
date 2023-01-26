@@ -14,8 +14,28 @@ NXdispersion_function:
     doc: |
       The sign convention being used (n + or - ik)
     enumeration: ['n + ik', 'n - ik']
+  energy_identifier(NX_CHAR):
+    doc: |
+      The identifier used to represent energy
+      in the formula. It is recommended to use `E`.
+    unit: NX_ENERGY
+  wavelength_identifier(NX_CHAR):
+    doc: |
+      The identifier useed to represent wavelength
+      in the formula. It is recommended to use `lambda`.
+    unit: NX_LENGTH
+  representation(NX_CHAR):
+    doc: |
+      Which representation does the formula evaluate to.
+      This may either be n for refractive index or eps for dielectric function.
+      The appropriate token is then to be used inside the formula.
+    enumeration: [n, eps]
   (NXdispersion_single_parameter):
   (NXdispersion_parameter):
+    units:
+      dimensions:
+        rank: 1
+        dim: [[1, n_repetitions]]
     values:
       dimensions:
         rank: 1

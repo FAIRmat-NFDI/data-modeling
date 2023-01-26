@@ -11,6 +11,16 @@ NXdispersion_repeated_parameter:
   description(NX_CHAR):
     doc: |
       A description of what this parameter represents
+  units(NX_CHAR):
+    doc: |
+      A unit array associating a unit with each parameter.
+      The first element should be equal to values/@unit.
+      The values should be SI interpretable standard units
+      with common prefixes (e.g. mikro, nano etc.) or their
+      short-hand notation (e.g. nm, mm, kHz etc.).
+    dimensions:
+      rank: 1
+      dim: [[1, n_repetitions]]
   values(NX_NUMBER):
     doc: |
       The value of the parameter

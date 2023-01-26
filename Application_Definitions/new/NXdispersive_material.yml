@@ -64,6 +64,11 @@ NXdispersive_material:
         model_name:
         formula:
         convention:
+        energy_identifier:
+          exists: recommended
+        wavelength_identifier:
+          exists: recommended
+        representation:
         (NXdispersion_single_parameter):
           name:
           value:
@@ -82,10 +87,18 @@ NXdispersive_material:
         convention:
         wavelength:
         dielectric_function:
+          exists: recommended
+        refractive_index:
+          exists: recommended
       (NXdispersion_function):
         model_name:
         formula:
         convention:
+        energy_identifier:
+          exists: recommended
+        wavelength_identifier:
+          exists: recommended
+        representation:
         (NXdispersion_single_parameter):
           name:
           value:
@@ -105,10 +118,18 @@ NXdispersive_material:
         convention:
         wavelength:
         dielectric_function:
+          exists: recommended
+        refractive_index:
+          exists: recommended
       (NXdispersion_function):
         model_name:
         formula:
         convention:
+        energy_identifier:
+          exists: recommended
+        wavelength_identifier:
+          exists: recommended
+        representation:
         (NXdispersion_single_parameter):
           name:
           value:
