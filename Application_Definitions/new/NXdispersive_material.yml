@@ -72,7 +72,7 @@ NXdispersive_material:
         (NXdispersion_single_parameter):
           name:
           value:
-        (NXdispersion_parameter):
+        (NXdispersion_repeated_parameter):
           name:
           values:
     dispersion_y(NXdispersion):
@@ -102,7 +102,7 @@ NXdispersive_material:
         (NXdispersion_single_parameter):
           name:
           value:
-        (NXdispersion_parameter):
+        (NXdispersion_repeated_parameter):
           name:
           values:
     dispersion_z(NXdispersion):
@@ -133,6 +133,6 @@ NXdispersive_material:
         (NXdispersion_single_parameter):
           name:
           value:
-        (NXdispersion_parameter):
+        (NXdispersion_repeated_parameter):
           name:
           values:

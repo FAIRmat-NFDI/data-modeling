@@ -31,7 +31,7 @@ NXdispersion_function:
       The appropriate token is then to be used inside the formula.
     enumeration: [n, eps]
   (NXdispersion_single_parameter):
-  (NXdispersion_parameter):
+  (NXdispersion_repeated_parameter):
     units:
       dimensions:
         rank: 1
