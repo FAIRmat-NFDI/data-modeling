@@ -54,6 +54,7 @@ NXdispersive_material:
         of the diagionalized permittivty tensor.
       model_name(NX_CHAR):
       (NXdispersion_table):
+        exists: recommended
         model_name:
         convention:
         wavelength:
@@ -62,6 +63,7 @@ NXdispersive_material:
         refractive_index:
           exists: recommended
       (NXdispersion_function):
+        exists: recommended
         model_name:
         formula:
         convention:
@@ -84,6 +86,7 @@ NXdispersive_material:
       exists: optional
       model_name(NX_CHAR):
       (NXdispersion_table):
+        exists: recommended
         model_name:
         convention:
         wavelength:
@@ -92,6 +95,7 @@ NXdispersive_material:
         refractive_index:
           exists: recommended
       (NXdispersion_function):
+        exists: recommended
         model_name:
         formula:
         convention:
@@ -115,6 +119,7 @@ NXdispersive_material:
       exists: optional
       model_name(NX_CHAR):
       (NXdispersion_table):
+        exists: recommended
         model_name:
         convention:
         wavelength:
@@ -123,6 +128,7 @@ NXdispersive_material:
         refractive_index:
           exists: recommended
       (NXdispersion_function):
+        exists: recommended
         model_name:
         formula:
         convention:
