@@ -5,7 +5,7 @@
 
 doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
 category: application
-(NXmpes):
+NXmpes:
   (NXentry):
     title:
     start_time(NX_DATE_TIME):
@@ -186,6 +186,14 @@ category: application
       chemical_formula:
         exists: recommended
         doc: "The chemical formula of the sample. For mixtures use the NXsample_component group in NXsample instead."
+      atom_types:
+        exists: recommended
+        doc: "Use Hill's system for listing existing elements of periodic table
+          which are inside or attached to the surface of the specimen
+          and thus relevant from a scientific point. The purpose of this
+          field is to allow material databases to parse the relevant
+          elements without having to interpret the sample history or other
+          fields."      
       sample_history(NXnote):
         exists: recommended
         doc: "A descriptor to keep track of the treatment of the sample before entering the photoemission experiment.
