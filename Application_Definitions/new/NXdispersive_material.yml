@@ -22,6 +22,7 @@ NXdispersive_material:
         Denotes whether the dispersion is calculated or derived from an experiment
       enumeration: ["measured", "simulated"]
     literature_references(NX_CHAR):
+      exists: recommended
       doc: |
         This fields holds a literature reference for this material.
     literature_dois(NX_CHAR):
