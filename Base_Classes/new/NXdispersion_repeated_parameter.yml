@@ -11,7 +11,7 @@ NXdispersion_repeated_parameter:
   description(NX_CHAR):
     doc: |
       A description of what this parameter represents
-  units(NX_CHAR):
+  parameter_units(NX_CHAR):
     doc: |
       A unit array associating a unit with each parameter.
       The first element should be equal to values/@unit.

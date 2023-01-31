@@ -32,7 +32,7 @@ NXdispersion_function:
     enumeration: [n, eps]
   (NXdispersion_single_parameter):
   (NXdispersion_repeated_parameter):
-    units:
+    parameter_units:
       dimensions:
         rank: 1
         dim: [[1, n_repetitions]]
