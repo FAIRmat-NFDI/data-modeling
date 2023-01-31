@@ -8,10 +8,11 @@ NXdispersion_function:
   model_name(NX_CHAR):
     doc: |
       The name of this dispersion model.
-  formula(NX_CHAR): |
-    This should be a python parsable function.
-    Here we should provide which keywords are available
-    and a BNF of valid grammar.
+  formula(NX_CHAR): 
+    doc: |
+      This should be a python parsable function.
+      Here we should provide which keywords are available
+      and a BNF of valid grammar.
   convention(NX_CHAR):
     doc: |
       The sign convention being used (n + or - ik)
