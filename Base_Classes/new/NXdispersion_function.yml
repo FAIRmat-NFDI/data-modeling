@@ -6,6 +6,8 @@ symbols:
     The number of repetitions for the repeated parameters
 NXdispersion_function:
   model_name(NX_CHAR):
+    doc: |
+      The name of this dispersion model.
   formula(NX_CHAR): |
     This should be a python parsable function.
     Here we should provide which keywords are available

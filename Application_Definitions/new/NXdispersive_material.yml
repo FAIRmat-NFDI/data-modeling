@@ -53,6 +53,8 @@ NXdispersive_material:
         For biaxial materials this denotes the x axis or epsilon 11 tensor element
         of the diagionalized permittivity tensor.
       model_name(NX_CHAR):
+        doc: |
+            The name of this dispersion model.
       (NXdispersion_table):
         exists: recommended
         model_name:
@@ -85,6 +87,8 @@ NXdispersive_material:
         permittivity tensor.
       exists: optional
       model_name(NX_CHAR):
+        doc: |
+            The name of this dispersion model.
       (NXdispersion_table):
         exists: recommended
         model_name:
@@ -118,6 +122,8 @@ NXdispersive_material:
         of the diagionalized perimittivty tensor.
       exists: optional
       model_name(NX_CHAR):
+        doc: |
+          The name of this dispersion model.
       (NXdispersion_table):
         exists: recommended
         model_name:
