@@ -17,6 +17,8 @@ NXdispersive_material:
       This should be according to the Hills system.
     colloquial_name(NX_CHAR):
       exists: optional
+      doc: |
+        The colloquial name of the material, e.g. graphite or diamond for carbon.
     dispersion_type(NX_CHAR):
       doc: |
         Denotes whether the dispersion is calculated or derived from an experiment
