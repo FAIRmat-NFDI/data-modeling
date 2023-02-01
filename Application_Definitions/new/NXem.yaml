@@ -559,8 +559,10 @@ NXem:
           Possibility to give an abbreviation or alias of the specimen name field.
       atom_types:
         doc: |
-          Use Hill's system for listing elements of the periodic table which are inside or attached
-          to the surface of the specimen and thus relevant from a scientific point of view.
+          List of comma-separated elements from the periodic table
+          that are contained in the sample. 
+          If the sample substance has multiple components, all 
+          elements from each component must be included in `atom_types`. 
           
           The purpose of the field is to offer materials database systems an opportunity to parse
           the relevant elements without having to interpret these from the sample history.
