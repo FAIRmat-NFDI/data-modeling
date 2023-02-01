@@ -193,6 +193,7 @@ NXmpes:
         Alternatively, a reference to the location or a unique identifier or other metadata file.
         In the case these are not available, free-text description."
       atom_types:
+        exists: recommended
         doc: |
           List of comma-separated elements from the periodic table
           that are contained in the sample. 
