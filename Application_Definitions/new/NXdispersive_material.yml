@@ -38,14 +38,13 @@ NXdispersive_material:
       doc: |
         Denotes whether the dispersion is calculated or derived from an experiment
       enumeration: ["measured", "simulated"]
-    literature_references(NX_CHAR):
+    REFERENCES(NXcite):
       exists: recommended
-      doc: |
-        This fields holds a literature reference for this material.
-    literature_dois(NX_CHAR):
-      exists: recommended
-      doc: |
-        This field holds the respective doi for the literature references.
+      text:
+        doc: |
+          A text description of this reference, e.g.
+          `E. Example et al, The mighty example, An example journal 50 (2023), 100`
+      doi:
     dispersion_x(NXdispersion):
       doc: |
         The dispersion along the optical axis of the material.
