@@ -87,6 +87,8 @@ NXdispersive_material:
         (NXdispersion_repeated_parameter):
           name:
           values(NX_NUMBER):
+      plot(NXdata):
+        exists: recommended
     dispersion_y(NXdispersion):
       doc: |
         This should only be filled for biaxial materials.
@@ -121,6 +123,8 @@ NXdispersive_material:
         (NXdispersion_repeated_parameter):
           name:
           values(NX_NUMBER):
+      plot(NXdata):
+        exists: recommended
     dispersion_z(NXdispersion):
       doc: |
         This should only be filled for uniaxial or biaxial materials.
@@ -156,3 +160,5 @@ NXdispersive_material:
         (NXdispersion_repeated_parameter):
           name:
           values(NX_NUMBER):
+      plot(NXdata):
+        exists: recommended
