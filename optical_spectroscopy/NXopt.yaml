@@ -6,7 +6,8 @@
 # *
 # ------------------------------------------------------------------------------
 # To do:
-# [ ] 
+# [ ] Check base classes (NXbeam_path + base classes used by it)
+# [ ] Harmonize NXopt and NXellipsometry
 # ______________________________________________________________________________
 
 category: application
