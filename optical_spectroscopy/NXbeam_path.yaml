@@ -98,7 +98,15 @@ doc: |
           power supply,
           electron source,
           other
-        ]    
+        ]
+    lifespan(NX_NUMBER):
+      exists: recommended
+      doc: Lifespan of the lamp (typically provided in hours).
+      unit: NX_TIME
+    operating_period(NX_NUMBER):
+      exists: recommended
+      doc: How many hours has the lamp been used?
+      unit: NX_TIME 
     excitation_wavelength(NX_FLOAT): 
       exists: required
       doc: |

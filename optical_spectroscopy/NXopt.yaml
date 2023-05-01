@@ -8,6 +8,7 @@
 # To do:
 # [ ] Check base classes (NXbeam_path + base classes used by it)
 # [ ] Harmonize NXopt and NXellipsometry
+# [ ] Fix dimensions and ranks
 # ______________________________________________________________________________
 
 category: application
@@ -29,7 +30,11 @@ symbols:
     Number of detection angles of the beam reflected or scattered off the
     sample.
   N_incident_angles: Number of angles of incidence of the incident beam.
-
+  N_observables: |
+    Number of observables that are saved in a measurement. e.g. one for
+    intensity, reflectivity or transmittance, two for Psi and Delta etc. This
+    is equal to the second dimension of the data array 'measured_data' and the
+    number of column names.
 NXopt:
   (NXentry):
     doc: |
@@ -179,6 +184,14 @@ NXopt:
           two or more beams) is part of the beam path, two or more NXbeam_path
           fields may be needed to fully describe the beam paths and the correct
           sequence of the beam path elements.
+      angle_of_incidence(NX_NUMBER):
+        doc: |
+          Angle(s) of the incident beam vs. the normal of the bottom reflective
+          (substrate) surface in the sample.
+        unit: NX_ANGLE
+        dimensions:
+          rank: 1
+          dim: [[1, N_incident_angles]]
       detection(NXbeam_path):
         doc: |
           Describes the beam path between the sample and the detector unit, as
@@ -187,6 +200,16 @@ NXopt:
           two or more beams) is part of the beam path, two or more NXbeam_path
           fields may be needed to fully describe the beam paths and the correct
           sequence of the beam path elements.
+      detection_angle(NX_NUMBER):
+        exists: optional
+        doc: |
+          Detection angle(s) of the beam reflected or scattered off the sample
+          vs. the normal of the bottom reflective (substrate) surface in the
+          sample if not equal to the angle(s) of incidence.
+        unit: NX_ANGLE
+        dimensions:
+          rank: 1
+          dim: [[1, N_detection_angles]]
       sample_stage(NXsubentry):
         doc:  |
           Sample stage, holding the sample at a specific position in X,Y,Z
@@ -230,24 +253,6 @@ NXopt:
               the beam hits the sample and in what direction the sample stands
               in a free-text description, e.g. 'center of sample, long edge
               parallel to the plane of incidence'.
-        angle_of_incidence(NX_NUMBER):
-          doc: |
-            Angle(s) of the incident beam vs. the normal of the bottom
-            reflective (substrate) surface in the sample.
-          unit: NX_ANGLE
-          dimensions:
-            rank: 1
-            dim: [[1, N_incident_angles]]
-        detection_angle(NX_NUMBER):
-          exists: optional
-          doc: |
-            Detection angle(s) of the beam reflected or scattered off the
-            sample vs. the normal of the bottom reflective (substrate) surface
-            in the sample if not equal to the angle(s) of incidence.
-          unit: NX_ANGLE
-          dimensions:
-            rank: 1
-            dim: [[1, N_detection_angles]]
         environment_conditions(NXenvironment):
           doc: |
             Specify external parameters that have influenced the sample, such
@@ -364,33 +369,58 @@ NXopt:
               dimensions:
                 rank: 1
                 dim: [[1, N_measurements]]
-        entry_window(NXaperture):
-        # CE: Do we need separate fields for entry and exit windows or should
-        # we pack them into one field?
+        WINDOW(NXaperture):
           exists: optional
           doc: |
             For environmental measurements, the environment (liquid, vapor
             etc.) is enclosed in a cell, which has windows both in the
-            direction of the source and the detector (looking from the sample).
-            These windows also add a phase shift to the light altering the
+            direction of the source (entry window) and the detector (exit
+            window) (looking from the sample). In case that the entry and exit
+            windows are not the same type and do not have the same properties,
+            use a second 'WINDOW(MXaperture)' field.
+
+            The windows also add a phase shift to the light altering the
             measured signal. This shift has to be corrected based on measuring
-            a known sample in the environmental cell.
+            a known sample (reference sample) or the actual sample of interest
+            in the environmental cell. State if a window correction has been
+            performed in 'window_effects_corrected'. Reference data should be
+            considered as a separate experiment, and a link to the NeXus file
+            should be added in reference_data_link in measured_data.
 
-            Reference data should be considered as a separate experiment, and a
-            link to the NeXus file should be added in reference_data_link in
-            measured_data.
-
-            This field describes the entry window, which is a part of the
-            sample stage but might also be considered to be a part of the
-            incident beam path described by 'incident_light(NXbeam_path)''.
-            In the latter case its position within the beam path should be
-            defined by the 'depends_on' field which points to the preceding
-            element. 
+            The window is considered to be a part of the sample stage but also
+            beam path. Hence, its position within the beam path should be
+            defined by the 'depends_on' field.
           depends_on:
             exists: recommended
             doc: |
               Specify the position of the window in the beam path by pointing
               to the preceding element in the sequence of beam path elements.
+          window_effects_corrected(NX_BOOLEAN):
+            doc: |
+              Was a window correction performed? If 'True' describe the window
+              correction procedure in 'window_correction/procedure'.
+          window_correction(NXprocess):
+            exists: optional
+            doc: |
+              Was a window correction performed? If 'True' describe the
+              window correction procedure in ''
+            procedure:
+              doc: |
+                Describe when (before or after the main measurement + time
+                stamp in 'date') and how the window effects have been
+                corrected, i.e. either mathematically or by performing a
+                reference measurement. In the latter case, provide the link to
+                to the reference data in 'reference_data_link'.
+            reference_data_link:
+              exists: optional
+              doc:  |
+                Link to the NeXus file which describes the reference data if a
+                reference measurement for window correction was performed.
+                Ideally, the reference measurement was performed on a reference
+                sample and on the same sample, and using the same conditions as
+                for the actual measurement with and without windows. It should
+                have been conducted as close in time to the actual measurement
+                as possible.
           material(NX_CHAR):
             doc: The material of the window.
             enumeration:
@@ -416,56 +446,7 @@ NXopt:
               Angle of the window normal (outer) vs. the substrate normal
               (similar to the angle of incidence).
             unit: NX_ANGLE
-        exit_window(NXaperture):
-          exists: optional
-          doc: |
-            For environmental measurements, the environment (liquid, vapor
-            etc.) is enclosed in a cell, which has windows both in the
-            direction of the source and the detector (looking from the sample).
-            These windows also add a phase shift to the light altering the
-            measured signal. This shift has to be corrected based on measuring
-            a known sample in the environmental cell.
-
-            Reference data should be considered as a separate experiment, and a
-            link to the NeXus file should be added in reference_data_link in
-            measured_data.
-
-            This field describes the exit window, which is a part of the
-            sample stage but might also be considered to be a part of the
-            incident beam path described by incident_light(NXbeam_path).
-            In the latter case its position within the beam path should be
-            defined by the 'depends_on' field which points to the preceding
-            element. 
-          depends_on:
-            doc: |
-              Specify the position of the window in the beam path by pointing
-              to the preceding element in the sequence of beam path elements.
-          material(NX_CHAR):
-            doc: The material of the window.
-            enumeration:
-              [
-                quartz,
-                diamond,
-                calcium fluoride,
-                zinc selenide,
-                thallium bromoiodide,
-                alkali halide compound,
-                Mylar,
-                other,
-              ]
-          other_material(NX_CHAR):
-            exists: optional
-            doc: |
-              If you specified 'other' as material, decsribe here what it is.
-          thickness(NX_FLOAT):
-            doc: Thickness of the window.
-            unit: NX_LENGTH
-          orientation_angle(NX_FLOAT):
-            doc: |
-              Angle of the window normal (outer) vs. the substrate normal
-              (similar to the angle of incidence).
-            unit: NX_ANGLE
-    
+       
     (NXsample):
       doc: |
         Properties of the sample, such as sample type, layer structure,
@@ -529,22 +510,38 @@ NXopt:
         exists: optional
         doc: Specify the sample orientation.
     
-    plot(NXdata): 
-      exists: optional
-      doc: |
-        A default view of the data provided in ENTRY/data/measured_data. This
-        should be the part of the data set which provides the most suitable
-        representation of the data.
-      \@axes:
-        doc: Spectrum, i.e. x-axis of the data (e.g. wavelength, energy etc.)
-      \@units:
-        doc: Unit of the x-axis (e.g. nanometer, Angstrom, electron volt etc.)
-    
     data(NXprocess):
       doc: |
         Measured data, data errors, and varied parameters. If reference data
         were measured they should be considered a separate experiment and a
         link to its NeXus file should be added in reference_data_link.
+      data_type:
+        doc: |
+          Select which type of data was recorded, for example intensity,
+          reflectivity, transmittance, Psi and Delta etc.
+          It is possible to have multiple selections. The enumeration list
+          depends on the type of experiment and may differ for different
+          application definitions.
+        enumeration:
+          [
+            intensity,
+            reflectivity,
+            transmittance,
+            Psi/Delta,
+            tan(Psi)/cos(Delta),
+            Mueller matrix,
+            Jones matrix,
+            N/C/S,
+            raw data,
+          ]
+      column_names:
+        doc: |
+          Please list in this array the column names used in your actual data.
+          That is ['Psi', 'Delta'] or ['MM1', 'MM2', 'MM3', ..., 'MM16'] for a
+          full Mueller matrix, etc.
+        dimensions:
+          rank: 1
+          dim: [[1, N_observables]]
       SPECTRUM(NX_FLOAT):
         doc: |
           Spectral values (e.g. wavelength or energy) used for the measurement.
@@ -556,7 +553,7 @@ NXopt:
           dim: [[1, N_spectrum]]
       measured_data(NX_FLOAT):
         doc: |
-          Resulting data from the measurement, described by data_type. 
+          Resulting data from the measurement, described by 'data_type'. 
           
           The first dimension is defined by the number of measurements taken,
           (N_measurements). The instructions on how to order the values
@@ -579,7 +576,7 @@ NXopt:
           dim: 
             [
               [1, N_measurements],
-              [2, N_variables],
+              [2, N_observables],
               [3, N_spectrum]
             ]
       data_error(NX_FLOAT):
@@ -599,10 +596,11 @@ NXopt:
           dim: 
             [
               [1, N_measurements],
-              [2, N_variables],
+              [2, N_observables],
               [3, N_spectrum]
             ]
       varied_parameter_link:
+        exists: optional
         doc: |
           List of links to the values of the sensors. Add a link for each
           varied parameter (i.e. for each sensor).
@@ -611,4 +609,20 @@ NXopt:
           dim: [[1, N_sensors]]
       reference_data_link:
         exists: optional
-        doc: Link to the NeXus file which describes the reference data.
+        doc:  |
+          Link to the NeXus file which describes the reference data if a
+          reference measurement was performed. Ideally, the reference
+          measurement was performed using the same conditions as the actual
+          measurement and should be as close in time to the actual measurement
+          as possible.
+    
+    plot(NXdata): 
+      exists: recommended
+      doc: |
+        A default view of the data provided in ENTRY/data/measured_data. This
+        should be the part of the data set which provides the most suitable
+        representation of the data.
+      \@axes:
+        doc: Spectrum, i.e. x-axis of the data (e.g. wavelength, energy etc.)
+      \@units:
+        doc: Unit of the x-axis (e.g. nanometer, Angstrom, electron volt etc.)
