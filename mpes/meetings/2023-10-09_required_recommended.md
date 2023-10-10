@@ -9,6 +9,6 @@
 - (NXuser) recommended. name and affiliation required
 
 # ToDos
-- Change NXuser recommeded/required
+- [X] Change NXuser recommeded/required - Added [here](https://github.com/FAIRmat-NFDI/nexus_definitions/pull/52/commits/4f4fabcd9701a964c19a6d213647f292a13d4c9b)
 
 # Backlog
