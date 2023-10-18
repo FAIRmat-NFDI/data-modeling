@@ -1,4 +1,7 @@
 
+# Residual question from [last meeting](2023-10-18_additions_to_nxmpes_instrument.md)
+- What happens if you write `doc` in the class inside an appdef? Does it replace the docstring from the base class or does it concatenate the docstrings? (see also [this](https://github.com/nexusformat/definitions/issues/1059) discussion)
+
 # Transformations
 
 ## Points to discuss
