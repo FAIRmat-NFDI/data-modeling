@@ -12,7 +12,7 @@
  
 ## Proposal for implementing references in yaml 
 ISO example:
-```
+```yaml
 energy_referencing(NXcalibration):
   exists: optional
   xref:
@@ -30,10 +30,11 @@ This should be converted in nyaml2nxdl to show up at the end of the docstring as
 ```
 
 Ontology example:
-```
-spec: OEO
-term: time series
-url: http://openenergy-platform.org/ontology/oeo/oeo-shared/OEO_00030034
+```yaml
+xref:
+  spec: OEO
+  term: time series
+  url: http://openenergy-platform.org/ontology/oeo/oeo-shared/OEO_00030034
 ```
 
 
@@ -43,7 +44,7 @@ url: http://openenergy-platform.org/ontology/oeo/oeo-shared/OEO_00030034
 - Propose to NIAC to support relationships between a given concept and a concept defined somewhere else (e.g., in an ontology) 
 - Rule: In NXDL, you need to put a specific text at the end of the docstring to indicate a relationships to a foreign concept.
     - in nyaml, add field `xref` like this:
-    ```
+    ```yaml
     xref:
       spec: <spec>
       term: <term>
@@ -52,7 +53,7 @@ url: http://openenergy-platform.org/ontology/oeo/oeo-shared/OEO_00030034
     - in nyaml2nxdl, this should be converted at the end of the docstring to: 
     ```
         This concept is related to term `<term>`_ of the <spec> standard.
-    .. _12.74: <url>
+    .. _<term>: <url>
     ```
 - We drop the convenience that you do not need to write (NX_CHAR) in nyaml (in order to avoid confusing the data field `xref(NX_CHAR)` and the control `xref`).
 
@@ -62,4 +63,4 @@ url: http://openenergy-platform.org/ontology/oeo/oeo-shared/OEO_00030034
 
 
 # Backlog
-- Add a more detailed description of control keys (exists, enumeration, unit, xref, ...) to nyaml2nxdl
+- Add a more detailed description of control keys (`exists`, `enumeration`, `unit`, `xref`, ...) to nyaml2nxdl (see [here](https://github.com/FAIRmat-NFDI/nexus_definitions/tree/fairmat/dev_tools/nyaml2nxdl))
