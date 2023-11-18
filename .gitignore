@@ -1,2 +1,4 @@
 ARPES/tabular-to-yaml/~$mpes-nexus_metadata_parameters.xlsx
 **/__pycache__/
+.ipynb_checkpoints
+.DS_Store

@@ -1,0 +1,370 @@
+# FAIRmat consortium 07/2022
+# Draft version of a NeXus application definition
+# for x-ray scattering experiments.
+
+# the doc needs to be a general block, first line providing a short summary, the
+# rest details, and possibly references.
+# TODO: Add additional information.
+# NX_CHAR does not have to be written out as it is implied
+category: application
+doc: |
+  General application definition for x-ray scattering experiments.
+symbols:
+  doc: The symbols used in the schema to specify e.g. dimensions of arrays
+  N_wavelengths: Number of wavlengths in the monochromated beam
+  N_detectors: Number of detection channels
+  N_xpixel: Number of x-pixels of the detector
+  N_ypixel: Number of y-pixels of the detector
+  N_phi: Number of phi angles
+  N_chi: Number of chi angles
+  N_omega: Number of omega angles
+  N_twotheta: Number of two-theta angles
+(NXxrd):
+  (NXentry):
+    \@version:
+      doc: |
+        An at least as strong as SHA256 hashvalue of the file
+        that specifies the application definition.
+    # enumeration: [sha_256_hash]
+    definition:
+      doc: NeXus NXDL schema to which this file conforms.
+      enumeration: [NXxrd]
+      \@version:
+      \@url:
+        doc: |
+          URL where to find further material (documentation, examples)
+          relevant to the application definition.
+    experiment_identifier:
+      doc: |
+        Ideally, a (globally) unique persistent identifier 
+        for referring to this experiment.
+
+        The identifier is usually defined/issued by the facility, laboratory,
+        or the principle investigator. The identifier enables to link 
+        experiments to e.g. proposals.
+    experiment_description:
+      exists: optional
+      doc: |
+        Free-text description about the experiment.
+
+        Users are strongly advised to detail the sample history in the 
+        respective field and fill rather as completely as possible the fields
+        of this application definition rather than write details about the
+        experiment into this free-text description field.
+    start_time(NX_DATE_TIME):
+      doc: |
+        ISO 8601 time code with local time zone offset to UTC information
+        included when the measurement started.
+    end_time(NX_DATE_TIME):
+      doc: |
+        ISO 8601 time code with local time zone offset to UTC information
+        included when the measurement ended.
+    # WHAT DEFINES THE START AND END ?
+    program: # here should be details about the control software used etc.
+      \@version:
+        doc: |
+          Program version plus build number, commit hash, or description of an
+          ever persistent resource where the source code of the program and
+          build instructions can be found so that the program can be configured
+          in such a manner that the result file is ideally recreatable
+          yielding the same results.
+    # experiment_documentation(NXnote): ??
+    # thumbnail(NXnote): ??
+    (NXuser):
+      # TODO: General pattern for user which we use in each of our appdefs
+      exists: [min, 1, max, infty]
+      doc: |
+        Contact information of at least the user of the instrument
+        or the investigator who performed this experiment.
+        Adding multiple users if relevant is recommended.
+      # should we make these fields similar?
+      # we should reconsider what is required, an email and affiliation,
+      # changes often factually faster than a ORCID or ResearcherID
+      name:
+        doc: Name of the user.
+      affiliation:
+        doc: |
+          Name of the affiliation of the user at the point in time
+          when the experiment was performed.
+      address:
+        doc: |
+          Full address (street, street number, ZIP, city, country)
+          of the user's affiliation.
+      email:
+        doc: Email address of the user.
+      url:
+        exists: recommended
+        doc: |
+          Author ID defined by reasearch id services, e.g. orcid (https://orcid.org/).
+      # other ResearcherID services?
+      # maybe role?
+      # role:
+      #   exists: optional
+      #   doc: |
+      #     Which role does the user have in the place and at the point
+      #     in time when the experiment was performed? Technician operating
+      #     the microscope. Student, postdoc, principle investigator, guest
+      #     are common examples.
+      telephone_number:
+        exists: recommended
+        doc: Official telephone number of the user.
+      # social media?
+    (NXsample):
+      # name is good, but we need sample ID for sure
+      # and some description of the chemistry
+      # state of the material:
+      # [powder, solid, liquid, solution]
+      # thermodynamic/phase state and shape/preparation
+      # it may have:
+      # dimensions, such as width, height, thickness
+      # volume
+      # concentration
+      # we may want to have situation mandatory (atmosphere)
+      name:
+        # MarkusK my suggestion on the naming
+        doc: |
+          Descriptive name or ideally (globally) unique persistent identifier.
+          The name distinguishes the specimen from all others and especially the
+          predecessor/origin from where the specimen was cut.
+        # MarkusK I am convinced the docstring should be made more instructive here
+      chemical_formula:
+      # sample_history:
+      # maybe a field like short_title:
+      # please take and use Andrea's NXsample proposal
+    (NXinstrument):
+      # lets put an NXmanufacturer for each component as it can hold also serial numbers
+      # etc and a structuring where people could store additional technician/bookkeeping/accounting relevant data
+      (NXsource):
+        type:
+          doc: ""
+          enumeration:
+            [
+              Synchrotron X-ray source,
+              Rotating Anode X-ray,
+              Fixed Tube X-ray,
+              Free-Electron Laser,
+              Metal Jet X-ray,
+            ]
+        name:
+          doc: ""
+        probe:
+          doc: ""
+          enumeration: [x-ray]
+      (NXbeam):
+        incident_energy(NX_FLOAT):
+          doc: ""
+          unit: NX_ENERGY
+      (NXmonochromator):
+        exists: optional
+        wavelength(NX_FLOAT):
+          doc: Optimal diffracted wavelengths # optimal in which sense?
+          dimensions:
+            rank: 1
+            dim: [[1, N_wavelengths]]
+          unit: NX_WAVELENGTH
+        (NXslit):
+          doc: Slits of the monochromator
+      goniometer(NXmanipulator):
+        # there should be a figure where all the angles are defined to guide the user
+        doc: The goniometer to positon source, detector and sample with respect to each other.
+        # TODO: Are these the common names? Should we name them something more general?
+        # For example polar, azimuthal etc.
+        (NXtransformations):
+          chi_angles(NX_TRANSFORMATION):
+            doc: Chi angles of the goniometer.
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_chi]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the chi_angles
+                in the NXgoniometer NXtransformations groups.
+          psi_angles(NX_TRANSFORMATION):
+            doc: Psi angles of the goniometer
+            transformation_type: rotation
+            unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_phi]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the psi_angles
+                in the NXgoniometer NXtransformations groups.
+          omega_angles(NX_TRANSFORMATION):
+            doc: Omega angles of the goniometer
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_omega]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the omega_angles
+                in the NXgoniometer NXtransformations groups.
+          twotheta(NX_TRANSFORMATION):
+            doc: Two-theta-theta angles of the goniometer
+            \@transformation_type(NX_CHAR):
+              enumeration: [rotation]
+            \@vector(NX_NUMBER):
+            unit: NX_ANGLE
+            dimensions:
+              rank: 1
+              dim: [[1, N_twotheta]]
+            \@depends_on(NX_CHAR):
+              doc: |
+                This should point to the transformation placing the twotheta_angles
+                in the NXgoniometer NXtransformations groups.
+      detector(NXdetector):
+        # we have the problem that unit depends on the detector type
+        # I cannot see the NXdetector having the option for counters etc.
+        # maybe we should add an item: detector_type
+        # and enum listing something like:
+        # [diode array, CCD array, 2D CMOS, 2D CCD, PMT, scintillation counter, ...]
+        # they may have further parameters, such as:
+        # operation voltage (PMT, MCP, scintillation detectors)
+
+        # it may be handy to add here NXtransformations
+        # to provide the position of the detector
+        # however the sample comes first, thus
+        # the transformation may rely on something
+        # defined later in the text. It should be no problem,
+        # but some may find it confusing at the first sight.
+        # TODO:
+        # Replace with NXtransformations
+        # and add support for 2D detectors
+
+        # MarkusK: would a global NXcoordinate_system_set
+        # where all the coordinate systems are defined and the individual
+        # nested NXtransformations depend_on ?
+        data(NX_NUMBER):
+          doc: Detector signal
+          # TODO: Is that a proper ordering for common XRD experiments
+          # regarding fast and slow scanning axis?
+          # looks alright to me but what if we do not have an area detector,
+          # think you mention this though in your leading statement about problems
+          dimensions:
+            rank: 6
+            dim:
+              [
+                [1, N_phi],
+                [2, N_chi],
+                [3, N_omega],
+                [4, N_twotheta],
+                [5, N_ypixel],
+                [6, N_xpixel],
+              ]
+        x_pixel_size(NX_FLOAT):
+          doc: Physical size of a pixel in x-direction # in which coordinate system the detector?
+          unit: NX_LENGTH
+        y_pixel_size(NX_FLOAT):
+          doc: Physical size of a pixel in y-direction # see above?
+          unit: NX_LENGTH
+        # TODO: Do we want to support scanning of detector positions?
+        position(NXtransformations):
+          doc: Position of the beam center
+          \@depends_on(NX_CHAR):
+        beam_center_x(NX_FLOAT):
+          doc: |
+            This is the x position where the direct beam would hit the detector.
+            This is a length, not a pixel position, and can be outside of the actual detector.
+          unit: NX_LENGTH
+        beam_center_y(NX_FLOAT):
+          doc: |
+            This is the y position where the direct beam would hit the detector.
+            This is a length, not a pixel position, and can be outside of the actual detector.
+          unit: NX_LENGTH
+        depends_on(NX_CHAR):
+          doc: |
+            This points to the transformation placing the detector in the coordinate system.
+          exists: recommended
+        (NXtransformations):
+          doc: |
+            This is the recommended location for the detector position.
+        # beam profile is relevant, in particular if you want to apply NXxrd also for
+        # texture goniometry where you could run in cases where you illuminate rather flat onto the detector
+        # and thus illuminate a larger cross-section
+        # how should I image here the resolving of the six axes of the detector,
+        # i.e. which phi value is represented by the say first dimension
+    (NXmonitor):
+      # TODO: Is there anything monitored form the source beam in XRD?
+      # Or do you just determine the properties of the beam once?
+      # Then it should be a property of NXsource.
+      exists: optional
+      mode:
+        doc: |
+          Count to a preset value based on either clock time (timer) 
+          or received monitor counts (monitor).
+        enumeration: [monitor, timer]
+      preset(NX_FLOAT):
+        doc: Preset value for time or monitor
+        unit: NX_ANY # ??
+      integral(NX_FLOAT):
+        doc: Total integral monitor counts
+        unit: NX_ANY
+    # NXdata is about the default look of your data
+    # MarkusK: is this really needed provided the file instance has resolved paths
+    # to what is a default plot, e.g. maybe an NXdata instance hidden eventually
+    # deeply inside the application but given the graph traversal with the @default
+    # links that plot is resolvable?
+    data(NXdata):
+    # there is likely not only one NXprocess but an entire array of
+    # NXprocesses involved?
+    (NXprocess):
+      exists: optional
+      doc: |
+        Description of a processing or analysis step, such as the
+        baseline extraction or azimuth integration.
+        Add additional fields as needed to describe value(s) of
+        any variable, parameter, or term related to
+        the NXprocess step. Be sure to include units attributes
+        for all numerical fields.
+
+# a list of base classes and concepts which PANAnalytical conceptualizes in their xrdml v2.2 standard:
+# antiScatterSlit (they come in two kind fixed and automated)
+# beamAttenuator (filter foil etc)
+# "beamKnife" beam shaping component
+# divergenceSlit (again coming in two kinds fixed and automated)
+# sample oscillation
+# record audit trail (UUID) for keeping track of documents and logging
+# related to the control software
+# heating dome, and/or component enabling the application of external stimuli on the specimen
+#   plus logging functionalities for data and metadata collected or associated with these components
+#   one could equip the goniometer with an NXfurnace or one could store instead of in an NXgoniometer all
+#   stage related data in an NXstage_lab
+
+# a list of concepts which Bruker conceptualizes, as see in C. Richters XRR.brml and EJZ060_13_224_RSM.brml file which is a ZIP file:
+# also here the concept one specimen "multiple experiments"
+# concept of an experimentCollection requiring
+#   machine identifier
+#   guid/uuid
+#   Bruker implements application definitions which store metadata about backward compatibility
+# for Bruker the XRR.brml example decompresses as follows:
+#   Experiment0/
+#              /ActiveContentContainer.xml
+#              /EvaluationContainer.xml
+#              /PreMeasContainer.xml
+#              /TemplateContainer.xml (all four time stamping and UUIDs, i.e. likely software state tracking)
+
+#              /DataContainer.xml (key metadata related to user and scan scheme pointing to RawData0)
+#              /RawData0.xml (proprietary naming and details about motors etc. and visited conditions in "DataRoutes/DataRoute", each position one "Datum")
+
+#              /InstructionContainer.xml (a deeply nested graph of with a "s***load of proprietary metadata)
+#              /MeasurementContainer.xml (motor state and drive speed settings among other)
+#   experimentCollection.xml
+
+# what are these containers? Let's explore:
+# Bruker conceptualizes a Camera monitoring the instrument
+# and what is stored in the BSML files ? or where are really the counts?
+
+# a list of concepts from Rigaku, as seen in C. Richters in-plane_diffraction.rasx which is also a ZIP file
+# decompressed structure looks very similar to how Bruker does it
+#   Data0/
+#        /Profile0.txt (positions)
+#        /MeasurementConditions0.xml (motor states and settings)
+#   root.xml
