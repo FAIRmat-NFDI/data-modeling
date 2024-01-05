@@ -11,8 +11,9 @@
 # Decisions
 - We want to have a probe field to describe which type of beam we are using (e.g., electron, neutron, etc)
 
-# Future discussion points
+# Handling of docstring "inheritance" in nexus
 - What happens if you write `doc` in the class inside an appdef? Does it replace the docstring from the base class or does it concatenate the docstrings? (see also [this](https://github.com/nexusformat/definitions/issues/1059) discussion)
+    - We discussed this: It concatenates, i.e., specializes the docstring
 
 # ToDos
 - [X] Use NXfabrication to specify Vendor, Model, S/N etc. of any given instrument, component
