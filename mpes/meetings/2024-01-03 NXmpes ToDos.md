@@ -8,9 +8,9 @@
 - Status: <span style="color:green">merged</span>
 ## Extend energy scan mode in NXenergydispersion
 - PR: https://github.com/FAIRmat-NFDI/nexus_definitions/pull/127
-- missing docs for tranmission and jittered/dithered modes
+- missing docs for tranmission and jittered/dither modes
     - Basic explanation by Laurenz, discuss at workshop
-- Status: <span style="color:orange">under review</span>
+- Status: <span style="color:green">merged</span>
 - ## Use new base classes for NXsample in NXmpes
 - PR: https://github.com/FAIRmat-NFDI/nexus_definitions/pull/68
 - What to do with NXsensor?
@@ -41,7 +41,7 @@
 - scheme
     - spatial_dispersive, angular_dispersive, non_dispersive
     - Add new fields: spatial_acceptance, angular_acceptance (optional)
-- Status: <span style="color:red">tbd</span>
+- Status: <span style="color:gree">done</span>
 
 ## Documentation
 - Two basic tutorials
