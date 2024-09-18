@@ -1,0 +1,160 @@
+common new base classes needed for our techniques:
+  NXsample_component_set:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXfit_function:
+  - APM
+  - EM
+  - MPES
+  NXunit_cell:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXfit_parameter:
+  - APM
+  - EM
+  - MPES
+  NXstage_lab:
+  - APM
+  - EM
+  NXactuator:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXdeflector:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXcircuit:
+  - APM
+  - EM
+  NXresolution:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXchemical_process:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXcs_profiling:
+  - APM
+  - EM
+  NXregistration:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXphysical_process:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXion:
+  - APM
+  - EM
+  NXpeak:
+  - APM
+  - EM
+  - MPES
+  NXroi:
+  - APM
+  - EM
+  NXrotation_set:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXcs_profiling_event:
+  - APM
+  - EM
+  NXpump:
+  - APM
+  - EM
+  NXcoordinate_system:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXfabrication:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXlens_em:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXdistortion:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXcs_computer:
+  - APM
+  - EM
+  NXchamber:
+  - APM
+  - EM
+  NXprogram:
+  - APM
+  - EM
+  - optical_spectroscopy
+  NXcoordinate_system_set:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXsingle_crystal:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXimage_set:
+  - APM
+  - EM
+  NXserialized:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXsubstance:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXactivity:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXpid:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXcalibration:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXidentifier:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXhistory:
+  - APM
+  - EM
+  - MPES
+  - optical_spectroscopy
+  NXmanipulator:
+  - MPES
+  - optical_spectroscopy
