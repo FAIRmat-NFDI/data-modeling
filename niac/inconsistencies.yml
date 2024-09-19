@@ -1,8 +1,0 @@
-inconsistencies/questions:
-  - |
-    `NXmicrosctructure` is used in NXem. `NXmicrosctructure` itself uses many of the `NXcs_*` base_classes
-    How can we get these in `contributed_definitions` if we want to move `NXem` to `applications`?
-  - |
-    `NXapm_msr` uses `NXcsg`. `NXcsg` cites itself as a sub-group. Is that allowed?
-  - |
-    `NXapm_sim` is (almost) empty

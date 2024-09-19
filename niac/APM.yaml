@@ -1,111 +1,123 @@
-APM:
-  depends on changes in these applications:
-  - none
-  depends on unchanged base_classes:
-  - NXattenuator
-  - NXbeam_stop
-  - NXbending_magnet
-  - NXcapillary
-  - NXcite
-  - NXcollection
-  - NXcollimator
-  - NXcrystal
-  - NXcylindrical_geometry
-  - NXdetector_channel
-  - NXdetector_group
-  - NXdetector_module
-  - NXdisk_chopper
-  - NXevent_data
-  - NXfermi_chopper
-  - NXfilter
-  - NXflipper
-  - NXgeometry
-  - NXgrating
-  - NXguide
-  - NXinsertion_device
-  - NXlog
-  - NXmirror
-  - NXmoderator
-  - NXmonitor
-  - NXnote
-  - NXobject
-  - NXoff_geometry
-  - NXorientation
-  - NXparameters
-  - NXpolarizer
-  - NXpositioner
-  - NXshape
-  - NXtranslation
-  - NXvelocity_selector
-  - NXxraylens
-  depends on changes in these base_classes:
-  - NXaperture
-  - NXbeam
-  - NXdata
-  - NXdetector
-  - NXentry
-  - NXenvironment
-  - NXinstrument
-  - NXmonochromator
-  - NXprocess
-  - NXsample
-  - NXsample_component
-  - NXsensor
-  - NXsource
-  - NXsubentry
-  - NXtransformations
-  - NXuser
-  move to applications:
-  - NXapm
-  move to base_classes:
-  - NXactivity
-  - NXactuator
-  - NXapm_charge_state_analysis
-  - NXapm_hit_finding
-  - NXapm_msr
-  - NXapm_ranging
-  - NXapm_reconstruction
-  - NXapm_sim
-  - NXapm_volt_and_bowl
-  - NXcalibration
-  - NXchamber
-  - NXchemical_composition
-  - NXchemical_process
-  - NXcircuit
-  - NXcomponent
-  - NXcoordinate_system
-  - NXcoordinate_system_set
-  - NXcs_computer
-  - NXcs_filter_boolean_mask
-  - NXcs_profiling
-  - NXcs_profiling_event
-  - NXcsg
-  - NXdeflector
-  - NXdistortion
-  - NXevent_data_apm
-  - NXevent_data_apm_set
-  - NXfabrication
-  - NXfit_function
-  - NXfit_parameter
-  - NXhistory
-  - NXidentifier
-  - NXimage_set
-  - NXion
-  - NXlens_em
-  - NXpeak
-  - NXphysical_process
-  - NXpid
-  - NXprogram
-  - NXpulser_apm
-  - NXpump
-  - NXreflectron
-  - NXregistration
-  - NXresolution
-  - NXroi
-  - NXrotation_set
-  - NXsample_component_set
-  - NXserialized
-  - NXsingle_crystal
-  - NXstage_lab
-  - NXsubstance
-  - NXunit_cell
+new application definitions:
+- NXapm
+new base classes only introduced in this domain:
+- NXapm_charge_state_analysis
+- NXapm_hit_finding
+- NXapm_msr
+- NXapm_ranging
+- NXapm_reconstruction
+- NXapm_sim
+- NXapm_volt_and_bowl
+- NXchemical_composition
+- NXcs_filter_boolean_mask
+- NXevent_data_apm
+- NXevent_data_apm_set
+- NXpulser_apm
+- NXreflectron
+all new base classes:
+- NXactivity
+- NXactuator
+- NXapm_charge_state_analysis
+- NXapm_hit_finding
+- NXapm_msr
+- NXapm_ranging
+- NXapm_reconstruction
+- NXapm_sim
+- NXapm_volt_and_bowl
+- NXcalibration
+- NXchamber
+- NXchemical_composition
+- NXchemical_process
+- NXcircuit
+- NXcomponent
+- NXcoordinate_system
+- NXcoordinate_system_set
+- NXcs_computer
+- NXcs_filter_boolean_mask
+- NXcs_profiling
+- NXcs_profiling_event
+- NXdeflector
+- NXdistortion
+- NXevent_data_apm
+- NXevent_data_apm_set
+- NXfabrication
+- NXfit_function
+- NXfit_parameter
+- NXhistory
+- NXidentifier
+- NXimage_set
+- NXion
+- NXlens_em
+- NXpeak
+- NXphysical_process
+- NXpid
+- NXprogram
+- NXpulser_apm
+- NXpump
+- NXreflectron
+- NXregistration
+- NXresolution
+- NXroi
+- NXrotation_set
+- NXsample_component_set
+- NXserialized
+- NXsingle_crystal
+- NXstage_lab
+- NXsubstance
+- NXunit_cell
+depends on changes in these base_classes:
+- NXaperture
+- NXbeam
+- NXdata
+- NXdetector
+- NXentry
+- NXenvironment
+- NXinstrument
+- NXmonochromator
+- NXprocess
+- NXsample
+- NXsample_component
+- NXsensor
+- NXsource
+- NXsubentry
+- NXtransformations
+- NXuser
+depends on changes in these applications:
+- none
+depends on unchanged base_classes:
+- NXattenuator
+- NXbeam_stop
+- NXbending_magnet
+- NXcapillary
+- NXcite
+- NXcollection
+- NXcollimator
+- NXcrystal
+- NXcylindrical_geometry
+- NXdetector_channel
+- NXdetector_group
+- NXdetector_module
+- NXdisk_chopper
+- NXevent_data
+- NXfermi_chopper
+- NXfilter
+- NXflipper
+- NXgeometry
+- NXgrating
+- NXguide
+- NXinsertion_device
+- NXlog
+- NXmirror
+- NXmoderator
+- NXmonitor
+- NXnote
+- NXobject
+- NXoff_geometry
+- NXorientation
+- NXparameters
+- NXpolarizer
+- NXpositioner
+- NXshape
+- NXtranslation
+- NXvelocity_selector
+- NXxraylens

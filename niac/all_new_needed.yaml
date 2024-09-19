@@ -21,8 +21,10 @@ all new base classes needed for our techniques:
 - NXcg_polygon_set
 - NXcg_polyhedron_set
 - NXcg_polyline_set
+- NXcg_primitive_set
 - NXcg_triangle_set
 - NXcg_triangulated_surface_mesh
+- NXcg_unit_normal_set
 - NXchamber
 - NXchemical_composition
 - NXchemical_process
@@ -37,7 +39,6 @@ all new base classes needed for our techniques:
 - NXcs_filter_boolean_mask
 - NXcs_profiling
 - NXcs_profiling_event
-- NXcsg
 - NXdeflector
 - NXdistortion
 - NXebeam_column
@@ -48,6 +49,7 @@ all new base classes needed for our techniques:
 - NXem_eds
 - NXem_eels
 - NXem_img
+- NXem_method
 - NXem_msr
 - NXem_sim
 - NXenergydispersion

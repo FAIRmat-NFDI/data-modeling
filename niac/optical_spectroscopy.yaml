@@ -1,91 +1,96 @@
-optical_spectroscopy:
-  depends on changes in these applications:
-  - none
-  depends on unchanged base_classes:
-  - NXattenuator
-  - NXbeam_stop
-  - NXbending_magnet
-  - NXcapillary
-  - NXcollection
-  - NXcollimator
-  - NXcrystal
-  - NXcylindrical_geometry
-  - NXdetector_channel
-  - NXdetector_group
-  - NXdetector_module
-  - NXdisk_chopper
-  - NXevent_data
-  - NXfermi_chopper
-  - NXfilter
-  - NXflipper
-  - NXgeometry
-  - NXgrating
-  - NXguide
-  - NXinsertion_device
-  - NXlog
-  - NXmirror
-  - NXmoderator
-  - NXmonitor
-  - NXnote
-  - NXoff_geometry
-  - NXorientation
-  - NXparameters
-  - NXpolarizer
-  - NXpositioner
-  - NXshape
-  - NXtranslation
-  - NXvelocity_selector
-  - NXxraylens
-  depends on changes in these base_classes:
-  - NXaperture
-  - NXbeam
-  - NXdata
-  - NXdetector
-  - NXentry
-  - NXenvironment
-  - NXinstrument
-  - NXmonochromator
-  - NXprocess
-  - NXsample
-  - NXsample_component
-  - NXsensor
-  - NXsource
-  - NXsubentry
-  - NXtransformations
-  - NXuser
-  move to applications:
-  - NXellipsometry
-  - NXoptical_spectroscopy
-  - NXraman
-  move to base_classes:
-  - NXactivity
-  - NXactuator
-  - NXbeam_device
-  - NXbeam_transfer_matrix_table
-  - NXcalibration
-  - NXchemical_process
-  - NXcircuit
-  - NXcomponent
-  - NXcoordinate_system
-  - NXcoordinate_system_set
-  - NXdeflector
-  - NXdistortion
-  - NXfabrication
-  - NXhistory
-  - NXidentifier
-  - NXlens_em
-  - NXlens_opt
-  - NXmanipulator
-  - NXopt_window
-  - NXphysical_process
-  - NXpid
-  - NXprogram
-  - NXregistration
-  - NXresolution
-  - NXrotation_set
-  - NXsample_component_set
-  - NXserialized
-  - NXsingle_crystal
-  - NXsubstance
-  - NXunit_cell
-  - NXwaveplate
+new application definitions:
+- NXellipsometry
+- NXoptical_spectroscopy
+- NXraman
+new base classes only introduced in this domain:
+- NXbeam_device
+- NXbeam_transfer_matrix_table
+- NXlens_opt
+- NXopt_window
+- NXwaveplate
+all new base classes:
+- NXactivity
+- NXactuator
+- NXbeam_device
+- NXbeam_transfer_matrix_table
+- NXcalibration
+- NXchemical_process
+- NXcircuit
+- NXcomponent
+- NXcoordinate_system
+- NXcoordinate_system_set
+- NXdeflector
+- NXdistortion
+- NXfabrication
+- NXhistory
+- NXidentifier
+- NXlens_em
+- NXlens_opt
+- NXmanipulator
+- NXopt_window
+- NXphysical_process
+- NXpid
+- NXprogram
+- NXregistration
+- NXresolution
+- NXrotation_set
+- NXsample_component_set
+- NXserialized
+- NXsingle_crystal
+- NXsubstance
+- NXunit_cell
+- NXwaveplate
+depends on changes in these base_classes:
+- NXaperture
+- NXbeam
+- NXdata
+- NXdetector
+- NXentry
+- NXenvironment
+- NXinstrument
+- NXmonochromator
+- NXprocess
+- NXsample
+- NXsample_component
+- NXsensor
+- NXsource
+- NXsubentry
+- NXtransformations
+- NXuser
+depends on changes in these applications:
+- none
+depends on unchanged base_classes:
+- NXattenuator
+- NXbeam_stop
+- NXbending_magnet
+- NXcapillary
+- NXcollection
+- NXcollimator
+- NXcrystal
+- NXcylindrical_geometry
+- NXdetector_channel
+- NXdetector_group
+- NXdetector_module
+- NXdisk_chopper
+- NXevent_data
+- NXfermi_chopper
+- NXfilter
+- NXflipper
+- NXgeometry
+- NXgrating
+- NXguide
+- NXinsertion_device
+- NXlog
+- NXmirror
+- NXmoderator
+- NXmonitor
+- NXnote
+- NXoff_geometry
+- NXorientation
+- NXparameters
+- NXpolarizer
+- NXpositioner
+- NXshape
+- NXtranslation
+- NXvelocity_selector
+- NXxraylens

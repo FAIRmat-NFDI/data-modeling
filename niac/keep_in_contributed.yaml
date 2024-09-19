@@ -1,4 +1,4 @@
-keep_in_contributed:
+keep in contributed:
 - NXamplifier
 - NXapm_compositionspace_config
 - NXapm_compositionspace_results
@@ -39,6 +39,7 @@ keep_in_contributed:
 - NXcg_tetrahedron_set
 - NXcontainer
 - NXcs_prng
+- NXcsg
 - NXcxi_ptycho
 - NXdata_mpes
 - NXdata_mpes_detector
