@@ -10,11 +10,12 @@ new base classes only introduced in this domain:
 - NXapm_volt_and_bowl
 - NXchemical_composition
 - NXcs_filter_boolean_mask
+- NXcs_prng
 - NXevent_data_apm
 - NXevent_data_apm_set
 - NXpulser_apm
 - NXreflectron
-all new base classes:
+all new base classes that this domain depends on:
 - NXactivity
 - NXactuator
 - NXapm_charge_state_analysis
@@ -34,6 +35,7 @@ all new base classes:
 - NXcoordinate_system_set
 - NXcs_computer
 - NXcs_filter_boolean_mask
+- NXcs_prng
 - NXcs_profiling
 - NXcs_profiling_event
 - NXdeflector

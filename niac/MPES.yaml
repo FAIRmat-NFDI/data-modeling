@@ -4,6 +4,8 @@ new application definitions:
 - NXxps
 new base classes only introduced in this domain:
 - NXcollectioncolumn
+- NXdata_mpes
+- NXdata_mpes_detector
 - NXelectron_level
 - NXelectronanalyser
 - NXenergydispersion
@@ -11,7 +13,7 @@ new base classes only introduced in this domain:
 - NXfit_background
 - NXprocess_mpes
 - NXspindispersion
-all new base classes:
+all new base classes that this domain depends on:
 - NXactivity
 - NXactuator
 - NXcalibration
@@ -21,6 +23,8 @@ all new base classes:
 - NXcomponent
 - NXcoordinate_system
 - NXcoordinate_system_set
+- NXdata_mpes
+- NXdata_mpes_detector
 - NXdeflector
 - NXdistortion
 - NXelectron_level

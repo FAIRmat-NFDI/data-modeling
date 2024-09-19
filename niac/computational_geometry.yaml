@@ -1,0 +1,22 @@
+new base classes:
+- NXcg_alpha_complex
+- NXcg_cylinder_set
+- NXcg_ellipsoid_set
+- NXcg_face_list_data_structure
+- NXcg_geodesic_mesh
+- NXcg_grid
+- NXcg_half_edge_data_structure
+- NXcg_hexahedron_set
+- NXcg_marching_cubes
+- NXcg_parallelogram_set
+- NXcg_point_set
+- NXcg_polygon_set
+- NXcg_polyhedron_set
+- NXcg_polyline_set
+- NXcg_primitive_set
+- NXcg_roi_set
+- NXcg_sphere_set
+- NXcg_tetrahedron_set
+- NXcg_triangle_set
+- NXcg_triangulated_surface_mesh
+- NXcg_unit_normal_set

@@ -86,6 +86,10 @@ def extract_all_classes(xml_file: str, visited_files=None) -> (set, set):
 
     return contributed, base
 
+def print_str_list(strings: list):
+    for s in strings:
+        print(f"    {s}")
+    print("\n")
 
 changed_base_classes = {
     # git diff --name-only upstream/main base_classes/*.nxdl.xml | sed 's|base_classes/\(.*\)\.nxdl\.xml|\1|'
@@ -115,20 +119,19 @@ appdef_map = {
     "optical_spectroscopy": ["NXoptical_spectroscopy", "NXellipsometry", "NXraman"],
 }
 
+additional_base_classes_per_domain = {
+    "APM": ["NXcs_prng"],
+    "EM": [],
+    "MPES": ["NXdata_mpes_detector", "NXdata_mpes"],
+    "optical_spectroscopy": [],
+}
 
-def print_str_list(strings: list):
-    for s in strings:
-        print(f"    {s}")
-    print("\n")
-
-all_contributed_appdefs = set()
-  
 empty_dict = {k: {} for k in list(appdef_map.keys())}
 
 classes = {
     "new application definitions": empty_dict.copy(),
     "new base classes only introduced in this domain": empty_dict.copy(),
-    "all new base classes": empty_dict.copy(),
+    "all new base classes that this domain depends on": empty_dict.copy(),
     "depends on changes in these base_classes": empty_dict.copy(),
     "depends on changes in these applications": empty_dict.copy(),
     "depends on unchanged base_classes": empty_dict.copy(),
@@ -136,6 +139,8 @@ classes = {
     # "common new base classes needed for more than one domain": [],
     # "keep in contributed": []
 }
+
+all_contributed_appdefs = set()
 
 for domain, contributed_appdefs in appdef_map.items():   
     all_existing_base = set()
@@ -147,6 +152,8 @@ for domain, contributed_appdefs in appdef_map.items():
         all_existing_base.update(base)
         contributed_base.update(contributed)
     
+    contributed_base.update(additional_base_classes_per_domain[domain])
+
     contributed_base = {c for c in contributed_base if c not in contributed_appdefs}
 
     changed_existing_base = {
@@ -157,7 +164,7 @@ for domain, contributed_appdefs in appdef_map.items():
     }
    
     classes["new application definitions"][domain] = sorted(contributed_appdefs)
-    classes["all new base classes"][domain] = sorted(contributed_base)
+    classes["all new base classes that this domain depends on"][domain] = sorted(contributed_base)
     classes["depends on changes in these base_classes"][domain] = sorted(
         changed_existing_base
     )
@@ -170,12 +177,12 @@ for domain, contributed_appdefs in appdef_map.items():
     classes["depends on unchanged base_classes"][domain] = sorted(
         unchanged_existing_base
     )
-all_new_base_classes = sorted(set.union(*map(set, classes["all new base classes"].values())))
+all_new_base_classes = sorted(set.union(*map(set, classes["all new base classes that this domain depends on"].values())))
 
 common_new_base_classes = {}
 
 for domain in appdef_map.keys():
-    base_class_set = classes["all new base classes"][domain]
+    base_class_set = classes["all new base classes that this domain depends on"][domain]
     for base_class in base_class_set:
         try:
             common_new_base_classes[base_class] += [domain]
@@ -187,7 +194,7 @@ common_new_base_classes = {
 }
 
 for domain in appdef_map.keys():
-    new_base_classes_domain = classes["all new base classes"][domain]
+    new_base_classes_domain = classes["all new base classes that this domain depends on"][domain]
     difference = list(set(new_base_classes_domain) - set(list(common_new_base_classes.keys())))
     classes["new base classes only introduced in this domain"][domain] = difference
 
@@ -195,11 +202,6 @@ all_contributed = file_names = [
     f.split(".nxdl.xml")[0]
     for f in os.listdir(Path(*(NEXUS_REPO_FOLDER, "contributed_definitions")))
     if f.endswith(".nxdl.xml")
-]
-keep_in_contributed = [
-    file
-    for file in all_contributed
-    if file not in all_new_base_classes and file not in all_contributed_appdefs
 ]
 
 #####################################################
@@ -224,7 +226,44 @@ for domain, contributed_appdefs in appdef_map.items():
     # Write the data to the YAML file
     with open(yml_file, "w") as file:
         yaml.dump(yml_data, file, sort_keys=False)
-    
+
+additional_base_classes = {
+    "computational_geometry" : [
+        "NXcg_alpha_complex",
+        "NXcg_cylinder_set",
+        "NXcg_ellipsoid_set",
+        "NXcg_face_list_data_structure",
+        "NXcg_geodesic_mesh",
+        "NXcg_grid",
+        "NXcg_half_edge_data_structure",
+        "NXcg_hexahedron_set",
+        "NXcg_marching_cubes",
+        "NXcg_parallelogram_set",
+        "NXcg_point_set",
+        "NXcg_polygon_set",
+        "NXcg_polyhedron_set",
+        "NXcg_polyline_set",
+        "NXcg_primitive_set",
+        "NXcg_roi_set",
+        "NXcg_sphere_set",
+        "NXcg_tetrahedron_set",
+        "NXcg_triangle_set",
+        "NXcg_triangulated_surface_mesh",
+        "NXcg_unit_normal_set",
+    ]
+}
+
+keep_in_contributed = [
+    file
+    for file in all_contributed
+    if file not in all_new_base_classes 
+    and file not in all_contributed_appdefs
+    and not any(file in lst for lst in additional_base_classes.values())
+    # and file not in list(additional_base_classes.items())
+]
+
+print(additional_base_classes.items())
+
 yml_config = {
     "all_new_needed": {
         "all new base classes needed for our techniques": sorted(all_new_base_classes)
@@ -236,6 +275,9 @@ yml_config = {
         "keep in contributed": sorted(keep_in_contributed),
     },
 }
+
+for key, values in additional_base_classes.items():
+    yml_config[key] = {"new base classes": sorted(set(values))}
 
 for file_name, yml_data in yml_config.items():
     yml_file = f"{file_name}.yaml"
@@ -263,10 +305,6 @@ FOLDERS_TO_MOVE = [
     ("xps", "applications")
 ]
 
-additional_base_classes_to_add = [
-    "NXcs_"
-]
-
 MOVE_FILES = False
 
 def move_classes(classes: List[str], target: Literal["application", "base_classes"]):
@@ -285,7 +323,7 @@ def move_classes(classes: List[str], target: Literal["application", "base_classe
 if MOVE_FILES:
     move_classes(all_new_base_classes, "base_classes")
     move_classes(all_contributed_appdefs, "applications")
-    move_classes(additional_base_classes_to_add, "base_classes")
+    move_classes(additional_base_classes, "base_classes")
 
     for (folder, target) in FOLDERS_TO_MOVE:
         old_path = Path(*(CONTRIBUTED_FOLDER, folder))
