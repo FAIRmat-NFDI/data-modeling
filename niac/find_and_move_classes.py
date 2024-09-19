@@ -262,8 +262,6 @@ keep_in_contributed = [
     # and file not in list(additional_base_classes.items())
 ]
 
-print(additional_base_classes.items())
-
 yml_config = {
     "all_new_needed": {
         "all new base classes needed for our techniques": sorted(all_new_base_classes)
