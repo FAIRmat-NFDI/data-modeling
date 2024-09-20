@@ -1,5 +1,5 @@
 #!/bin/bash
-create_pr() {
+create_branch() {
   cd ../../nexus_definitions
 
   branch_name=$1
@@ -54,13 +54,13 @@ create_pr() {
       git restore --source fairmat-2024 "contributed_definitions/${contributed}.nxdl.xml"
     done
   else
-    echo "No base classes to restore."
+    echo "No contributed definition to restore."
   fi
 
   # Restore other files if not empty
   if [ ${#other_files[@]} -gt 0 ]; then
     for file in "${other_files[@]}"; do
-      git restore --source fairmat-2024 file
+      git restore --source fairmat-2024 ${file} 
     done
   else
     echo "No other files to restore."
@@ -69,7 +69,9 @@ create_pr() {
   # Commit and push
   git add -A
   git commit -m "pull out modifications for ${branch_name}"
-  git push --set-upstream origin "${branch_name}"
+  # git push --set-upstream origin "${branch_name}"
+  git switch fairmat-2024
+  
 }
 
 # Pass inputs to the function

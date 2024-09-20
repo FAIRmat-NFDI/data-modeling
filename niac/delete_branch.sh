@@ -8,5 +8,5 @@ delete_branch () {
   git branch -D "${branch_name}"
 }
 
-branch_name="fairmat-2024-mpes"
+branch_name="fairmat-2024-dev-tools-and-manual"
 delete_branch "$branch_name" 
