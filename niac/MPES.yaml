@@ -23,8 +23,6 @@ all new base classes that this domain depends on:
 - NXcomponent
 - NXcoordinate_system
 - NXcoordinate_system_set
-- NXdata_mpes
-- NXdata_mpes_detector
 - NXdeflector
 - NXdistortion
 - NXelectron_level

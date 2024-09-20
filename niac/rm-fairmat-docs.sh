@@ -1,27 +1,25 @@
+cd ../../nexus_definitions 
  
- 
-alias checkout_main='git checkout upstream/main'
 
-make clean-nyaml
-checkout_main .github/workflows 
-checkout_main .gitignore
-checkout_main Makefile
-checkout_main common/ 
-checkout_main README.md 
-checkout_main dev_tools/globals/urls.py
-checkout_main requirements.txt
+# make clean-nyaml
+git checkout upstream/main .github/workflows 
+rm .github/workflows/fairmat*
+git checkout upstream/main .gitignore
+git checkout upstream/main Makefile
+git checkout upstream/main common/ 
+git checkout upstream/main README.md 
+git checkout upstream/main dev_tools/globals/urls.py
+git checkout upstream/main requirements.txt
 cd manual/source
-checkout_main conf.py
-checkout_main _static
-checkout_main examples/index.rst
-rm fairmat_cover.rst
+git checkout upstream/main conf.py
+git checkout upstream/main index.rst
+git checkout upstream/main examples/index.rst
+rm _static/blockquote.css.bak
+rm _static/to_alabaster.css
+rm _static/to_rtd.css
+rm fairmat-cover.rst
 rm img/FAIRmat*
 rm sed/entry-page.html
 rm nexus-index.rst
 rm *-structure.rst
 cd ../..
-
-
-# add to manual/source/conf.py
-# \DeclareUnicodeCharacter{394}{$\Delta$}
-# \DeclareUnicodeCharacter{2206}{$\Delta$}

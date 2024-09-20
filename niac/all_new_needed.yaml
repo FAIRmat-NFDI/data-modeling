@@ -35,8 +35,6 @@ all new base classes needed for our techniques:
 - NXcs_prng
 - NXcs_profiling
 - NXcs_profiling_event
-- NXdata_mpes
-- NXdata_mpes_detector
 - NXdeflector
 - NXdistortion
 - NXebeam_column

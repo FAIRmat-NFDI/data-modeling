@@ -32,6 +32,8 @@ keep in contributed:
 - NXcontainer
 - NXcsg
 - NXcxi_ptycho
+- NXdata_mpes
+- NXdata_mpes_detector
 - NXdelocalization
 - NXdispersion
 - NXdispersion_function

@@ -122,7 +122,7 @@ appdef_map = {
 additional_base_classes_per_domain = {
     "APM": ["NXcs_prng"],
     "EM": [],
-    "MPES": ["NXdata_mpes_detector", "NXdata_mpes"],
+    "MPES": [],
     "optical_spectroscopy": [],
 }
 
@@ -303,7 +303,7 @@ FOLDERS_TO_MOVE = [
     ("xps", "applications")
 ]
 
-MOVE_FILES = False
+MOVE_FILES = True
 
 def move_classes(classes: List[str], target: Literal["application", "base_classes"]):
     for class_name in sorted(classes):
@@ -321,7 +321,8 @@ def move_classes(classes: List[str], target: Literal["application", "base_classe
 if MOVE_FILES:
     move_classes(all_new_base_classes, "base_classes")
     move_classes(all_contributed_appdefs, "applications")
-    move_classes(additional_base_classes, "base_classes")
+    for cls_list in additional_base_classes.values():
+        move_classes(cls_list, "base_classes")
 
     for (folder, target) in FOLDERS_TO_MOVE:
         old_path = Path(*(CONTRIBUTED_FOLDER, folder))
