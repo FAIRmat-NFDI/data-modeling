@@ -50,8 +50,7 @@ changed_applications = {"NXarpes"}
 
 for appdef in changed_applications:
     branch_name = f"fairmat-2024-{appdef.lower()}"
-    applications = [appdef]
-    # run_bash_script(branch_name, applications=applications)
+    # run_bash_script(branch_name, applications=[appdef])
 
 
 #### CHANGED EXISTING BASE CLASSES
@@ -78,8 +77,7 @@ changed_base_classes = {
 
 for base_class in changed_base_classes:
     branch_name = f"fairmat-2024-{base_class.lower()}"
-    base_classes = [base_class]
-    # run_bash_script(branch_name, base_classes=base_classes)
+    # run_bash_script(branch_name, base_classes=[base_class])
 
 
 #### common_base_classes
@@ -87,7 +85,7 @@ branch_name = f"fairmat-2024-common-base-classes"
 with open(f"common_new_needed.yaml", 'r') as stream:
     yml_data = yaml.safe_load(stream)
     common_base_classes = list(yml_data["common new base classes needed for more than one domain"].keys())
-    print(common_base_classes)
+    print(f"common new base classes:\n{common_base_classes}\n")
 
     # run_bash_script(branch_name, base_classes=common_base_classes)
 
@@ -96,18 +94,16 @@ branch_name = f"fairmat-2024-contributed"
 with open(f"keep_in_contributed.yaml", 'r') as stream:
     yml_data = yaml.safe_load(stream)
     contributed_classes = yml_data["keep in contributed"]
-    print(contributed_classes)
+    print(f"contributed classes:\n{contributed_classes}\n")
     # run_bash_script(branch_name, contributed_definitions=contributed_classes)
 
 ### computational geometry
 branch_name = f"fairmat-2024-computational-geometry"
 with open(f"computational_geometry.yaml", 'r') as stream:
     yml_data = yaml.safe_load(stream)
-    base_classes = yml_data["new base classes"]
-    print(base_classes)
-    # run_bash_script(branch_name, base_classes=base_classes)
-
-
+    cg_base_classes = yml_data["new base classes"]
+    print(f"computational geometry:\n{cg_base_classes}\n")
+    # run_bash_script(branch_name, base_classes=cg_base_classes)
 
 
 #### Domain PRs
@@ -132,18 +128,13 @@ for domain in [
 
     other_files = ["applications/xps"] if domain == "MPES" else []
 
-    # print(domain)
-    # print(new_applications)
-    # print(updated_applications)
-    # print(new_base_classes)
-    # print(updated_base_classes)
-
     applications = sorted(new_applications + updated_applications)
     base_classes = sorted(new_base_classes + updated_base_classes)
 
-    print(applications)
-    print(base_classes)
-    print(other_files)
+    print(domain)
+    print(f"applications:\n\t{applications}")
+    print(f"base_classes:\n\t{base_classes}")
+    print(f"other files:\n\t{other_files}\n")
 
     # run_bash_script(branch_name, applications=applications, base_classes=base_classes, other_files=other_files)
 
@@ -155,7 +146,7 @@ with open(f"keep_in_contributed.yaml", 'r') as stream:
         "dev_tools",
         "manual"
     ]
-    print(contributed_classes)
+    print(f"other files:\n{other_files}\n")
     # run_bash_script(branch_name, contributed_definitions=contributed_classes)
 
 
