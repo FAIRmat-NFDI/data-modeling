@@ -65,35 +65,36 @@ changed_applications = {"NXarpes"}
 
 for appdef in changed_applications:
     branch_name = f"fairmat-2024-{appdef.lower()}"
-    run_bash_script(branch_name=branch_name, task="create", applications=[appdef])
+    # run_bash_script(branch_name=branch_name, task="create", applications=[appdef])
     # run_bash_script(branch_name=branch_name, task="clean", applications=[appdef])
 
 
 #### CHANGED EXISTING BASE CLASSES
 changed_base_classes = {
     # git diff --name-only upstream/main base_classes/*.nxdl.xml | sed 's|base_classes/\(.*\)\.nxdl\.xml|\1|'
-    "NXaperture", # PR ready
-    "NXbeam", # PR ready
-    "NXdata", # PR ready
-    "NXdetector", # PR ready
-    "NXentry", # PR ready
-    "NXenvironment", # PR ready
-    "NXinstrument",
-    "NXmonochromator",
-    "NXprocess",
-    "NXroot",
-    "NXsample", # PR ready
+    # "NXaperture", # PR ready
+    # "NXbeam", # PR ready
+    # "NXdata", # PR ready
+    # "NXdetector", # PR ready
+    # "NXentry", # PR ready
+    # "NXenvironment", # PR ready
+    # "NXinstrument", # PR ready
+    # "NXmonochromator", # PR ready
+    # "NXprocess", # PR ready
+    # "NXroot", # PR ready
+    "NXsample", # PR draft
     "NXsample_component", # together with NXsample PR
-    "NXsensor", # together with NXenvironment PR
-    "NXsource", # PR ready
-    "NXsubentry", # together with NXentry PR
-    "NXtransformations",
-    "NXuser",
+    # "NXsensor", # together with NXenvironment PR
+    # "NXsource", # PR ready
+    # "NXsubentry", # together with NXentry PR
+    # "NXtransformations", # PR ready
+    # "NXuser", # PR ready
 }
 
 for base_class in changed_base_classes:
     branch_name = f"fairmat-2024-{base_class.lower()}"
     # run_bash_script(branch_name, base_classes=[base_class])
+    run_bash_script(branch_name=branch_name, task="clean", base_classes=[base_class])
 
 
 #### common_base_classes
@@ -104,7 +105,9 @@ with open(f"common_new_needed.yaml", "r") as stream:
         yml_data["common new base classes needed for more than one domain"].keys()
     )
     # print(f"common new base classes:\n{common_base_classes}\n")
-    # run_bash_script(branch_name, base_classes=common_base_classes)
+#    run_bash_script(branch_name, base_classes=common_base_classes)
+    # run_bash_script(branch_name=branch_name, task="clean", base_classes=common_base_classes)
+
 
 #### contributed definitions
 branch_name = f"fairmat-2024-contributed"

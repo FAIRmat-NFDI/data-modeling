@@ -5,14 +5,16 @@
 clean_branch() {
     cd ../../nexus_definitions
     branch_name=$1
-    applications=("$2")  # Treat $2-5 as space-separated list and convert to array
-    base_classes=("$3")
-    contributed_definitions=("$4")
-    other_files=("$5")
+        branch_name=$1
+    applications=($2)  # Treat $2-5 as space-separated list and convert to array
+    base_classes=($3)
+    contributed_definitions=($4)
+    other_files=($5)
 
     # Switch to the branch
     git switch "${branch_name}"
 
+    # Initialize FILES_TO_KEEP as an empty array
     FILES_TO_KEEP=()
 
     # Restore applications if not empty
@@ -51,6 +53,9 @@ clean_branch() {
         echo "No other files to cherry-pick."
     fi
 
+    # Debugging output to check FILES_TO_KEEP
+    echo "FILES_TO_KEEP: ${FILES_TO_KEEP[@]}"
+
     # Step 1: Identify the common ancestor commit with upstream/main
     base_commit=$(git merge-base upstream/main "${branch_name}")
 
@@ -63,21 +68,31 @@ clean_branch() {
     all_commits=()
 
     for file in "${FILES_TO_KEEP[@]}"; do
-        # Retrieve the commits for the current file
-        commits=$(git log --pretty=format:"%H" "${base_commit}..${branch_name}" -- "$file")
-        # Convert commits string into an array
-        IFS=$'\n' read -r -d '' -a commit_array <<< "$commits"$'\n'
+        # Retrieve all commits that modified the current file, including history
+        commits=$(git log --follow --pretty=format:"%H" "${base_commit}..${branch_name}" -- "$file")
 
+        echo "Commits for $file: $commits"  # Output the raw commit string
+
+        # Convert commits string into an array and filter out empty lines
+        IFS=$'\n' read -r -d '' -a commit_array <<< "$commits"$'\n'
+        
         # Append the commits to all_commits array
         all_commits+=("${commit_array[@]}")
     done
 
+    # Remove duplicate commits
     unique_commits=($(printf "%s\n" "${all_commits[@]}"))
 
+    echo $unique_commits
+
+    # Sort unique commits to maintain order by date
     reversed_commits=()
     for ((i=${#unique_commits[@]}-1; i>=0; i--)); do
         reversed_commits+=("${unique_commits[i]}")
     done
+
+    # Debugging output to check unique and reversed commits
+    echo "Unique Commits: ${unique_commits[@]}"
 
     # Step 4: Cherry-pick those commits that actually have the changes
     for commit in "${reversed_commits[@]}"; do
@@ -129,15 +144,15 @@ clean_branch() {
     # Step 7: Delete the temporary branch
     git branch -D temp-cleaned-branch
 
-    echo "Rebase finished. Only commits affecting $FILES_TO_KEEP were kept."
+    echo "Rebase finished. Only commits affecting ${FILES_TO_KEEP[@]} were kept."
 }
 
 # clean_branch fairmat-2024-nxarpes
 # Pass inputs to the function
-#clean_branch "$@"
-applications=""
-base_classes="NXsubentry" # NXsubentry NXidentifier"
-contributed_definitions=""
-other_files=""
+clean_branch "$@"
+# applications=""
+# base_classes="NXprocess" # NXsubentry NXidentifier"
+# contributed_definitions=""
+# other_files=""
 
-clean_branch fairmat-2024-nxsubentry "$applications" "$base_classes" "$contributed_definitions" "$other_files"
+# clean_branch fairmat-2024-nxprocess "$applications" "$base_classes" "$contributed_definitions" "$other_files"
