@@ -3,7 +3,7 @@ from pathlib import Path
 import yaml
 import subprocess
 
-from typing import List
+from typing import List, Literal
 
 
 PRINT_CLASSES = True
@@ -21,12 +21,18 @@ NEXUS_REPO_FOLDER = Path(*(data_modeling_path.parent, "nexus_definitions"))
 
 def run_bash_script(
     branch_name: str,
+    task:Literal["create", "clean"] = "create",
     applications: List[str] = [],
     base_classes: List[str] = [],
     contributed_definitions: List[str] = [],
     other_files: List[str] = [],
 ):
-    bash_script = "./create_branch.sh"
+    if task == "create":
+        bash_script = "./create_branch.sh"
+    elif task == "clean":
+        bash_script = "./clean_branch.sh"
+    else:
+        raise ValueError("no script for task {task}!")
 
     # Prepare the applications and base_classes as space-separated strings
     applications_str = " ".join(applications)
@@ -59,27 +65,28 @@ changed_applications = {"NXarpes"}
 
 for appdef in changed_applications:
     branch_name = f"fairmat-2024-{appdef.lower()}"
-    # run_bash_script(branch_name, applications=[appdef])
+    run_bash_script(branch_name=branch_name, task="create", applications=[appdef])
+    # run_bash_script(branch_name=branch_name, task="clean", applications=[appdef])
 
 
 #### CHANGED EXISTING BASE CLASSES
 changed_base_classes = {
     # git diff --name-only upstream/main base_classes/*.nxdl.xml | sed 's|base_classes/\(.*\)\.nxdl\.xml|\1|'
-    "NXaperture",
-    "NXbeam",
-    "NXdata",
-    "NXdetector",
-    "NXentry",
-    "NXenvironment",
+    "NXaperture", # PR ready
+    "NXbeam", # PR ready
+    "NXdata", # PR ready
+    "NXdetector", # PR ready
+    "NXentry", # PR ready
+    "NXenvironment", # PR ready
     "NXinstrument",
     "NXmonochromator",
     "NXprocess",
     "NXroot",
-    "NXsample",
-    "NXsample_component",
-    "NXsensor",
-    "NXsource",
-    "NXsubentry",
+    "NXsample", # PR ready
+    "NXsample_component", # together with NXsample PR
+    "NXsensor", # together with NXenvironment PR
+    "NXsource", # PR ready
+    "NXsubentry", # together with NXentry PR
     "NXtransformations",
     "NXuser",
 }
@@ -97,7 +104,6 @@ with open(f"common_new_needed.yaml", "r") as stream:
         yml_data["common new base classes needed for more than one domain"].keys()
     )
     # print(f"common new base classes:\n{common_base_classes}\n")
-
     # run_bash_script(branch_name, base_classes=common_base_classes)
 
 #### contributed definitions
@@ -119,8 +125,8 @@ with open(f"computational_geometry.yaml", "r") as stream:
 
 #### Domain PRs
 for domain in [
-    #    "APM",
-    #    "EM",
+    "APM",
+    "EM",
     "MPES",
     "optical_spectroscopy",
 ]:
@@ -155,4 +161,4 @@ branch_name = f"fairmat-2024-dev-tools-and-manual"
 with open(f"keep_in_contributed.yaml", "r") as stream:
     other_files = ["dev_tools", "manual"]
     # print(f"other files:\n{other_files}\n")
-    run_bash_script(branch_name, other_files=other_files)
+    # run_bash_script(branch_name, other_files=other_files)

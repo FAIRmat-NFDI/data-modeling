@@ -14,9 +14,6 @@ create_branch() {
   # Create a new branch
   git checkout -b "${branch_name}"
 
-  echo $applications
-  echo $base_classes
-
   # List files in fairmat-2024 not in upstream/main
   files_to_remove=$(git diff --name-only upstream/main...fairmat-2024)
 
@@ -69,7 +66,9 @@ create_branch() {
   # Commit and push
   git add -A
   git commit -m "pull out modifications for ${branch_name}"
-  # git push --set-upstream origin "${branch_name}"
+  git push --set-upstream origin "${branch_name}"
+
+  # Switch back to fairmat-2024 branch
   git switch fairmat-2024
   
 }
