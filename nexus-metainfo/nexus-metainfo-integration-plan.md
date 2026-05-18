@@ -253,14 +253,22 @@ quantities.
 
 ## Performance: Entry Point Splitting
 
-Replace the monolithic schema package with multiple entry points:
+Replace the monolithic schema package with multiple entry points.
 
+**Current state (Phase 1)** — single entry point in `metainfo/__init__.py`:
 ```toml
 [project.entry-points."nomad.plugin"]
-nexus_base_classes   = "pynxtools.nomad.metainfo.base_classes:NexusBaseClassesEntryPoint"
-nexus_applications   = "pynxtools.nomad.metainfo.applications:NexusApplicationsEntryPoint"
-nexus_contributed    = "pynxtools.nomad.metainfo.contributed:NexusContributedEntryPoint"
+nexus_base_classes = "pynxtools.nomad.metainfo:nexus_base_classes"
 ```
+
+**Target state (Phase 2+)** — one entry point per category:
+```toml
+[project.entry-points."nomad.plugin"]
+nexus_base_classes   = "pynxtools.nomad.metainfo:nexus_base_classes"
+nexus_applications   = "pynxtools.nomad.metainfo:nexus_applications"
+nexus_contributed    = "pynxtools.nomad.metainfo:nexus_contributed"
+```
+All entry point classes live in `metainfo/__init__.py`; each delegates to its own `_package.py`.
 
 Domain plugins (e.g., `pynxtools-mpes`) import only what they need:
 
@@ -319,8 +327,15 @@ Catches NXDL version drift. A human must review and approve any field type/name 
 **CLI**:
 ```bash
 pynx nomad generate-metainfo [--nx-class NXdetector] [--all] [--dry-run] [--force]
+pynx nomad generate-metainfo --all \
+    --output-dir ../nomad-measurements/src/nomad_measurements/nexus/metainfo/base_classes
 pynx nomad export-nxdl [--nx-class NXxps] [--all] [--check-only]
 ```
+
+`--output-dir` is `None` by default, which resolves to the pynxtools-internal
+`metainfo/base_classes/` directory. Pass an explicit path when generating into a
+different package. This is how the same tool serves both the current pynxtools home and
+the future nomad-measurements home without any code changes.
 
 ---
 
@@ -402,7 +417,11 @@ custom plugin → nomad-measurements standard section → NeXus application defi
 - [x] `metainfo/base_classes/*.py` — 142 generated Python files
 - [x] `metainfo/_package.py` — assembles NOMAD `Package`; graceful degradation for cross-category refs
 - [x] `nexus_tree.py` additions: `build_base_class_node()`, `populate_direct_children()`, typed attrs (`deprecated`, `category`, `restricts`, `ignore_extra_*`, `symbols`, `interpretation`, `long_name`)
-- [ ] Entry points in `pyproject.toml` for base classes
+- [x] Entry points in `pyproject.toml` — `nexus_base_classes = "pynxtools.nomad.metainfo:nexus_base_classes"`;
+      entry point class lives in `metainfo/__init__.py` alongside public `build_package()` / `all_sections()` API;
+      `metainfo/base_classes/__init__.py` is reserved for re-exports only
+- [x] Generator formatting pipeline fixed: correct `ruff check --fix` stdin invocation, import sort order,
+      debug code removed; `ruff>=0.15.0` declared in `nomad` optional dependency; `include` glob fixed to `src/**/*.py`
 - [ ] **Tests**: package equivalence (same section names, quantity types as current schema for base classes)
 
 Note: `nexus-inheritance-concept-paths` merge is **not** a prerequisite for Phase 1. The
@@ -446,19 +465,57 @@ The new symbols will be re-exported from the shim in that branch when it merges.
 
 ## 5-Week Milestone (Project Meeting)
 
-| Week | Focus |
-|---|---|
-| 1 | Phase 0: ADRs 001–005 written; worktree merged; `test_fixes.py` → pytest |
-| 2 | `annotations.py` + `converters/_naming.py` + generator skeleton |
-| 3–4 | Generator working; first 20–30 base class Python files generated |
-| 5 | Entry points configured; package equivalence test passing for generated base classes |
+| Week | Focus | Status |
+|---|---|---|
+| 1 | Phase 0: ADRs 001–005 written; worktree merged; `test_fixes.py` → pytest | ADRs pending; generator infrastructure complete |
+| 2 | `annotations.py` + `converters/_naming.py` + generator skeleton | Done |
+| 3–4 | Generator working; all 142 base class Python files generated | Done |
+| 5 | Entry points configured; package equivalence test passing for generated base classes | Entry points done; tests pending |
 
 **Demonstrable at week-5 meeting:**
-- `pynx nomad generate-metainfo --nx-class NXentry` produces a valid, importable Python file
-- `Entry(Measurement)` with `NeXusGroup` + `NeXusQuantity` annotations on all quantities
-- `optionality` correctly set from NXDL (required/recommended/optional)
-- ADRs 001–005 reviewed and agreed
-- Semantic mapping document complete
+- [x] `pynx nomad generate-metainfo --nx-class NXentry` produces a valid, importable Python file
+- [x] `Entry(Measurement)` with `NeXusGroup` + `NeXusQuantity` annotations on all quantities
+- [x] `optionality` correctly set from NXDL (required/recommended/optional)
+- [ ] ADRs 001–005 reviewed and agreed
+- [ ] Semantic mapping document complete
+
+---
+
+## Long-Term Dependency Architecture
+
+When the generated schema moves to `nomad-measurements`, the dependency graph must remain
+one-directional:
+
+```
+nomad-measurements → pynxtools
+```
+
+**Why this is safe:**
+- Generated files always import `from pynxtools.nomad.annotations import NeXusGroup, NeXusQuantity`.
+  These annotations stay in pynxtools permanently — they follow the parser, not the schema.
+- `pynxtools.parser` must NOT import schema classes from `nomad-measurements` at runtime.
+  Instead it navigates the archive using NOMAD's reflection API
+  (`section.m_def.m_get_annotations("nexus_group")`). The schema is already loaded by the
+  time the parser runs (NOMAD's plugin system handles it). No direct import needed.
+
+**Why the converter is permanently in pynxtools (two independent reasons):**
+
+1. It depends on `nexus_tree.py` (`build_base_class_node`, `NexusEntity`, `NexusGroup`,
+   `populate_direct_children`). These are core pynxtools internals that cannot move to
+   nomad-measurements without reversing the dependency direction.
+2. It depends on the NXDL definitions submodule, which lives in pynxtools.
+
+The *output* side is just a path — now configurable via `--output-dir`. nomad-measurements
+CI calls `pynx nomad generate-metainfo --all --output-dir <path>` to regenerate after NXDL
+updates. No dependency inversion needed, ever.
+
+**What this rules out:**
+- Parser importing `from nomad_measurements.nexus.metainfo import Entry` — never do this.
+- Moving the converter to nomad-measurements — it needs `nexus_tree.py` and the definitions
+  submodule, both of which must stay in pynxtools.
+- A separate `nexus-metainfo-tools` package — same issue: it would need pynxtools
+  internals, and if nomad-measurements depends on it, you get a loop via pynxtools
+  re-exporting the schema.
 
 ---
 
