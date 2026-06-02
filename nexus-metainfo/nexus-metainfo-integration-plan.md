@@ -436,7 +436,7 @@ custom plugin → nomad-measurements standard section → NeXus application defi
 - [x] `converters/_mapping.py` with `nxdl_to_class_name`, `BASESECTIONS_MAP`, `nx_type_to_source`, `field_conflicts_with_group`
 - [x] `converters/nxdl_to_metainfo.py` — generator using `generate_tree_from()` from `NexusNode` API; zero raw XML access
 - [x] `metainfo/base_classes/*.py` — all 142 generated Python files; regenerated with all fixes
-- [x] `metainfo/_package.py` — `build_base_classes_package()`; assembles NOMAD Package; graceful degradation
+- [x] `metainfo/_package.py` — `build_base_classes_package()`; assembles NOMAD Package; graceful degradation. Uses `setattr(mod, "m_package", assembled_package)` on each imported module to prevent double-registration — NOMAD's metaclass auto-creates a per-module Package at import time; without the override `all_metainfo_packages()` would find both and register each Section twice.
 - [x] `nexus_tree.py` refactored: `generate_tree_from()` → `NexusDefinition`; `_NexusEntityBase`/`NexusField`/`NexusAttribute` split; `NexusDefinition.get_link()` for documentation URLs
 - [x] Entry points: `nexus_base_classes` in `pyproject.toml`; `build_base_classes_package()` public API
 - [x] `links=[url]` on every `Section` and `Quantity` via `node.get_link()`
@@ -446,7 +446,18 @@ custom plugin → nomad-measurements standard section → NeXus application defi
 - [x] ADRs 001–005 written in `data-modeling/nexus-metainfo/adr/`
 - [ ] **Tests**: package equivalence; annotation tests; `test_annotation_fixes.py`
 
+### Open question: generated `description=` strings (branch `nexus-metainfo-docstrings`)
+
+Three options — **no decision yet**:
+
+1. **Unchanged NXDL strings** — keep original text verbatim. Faithful to NXDL; requires no maintenance. Still contains RST markup, ISO references, and NeXus-committee prose that is confusing in a NOMAD GUI context.
+
+2. **Plain-stripped strings** (branch `nexus-metainfo-docstrings`) — RST markup removed via `strip_rst`. Clean text, ready now. Content is still NeXus-centric and often too long; just removes formatting noise without addressing meaning.
+
+3. **AI-rewritten descriptions** — LLM rewrites each description as 1–2 plain-English sentences suitable for a NOMAD GUI. Requires a review pass for scientific correctness. The NeXus manual link (`links=[url]`) is always present, so `description=` is free to be user-facing rather than a spec copy.
+
 ### Phase 2 — Application + Contributed Definitions (post week 5)
+- **Prerequisite**: clarify multi-package search with NOMAD core before starting. `nexus_base_classes` and `nexus_applications` are separate packages; NOMAD's Elasticsearch app may only index one. Must resolve before Phase 2 ships.
 - `metainfo/applications/*.py` — ~50 files
 - `metainfo/contributed/*.py` — ~96 files
 - Application definitions specialize base class groups with AD-specific optionality
@@ -459,10 +470,12 @@ custom plugin → nomad-measurements standard section → NeXus application defi
 - **Gate**: parser test suite passes; identical archive output for reference `.nxs` files
 
 ### Phase 4 — Parser Migration
-- Rewrite `parser.py` to use `NeXusGroup.nx_class` / `NeXusQuantity.nx_name` for navigation
-- Drop `section.more["nx_*"]` dependencies
-- Drop `__field` / `___` name construction
-- `HandleNexus` / `NomadParser` HDF5 walker unchanged
+- Rewrite `parser.py` to use `NeXusGroup.nx_class` / `NeXusQuantity.name` for navigation
+- Drop `section.more["nx_*"]` dependencies; drop `_rename_nx_for_nomad` call sites
+- **FIELD_STATISTICS**: generator emits `{name}__mean/__min/__max/__size/__ndim` parallel quantities for all numeric fields in NXdata-derived classes (including named concept subclasses — inheritance does not propagate statistics). Parser fills them in `normalize()` on `Data`.
+- **`m_nx_data_path`/`m_nx_data_file`**: not added to the generated schema. Parser writes one HDF5-path→archive-path mapping as a single `Quantity(type=str)` on the root section at end of `parse()`. GUI uses this for direct HDF5 navigation.
+- **`is_full_storage`**: decide in Phase 4 — maps to NOMAD lazy-loading or dropped.
+- **Gate**: golden-output archive JSON tests against known `.nxs` files before touching the parser
 - **Tests**: parse reference `.nxs` files; `archive.m_to_dict()` matches golden outputs
 
 ### Phase 5 — Cleanup
