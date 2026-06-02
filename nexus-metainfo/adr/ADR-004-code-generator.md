@@ -1,0 +1,102 @@
+# ADR-004: Code Generator Specification
+
+**Status**: Current design — may evolve as implementation progresses  
+**Date**: 2026-06  
+**Deciders**: Lukas Pielsticker
+**Dicussion panel**: Hampus Näsström, Area B core team
+
+---
+
+## Context
+
+The existing schema generation in `schema.py` builds NOMAD `Section` and `Quantity` objects at import time by parsing NXDL XML directly. This produces no reusable Python artifacts, couples NXDL parsing to NOMAD schema registration, and makes the schema impossible to inspect, version, or extend without running NOMAD.
+
+We need a code generator that reads NXDL through the NexusNode API and writes one
+importable Python file per NXDL base class.
+
+## Decision
+
+### Entry point
+
+`generate_tree_from(nx_name)` in `pynxtools.nexus.nexus_tree` is the single entry
+point into NXDL data. The generator accesses **no raw XML** — all NXDL attributes are read through typed `NexusNode` properties which resolve inheritance automatically.
+
+### Output
+
+One Python file per NXDL base class, written to `metainfo/base_classes/`. Each file:
+- Defines one top-level Section class (the primary class)
+- May define named concept classes (Section subclasses for groups that have own quantities)
+- Has `__all__ = ["PrimaryClassName"]`
+- Carries `links=[url]` on every Section and Quantity pointing to the NeXus manual
+- Is linted and formatted with `ruff`
+
+### Additive-only write policy
+
+The generator never removes existing members. When a file already exists:
+- **No user additions**: rewrite if content differs (propagates description changes, new members, annotation updates)
+- **User additions present** (methods or quantities not in new output): skip; protect customizations. Use `--force` to override.
+- **`--dry-run`**: report whether the file would change; no write
+
+This allows `normalize()` methods added by plugin developers to survive regeneration.
+
+### Naming conventions
+
+- **Class names**: strip `NX` prefix, CamelCase.
+- **Quantity names**: NXDL field names as-is; `_quantity` suffix for:
+  - Reserved NOMAD `BaseSection` names (`name`, `datetime`, `lab_id`, `description`)
+  - Field-vs-group collisions (group wins the unqualified name)
+- **Subsection names**: NXDL group name; `_quantity` suffix for reserved names
+- **Field-attribute quantities**: `{field_name}__{attr_name}` (double underscore)
+
+### Naming for application definition nested classes (Phase 2)
+
+Application definitions use a **submodule file layout** with short Python class names.
+NOMAD schema name uniqueness (required within a `Package`) is enforced via an explicit
+`m_def = Section(name="...")` — the generator derives it from the module path:
+
+```
+applications/arpes/
+    __init__.py    # class ARPES(Measurement, Schema)
+    entry.py       # class Entry(base_entry.Entry): m_def = Section(name="ARPESEntry")
+    instrument.py  # class Instrument(...):         m_def = Section(name="ARPESInstrument")
+```
+
+Plugin developers use the short name: `from ...applications.arpes.entry import Entry`.
+The long name (`ARPESEntry`) is only needed inside NOMAD's package registry to avoid
+collisions between base-class and application-definition classes with the same short name.
+
+### Dependency ordering
+
+Files are written in topological order (using `toposort_flatten`) so that each file's imports are already on disk when it is generated. Cycles are detected and reported.
+
+### Template
+
+Jinja2 template at `converters/templates/base_class.py.j2`. The generator passes a context dict built from `NexusNode` properties — no template accesses XML directly.
+
+### CLI
+
+```bash
+pynx nomad generate-metainfo --nx-class NXentry        # single class
+pynx nomad generate-metainfo --all                      # all base classes
+pynx nomad generate-metainfo --all --force              # overwrite all
+pynx nomad generate-metainfo --all --dry-run            # CI diff check
+```
+
+## Alternatives considered
+
+**Runtime generation (current approach)**: builds Section objects at import time.
+Rejected: no reusable artifacts; hard to inspect; slow startup.
+
+**Single giant Python file**: all classes in one file. Rejected: unmaintainable at ~150 classes; no per-class version history; circular import risk.
+
+**AST rewriting instead of Jinja2**: patch existing files with AST transforms.
+Rejected: fragile for structural changes; Jinja2 + additive check is simpler and
+produces clean, readable output.
+
+## Consequences
+
+- Generated files are committed to the repository and treated as source artifacts. They must be regenerated whenever the NXDL definitions change.
+- The `--dry-run` flag enables CI to enforce that committed files match generator output.
+- The `--force` flag is needed to propagate non-structural changes (descriptions,
+  annotation values) to files that have no user additions.
+- Named concept classes are internal implementation detail; `__all__` exposes only the primary class. Imports of named concepts are possible but not part of the public API.

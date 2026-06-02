@@ -35,36 +35,43 @@ nomad-measurements standard sections
 Plugin-specific schemas (lab-custom, instrument-specific)
 ```
 
-Long-term: only the schema package (`metainfo/`) moves to `nomad-measurements`. The NeXus
-parser, search app, and examples stay in pynxtools — NOMAD must always parse `.nxs` files.
+Long-term: only the schema package (`metainfo/`) moves to `nomad-measurements`. The NeXus parser, search app, and examples stay in pynxtools — NOMAD must always parse `.nxs` files.
+
+## Architecture Decision Records (ADRs)
+
+Design decisions that arise during implementation are captured as **Architecture Decision Records** — short documents (1–3 pages) stating the decision, alternatives considered, and rationale. ADRs in this project are **living documents**: they reflect the current best understanding and may be revised as implementation reveals new constraints.
+
+ADRs live alongside this plan in [`adr/`](adr/):
+
+| ADR | Topic |
+|---|---|
+| [ADR-001](adr/ADR-001-nexus-annotations.md) | `NeXusDefinition` + `NeXusGroup` + `NeXusQuantity` annotation models |
+| [ADR-002](adr/ADR-002-optionality-semantics.md) | NXDL optionality → NOMAD; GUI visibility rule |
+| [ADR-003](adr/ADR-003-base-section-mapping.md) | Canonical NeXus ↔ NOMAD base section mapping |
+| [ADR-004](adr/ADR-004-code-generator.md) | Code generator specification |
+| [ADR-005](adr/ADR-005-entry-point-splitting.md) | Entry point splitting and domain plugin interface |
+
+When this plan and an ADR conflict, the ADR takes precedence — it captures the more recent and detailed decision.
+
+---
 
 ## NeXus File to NOMAD Entry Mapping
 
-**One NOMAD entry per NXentry** (first iteration). The NeXus file is not mapped to an
-outer experiment section — each NXentry becomes one independent NOMAD entry directly.
-Multi-entry files produce one NOMAD entry per NXentry; the mapping is 1:1.
+**One NOMAD entry per NXentry** (first iteration). The NeXus file is not mapped to an outer experiment section — each NXentry becomes one independent NOMAD entry directly. Multi-entry files produce one NOMAD entry per NXentry; the mapping is 1:1.
 
-Future: if a file-level experiment wrapper is needed, it can be added as an outer section
-in a later phase without breaking the 1:1 base.
+Future: if a file-level experiment wrapper is needed, it can be added as an outer section in a later phase without breaking the 1:1 base.
 
 ---
 
 ## Naming Conventions
 
 ### Section (class) names
-Remove `NX` prefix, then convert to CamelCase. Abbreviations stay uppercase via a lookup table:
+Remove `NX` prefix, then convert to CamelCase (each `_`-separated word title-cased).
+Implementation in `converters/_mapping.py:nxdl_to_class_name`.
 
-```python
-ABBREVIATIONS = {"xrd","xps","arpes","mpes","em","apm","xas","afm","stm","sem","tem","spm","ipf"}
-
-def nxdl_to_class_name(nx_name: str) -> str:
-    stem = nx_name[2:] if nx_name.startswith("NX") else nx_name
-    parts = stem.split("_")
-    return "".join(p.upper() if p.lower() in ABBREVIATIONS else p.capitalize()
-                   for p in parts if p)
-# NXxrd → XRD, NXarpes → ARPES, NXoptical_spectroscopy → OpticalSpectroscopy
-# NXsample → Sample, NXentry → Entry, NXinstrument → Instrument
-# NXmicrostructure_ipf → MicrostructureIPF
+```
+NXsample → Sample,  NXentry → Entry,  NXoptical_spectroscopy → OpticalSpectroscopy
+NXmicrostructure_ipf → MicrostructureIpf
 ```
 
 ### Naming for nested specialisations (application definitions)
@@ -84,9 +91,15 @@ Plugin developers use the short name: `from ...applications.arpes.entry import E
 
 ### Quantity (field) names
 - NXDL fields: use the NXDL name directly — `start_time`, `energy`, `title`
-- Attributes on groups: `{attr_name}` or `{attr_name}_attr` (context-dependent — TBD in ADR-001)
+- Attributes on groups: `{attr_name}` — no suffix, emitted without the `@` prefix
 - Attributes on fields: `{field_name}__{attr_name}` — e.g., `energy__units`
 - Variadic (nameType=any/partial): `variable=True` on SubSection/Quantity
+
+### Name conflict resolution
+
+Groups always win the unqualified name. `_quantity` suffix applied for:
+1. **Reserved NOMAD names** (`name`, `datetime`, `lab_id`, `description`) → `name_quantity`, etc.
+2. **Field-vs-group collision** — when a NXDL field and group in the same class (or ancestor chain) share a Python name (e.g. `NXsample` field `sample_component` vs. `NXsample_component` group). Field renamed to `sample_component_quantity`; SubSection keeps `sample_component`.
 
 ### Connection from Python class to NXDL
 
@@ -94,7 +107,7 @@ The connection is carried by the `NeXusGroup` annotation on `Section.m_def`, not
 class-level string attributes:
 
 ```python
-class XRD(Measurement):
+class Xrd(Measurement):
     m_def = Section(
         a_nexus_group=NeXusGroup(
             nx_class="NXxrd",
@@ -108,25 +121,30 @@ class XRD(Measurement):
 
 ## Annotation Models
 
-Two annotation classes replace the hidden `section.more["nx_*"]` protocol.
+Three annotation classes replace the hidden `section.more["nx_*"]` protocol.
+See [ADR-001](adr/ADR-001-nexus-annotations.md) for full rationale.
 
-Field names use bare names — the annotation namespace is provided by the registry key
-(`nexus_group`, `nexus_quantity`), not by field name prefixes. `nx_class` is the one
-exception because it is the NeXus concept identifier.
+Field names use bare names — the annotation namespace is provided by the registry key,
+not by field name prefixes. `nx_class` is the one exception (Python reserved keyword).
 
 ```python
-class NeXusGroup(AnnotationModel):
-    """Attached to Section.m_def and SubSection definitions for groups."""
-    nx_class: str                    # "NXinstrument"
-    name: str | None = None          # fixed name if specified; None = variadic
-    name_type: Literal["specified","any","partial"] = "specified"
+class NeXusDefinition(AnnotationModel):
+    """Attached to Section.m_def of every top-level generated class."""
+    nx_class: str
     category: Literal["base","application","contributed"] = "base"
-    optionality: Literal["required","recommended","optional"] = "optional"
     restricts: bool = False
     ignore_extra_groups: bool = False
     ignore_extra_fields: bool = False
     ignore_extra_attributes: bool = False
     symbols: dict[str, str] | None = None
+    deprecated: str | None = None
+
+class NeXusGroup(AnnotationModel):
+    """Attached to named concept class m_def, or SubSection for cross-file references."""
+    nx_class: str
+    name: str | None = None
+    name_type: Literal["specified","any","partial"] = "specified"
+    optionality: Literal["required","recommended","optional"] = "optional"
     min_occurs: int | None = None
     max_occurs: int | None = None
     deprecated: str | None = None
@@ -134,10 +152,10 @@ class NeXusGroup(AnnotationModel):
 class NeXusQuantity(AnnotationModel):
     """Attached to Quantity definitions for fields and attributes."""
     kind: Literal["field","attribute"]
-    name: str                        # original NXDL name
-    parent_field: str | None = None  # for field-level attributes: owning field name
-    type: str = "NX_CHAR"            # NX type category: "NX_FLOAT", "NX_CHAR", …
-    units: str | None = None         # NX unit category: "NX_ENERGY", "NX_LENGTH"
+    name: str
+    parent_field: str | None = None
+    type: str = "NX_CHAR"
+    units: str | None = None
     name_type: Literal["specified","any","partial"] = "specified"
     optionality: Literal["required","recommended","optional"] = "optional"
     enumeration: list[str] | None = None
@@ -150,8 +168,9 @@ class NeXusQuantity(AnnotationModel):
 Registered at plugin load time — no NOMAD core PR needed:
 ```python
 # annotations.py
-AnnotationModel.m_registry["nexus_group"] = NeXusGroup
-AnnotationModel.m_registry["nexus_quantity"] = NeXusQuantity
+AnnotationModel.m_registry["nexus_definition"] = NeXusDefinition
+AnnotationModel.m_registry["nexus_group"]      = NeXusGroup
+AnnotationModel.m_registry["nexus_quantity"]   = NeXusQuantity
 ```
 
 ---
@@ -396,11 +415,13 @@ All XML-parsing, `_create_class_section`, `_create_group`, `_create_field`,
 Deliverables: ADRs, not implementation.
 
 Required ADRs:
-- **ADR-001**: `NeXusGroup` + `NeXusQuantity` field names and types
-- **ADR-002**: `nx_optionality` semantics — how optionality is set from NXDL context
-- **ADR-003**: Canonical NeXus ↔ NOMAD base section mapping (full table)
-- **ADR-004**: Code generator specification (input: NexusNode; output: Python; additive-only)
-- **ADR-005**: Entry point splitting strategy and domain plugin interface
+- **[ADR-001](adr/ADR-001-nexus-annotations.md)**: `NeXusDefinition` + `NeXusGroup` + `NeXusQuantity` field names and types
+- **[ADR-002](adr/ADR-002-optionality-semantics.md)**: Optionality semantics — how NXDL optionality maps to NOMAD; GUI visibility rule
+- **[ADR-003](adr/ADR-003-base-section-mapping.md)**: Canonical NeXus ↔ NOMAD base section mapping
+- **[ADR-004](adr/ADR-004-code-generator.md)**: Code generator specification (NexusNode input; Python output; additive-only)
+- **[ADR-005](adr/ADR-005-entry-point-splitting.md)**: Entry point splitting strategy and domain plugin interface
+
+> ADRs are living design documents — decisions may evolve as implementation progresses.
 
 Semantic mapping document: full table of NeXus base classes → NOMAD base sections (covers
 all ~156 base classes, not just the current BASESECTIONS_MAP partial list).
@@ -410,23 +431,20 @@ Schema contribution pathway document:
 custom plugin → nomad-measurements standard section → NeXus application definition (NIAC)
 ```
 
-### Phase 1 — Infrastructure + Base Class Generation (weeks 2–5, largely complete)
-- [x] `annotations.py` with `NeXusGroup` + `NeXusQuantity` (bare field names; registered with NOMAD annotation system)
-- [x] `converters/_naming.py` with `nxdl_to_class_name`, `BASESECTIONS_MAP`, topological sort, `nx_type_to_source`
-- [x] `converters/nxdl_to_metainfo.py` — generator using `build_base_class_node()` from `NexusNode` API; zero raw XML access
-- [x] `metainfo/base_classes/*.py` — 142 generated Python files
-- [x] `metainfo/_package.py` — assembles NOMAD `Package`; graceful degradation for cross-category refs
-- [x] `nexus_tree.py` additions: `build_base_class_node()`, `populate_direct_children()`, typed attrs (`deprecated`, `category`, `restricts`, `ignore_extra_*`, `symbols`, `interpretation`, `long_name`)
-- [x] Entry points in `pyproject.toml` — `nexus_base_classes = "pynxtools.nomad.metainfo:nexus_base_classes"`;
-      entry point class lives in `metainfo/__init__.py` alongside public `build_package()` / `all_sections()` API;
-      `metainfo/base_classes/__init__.py` is reserved for re-exports only
-- [x] Generator formatting pipeline fixed: correct `ruff check --fix` stdin invocation, import sort order,
-      debug code removed; `ruff>=0.15.0` declared in `nomad` optional dependency; `include` glob fixed to `src/**/*.py`
-- [ ] **Tests**: package equivalence (same section names, quantity types as current schema for base classes)
-
-Note: `nexus-inheritance-concept-paths` merge is **not** a prerequisite for Phase 1. The
-generator uses `build_base_class_node()` added to `dataconverter/nexus_tree.py` on master.
-The new symbols will be re-exported from the shim in that branch when it merges.
+### Phase 1 — Infrastructure + Base Class Generation (**complete**)
+- [x] `annotations.py` with `NeXusDefinition` + `NeXusGroup` + `NeXusQuantity` (bare field names; all registered)
+- [x] `converters/_mapping.py` with `nxdl_to_class_name`, `BASESECTIONS_MAP`, `nx_type_to_source`, `field_conflicts_with_group`
+- [x] `converters/nxdl_to_metainfo.py` — generator using `generate_tree_from()` from `NexusNode` API; zero raw XML access
+- [x] `metainfo/base_classes/*.py` — all 142 generated Python files; regenerated with all fixes
+- [x] `metainfo/_package.py` — `build_base_classes_package()`; assembles NOMAD Package; graceful degradation
+- [x] `nexus_tree.py` refactored: `generate_tree_from()` → `NexusDefinition`; `_NexusEntityBase`/`NexusField`/`NexusAttribute` split; `NexusDefinition.get_link()` for documentation URLs
+- [x] Entry points: `nexus_base_classes` in `pyproject.toml`; `build_base_classes_package()` public API
+- [x] `links=[url]` on every `Section` and `Quantity` via `node.get_link()`
+- [x] RST stripped from descriptions; `strip_rst` in `nexus/utils.py`
+- [x] `_quantity` suffix for all name conflicts; `field_conflicts_with_group` helper
+- [x] Same-class field/group conflict resolution; additive-only guard improved
+- [x] ADRs 001–005 written in `data-modeling/nexus-metainfo/adr/`
+- [ ] **Tests**: package equivalence; annotation tests; `test_annotation_fixes.py`
 
 ### Phase 2 — Application + Contributed Definitions (post week 5)
 - `metainfo/applications/*.py` — ~50 files
@@ -467,17 +485,19 @@ The new symbols will be re-exported from the shim in that branch when it merges.
 
 | Week | Focus | Status |
 |---|---|---|
-| 1 | Phase 0: ADRs 001–005 written; worktree merged; `test_fixes.py` → pytest | ADRs pending; generator infrastructure complete |
-| 2 | `annotations.py` + `converters/_naming.py` + generator skeleton | Done |
+| 1 | Phase 0: ADRs 001–005 written; worktree merged; `test_fixes.py` → pytest | ADRs written; generator infrastructure complete |
+| 2 | `annotations.py` + `converters/_mapping.py` + generator skeleton | Done |
 | 3–4 | Generator working; all 142 base class Python files generated | Done |
-| 5 | Entry points configured; package equivalence test passing for generated base classes | Entry points done; tests pending |
+| 5 | Entry points configured; package equivalence test | Entry points done; tests pending |
 
-**Demonstrable at week-5 meeting:**
+**Phase 1 status (as of 2026-06-02): implementation complete; tests and ADR review pending.**
 - [x] `pynx nomad generate-metainfo --nx-class NXentry` produces a valid, importable Python file
-- [x] `Entry(Measurement)` with `NeXusGroup` + `NeXusQuantity` annotations on all quantities
+- [x] `Entry(Object, basesections.Measurement)` with all three annotation types on all quantities
 - [x] `optionality` correctly set from NXDL (required/recommended/optional)
-- [ ] ADRs 001–005 reviewed and agreed
-- [ ] Semantic mapping document complete
+- [x] `links=[url]` on every Section and Quantity pointing to NeXus manual
+- [x] ADRs 001–005 written in `data-modeling/nexus-metainfo/adr/`
+- [ ] ADRs reviewed and agreed by team
+- [ ] Package equivalence tests passing
 
 ---
 
