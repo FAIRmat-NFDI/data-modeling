@@ -1,6 +1,47 @@
 # NeXus–NOMAD Metainfo Refactor: Work Plan
 
-## Problem
+> Internal plan with full implementation detail: `we-are-planning-a-compiled-valiant.md` (private)
+> ADRs: [`adr/`](adr/)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Problem & Goal](#problem)
+  - [Target Architecture](#target-architecture)
+  - [NeXus File to NOMAD Entry Mapping](#nexus-file-to-nomad-entry-mapping)
+  - [Architecture Decision Records](#architecture-decision-records-adrs)
+- [Design Decisions](#design-decisions)
+  - [Naming Conventions](#naming-conventions)
+    - [Section names](#section-class-names) · [Quantity names](#quantity-field-names) · [Conflict resolution](#name-conflict-resolution) · [Connection to NXDL](#connection-from-python-class-to-nxdl)
+  - [Annotation Models](#annotation-models)
+  - [Visibility Rule](#visibility-rule-option-3b)
+  - [Base Section Mapping](#base-section-mapping)
+  - [Entry Point Splitting](#performance-entry-point-splitting)
+- [Schema Structure](#schema-structure)
+  - [File Layout](#new-file-layout)
+- [Generator & Tools](#generator--tools)
+  - [Code Generator](#code-generator-nxdl--python-nxdl_to_metainfopy)
+  - [Round-Trip Exporter](#round-trip-python--nxdl-metainfo_to_nxdlpy)
+  - [Parser Migration](#parser-migration-parserpy)
+  - [schema.py End State](#schemapy-end-state-80-lines)
+- [Roadmap](#roadmap)
+  - [Phases](#phases)
+    - [Phase 0](#phase-0--architecture-alignment-weeks-1-no-code) · [Phase 1](#phase-1--infrastructure--base-class-generation-complete) · [Phase 2](#phase-2--application--contributed-definitions) · [Phase 3](#phase-3--bridge-schemapy) · [Phase 4](#phase-4--parser-migration) · [Phase 5](#phase-5--cleanup) · [Phase N](#phase-n--nomad-measurements-alignment)
+  - [5-Week Milestone](#5-week-milestone-project-meeting)
+- [Architecture & Strategy](#architecture--strategy)
+  - [Long-Term Dependency Architecture](#long-term-dependency-architecture)
+  - [Design Tensions](#architectural-design-tensions-to-resolve-beforeduring-implementation)
+  - [Versioning Strategy](#versioning-strategy)
+- [References](#references)
+  - [Open Issues](#relevant-open-issues)
+  - [Verification](#verification)
+  - [Open Questions](#open-questions-for-adr-process)
+
+---
+
+## Overview
+
+### Problem
 
 The NeXus integration in NOMAD is perceived as fundamentally different from other plugins.
 Root causes:
@@ -11,7 +52,7 @@ Root causes:
 - Large monolithic schema package slows appworker startup
 - No UI filtering of optional inherited quantities — users see full NeXus taxonomy
 
-## Goal
+### Goal
 
 Create one authoritative FAIRmat characterization/measurement layer:
 - NeXus sections defined as **Python Metainfo classes** — importable, type-checkable, extensible
@@ -21,7 +62,7 @@ Create one authoritative FAIRmat characterization/measurement layer:
 - Schema loads fast via entry point splitting — domain plugins load only what they need
 - Designed to eventually live in `nomad-measurements`
 
-## Target Architecture
+### Target Architecture
 
 ```
 NOMAD base sections (BaseSection, Measurement, Instrument, …)
@@ -37,7 +78,7 @@ Plugin-specific schemas (lab-custom, instrument-specific)
 
 Long-term: only the schema package (`metainfo/`) moves to `nomad-measurements`. The NeXus parser, search app, and examples stay in pynxtools — NOMAD must always parse `.nxs` files.
 
-## Architecture Decision Records (ADRs)
+### Architecture Decision Records (ADRs)
 
 Design decisions that arise during implementation are captured as **Architecture Decision Records** — short documents (1–3 pages) stating the decision, alternatives considered, and rationale. ADRs in this project are **living documents**: they reflect the current best understanding and may be revised as implementation reveals new constraints.
 
@@ -55,7 +96,7 @@ When this plan and an ADR conflict, the ADR takes precedence — it captures the
 
 ---
 
-## NeXus File to NOMAD Entry Mapping
+### NeXus File to NOMAD Entry Mapping
 
 **One NOMAD entry per NXentry** (first iteration). The NeXus file is not mapped to an outer experiment section — each NXentry becomes one independent NOMAD entry directly. Multi-entry files produce one NOMAD entry per NXentry; the mapping is 1:1.
 
@@ -63,18 +104,21 @@ Future: if a file-level experiment wrapper is needed, it can be added as an oute
 
 ---
 
-## Naming Conventions
+## Design Decisions
 
-### Section (class) names
+### Naming Conventions
+
+#### Section (class) names
 Remove `NX` prefix, then convert to CamelCase (each `_`-separated word title-cased).
 Implementation in `converters/_mapping.py:nxdl_to_class_name`.
 
 ```
-NXsample → Sample,  NXentry → Entry,  NXoptical_spectroscopy → OpticalSpectroscopy
+NXsample → Sample,  NXentry → Entry, NXelectrondetector → ElectronDetector 
+NXxrd → Xrd, NXarpes → Arpes, NXoptical_spectroscopy → OpticalSpectroscopy
 NXmicrostructure_ipf → MicrostructureIpf
 ```
 
-### Naming for nested specialisations (application definitions)
+#### Naming for nested specialisations (application definitions)
 
 Application definitions use a **submodule file layout** with short Python class names.
 NOMAD schema name uniqueness (required within a `Package`) is enforced via an explicit
@@ -89,19 +133,19 @@ applications/arpes/
 
 Plugin developers use the short name: `from ...applications.arpes.entry import Entry`.
 
-### Quantity (field) names
+#### Quantity (field) names
 - NXDL fields: use the NXDL name directly — `start_time`, `energy`, `title`
 - Attributes on groups: `{attr_name}` — no suffix, emitted without the `@` prefix
 - Attributes on fields: `{field_name}__{attr_name}` — e.g., `energy__units`
 - Variadic (nameType=any/partial): `variable=True` on SubSection/Quantity
 
-### Name conflict resolution
+#### Name conflict resolution
 
 Groups always win the unqualified name. `_quantity` suffix applied for:
 1. **Reserved NOMAD names** (`name`, `datetime`, `lab_id`, `description`) → `name_quantity`, etc.
 2. **Field-vs-group collision** — when a NXDL field and group in the same class (or ancestor chain) share a Python name (e.g. `NXsample` field `sample_component` vs. `NXsample_component` group). Field renamed to `sample_component_quantity`; SubSection keeps `sample_component`.
 
-### Connection from Python class to NXDL
+#### Connection from Python class to NXDL
 
 The connection is carried by the `NeXusGroup` annotation on `Section.m_def`, not by
 class-level string attributes:
@@ -119,7 +163,7 @@ class Xrd(Measurement):
 
 ---
 
-## Annotation Models
+### Annotation Models
 
 Three annotation classes replace the hidden `section.more["nx_*"]` protocol.
 See [ADR-001](adr/ADR-001-nexus-annotations.md) for full rationale.
@@ -175,7 +219,7 @@ AnnotationModel.m_registry["nexus_quantity"]   = NeXusQuantity
 
 ---
 
-## Visibility Rule (Option 3B)
+### Visibility Rule (Option 3B)
 
 The schema remains complete and NeXus-compliant. Filtering is a presentation concern only.
 
@@ -200,7 +244,9 @@ quantities with no value in the file are not indexed. Coordination with NOMAD co
 
 ---
 
-## New File Layout
+## Schema Structure
+
+### New File Layout
 
 ```
 src/pynxtools/nomad/
@@ -242,7 +288,7 @@ src/pynxtools/nomad/
 
 ---
 
-## Base Section Mapping
+### Base Section Mapping
 
 Direct Python inheritance replaces `BASESECTIONS_MAP`:
 
@@ -270,7 +316,7 @@ quantities.
 
 ---
 
-## Performance: Entry Point Splitting
+### Performance: Entry Point Splitting
 
 Replace the monolithic schema package with multiple entry points.
 
@@ -285,25 +331,30 @@ nexus_base_classes = "pynxtools.nomad.metainfo:nexus_base_classes"
 [project.entry-points."nomad.plugin"]
 nexus_base_classes   = "pynxtools.nomad.metainfo:nexus_base_classes"
 nexus_applications   = "pynxtools.nomad.metainfo:nexus_applications"
-nexus_contributed    = "pynxtools.nomad.metainfo:nexus_contributed"
 ```
 All entry point classes live in `metainfo/__init__.py`; each delegates to its own `_package.py`.
 
-Domain plugins (e.g., `pynxtools-mpes`) import only what they need:
+In addition, we may later define entry points for specific applications, like `mpes`:
 
 ```python
-# pynxtools_mpes/schema.py
+# mpes/_package_.py
 from pynxtools.nomad.metainfo.base_classes.entry import Entry
 from pynxtools.nomad.metainfo.base_classes.instrument import Instrument
-from pynxtools.nomad.metainfo.applications.mpes import MPES
+from pynxtools.nomad.metainfo.applications.mpes import Mpes
 ```
 
-Each entry point loads independently; Python's import caching handles deduplication.
-No runtime lazy loading state machine needed.
+```
+[project.entry-points."nomad.plugin"]
+mpes   = "pynxtools.nomad.metainfo:mpes"
+```
+
+Each entry point loads independently; Python's import caching handles deduplication. No runtime lazy loading state machine needed.
 
 ---
 
-## Code Generator: NXDL → Python (`nxdl_to_metainfo.py`)
+## Generator & Tools
+
+### Code Generator: NXDL → Python (`nxdl_to_metainfo.py`)
 
 **Pipeline**:
 ```
@@ -358,17 +409,17 @@ the future nomad-measurements home without any code changes.
 
 ---
 
-## Round-Trip: Python → NXDL (`metainfo_to_nxdl.py`)
+### Round-Trip: Python → NXDL (`metainfo_to_nxdl.py`)
 
 Reads `NeXusGroup` + `NeXusQuantity` annotations → emits NXDL XML.
-- Warns (does not error) on type changes against existing NXDL
+- Errors on type changes against existing NXDL
 - Never emits removals — human must handle deprecations manually
 
 Required by the constraint: Python authoring must be a strict superset of NXDL semantics.
 
 ---
 
-## Parser Migration (`parser.py`)
+### Parser Migration (`parser.py`)
 
 New annotation-based navigation instead of `section.more["nx_*"]` and name suffixes.
 
@@ -382,7 +433,7 @@ New annotation-based navigation instead of `section.more["nx_*"]` and name suffi
 
 ---
 
-## `schema.py` End State (~80 lines)
+### `schema.py` End State (~80 lines)
 
 ```python
 from pynxtools.nomad.metainfo import build_package
@@ -409,9 +460,14 @@ All XML-parsing, `_create_class_section`, `_create_group`, `_create_field`,
 
 ---
 
-## Phases
+## Roadmap
 
-### Phase 0 — Architecture Alignment (weeks 1, no code)
+### Phases
+
+#### Phase 0 — Architecture Alignment (weeks 1, no code)
+
+*Agree on all design decisions before writing any code — annotations, naming, base section mapping, generator spec, entry point strategy.*
+
 Deliverables: ADRs, not implementation.
 
 Required ADRs:
@@ -431,12 +487,15 @@ Schema contribution pathway document:
 custom plugin → nomad-measurements standard section → NeXus application definition (NIAC)
 ```
 
-### Phase 1 — Infrastructure + Base Class Generation (**complete**)
+#### Phase 1 — Infrastructure + Base Class Generation (**complete**)
+
+*Build the generator and produce importable Python metainfo classes for all ~142 NXDL base classes (`category="base"`).*
+
 - [x] `annotations.py` with `NeXusDefinition` + `NeXusGroup` + `NeXusQuantity` (bare field names; all registered)
 - [x] `converters/_mapping.py` with `nxdl_to_class_name`, `BASESECTIONS_MAP`, `nx_type_to_source`, `field_conflicts_with_group`
 - [x] `converters/nxdl_to_metainfo.py` — generator using `generate_tree_from()` from `NexusNode` API; zero raw XML access
 - [x] `metainfo/base_classes/*.py` — all 142 generated Python files; regenerated with all fixes
-- [x] `metainfo/_package.py` — `build_base_classes_package()`; assembles NOMAD Package; graceful degradation. Uses `setattr(mod, "m_package", assembled_package)` on each imported module to prevent double-registration — NOMAD's metaclass auto-creates a per-module Package at import time; without the override `all_metainfo_packages()` would find both and register each Section twice.
+- [x] `metainfo/_package.py` — `build_base_classes_package()`; assembles NOMAD Package; graceful degradation. NOMAD's metaclass auto-creates a per-module `Package` for each imported file. `setattr(mod, "m_package", assembled_package)` overrides these to prevent double-registration in `all_metainfo_packages()`; without the override `all_metainfo_packages()` would find both and register each Section twice.
 - [x] `nexus_tree.py` refactored: `generate_tree_from()` → `NexusDefinition`; `_NexusEntityBase`/`NexusField`/`NexusAttribute` split; `NexusDefinition.get_link()` for documentation URLs
 - [x] Entry points: `nexus_base_classes` in `pyproject.toml`; `build_base_classes_package()` public API
 - [x] `links=[url]` on every `Section` and `Quantity` via `node.get_link()`
@@ -446,7 +505,13 @@ custom plugin → nomad-measurements standard section → NeXus application defi
 - [x] ADRs 001–005 written in `data-modeling/nexus-metainfo/adr/`
 - [ ] **Tests**: package equivalence; annotation tests; `test_annotation_fixes.py`
 
-### Open question: generated `description=` strings (branch `nexus-metainfo-docstrings`)
+**Phase 1 implementation is complete. Remaining: ADRs + tests.**
+
+#### Open question: generated `description=` strings (branch `nexus-metainfo-docstrings`)
+
+The NeXus descriptions are very much geared towards NeXus; often they are also rather verbose. We could change that for the NOMAD Metainfo items.
+
+The NeXus manual link (`links=[url]`) is always present, so users can always reach the authoritative NXDL description. This means `description=` can be genuinely user-facing rather than a spec copy.
 
 Three options — **no decision yet**:
 
@@ -454,22 +519,33 @@ Three options — **no decision yet**:
 
 2. **Plain-stripped strings** (branch `nexus-metainfo-docstrings`) — RST markup removed via `strip_rst`. Clean text, ready now. Content is still NeXus-centric and often too long; just removes formatting noise without addressing meaning.
 
-3. **AI-rewritten descriptions** — LLM rewrites each description as 1–2 plain-English sentences suitable for a NOMAD GUI. Requires a review pass for scientific correctness. The NeXus manual link (`links=[url]`) is always present, so `description=` is free to be user-facing rather than a spec copy.
+3. **AI-rewritten descriptions** — LLM rewrites each description as 1–2 plain-English sentences suitable for a NOMAD GUI. Requires a review pass for scientific correctness.
 
-### Phase 2 — Application + Contributed Definitions (post week 5)
-- **Prerequisite**: clarify multi-package search with NOMAD core before starting. `nexus_base_classes` and `nexus_applications` are separate packages; NOMAD's Elasticsearch app may only index one. Must resolve before Phase 2 ships.
+If the individual concepts from the NeXus Ontology get registered, we can even add links to the actual PIDs; that would be the best solution.
+
+#### Phase 2 — Application + Contributed Definitions
+
+*Extend the generator to all `category="application"` definitions (official + FAIRmat contributed), producing `Xps(Entry)` style specializations and the `nexus_applications` entry point.*
+
+- **Prerequisite**: clarify multi-package search with NOMAD core before starting. `nexus_base_classes` and `nexus_applications` are separate packages; NOMAD's Elasticsearch app may only index one. Resolution determines whether Phase 2 produces a second package or extends the base one. Related to pynxtools issue #708.
 - `metainfo/applications/*.py` — ~50 files
 - `metainfo/contributed/*.py` — ~96 files
 - Application definitions specialize base class groups with AD-specific optionality
 - **Round-trip tests**: NXDL → Python → NXDL recovers field names, types, hierarchy
 
-### Phase 3 — Bridge `schema.py`
+#### Phase 3 — Bridge `schema.py`
+
+*Add a new annotation-based parser entry point alongside the existing one — keep the old stack running, validate the new parser in parallel.*
+
 - `create_metainfo_package()` → `metainfo._package.build_package()`
 - `schema.py` becomes ~80-line shim
 - Old XML-parsing code present but unreachable (behind `USE_LEGACY` flag)
 - **Gate**: parser test suite passes; identical archive output for reference `.nxs` files
 
-### Phase 4 — Parser Migration
+#### Phase 4 — Parser Migration
+
+*Switch the canonical parser to annotation-based navigation; implement backwards conversion (`metainfo_to_nxdl.py`); deprecate old entry points.*
+
 - Rewrite `parser.py` to use `NeXusGroup.nx_class` / `NeXusQuantity.name` for navigation
 - Drop `section.more["nx_*"]` dependencies; drop `_rename_nx_for_nomad` call sites
 - **FIELD_STATISTICS**: generator emits `{name}__mean/__min/__max/__size/__ndim` parallel quantities for all numeric fields in NXdata-derived classes (including named concept subclasses — inheritance does not propagate statistics). Parser fills them in `normalize()` on `Data`.
@@ -478,14 +554,22 @@ Three options — **no decision yet**:
 - **Gate**: golden-output archive JSON tests against known `.nxs` files before touching the parser
 - **Tests**: parse reference `.nxs` files; `archive.m_to_dict()` matches golden outputs
 
-### Phase 5 — Cleanup
+**After this phase, we are out of v1!**
+
+#### Phase 5 — Cleanup
+
+*Remove all legacy runtime generation code, shims, and intermediate compatibility layers.*
+
 - Remove XML-parsing generation code from `schema.py`
 - Remove `NexusBaseSection`, `NexusMeasurement`, `NexusActivityStep`, `NexusActivityResult`
 - Remove `_rename_nx_for_nomad` (or keep with `DeprecationWarning` for external users)
 - Remove `BASESECTIONS_MAP`, `NORMALIZER_MAP`, `section_definitions` global
 - `metainfo_to_nxdl.py` round-trip exporter (may start earlier alongside Phase 2)
 
-### Phase N — nomad-measurements Alignment (parallel to Phases 2–5)
+#### Phase N — nomad-measurements Alignment
+
+*`nomad-measurements` inherits from the generated NeXus base classes, becoming the authoritative FAIRmat measurement schema layer.*
+
 - `nomad-measurements` sections inherit from generated Python NeXus classes
 - XRD as pilot (already has `NEXUS_DATASET_MAP`): `class XRayDiffraction(XRD):`
 - Requires ADRs 006 (mapping table) and 007 (backward compat)
@@ -494,7 +578,7 @@ Three options — **no decision yet**:
 
 ---
 
-## 5-Week Milestone (Project Meeting)
+### 5-Week Milestone (Project Meeting)
 
 | Week | Focus | Status |
 |---|---|---|
@@ -514,7 +598,9 @@ Three options — **no decision yet**:
 
 ---
 
-## Long-Term Dependency Architecture
+## Architecture & Strategy
+
+### Long-Term Dependency Architecture
 
 When the generated schema moves to `nomad-measurements`, the dependency graph must remain
 one-directional:
@@ -552,7 +638,7 @@ updates. No dependency inversion needed, ever.
 
 ---
 
-## Architectural Design Tensions (to resolve before/during implementation)
+### Architectural Design Tensions (to resolve before/during implementation)
 
 1. **`AnchoredReference` / identifiers**: `identifierNAME` → `EntityReference` logic is
    NeXus-specific. Decision needed: does it stay in pynxtools or move to nomad-measurements?
@@ -574,28 +660,24 @@ updates. No dependency inversion needed, ever.
    # nomad-measurements: future location
    from nomad_measurements.nexus.base_classes.entry import Entry
    ```
-   Provide re-export shim in pynxtools for backward compat.
-
 ---
 
-## Versioning Strategy
+### Versioning Strategy
 
 | Version | Content | Breaking changes |
 |---|---|---|
-| **0.x (current)** | Runtime-generated schema; `__field` names; `NORMALIZER_MAP` | — |
-| **1.0** | Phases 0–3: Python-native `metainfo/` files; `NeXusGroup`/`NeXusQuantity` annotations; entry point splitting; `schema.py` thin shim. All `__field`-based code still works via backward-compat `__getattr__` shim. | None (additive only) |
-| **2.0** | Phases 4–5: parser rewritten; `__field`/`___` suffixes removed; `NexusBaseSection`, `NORMALIZER_MAP` removed | Yes — plugin code using `__field`, `section.more["nx_*"]`, or `NORMALIZER_MAP` must migrate |
+| **0.x (current)** | Runtime-generated schema; old `__field` names; `NORMALIZER_MAP` | — |
+| **1.0** | Old schema + parser + app unchanged and still the default. New Python-native metainfo available as opt-in entry points (`nexus_base_classes`, `nexus_applications`). `__getattr__` shims provided if easy; otherwise new schema is purely additive alongside the old. | None for existing users |
+| **2.0** | New parser is canonical; old `nexus_schema` / `nexus_parser` / `nexus_app` entry points removed; `NexusBaseSection`, `NORMALIZER_MAP`, runtime XML generation removed. | Yes — plugin code using old names / `NORMALIZER_MAP` must migrate |
 
-**Rationale:**
-- 0.x → 1.0 signals "schema API is now stable and importable" — plugin authors can start inheriting from `Entry`, `Sample`, `XRD`, etc. without touching `__field` code
-- The 1.x series is the migration window — every `__field` access emits `DeprecationWarning` via `__getattr__` shim; plugin authors have a full release cycle
-- 2.0 is the clean break, announced in advance, with a migration guide and compatibility codemods
+v1 is the transition window where both worlds coexist. v2 is the clean break.
 
-**pynxtools-* family coordination**: pynxtools-xps, -mpes, -em, -apm, -xas, -xrd, -raman, -spm, -ellips must be informed before 1.0 ships so they can plan 2.0 migrations. A compatibility matrix (which pynxtools-* version requires which pynxtools) should be published at the 1.0 release.
-
+**pynxtools-* family coordination**: pynxtools-xps, -mpes, -em, -apm, -xas, -xrd, -raman, -spm, -ellips must be informed before v2. A compatibility matrix should be published at the v2 release.
 ---
 
-## Relevant Open Issues
+## References
+
+### Relevant Open Issues
 
 | Issue | Title | Phase |
 |---|---|---|
@@ -610,7 +692,7 @@ updates. No dependency inversion needed, ever.
 
 ---
 
-## Verification
+### Verification
 
 ```bash
 # Prerequisite baseline:
@@ -633,7 +715,7 @@ pynx nomad export-nxdl --all --check-only  # NXDL recovered from Python annotati
 
 ---
 
-## Open Questions (for ADR process)
+### Open Questions (for ADR process)
 
 - Attribute naming: `{field}__units` vs. storing units directly on the Quantity's `unit` parameter?
 - `AnchoredReference`: stay in pynxtools or migrate to nomad-measurements?
