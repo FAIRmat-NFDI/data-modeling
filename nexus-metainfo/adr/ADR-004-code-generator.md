@@ -30,6 +30,20 @@ One Python file per NXDL base class, written to `metainfo/base_classes/`. Each f
 - Carries `links=[url]` on every Section and Quantity pointing to the NeXus manual
 - Is linted and formatted with `ruff`
 
+### NXDL node kinds handled by the generator
+
+| NXDL element | Generated artifact | Annotation |
+|---|---|---|
+| `<field>` | `Quantity` | `NeXusField` |
+| `<attribute>` (group-level or field-level) | `Quantity` | `NeXusAttribute` |
+| `<group>` | `SubSection` (+ optional named concept class) | `NeXusGroup` |
+| `<link>` | `Quantity(type=str)` | `NeXusLink` |
+| `<choice>` | One `SubSection` per alternative | `NeXusChoice` |
+
+**`<link>` handling**: emitted as `Quantity(type=str)` carrying `a_nexus_link`. The `target` field stores the schema-level default target path from the NXDL. The actual HDF5 target is resolved by the parser at read time. Links share the quantity name namespace with fields (a link name that conflicts with a field name would be a NXDL error).
+
+**`<choice>` handling**: each alternative group inside the `<choice>` block becomes a separate `SubSection` named `{choice_name}_{class_suffix}` (e.g. `pixel_shape_off_geometry`, `pixel_shape_cylindrical_geometry`). All alternatives carry `NeXusChoice` with the shared `group_name`. The parser selects the matching SubSection by comparing `NeXusChoice.nx_class` against the HDF5 group's `NX_class` attribute. Only alternatives whose target class is already in `base_classes/` are generated (same rule as for regular groups).
+
 ### Additive-only write policy
 
 The generator never removes existing members. When a file already exists:
@@ -76,7 +90,7 @@ Jinja2 template at `converters/templates/base_class.py.j2`. The generator passes
 ### CLI
 
 ```bash
-pynx nomad generate-metainfo --nx-class NXentry        # single class
+pynx nomad generate-metainfo --nxdl NXentry        # single class
 pynx nomad generate-metainfo --all                      # all base classes
 pynx nomad generate-metainfo --all --force              # overwrite all
 pynx nomad generate-metainfo --all --dry-run            # CI diff check

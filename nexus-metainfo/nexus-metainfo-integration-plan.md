@@ -91,6 +91,7 @@ ADRs live alongside this plan in [`adr/`](adr/):
 | [ADR-003](adr/ADR-003-base-section-mapping.md) | Canonical NeXus ↔ NOMAD base section mapping |
 | [ADR-004](adr/ADR-004-code-generator.md) | Code generator specification |
 | [ADR-005](adr/ADR-005-entry-point-splitting.md) | Entry point splitting and domain plugin interface |
+| [ADR-006](adr/ADR-006-application-definitions-are-entry-subclasses.md) | Application definitions inherit from Entry, not Object |
 
 When this plan and an ADR conflict, the ADR takes precedence — it captures the more recent and detailed decision.
 
@@ -396,10 +397,10 @@ Catches NXDL version drift. A human must review and approve any field type/name 
 
 **CLI**:
 ```bash
-pynx nomad generate-metainfo [--nx-class NXdetector] [--all] [--dry-run] [--force]
+pynx nomad generate-metainfo [--nxdl NXdetector] [--all] [--dry-run] [--force]
 pynx nomad generate-metainfo --all \
     --output-dir ../nomad-measurements/src/nomad_measurements/nexus/metainfo/base_classes
-pynx nomad export-nxdl [--nx-class NXxps] [--all] [--check-only]
+pynx nomad export-nxdl [--nxdl NXxps] [--all] [--check-only]
 ```
 
 `--output-dir` is `None` by default, which resolves to the pynxtools-internal
@@ -523,15 +524,25 @@ Three options — **no decision yet**:
 
 If the individual concepts from the NeXus Ontology get registered, we can even add links to the actual PIDs; that would be the best solution.
 
-#### Phase 2 — Application + Contributed Definitions
+#### Phase 2 — Application + Contributed Definitions (**complete**)
 
 *Extend the generator to all `category="application"` definitions (official + FAIRmat contributed), producing `Xps(Entry)` style specializations and the `nexus_applications` entry point.*
 
-- **Prerequisite**: clarify multi-package search with NOMAD core before starting. `nexus_base_classes` and `nexus_applications` are separate packages; NOMAD's Elasticsearch app may only index one. Resolution determines whether Phase 2 produces a second package or extends the base one. Related to pynxtools issue #708.
-- `metainfo/applications/*.py` — ~50 files
-- `metainfo/contributed/*.py` — ~96 files
-- Application definitions specialize base class groups with AD-specific optionality
-- **Round-trip tests**: NXDL → Python → NXDL recovers field names, types, hierarchy
+**Key Design Decision** (see [ADR-006](adr/ADR-006-application-definitions-are-entry-subclasses.md)):
+Application definitions generate `Xps(Entry)`, **not** `Xps(Object, Measurement)`.
+Every NXDL application definition wraps exactly one NXentry at the top level. The generator unwraps this: it finds the NXentry child, uses its children as the effective children for generation, and sets Entry as the Python base class. This makes the intent clear in the Python code: Xps is a specialized kind of Entry, not a container that holds entries.
+
+- [x] Discovery by `category` attribute in NXDL `<definition>`, not folder
+- [x] `metainfo/applications/*.py` — 85 flat generated files (Phase 2 target: flat; Phase 2b target: submodule layout)
+- [x] Contributed definitions discovered and generated alongside official applications
+- [x] NXentry unwrapping in generator; Entry as base class
+- [x] Named concepts follow Phase 1 rule: only when a group has own quantities
+- [x] Two entry points: `nexus_base_classes` (142 base classes) + `nexus_applications` (85 application classes)
+- [x] All 280 generated files committed and integrated
+- [x] Package assembly working; cross-package references resolved
+- [x] 156 tests passing; no regressions
+
+**Remaining for Phase 2 closure**: ADRs review; ADR-006 written for architectural decision
 
 #### Phase 3 — Bridge `schema.py`
 
@@ -588,7 +599,7 @@ If the individual concepts from the NeXus Ontology get registered, we can even a
 | 5 | Entry points configured; package equivalence test | Entry points done; tests pending |
 
 **Phase 1 status (as of 2026-06-02): implementation complete; tests and ADR review pending.**
-- [x] `pynx nomad generate-metainfo --nx-class NXentry` produces a valid, importable Python file
+- [x] `pynx nomad generate-metainfo --nxdl NXentry` produces a valid, importable Python file
 - [x] `Entry(Object, basesections.Measurement)` with all three annotation types on all quantities
 - [x] `optionality` correctly set from NXDL (required/recommended/optional)
 - [x] `links=[url]` on every Section and Quantity pointing to NeXus manual
