@@ -57,9 +57,7 @@ def extract_all_classes(xml_file: str, visited_files=None) -> (set, set):
     extends_attr = root.get("extends")
     if extends_attr and extends_attr != "NXobject":
         classes += [extends_attr]
-
-    cls_name = "NXem_method"
-    
+   
     for class_name in classes:
         if class_name:
             # Check for the file in base_classes directory first
