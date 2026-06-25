@@ -14,7 +14,7 @@ For classes not in the explicit map, a default (`BaseSection`) is used.
 
 ## Decision
 
-The canonical mapping is defined in `pynxtools.nomad.converters._mapping.BASESECTIONS_MAP`:
+For now, the canonical mapping is defined in `pynxtools.nomad.converters._mapping.BASESECTIONS_MAP`:
 
 | NXDL class | Generated Python class | NOMAD base section | Rationale |
 |---|---|---|---|
@@ -27,6 +27,8 @@ The canonical mapping is defined in `pynxtools.nomad.converters._mapping.BASESEC
 | `NXdata` | `Data` | `basesections.ActivityResult` | NXdata holds the result of a measurement |
 
 All other NXDL base classes inherit from `Object` (the generated `NXobject` class), giving the full NeXus class hierarchy in Python.
+
+The idea is that later, when we have an initially stable Python representation, we remove `BASESECTIONS_MAP` and define the parent classes directly inside the classes in the `.py` files.
 
 ### Multiple inheritance rule
 

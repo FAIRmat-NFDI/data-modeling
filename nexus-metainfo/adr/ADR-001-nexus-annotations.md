@@ -2,7 +2,7 @@
 
 **Status**: Accepted  
 **Date**: 2026-06  
-**Deciders**: Lukas Pielsticker, Hampus Näsström
+**Deciders**: Lukas Pielsticker, Hampus Näsström  
 **Dicussion panel**: Area B core team
 
 ---

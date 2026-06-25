@@ -2,7 +2,7 @@
 
 **Status**: Current design — may evolve as implementation progresses  
 **Date**: 2026-06  
-**Deciders**: Lukas Pielsticker
+**Deciders**: Lukas Pielsticker  
 **Dicussion panel**: Hampus Näsström, Area B core team
 
 ---
@@ -62,7 +62,9 @@ This allows `normalize()` methods added by plugin developers to survive regenera
 - **Subsection names**: NXDL group name; `_quantity` suffix for reserved names
 - **Field-attribute quantities**: `{field_name}__{attr_name}` (double underscore)
 
-### Naming for application definition nested classes (Phase 2)
+### Naming for application definition nested classes (Phase 2 -> 6)
+
+**This idea was not implemented yet. We punted the decision about it towards a later phase.**
 
 Application definitions use a **submodule file layout** with short Python class names.
 NOMAD schema name uniqueness (required within a `Package`) is enforced via an explicit

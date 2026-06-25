@@ -2,7 +2,7 @@
 
 **Status**: Accepted — subject to revision as implementation progresses  
 **Date**: 2026-06  
-**Deciders**: Lukas Pielsticker, Hampus Näsström
+**Deciders**: Lukas Pielsticker, Hampus Näsström  
 **Dicussion panel**: Area B core team
 
 ---
@@ -19,7 +19,7 @@ The existing pynxtools NOMAD integration does not surface these levels in the sc
 
 We need to:
 1. Correctly derive optionality from NXDL context during code generation
-2. Store it on the `NeXusQuantity` annotation so the parser and GUI can act on it
+2. Store it on `NeXusField` and `NeXusAttribute` annotations so the parser and GUI can act on it
 3. Define the future visibility rule for the NOMAD GUI (pending NOMAD core ask)
 
 ## Decision
@@ -39,7 +39,7 @@ Rules applied by `NexusNode._set_optionality()`:
 
 ### Storage
 
-`optionality` is stored on both `NeXusGroup` and `NeXusQuantity` annotations (see
+`optionality` is stored on `NeXusGroup`, `NeXusField`, and `NeXusAttribute` annotations (see
 ADR-001). The value is the direct NXDL-derived string — no remapping.
 
 ### Future visibility rule (pending NOMAD core ask)
@@ -72,6 +72,6 @@ information useful for validation feedback and future filtering granularity.
 
 ## Consequences
 
-- The `optionality` field is present on all generated `NeXusQuantity` and `NeXusGroup` annotations regardless of whether the GUI filtering mechanism exists yet.
+- The `optionality` field is present on all six annotation models regardless of whether the GUI filtering mechanism exists yet.
 - Issue #542 (search quantity filtering) depends on NOMAD core delivering the visibility mechanism; this ADR defines our side of the interface.
-- Parser and validation code can use `NeXusQuantity.optionality` to decide whether a   missing field produces an error or a warning.
+- Parser and validation code can use `NeXusField.optionality` / `NeXusAttribute.optionality` to decide whether a   missing field produces an error or a warning.

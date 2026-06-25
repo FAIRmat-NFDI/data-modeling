@@ -2,6 +2,8 @@
 
 **Status**: Decided (Phase 2 implementation)  
 **Date**: 2026-06-05
+**Deciders**: Lukas Pielsticker  
+**Dicussion panel**: Hampus Näsström, Area B core team
 
 ## Summary
 
@@ -23,22 +25,25 @@ class Xps(Object, basesections.Measurement):
 
 ## Context
 
-In NeXus, every application definition (e.g. `NXxps.nxdl.xml`) wraps exactly one `NXentry` group at the top level. This is a syntactic constraint: the root of the definition file is always an `NXentry`.
+In NeXus, every application definition (e.g. `NXxps.nxdl.xml`) wraps exactly one `NXentry` group at the top level. This is — at least until now — a syntactic constraint: the root of the definition file is always an `NXentry`.
 
-There are two possible interpretations in Python:
+There are two possible **interpretations in Python**:
 
 ### Interpretation A: "Xps describes an entry"
+
 `Xps(Entry)` — Xps is a **specialized kind of Entry**, with XPS-specific constraints on which subgroups are present and required, and with specific optionality for each field.
 
 ### Interpretation B: "Xps contains an entry"
+
 `Xps(Object, Measurement)` — Xps is a **container type that holds an Entry** as a SubSection. This requires unwrapping the NXentry in the schema definition to expose it as a named SubSection.
 
 ### The NeXus Ontological Intent
 
 In the NeXus data model:
+- `NXxps/ENTRY` is a different concept than `NXentry`, but:
 - Files contain one or more `NXentry` groups (the root entry points to actual data).
 - Application definitions (e.g. `NXxps.nxdl.xml`) define the **shape and constraints** of an `NXentry` in a specific measurement context — they are **constraint templates**, not entity types.
-- A file in XPS format is a file whose `NXentry` satisfies the `NXxps` template.
+- A file in XPS format is a file whose `NXentry` instances satisfy the `NXxps` template.
 
 Therefore, in Python/NOMAD:
 - A NOMAD entry created from a NeXus file is an instance of the specialized Entry class (e.g. `Xps`).

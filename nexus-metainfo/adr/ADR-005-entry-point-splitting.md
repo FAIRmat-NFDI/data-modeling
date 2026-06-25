@@ -2,9 +2,11 @@
 
 **Status**: Still slightly tbd — may evolve as implementation progresses  
 **Date**: 2026-06  
-**Deciders**: Lukas Pielsticker
+**Deciders**: Lukas Pielsticker  
 **Dicussion panel**: Hampus Näsström, Area B core team
 ---
+
+**This ADR is WIP for now. The current document only reflects the current implementation. This may change upon discussion.**
 
 ## Context
 
