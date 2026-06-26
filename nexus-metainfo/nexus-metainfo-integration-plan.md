@@ -26,11 +26,12 @@
   - [schema.py End State](#schemapy-end-state-80-lines)
 - [Roadmap](#roadmap)
   - [Phases](#phases)
-    - [Phase 0](#phase-0--architecture-alignment-weeks-1-no-code) · [Phase 1](#phase-1--infrastructure--base-class-generation-complete) · [Phase 2](#phase-2--application--contributed-definitions-complete) · [Phase 2.5](#phase-25--eln-annotations-on-generated-schema-complete-added-after-this-plan-was-first-written) · [Phase 3](#phase-3--new-parser--new-app-v2-complete--superseded-the-original-bridge-schemapy-plan-below) · [Phase 4](#phase-4--migrate-pynxtools--plugins-to-v2-not-started--active-focus) · [Phase 5](#phase-5--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified) · [Phase 6](#phase-6--backwards-converter-metainfo_to_nxdlpy-not-started--file-does-not-exist) · [Phase 7](#phase-7--cleanup-not-started) · [Phase N](#phase-n--nomad-measurements-alignment-early-draft-deprioritized-while-phase-4-is-the-active-focus)
+    - [Phase 0](#phase-0--architecture-alignment-weeks-1-no-code) · [Phase 1](#phase-1--infrastructure--base-class-generation-complete) · [Phase 2](#phase-2--application--contributed-definitions-complete) · [Phase 2.5](#phase-25--eln-annotations-on-generated-schema-complete-added-after-this-plan-was-first-written) · [Phase 3](#phase-3--new-parser--new-app-v2-complete--superseded-the-original-bridge-schemapy-plan-below) · [Phase 4](#phase-4--migrate-pynxtools--plugins-to-v2-substantially-complete--app-migrations--dataconverter-switch-done-end-to-end-testing-gap-writeup-and-per-plugin-docs-remain) · [Phase 5](#phase-5--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified) · [Phase 6](#phase-6--backwards-converter-metainfo_to_nxdlpy-not-started--file-does-not-exist) · [Phase 7](#phase-7--cleanup-not-started) · [Phase N](#phase-n--nomad-measurements-alignment-early-draft-deprioritized-while-phase-4-is-the-active-focus)
   - [5-Week Milestone](#5-week-milestone-project-meeting)
 - [Architecture & Strategy](#architecture--strategy)
   - [Long-Term Dependency Architecture](#long-term-dependency-architecture)
   - [Design Tensions](#architectural-design-tensions)
+  - [NOMAD Core Asks](#nomad-core-asks)
   - [Versioning Strategy](#versioning-strategy)
 - [References](#references)
   - [Open Issues](#relevant-open-issues)
@@ -221,17 +222,10 @@ in the uploaded file — are always visible.
 **GUI toggle**: "Show all defined quantities" toggle (off by default) reveals the full
 NeXus taxonomy for power users.
 
-**Implementation**: requires a general NOMAD core mechanism — not ELN-specific. Options:
-- General `visible_by_default: bool` flag on `Definition` / `Quantity` consumed by all UI
-  surfaces, set from `nx_optionality` during code generation
-- Or: NOMAD core reads `NeXusField.optionality` / `NeXusAttribute.optionality` annotation directly
-
-This is the most significant NOMAD core ask. A 1-page spec document (ADR-002 derivative)
-is required before approaching the NOMAD team. The mechanism must be general enough for
-non-NeXus use cases — framed as "optionality-driven visibility" not "NeXus visibility".
-
-**Search indexing**: optional quantities that are populated in a file are indexed. Optional
-quantities with no value in the file are not indexed. Coordination with NOMAD core needed.
+**Implementation**: requires a general NOMAD core mechanism — not ELN-specific. See
+[NOMAD Core Asks](#nomad-core-asks) items 1–2 for the consolidated ask (visibility mechanism
+options and the related search-indexing question) and what's needed before approaching the
+NOMAD team.
 
 ---
 
@@ -249,7 +243,7 @@ src/pynxtools/nomad/
         metainfo_to_nxdl.py          # Phase 6: Python + annotations → NXDL XML (round-trip) — not started
         cli.py                       # pynx nomad generate-metainfo
         templates/
-            base_class.py.j2         # Jinja2 template (universal; category-aware header)
+            nexus.py.j2         # Jinja2 template (universal; category-aware header)
     metainfo/
         __init__.py                  # public API: build_base_classes_package(), build_applications_package()
         _package.py                  # assembles NOMAD Package
@@ -572,17 +566,19 @@ Every NXDL application definition wraps exactly one NXentry at the top level. Th
 
 **After Phase 3, the parser/app v2 stack exists in parallel with v1 — v1 remains default until Phase 4 plugin migration completes.**
 
-#### Phase 4 — Migrate pynxtools-* Plugins to v2 (**not started — active focus**)
+#### Phase 4 — Migrate pynxtools-* Plugins to v2 (**substantially complete** — app migrations + dataconverter switch done; end-to-end testing-gap writeup and per-plugin docs remain)
 
 *Application-definition classes (e.g. `Xps(Entry)`) are generated centrally in pynxtools, not owned per plugin — a plugin's `pynxtools.reader` entry point only produces a `.nxs` file; parsing it is owned entirely by the single, shared `nexus_parser_v2` entry point. So "switch schema base"/"replace `NORMALIZER_MAP` callbacks" are not per-plugin tasks under the architecture actually built — flipping the active parser/app is a one-time pynxtools-core decision, not per-plugin code.*
 
 **What is real, per-plugin work** (confirmed by survey across all 10 `pynxtools-*` packages):
-- **NOMAD apps**: only 3 of 10 plugins have a real, shipped app (`pynxtools-mpes`, `pynxtools-raman`, `pynxtools-spm`); two more have one disabled (`pynxtools-em`/`pynxtools-apm`, `# em_app =`/`# apm_app =` commented out) — worth re-enabling if low-effort once the pattern is established. `apps/app_v2.py` (`nexus_app_v2`) is the reference pattern: same `App`/`Column`/`Menu` DSL, just v2's clean paths (no `__field`, no `ENTRY[*]` wrapping) — migrating the three real apps is a mechanical per-string rewrite, not a new framework.
-- `mpes_app` also references FIELD_STATISTICS-derived columns (`energy__min`/`energy__max`/`data__size`) that don't exist in the v2 schema yet — **complete FIELD_STATISTICS first** (carried over from Phase 3), scoped to numeric array quantities inside `Data`-derived classes only (`node.nx_class == "NXdata"` at generation time), not generically.
-- **Example uploads**: lower risk than apps — they mostly glob raw example files, not pre-baked archive JSON. Risk is any bundled ELN/template `.archive.yaml` files referencing old paths. **No existing harness tests the true end-to-end path** (raw file → `.nxs` → `nexus_parser_v2` → archive) without running real NOMAD infrastructure; the existing helper (`pynxtools.testing.nomad_example.parse_nomad_examples`) only validates bundled ELN schema/archive files via NOMAD's generic `ArchiveParser`, not actual NeXus parsing.
-- **Docs**: backlog, not migration — no plugin has dedicated NOMAD/NeXus data-model docs yet. Write after the app migrations land.
-- The shared ELN→NeXus conversion path (`nomad/schema_packages/dataconverter.py`) still hardcodes `from pynxtools.nomad.parsers.parser import NexusParser` (v1) — needs switching to `NexusParserV2` as part of this phase.
-- **Gate**: each migrated app/plugin's own test suite passes on the v2 stack.
+- **NOMAD apps — done.** All 5 apps migrated and re-enabled: `mpes_app`/`raman_app`/`spm_app` (the 3 that already shipped) plus `em_app`/`apm_app` (previously disabled, trivial stubs — re-enabled with the same pattern). Every `search_quantity`/`quantity` string was verified by loading the real, live NOMAD schema (`entry_type.reload_quantities_dynamic()`) and confirming each one actually resolves, not just pydantic-validated. Several v1-era references turned out to be structurally unsearchable and were dropped rather than faked: array-shaped quantities (`shape=["*"]`, e.g. `axes`, `incident_energy`, `incident_polarization`) are unconditionally excluded from NOMAD's dynamic search-quantity registration (`elasticsearch_extension.create_dynamic_quantity_annotation`'s `shape != []` check — a hard NOMAD-core constraint); and several `spm_app` v1 concepts (scan region/mesh scan, bias-spectroscopy sweep, `SPM_POSITIONER` controller/z-controller, cantilever oscillator) no longer exist in the current `NXspm`/`NXsensor_scan` definitions at all (version drift since v1, confirmed by direct inspection). `nomad-FAIR`'s app-search allowlist was also missing `'Spm'` — added. All five apps added to `nomad.yaml`'s `plugins.entry_points.include` (none were enabled in this dev environment before, even pre-migration).
+- `mpes_app` also references FIELD_STATISTICS-derived columns (`energy__min`/`energy__max`/`data__size`) — **done, in two passes**: first re-implemented (committed `9ff9dda2` on `nexus-metainfo-phase4`), scoped to numeric array quantities inside `Data`-derived classes (`node.nx_class == "NXdata"`), including variadic DATA/AXISNAME signals via a wildcard-shape fallback used only for the has_statistics decision (never written back onto the quantity's own declared shape — doing so initially broke real ARPES parsing, since it changed how the parser populates the field; fixed). No `{name}__mean` quantity exists — confirmed empirically that v1's own mean-into-bare-field write fails silently too (no working precedent to preserve); only `__min`/`__max`/`__size`/`__ndim` are generated, with `__ndim` as `np.int8` (NOMAD has no real unsigned-int type and silently downcasts `np.uint8`). **This first pass turned out to be incomplete**: it still missed concretely-named NXdata axes with no NXDL `<dimensions>` (e.g. NXmpes's `energy`/`kx`/`ky`/`delay` — `name_type="specified"`, not the variadic `AXISNAME`/`DATA` pattern the first pass's `is_effectively_array` check was scoped to). A second, narrower widening of `is_effectively_array` (drop the `name_type` restriction entirely — any field inside an NXdata-derived class is array-like by NeXus convention, named or not) closed this; confirmed no regression in the ARPES test that originally motivated the restriction.
+
+  **Forward-looking, not in scope for Phase 4**: writing the mean into an array-shaped quantity is a workaround. See [NOMAD Core Asks](#nomad-core-asks) item 3 — the better long-term answer is `HDF5Reference` for NXdata's DATA/AXISNAME-derived axes/signal fields. Not blocking; FIELD_STATISTICS as implemented is the pragmatic answer until/unless that lands.
+- **Example uploads**: lower risk than apps — they mostly glob raw example files, not pre-baked archive JSON. Risk is any bundled ELN/template `.archive.yaml` files referencing old paths. **No existing harness tests the true end-to-end path** (raw file → `.nxs` → `nexus_parser_v2` → archive) without running real NOMAD infrastructure; the existing helper (`pynxtools.testing.nomad_example.parse_nomad_examples`) only validates bundled ELN schema/archive files via NOMAD's generic `ArchiveParser`, not actual NeXus parsing. Still open.
+- **Docs**: backlog, not migration — no plugin has dedicated NOMAD/NeXus data-model docs yet. Still open — write now that the app migrations have landed.
+- The shared ELN→NeXus conversion path (`nomad/schema_packages/dataconverter.py`) hardcoded `from pynxtools.nomad.parsers.parser import NexusParser` (v1) — **done, with a gate, not an unconditional switch**: an unconditional switch to `NexusParserV2` would have bypassed `nomad.yaml`'s rollout mechanism (this internal call isn't reached through NOMAD's mainfile-matching system), forcing v2's archive shape onto ELN-authored entries for every distribution regardless of whether it still defaults to v1 for direct uploads. Added `_get_nexus_parser_cls()`: checks `config.plugins.entry_points.filtered_keys()` for `nexus_parser_v2` and only returns it if a distribution opted in via its own `nomad.yaml`; defaults to `NexusParser` (v1) otherwise, matching every released distribution today. Full `tests/nomad tests/dataconverter` suite passing (477 passed, 16 skipped). No dedicated golden-output diff test exists because no existing test exercised `populate_nexus_subsection()` at all, in either parser version — there was no baseline to diff against.
+- **Gate**: each migrated app/plugin's own test suite passes on the v2 stack. Met for all 5 apps + the dataconverter switch.
 - **Coordination**: publish a compatibility matrix (which pynxtools-* version requires which pynxtools) as part of the v1 release announcement.
 
 #### Phase 5 — Port `NORMALIZER_MAP` Logic to `normalize()` Methods (**not started** — newly identified)
@@ -717,6 +713,45 @@ updates. No dependency inversion needed, ever.
    ```
 ---
 
+### NOMAD Core Asks
+
+Consolidated list of capabilities this project needs from the NOMAD core team. Each should be
+framed as a general NOMAD platform improvement, not a NeXus-specific request — the mechanism
+must be useful to any schema, not just this one.
+
+1. **Optionality-driven visibility** (the most significant ask). Optional inherited quantities
+   should be hidden by default in ELN, metainfo viewer, and search; required/recommended
+   quantities — and any optional quantity actually populated in the uploaded file — stay
+   visible. A "Show all defined quantities" GUI toggle (off by default) reveals the full
+   taxonomy for power users. Implementation options: a general `visible_by_default: bool` flag
+   on `Definition`/`Quantity` consumed by all UI surfaces (set from NXDL `optionality` during
+   code generation), or NOMAD core reading `NeXusField.optionality`/`NeXusAttribute.optionality`
+   directly. Needs a 1-page spec document (an ADR-002 derivative) before approaching the team.
+   See [Visibility Rule](#visibility-rule-option-3b) for full context.
+
+2. **Search index filtering for optional quantities.** Optional quantities populated in a file
+   should be indexed; optional quantities with no value should not be. Coordination needed with
+   NOMAD core on how search indexing currently handles this.
+
+3. **`HDF5Reference` made more generally usable** (raised during Phase 4's FIELD_STATISTICS
+   work — see [Phase 4](#phase-4--migrate-pynxtools--plugins-to-v2-substantially-complete--app-migrations--dataconverter-switch-done-end-to-end-testing-gap-writeup-and-per-plugin-docs-remain)).
+   Writing a representative mean into an array-shaped quantity is a workaround forced by the
+   archive's storage model; the better long-term answer for NXdata's DATA/AXISNAME-derived
+   axes/signal fields is `HDF5Reference` (already used by
+   `nomad_measurements.xrd.XRDResult1DHDF5`) — these arrays aren't searchable as scalars today
+   either, so nothing is lost by moving them there. Two gaps need closing first: (a)
+   auto-writing an HDF5 file when an entry is created from the GUI/ELN with no underlying
+   `.nxs` file to reference (nomad-measurements' `HDF5Handler` already does this per-plugin —
+   ask whether it becomes a first-class `HDF5Reference` capability instead), and (b) searchable
+   statistics by default on `HDF5Reference` quantities, which would obsolete hand-generating
+   FIELD_STATISTICS per schema entirely. Not blocking — FIELD_STATISTICS as implemented is the
+   pragmatic answer until/unless this lands.
+
+**What NOT to ask**: everything else in this plan. Present decisions, not options, for anything
+not listed here.
+
+---
+
 ### Versioning Strategy
 
 | Version | Content | Breaking changes |
@@ -737,7 +772,7 @@ v1 is the transition window where both worlds coexist. v2 is the clean break.
 | Issue | Title | Phase |
 |---|---|---|
 | #765 | Schema caching cleanup | Phase 1 (Python import replaces JSON cache) |
-| #708 | Split nexus package into smaller packages | Phase 1 (entry point splitting) |
+| #708 | Split nexus package into smaller packages | Closeable — Phase 1/2 (`nexus_base_classes` + `nexus_applications`); multi-package search confirmed unlimited during Phase 4 |
 | #542 | Search quantities in NOMAD | Phase 1 (`nx_optionality` drives indexing) |
 | #534 | Unsigned int type mapping | Phase 1 (`NeXusField.type = "NX_UINT"`) |
 | #702 | Parsing/normalization improvements | Parser rewrite: Phase 3 (complete); normalization improvements: Phase 5 |
@@ -775,3 +810,4 @@ pynx nomad export-nxdl --all --check-only  # NXDL recovered from Python annotati
 - Attribute naming: `{field}__units` vs. storing units directly on the Quantity's `unit` parameter? — resolved in practice: units go on the Quantity's `unit` parameter (`a_nexus_field=NeXusField(units="NX_VOLTAGE")` records the NXDL unit *category*, separately from the resolved pint `unit=` on the Quantity itself).
 - `AnchoredReference`/`identifierNAME`: stay in pynxtools or migrate to nomad-measurements? — tracked under [Architectural Design Tensions](#architectural-design-tensions) item 1, to be resolved as part of Phase 5.
 - Backward compat period for `__field` suffix: already resolved by the Versioning Strategy above — no shim; v1 keeps the old stack unchanged and v2 is the clean break for plugin code using old names.
+- **`_quantity` suffix rule for reserved `BaseSection` names** (`name`/`datetime`/`lab_id`/`description` → `name_quantity`/etc.) may not be necessary — NOMAD allows redefining an inherited quantity in a subclass (adding NXDL-specific annotations/`description=`) without renaming, as long as the type stays compatible (all four reserved names match their NXDL counterparts' types exactly). One thing to verify first: `BaseSection.normalize()`'s `entry_name`-from-`self.name` side effect only fires for the entry's top-level section, not nested SubSections — confirm before assuming the collapse is safe everywhere. **Not fixing now**: Phase N's basesections-alignment work will anyway reconcile NeXus concepts with NOMAD's base sections, so this is deferred there rather than patched as a one-off generator tweak.

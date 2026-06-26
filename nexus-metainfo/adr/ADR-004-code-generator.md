@@ -1,6 +1,6 @@
 # ADR-004: Code Generator Specification
 
-**Status**: Current design — may evolve as implementation progresses  
+**Status**: Decided (Phases 1–3 implementation); the nested-class submodule layout below remains deferred to Phase 7  
 **Date**: 2026-06  
 **Deciders**: Lukas Pielsticker  
 **Dicussion panel**: Hampus Näsström, Area B core team
@@ -23,7 +23,7 @@ point into NXDL data. The generator accesses **no raw XML** — all NXDL attribu
 
 ### Output
 
-One Python file per NXDL base class, written to `metainfo/base_classes/`. Each file:
+One Python file per NXDL class, written to `metainfo/base_classes/` (category `"base"`) or `metainfo/applications/` (category `"application"`, added in Phase 2 — includes both official and community-contributed application definitions, discovered by `category`, not by file path; see ADR-005). Each file:
 - Defines one top-level Section class (the primary class)
 - May define named concept classes (Section subclasses for groups that have own quantities)
 - Has `__all__ = ["PrimaryClassName"]`
@@ -62,7 +62,7 @@ This allows `normalize()` methods added by plugin developers to survive regenera
 - **Subsection names**: NXDL group name; `_quantity` suffix for reserved names
 - **Field-attribute quantities**: `{field_name}__{attr_name}` (double underscore)
 
-### Naming for application definition nested classes (Phase 2 -> 6)
+### Naming for application definition nested classes (deferred from Phase 2 to Phase 7)
 
 **This idea was not implemented yet. We punted the decision about it towards a later phase.**
 
@@ -87,16 +87,20 @@ Files are written in topological order (using `toposort_flatten`) so that each f
 
 ### Template
 
-Jinja2 template at `converters/templates/base_class.py.j2`. The generator passes a context dict built from `NexusNode` properties — no template accesses XML directly.
+Jinja2 template at `converters/templates/nexus.py.j2`. The generator passes a context dict built from `NexusNode` properties — no template accesses XML directly.
 
 ### CLI
 
 ```bash
 pynx nomad generate-metainfo --nxdl NXentry        # single class
-pynx nomad generate-metainfo --all                      # all base classes
+pynx nomad generate-metainfo --all-base                 # base classes only
+pynx nomad generate-metainfo --all-applications          # application/contributed classes only
+pynx nomad generate-metainfo --all                      # applications first, then base (Phase 2+)
 pynx nomad generate-metainfo --all --force              # overwrite all
 pynx nomad generate-metainfo --all --dry-run            # CI diff check
 ```
+
+Exactly one of `--nxdl`, `--all`, `--all-base`, `--all-applications` must be given (flags added beyond the original single-`--all` design as Phase 2's applications/base split made selective regeneration necessary).
 
 ## Alternatives considered
 

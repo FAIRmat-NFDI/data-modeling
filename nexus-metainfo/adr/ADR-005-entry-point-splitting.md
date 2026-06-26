@@ -1,12 +1,10 @@
 # ADR-005: Entry Point Splitting Strategy and Domain Plugin Interface
 
-**Status**: Still slightly tbd — may evolve as implementation progresses  
+**Status**: Decided (Phase 1/2 implementation). Updated in Phase 4 to correct the contributed-definitions entry point and resolve the multi-package search question.  
 **Date**: 2026-06  
 **Deciders**: Lukas Pielsticker  
 **Dicussion panel**: Hampus Näsström, Area B core team
 ---
-
-**This ADR is WIP for now. The current document only reflects the current implementation. This may change upon discussion.**
 
 ## Context
 
@@ -77,13 +75,19 @@ This mirrors the pattern used by `nomad-measurements` (where all classes are in 
 
 - `nexus_base_classes` — the Phase 1 entry point
 - `nexus_applications` — Phase 2
-- `nexus_contributed` — Phase 2 (contributed definitions from the FAIRmat namespace)
 
-## Open questions (to be resolved before Phase 2)
+**Contributed definitions do not get a third entry point.** The original plan above (`nexus_contributed`, "contributed definitions from the FAIRmat namespace") was superseded once Phase 2 was actually implemented: contributed definitions are NXDL files with the same `category` attribute (`"base"` or `"application"`) as official ones — the generator discovers and bundles them into `nexus_base_classes`/`nexus_applications` by that `category`, exactly like official definitions, with no separate package and no functional difference on the NOMAD side. The only distinguishing marker is a `# NOTE` header the generator adds to each contributed-definition-derived file, e.g.:
 
-- **Multi-package search**: NOMAD's Elasticsearch app is configured against one
-  `SchemaPackage`. If `nexus_base_classes` and `nexus_applications` are separate
-  packages, the search index may only cover one. This must be clarified with the NOMAD core team before Phase 2 starts.
+```python
+# NOTE: This class is generated from a community-contributed NXDL definition.
+# The NXDL source may change across versions. Regenerate after updating definitions.
+```
+
+This reflects that contributed definitions are still under NIAC/community review upstream (see `definitions/manual/source/defs_intro.rst`: "...also contains contributed definitions of new base classes or application definitions that are currently under review") and may change independently of, and on a different cadence than, official definitions — a property worth tracking at the comment/regeneration level, not at the entry-point/package level.
+
+## Open questions
+
+- ~~**Multi-package search**: NOMAD's Elasticsearch app is configured against one `SchemaPackage`. If `nexus_base_classes` and `nexus_applications` are separate packages, the search index may only cover one.~~ **Resolved in Phase 4.** Confirmed by direct inspection of `elasticsearch_extension.py`'s dynamic search-quantity registration (`reload_quantities_dynamic()`): it iterates `packages_from_plugins.values()` uniformly across every loaded `SchemaPackage`, with no per-package limit. Empirically verified against the live schema while migrating `mpes_app`/`raman_app`/`spm_app`/`em_app`/`apm_app` — all five application classes, split across the two separate `nexus_base_classes`/`nexus_applications` packages, register and resolve correctly, including nested SubSection paths several levels deep. No NOMAD-core follow-up needed.
 - **Parser cross-package resolution**: the parser resolves section classes by name across all registered packages at parse time. This works because NOMAD registers all packages from all loaded entry points before parsing begins.
 
 ## Alternatives considered
@@ -95,5 +99,5 @@ granularity. Rejected for Phase 1: requires generating and maintaining per-techn
 
 ## Consequences
 
-- Issue #708 (split nexus package) is addressed by Phase 1 landing `nexus_base_classes` and Phase 2 adding `nexus_applications`. Could maybe close #708 after Phase 2.
+- Issue #708 (split nexus package) is addressed by Phase 1 landing `nexus_base_classes` and Phase 2 adding `nexus_applications`. Closeable now that the multi-package search open question above is resolved.
 - The `build_base_classes_package()` function is the programmatic equivalent of the entry point for code that needs the package without going through NOMAD's plugin system.

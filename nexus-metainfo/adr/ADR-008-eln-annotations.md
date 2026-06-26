@@ -87,7 +87,7 @@ NOMAD's own validator rejects at startup:
 `assert len(quantity.shape) <= 1, 'Only scalars or lists can be edited.'`. Scalar/1D
 named-concept overrides are unaffected and still get `a_eln`.
 
-### Template (`templates/base_class.py.j2`)
+### Template (`templates/nexus.py.j2`)
 
 - Unconditional import: `from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum, SchemaAnnotation`.
 - `a_eln=ELNAnnotation(component=ELNComponentEnum.{{ qty.eln_component }}, default=...)`

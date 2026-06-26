@@ -1,6 +1,6 @@
 # ADR-001: NeXus Annotation Models for NOMAD Metainfo
 
-**Status**: Accepted  
+**Status**: Decided (Phase 1 implementation)  
 **Date**: 2026-06  
 **Deciders**: Lukas Pielsticker, Hampus Näsström  
 **Dicussion panel**: Area B core team
@@ -162,6 +162,6 @@ introspectable from plugin code via stable API. This ADR replaces it.
 - Plugin code introspects via `qty.m_def.m_get_annotations("nexus_field")` or `"nexus_attribute"`.
 - `NeXusField.optionality` / `NeXusAttribute.optionality` enable the GUI visibility filter described in ADR-002.
 - `NeXusField.type` / `NeXusAttribute.type` preserve the original NX type even when NOMAD has no exact equivalent (e.g. `NX_UINT` → stored in annotation, mapped to `np.int64` in Python).
-- `NeXusLink` enables the round-trip exporter (Phase 4) to reconstruct `<link>` elements; without it, links would be silently dropped.
+- `NeXusLink` enables the round-trip exporter (Phase 6 — renumbered from an earlier draft's "Phase 4"; the current phase plan's Phase 4 is the pynxtools-plugin migration, Phase 6 is `metainfo_to_nxdl.py`) to reconstruct `<link>` elements; without it, links would be silently dropped.
 - `NeXusChoice` lets the parser select the correct SubSection by matching `NX_class` on the HDF5 group against `NeXusChoice.nx_class`.
 - All six annotation classes must be imported before any schema package loads — this is guaranteed by `pynxtools.nomad.annotations` being the first import in every generated file.

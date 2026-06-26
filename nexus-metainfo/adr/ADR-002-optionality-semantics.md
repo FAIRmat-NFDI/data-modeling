@@ -1,6 +1,6 @@
 # ADR-002: Optionality Semantics — How NXDL Optionality Maps to NOMAD
 
-**Status**: Accepted — subject to revision as implementation progresses  
+**Status**: Decided (Phase 1 implementation) — the GUI visibility mechanism itself remains pending on NOMAD core (see #542)  
 **Date**: 2026-06  
 **Deciders**: Lukas Pielsticker, Hampus Näsström  
 **Dicussion panel**: Area B core team
