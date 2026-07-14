@@ -59,7 +59,9 @@ This allows `normalize()` methods added by plugin developers to survive regenera
 - **Quantity names**: NXDL field names as-is; `_quantity` suffix for:
   - Reserved NOMAD `BaseSection` names (`name`, `datetime`, `lab_id`, `description`)
   - Field-vs-group collisions (group wins the unqualified name)
-- **Subsection names**: NXDL group name; `_quantity` suffix for reserved names
+- **Subsection names**: NXDL group name; `_group` suffix when a group in a child class
+  collides with a Quantity (field) of the same name inherited from an ancestor class
+  (symmetric inheritance rule — the ancestor always keeps the unqualified name)
 - **Field-attribute quantities**: `{field_name}__{attr_name}` (double underscore)
 
 ### Naming for application definition nested classes (deferred from Phase 2 to Phase 7)

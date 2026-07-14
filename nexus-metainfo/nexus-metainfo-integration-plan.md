@@ -144,9 +144,14 @@ the target shape, not the current one; do not assume the submodule import paths 
 
 #### Name conflict resolution
 
-Groups always win the unqualified name. `_quantity` suffix applied for:
+Two suffix rules handle all collision cases:
+
+`_quantity` suffix applied to fields:
 1. **Reserved NOMAD names** (`name`, `datetime`, `lab_id`, `description`) → `name_quantity`, etc.
 2. **Field-vs-group collision** — when a NXDL field and group in the same class (or ancestor chain) share a Python name (e.g. `NXsample` field `sample_component` vs. `NXsample_component` group). Field renamed to `sample_component_quantity`; SubSection keeps `sample_component`.
+
+`_group` suffix applied to SubSections (symmetric inheritance rule):
+3. **Group-vs-ancestor-field collision** — when a child class introduces a group whose Python name matches a Quantity (field) already declared by an ancestor class, the group is renamed to `{name}_group`. The ancestor holds the unqualified name. Example: `NXapm_ranging` defines a variadic `program` group; `NXprocess` (mapped ancestor) already has `program` as a `Quantity` → SubSection becomes `program_group`.
 
 #### Connection from Python class to NXDL
 
