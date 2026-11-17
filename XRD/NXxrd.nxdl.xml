@@ -1,0 +1,391 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<definition category="application" extends="NXobject" name="NXxrd" type="group" xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <symbols>
+        <doc>
+             The symbols used in the schema to specify e.g. dimensions of arrays
+        </doc>
+        <symbol name="N_wavelengths">
+            <doc>
+                 Number of wavlengths in the monochromated beam
+            </doc>
+        </symbol>
+        <symbol name="N_detectors">
+            <doc>
+                 Number of detection channels
+            </doc>
+        </symbol>
+        <symbol name="N_xpixel">
+            <doc>
+                 Number of x-pixels of the detector
+            </doc>
+        </symbol>
+        <symbol name="N_ypixel">
+            <doc>
+                 Number of y-pixels of the detector
+            </doc>
+        </symbol>
+        <symbol name="N_phi">
+            <doc>
+                 Number of phi angles
+            </doc>
+        </symbol>
+        <symbol name="N_chi">
+            <doc>
+                 Number of chi angles
+            </doc>
+        </symbol>
+        <symbol name="N_omega">
+            <doc>
+                 Number of omega angles
+            </doc>
+        </symbol>
+        <symbol name="N_twotheta">
+            <doc>
+                 Number of two-theta angles
+            </doc>
+        </symbol>
+    </symbols>
+    <doc>
+         General application definition for x-ray scattering experiments.
+    </doc>
+    <group type="NXentry">
+        <attribute name="version">
+            <doc>
+                 An at least as strong as SHA256 hashvalue of the file
+                 that specifies the application definition.
+            </doc>
+        </attribute>
+        <field name="definition" type="NX_CHAR">
+            <doc>
+                 NeXus NXDL schema to which this file conforms.
+            </doc>
+            <enumeration>
+                <item value="NXxrd"/>
+            </enumeration>
+            <attribute name="version" type="NX_CHAR"/>
+            <attribute name="url" type="NX_CHAR">
+                <doc>
+                     URL where to find further material (documentation, examples)
+                     relevant to the application definition.
+                </doc>
+            </attribute>
+        </field>
+        <field name="experiment_identifier" type="NX_CHAR">
+            <doc>
+                 Ideally, a (globally) unique persistent identifier 
+                 for referring to this experiment.
+                 
+                 The identifier is usually defined/issued by the facility, laboratory,
+                 or the principle investigator. The identifier enables to link 
+                 experiments to e.g. proposals.
+            </doc>
+        </field>
+        <field name="experiment_description" optional="true" type="NX_CHAR">
+            <doc>
+                 Free-text description about the experiment.
+                 
+                 Users are strongly advised to detail the sample history in the 
+                 respective field and fill rather as completely as possible the fields
+                 of this application definition rather than write details about the
+                 experiment into this free-text description field.
+            </doc>
+        </field>
+        <field name="start_time" type="NX_DATE_TIME">
+            <doc>
+                 ISO 8601 time code with local time zone offset to UTC information
+                 included when the measurement started.
+            </doc>
+        </field>
+        <field name="end_time" type="NX_DATE_TIME">
+            <doc>
+                 ISO 8601 time code with local time zone offset to UTC information
+                 included when the measurement ended.
+            </doc>
+        </field>
+        <field name="program" type="NX_CHAR">
+            <attribute name="version" type="NX_CHAR">
+                <doc>
+                     Program version plus build number, commit hash, or description of an
+                     ever persistent resource where the source code of the program and
+                     build instructions can be found so that the program can be configured
+                     in such a manner that the result file is ideally recreatable
+                     yielding the same results.
+                </doc>
+            </attribute>
+        </field>
+        <group maxOccurs="unbounded" minOccurs="1" type="NXuser">
+            <doc>
+                 Contact information of at least the user of the instrument
+                 or the investigator who performed this experiment.
+                 Adding multiple users if relevant is recommended.
+            </doc>
+            <field name="name" type="NX_CHAR">
+                <doc>
+                     Name of the user.
+                </doc>
+            </field>
+            <field name="affiliation" type="NX_CHAR">
+                <doc>
+                     Name of the affiliation of the user at the point in time
+                     when the experiment was performed.
+                </doc>
+            </field>
+            <field name="address" type="NX_CHAR">
+                <doc>
+                     Full address (street, street number, ZIP, city, country)
+                     of the user's affiliation.
+                </doc>
+            </field>
+            <field name="email" type="NX_CHAR">
+                <doc>
+                     Email address of the user.
+                </doc>
+            </field>
+            <field name="url" recommended="true" type="NX_CHAR">
+                <doc>
+                     Author ID defined by reasearch id services, e.g. orcid (https://orcid.org/).
+                </doc>
+            </field>
+            <field name="telephone_number" recommended="true" type="NX_CHAR">
+                <doc>
+                     Official telephone number of the user.
+                </doc>
+            </field>
+        </group>
+        <group type="NXsample">
+            <field name="name" type="NX_CHAR">
+                <doc>
+                     Descriptive name or ideally (globally) unique persistent identifier.
+                     The name distinguishes the specimen from all others and especially the
+                     predecessor/origin from where the specimen was cut.
+                </doc>
+            </field>
+            <field name="chemical_formula" type="NX_CHAR"/>
+        </group>
+        <group type="NXinstrument">
+            <group type="NXsource">
+                <field name="type" type="NX_CHAR">
+                    <doc>
+                         
+                    </doc>
+                    <enumeration>
+                        <item value="Synchrotron X-ray source"/>
+                        <item value="Rotating Anode X-ray"/>
+                        <item value="Fixed Tube X-ray"/>
+                        <item value="Free-Electron Laser"/>
+                        <item value="Metal Jet X-ray"/>
+                    </enumeration>
+                </field>
+                <field name="name" type="NX_CHAR">
+                    <doc>
+                         
+                    </doc>
+                </field>
+                <field name="probe" type="NX_CHAR">
+                    <doc>
+                         
+                    </doc>
+                    <enumeration>
+                        <item value="x-ray"/>
+                    </enumeration>
+                </field>
+            </group>
+            <group type="NXbeam">
+                <field name="incident_energy" type="NX_FLOAT" units="NX_ENERGY">
+                    <doc>
+                         
+                    </doc>
+                </field>
+            </group>
+            <group optional="true" type="NXmonochromator">
+                <field name="wavelength" type="NX_FLOAT" units="NX_WAVELENGTH">
+                    <doc>
+                         Optimal diffracted wavelengths
+                    </doc>
+                    <dimensions rank="1">
+                        <dim index="1" value="N_wavelengths"/>
+                    </dimensions>
+                </field>
+                <group type="NXslit">
+                    <doc>
+                         Slits of the monochromator
+                    </doc>
+                </group>
+            </group>
+            <group name="goniometer" type="NXmanipulator">
+                <doc>
+                     The goniometer to positon source, detector and sample with respect to each
+                     other.
+                </doc>
+                <group type="NXtransformations">
+                    <group name="chi_angles" type="NX_TRANSFORMATION">
+                        <doc>
+                             Chi angles of the goniometer.
+                        </doc>
+                        <attribute name="transformation_type">
+                            <enumeration>
+                                <item value="rotation"/>
+                            </enumeration>
+                        </attribute>
+                        <attribute name="vector"/>
+                        <field name="unit" type="NX_CHAR" units="NX_ANGLE"/>
+                        <dimensions rank="1">
+                            <dim index="1" value="N_chi"/>
+                        </dimensions>
+                        <attribute name="depends_on">
+                            <doc>
+                                 This should point to the transformation placing the chi_angles
+                                 in the NXgoniometer NXtransformations groups.
+                            </doc>
+                        </attribute>
+                    </group>
+                    <group name="psi_angles" type="NX_TRANSFORMATION">
+                        <doc>
+                             Psi angles of the goniometer
+                        </doc>
+                        <field name="transformation_type" type="NX_CHAR"/>
+                        <field name="unit" type="NX_CHAR" units="NX_ANGLE"/>
+                        <dimensions rank="1">
+                            <dim index="1" value="N_phi"/>
+                        </dimensions>
+                        <attribute name="depends_on">
+                            <doc>
+                                 This should point to the transformation placing the psi_angles
+                                 in the NXgoniometer NXtransformations groups.
+                            </doc>
+                        </attribute>
+                    </group>
+                    <group name="omega_angles" type="NX_TRANSFORMATION">
+                        <doc>
+                             Omega angles of the goniometer
+                        </doc>
+                        <attribute name="transformation_type">
+                            <enumeration>
+                                <item value="rotation"/>
+                            </enumeration>
+                        </attribute>
+                        <attribute name="vector"/>
+                        <field name="unit" type="NX_CHAR" units="NX_ANGLE"/>
+                        <dimensions rank="1">
+                            <dim index="1" value="N_omega"/>
+                        </dimensions>
+                        <attribute name="depends_on">
+                            <doc>
+                                 This should point to the transformation placing the omega_angles
+                                 in the NXgoniometer NXtransformations groups.
+                            </doc>
+                        </attribute>
+                    </group>
+                    <group name="twotheta" type="NX_TRANSFORMATION">
+                        <doc>
+                             Two-theta-theta angles of the goniometer
+                        </doc>
+                        <attribute name="transformation_type">
+                            <enumeration>
+                                <item value="rotation"/>
+                            </enumeration>
+                        </attribute>
+                        <attribute name="vector"/>
+                        <field name="unit" type="NX_CHAR" units="NX_ANGLE"/>
+                        <dimensions rank="1">
+                            <dim index="1" value="N_twotheta"/>
+                        </dimensions>
+                        <attribute name="depends_on">
+                            <doc>
+                                 This should point to the transformation placing the twotheta_angles
+                                 in the NXgoniometer NXtransformations groups.
+                            </doc>
+                        </attribute>
+                    </group>
+                </group>
+            </group>
+            <group name="detector" type="NXdetector">
+                <field name="data" type="NX_NUMBER">
+                    <doc>
+                         Detector signal
+                    </doc>
+                    <dimensions rank="6">
+                        <dim index="1" value="N_phi"/>
+                        <dim index="2" value="N_chi"/>
+                        <dim index="3" value="N_omega"/>
+                        <dim index="4" value="N_twotheta"/>
+                        <dim index="5" value="N_ypixel"/>
+                        <dim index="6" value="N_xpixel"/>
+                    </dimensions>
+                </field>
+                <field name="x_pixel_size" type="NX_FLOAT" units="NX_LENGTH">
+                    <doc>
+                         Physical size of a pixel in x-direction
+                    </doc>
+                </field>
+                <field name="y_pixel_size" type="NX_FLOAT" units="NX_LENGTH">
+                    <doc>
+                         Physical size of a pixel in y-direction
+                    </doc>
+                </field>
+                <group name="position" type="NXtransformations">
+                    <doc>
+                         Position of the beam center
+                    </doc>
+                    <attribute name="depends_on"/>
+                </group>
+                <field name="beam_center_x" type="NX_FLOAT" units="NX_LENGTH">
+                    <doc>
+                         This is the x position where the direct beam would hit the detector.
+                         This is a length, not a pixel position, and can be outside of the actual detector.
+                    </doc>
+                </field>
+                <field name="beam_center_y" type="NX_FLOAT" units="NX_LENGTH">
+                    <doc>
+                         This is the y position where the direct beam would hit the detector.
+                         This is a length, not a pixel position, and can be outside of the actual detector.
+                    </doc>
+                </field>
+                <field name="depends_on" recommended="true" type="NX_CHAR">
+                    <doc>
+                         This points to the transformation placing the detector in the coordinate system.
+                    </doc>
+                </field>
+                <group type="NXtransformations">
+                    <doc>
+                         This is the recommended location for the detector position.
+                    </doc>
+                </group>
+            </group>
+        </group>
+        <group optional="true" type="NXmonitor">
+            <field name="mode" type="NX_CHAR">
+                <doc>
+                     Count to a preset value based on either clock time (timer) 
+                     or received monitor counts (monitor).
+                </doc>
+                <enumeration>
+                    <item value="monitor"/>
+                    <item value="timer"/>
+                </enumeration>
+            </field>
+            <field name="preset" type="NX_FLOAT" units="NX_ANY">
+                <doc>
+                     Preset value for time or monitor
+                </doc>
+            </field>
+            <field name="integral" type="NX_FLOAT" units="NX_ANY">
+                <doc>
+                     Total integral monitor counts
+                </doc>
+            </field>
+        </group>
+        <group name="data" type="NXdata"/>
+        <group optional="true" type="NXprocess">
+            <doc>
+                 Description of a processing or analysis step, such as the
+                 baseline extraction or azimuth integration.
+                 Add additional fields as needed to describe value(s) of
+                 any variable, parameter, or term related to
+                 the NXprocess step. Be sure to include units attributes
+                 for all numerical fields.
+            </doc>
+        </group>
+    </group>
+</definition>
