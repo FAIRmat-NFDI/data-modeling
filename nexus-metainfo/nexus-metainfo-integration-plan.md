@@ -26,7 +26,7 @@
   - [schema.py End State](#schemapy-end-state-80-lines)
 - [Roadmap](#roadmap)
   - [Phases](#phases)
-    - [Phase 0](#phase-0--architecture-alignment-weeks-1-no-code) · [Phase 1](#phase-1--infrastructure--base-class-generation-complete) · [Phase 2](#phase-2--application--contributed-definitions-complete) · [Phase 2.5](#phase-25--eln-annotations-on-generated-schema-complete-added-after-this-plan-was-first-written) · [Phase 3](#phase-3--new-parser--new-app-v2-complete--superseded-the-original-bridge-schemapy-plan-below) · [Phase 4](#phase-4--migrate-pynxtools--plugins-to-v2-code-complete) · [Phase 5](#phase-5--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified) · [Phase 6](#phase-6--backwards-converter-metainfo_to_nxdlpy-not-started--file-does-not-exist) · [Phase 7](#phase-7--cleanup-not-started) · [Phase N](#phase-n--nomad-measurements-alignment-early-draft-deprioritized-while-phase-4-is-the-active-focus)
+    - [Phase 0](#phase-0--architecture-alignment-weeks-1-no-code) · [Phase 1](#phase-1--infrastructure--base-class-generation-complete) · [Phase 2](#phase-2--application--contributed-definitions-complete) · [Phase 2.5](#phase-25--eln-annotations-on-generated-schema-complete-added-after-this-plan-was-first-written) · [Phase 3](#phase-3--new-parser--new-app-v2-complete--superseded-the-original-bridge-schemapy-plan-below) · [Phase 4](#phase-4--migrate-pynxtools--plugins-to-v2-code-complete) · [Phase 5](#phase-5--align-basesections-v2-with-the-nexus-schema) · [Phase N](#phase-n--nomad-measurements-migration) · [Phase 6](#phase-6--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified) · [Phase 7](#phase-7--backwards-converter-metainfo_to_nxdlpy-not-started--file-does-not-exist) · [Phase 8](#phase-8--cleanup-not-started)
   - [5-Week Milestone](#5-week-milestone-project-meeting)
 - [Architecture & Strategy](#architecture--strategy)
   - [Long-Term Dependency Architecture](#long-term-dependency-architecture)
@@ -124,7 +124,7 @@ NXmicrostructure_ipf → MicrostructureIpf
 
 Application definitions (Phase 2, current state: **flat files** — one `.py` per application,
 e.g. `applications/xps.py` defining `class Xps(Entry)`) target a **submodule layout** as a
-future, non-breaking reorganisation (Phase 2b, deferred to Phase 7):
+future, non-breaking reorganisation (Phase 2b, deferred to Phase 8):
 
 ```
 applications/arpes/
@@ -245,7 +245,7 @@ src/pynxtools/nomad/
         __init__.py
         _mapping.py                  # nxdl_to_class_name, BASESECTIONS_MAP, type mapping, field_conflicts_with_group
         nxdl_to_metainfo.py          # NXDL → Python generator (additive-only)
-        metainfo_to_nxdl.py          # Phase 6: Python + annotations → NXDL XML (round-trip) — not started
+        metainfo_to_nxdl.py          # Phase 7: Python + annotations → NXDL XML (round-trip) — not started
         cli.py                       # pynx nomad generate-metainfo
         templates/
             nexus.py.j2         # Jinja2 template (universal; category-aware header)
@@ -253,16 +253,16 @@ src/pynxtools/nomad/
         __init__.py                  # public API: build_base_classes_package(), build_applications_package()
         _package.py                  # assembles NOMAD Package
         base_classes/                # 142 .py files (category="base")
-            entry.py                # Entry(Object, basesections.Measurement, EntryData)
-            sample.py                # Sample(Component, basesections.CompositeSystem)
+            entry.py                # Entry(Object, basesections.Activity, EntryData) — post-Phase-5/ADR-009
+            sample.py                # Sample(Component, basesections.System) — post-Phase-5/ADR-009
             root.py                  # Root(Object, basesections.Experiment, EntryData)
             ...
         applications/                # 85 flat .py files (category="application", Phase 2)
             arpes.py                 # Arpes(Entry)
             xps.py                   # Xps(Entry)
-            ...                      # submodule-per-app layout is Phase 2b, deferred to Phase 7
+            ...                      # submodule-per-app layout is Phase 2b, deferred to Phase 8
     schema_packages/
-        schema.py                    # OLD, v1 — untouched; becomes an ~80-line shim only in Phase 7
+        schema.py                    # OLD, v1 — untouched; becomes an ~80-line shim only in Phase 8
         dataconverter.py             # OLD, v1 — ELN→eln_data.yaml→NeXus flow; populate_nexus_subsection() is dead code; NexusDataConverter.normalize() dispatches via process_updated_raw_file()
     parsers/
         parser.py                    # OLD, v1 — untouched, stays default until Phase 4 plugin migration completes
@@ -275,7 +275,7 @@ src/pynxtools/nomad/
 
 Phase 3 added `parser_v2.py`/`app_v2.py` as new, parallel, additive entry points — it did **not**
 rewrite `parser.py`/`schema.py`/`nexus_app.py` in place. Those old files are only removed/shimmed
-in Phase 7, once Phase 4 (plugin migration) and Phase 5 (normalizer porting) are both done.
+in Phase 8, once Phase 4 (plugin migration) and Phase 6 (normalizer porting) are both done.
 
 ---
 
@@ -284,29 +284,40 @@ in Phase 7, once Phase 4 (plugin migration) and Phase 5 (normalizer porting) are
 Defined in `converters/_mapping.py:BASESECTIONS_MAP`. **Transitional** — long-term, the
 mapping should be declared on the NXDL classes directly, not a hardcoded dict.
 
+**Updated for Phase 5/[ADR-009](adr/ADR-009-experiment-basesections-alignment.md)** (done, pending
+H/S review) — the table below reflects the current, post-Phase-5 mapping. See ADR-009 for the
+full rationale behind each rename.
+
 | NXDL class | Generated Python class inherits from |
 |---|---|
 | `NXobject` | `Object` (→ `BaseSection`) |
-| `NXentry` | `Object, basesections.Measurement` |
-| `NXprocess` | `Object, basesections.ActivityStep` |
-| `NXsample` | `Component, basesections.CompositeSystem` |
-| `NXsample_component` | `Component, basesections.Component` |
-| `NXfabrication` | `Object, basesections.Instrument` |
-| `NXdata` | `Object, basesections.ActivityResult` |
+| `NXentry` | `Object, basesections.Activity` (`Measurement` only for the per-app opt-in techniques: mpes/raman/spm/xps) |
+| `NXprocess` | `Object, basesections.Analysis` |
+| `NXsample` | `Component, basesections.System` |
+| `NXsample_component` | `Component, basesections.System` |
+| `NXfabrication` | `Object, basesections.InstrumentEntry` (renamed from `Instrument` — see ADR-009) |
+| `NXdata` | `Object, basesections.MeasurementData` |
 | Application defs (`category="application"`) | `Entry` (NXentry wrapper unwrapped — [ADR-006](adr/ADR-006-application-definitions-are-entry-subclasses.md), *not* a separate `Measurement, Schema, PlotSection` mixin) |
 | All others | `Object` |
 
-`NXentry → Object, Measurement`: each NXentry becomes one NOMAD entry (1:1 mapping, plus one
+`NXentry → Object, Activity`: each NXentry becomes one NOMAD entry (1:1 mapping, plus one
 `Root(Experiment)` grouping entry per file — [ADR-007](adr/ADR-007-nxroot-handling.md)).
-`Measurement` is the right base — it provides `instruments`/`samples`/`steps` subsections
-(see [Phase N](#phase-n--nomad-measurements-alignment-early-draft-deprioritized-while-phase-4-is-the-active-focus)
-for a proposed rename to `instrument`/`sample`/`data`, not yet decided) and is what
-nomad-measurements classes (`XRayDiffraction`, …) already inherit from on basesections v1.
+ADR-009 settled the `samples`/`instruments`/`results` vs. `sample`/`instrument`/`data` question
+raised as an open item here in earlier drafts, then **reverted part of that decision** (see
+ADR-009's own status update): `samples`/`instruments` stay **plural**, matching NOMAD's own
+list-naming convention; `.results` → `.data` is kept, with `results` restored as an alias.
+pynxtools's generated schema (`Entry.sample`/`.instrument` etc.) was pluralized to match, on
+branch `pluralize-subsections` (not yet merged) — see ADR-011's status update for the override-
+matching bug that pluralization pass had to fix along the way. `basesections.Instrument` was
+renamed to `InstrumentEntry` (freeing `Instrument` for the NeXus-shaped, per-measurement concept)
+because it already has real downstream consumers in nomad-measurements' `transmission`/
+`quantumdesign` plugins — see [ADR-011](adr/ADR-011-nomad-measurements-migration.md) for the
+(corrected) per-plugin migration impact of this rename.
 
 `normalize()` lives as a method directly on each generated class — that part of the design is
 final. **Not yet true today**: the generator currently only emits a `super().normalize()` stub;
 porting the old `NORMALIZER_MAP`'s hand-written normalizers onto these stubs is its own phase
-([Phase 5](#phase-5--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified)),
+([Phase 6](#phase-6--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified)),
 not yet started. `NORMALIZER_MAP`/`NexusBaseSection` still exist in the old runtime-generated
 schema until that phase completes. Once classes are regenerated, the additive-only constraint
 protects hand-written `normalize()` bodies — `ast.parse()` detects existing methods and never
@@ -381,7 +392,7 @@ importing the produced file and checking `m_def`.
 - `optionality` set on all quantities; drives UI visibility once the NOMAD core mechanism is agreed (not yet implemented)
 - All six annotations (`NeXusDefinition`, `NeXusGroup`, `NeXusField`, `NeXusAttribute`, `NeXusLink`, `NeXusChoice`) populated from `NexusNode` metadata
 - `a_eln`/`a_display`/`SchemaAnnotation` populated where applicable (Phase 2.5, complete — see [ADR-008](adr/ADR-008-eln-annotations.md))
-- `normalize()` stub calling `super().normalize(archive, logger)` — developers fill it in; porting the *old* `NORMALIZER_MAP` logic onto these stubs is Phase 5, not yet started
+- `normalize()` stub calling `super().normalize(archive, logger)` — developers fill it in; porting the *old* `NORMALIZER_MAP` logic onto these stubs is Phase 6, not yet started
 
 **Additive-only constraint**: before writing, parse the existing file with `ast.parse()`,
 collect all member names. Only append members not already present — never remove or rename.
@@ -571,57 +582,120 @@ Every NXDL application definition wraps exactly one NXentry at the top level. Th
 
 **After Phase 3, the parser/app v2 stack exists in parallel with v1 — v1 remains default until Phase 4 plugin migration completes.**
 
-#### Phase 4 — Migrate pynxtools-* Plugins to v2 (**code complete** — all 5 app migrations committed; `dataconverter.py` confirmed no-op; end-to-end testing gap and per-plugin docs remain)
+#### Phase 4 — Migrate pynxtools-* Plugins to v2 (**code + test complete** — all 6 app migrations committed; `dataconverter.py` confirmed no-op; true end-to-end testing gap remains open by design, per-plugin docs rescoped)
 
 *Application-definition classes (e.g. `Xps(Entry)`) are generated centrally in pynxtools, not owned per plugin — a plugin's `pynxtools.reader` entry point only produces a `.nxs` file; parsing it is owned entirely by the single, shared `nexus_parser_v2` entry point. So "switch schema base"/"replace `NORMALIZER_MAP` callbacks" are not per-plugin tasks under the architecture actually built — flipping the active parser/app is a one-time pynxtools-core decision, not per-plugin code.*
 
 **What is real, per-plugin work** (confirmed by survey across all 10 `pynxtools-*` packages):
-- **NOMAD apps — done.** All 5 apps migrated and re-enabled: `mpes_app`/`raman_app`/`spm_app` (the 3 that already shipped) plus `em_app`/`apm_app` (previously disabled, trivial stubs — re-enabled with the same pattern). Every `search_quantity`/`quantity` string was verified by loading the real, live NOMAD schema (`entry_type.reload_quantities_dynamic()`) and confirming each one actually resolves, not just pydantic-validated. Several v1-era references turned out to be structurally unsearchable and were dropped rather than faked: array-shaped quantities (`shape=["*"]`, e.g. `axes`, `incident_energy`, `incident_polarization`) are unconditionally excluded from NOMAD's dynamic search-quantity registration (`elasticsearch_extension.create_dynamic_quantity_annotation`'s `shape != []` check — a hard NOMAD-core constraint); and several `spm_app` v1 concepts (scan region/mesh scan, bias-spectroscopy sweep, `SPM_POSITIONER` controller/z-controller, cantilever oscillator) no longer exist in the current `NXspm`/`NXsensor_scan` definitions at all (version drift since v1, confirmed by direct inspection). `nomad-FAIR`'s app-search allowlist was also missing `'Entry'` and `'Spm'` — both added. All five apps added to `nomad.yaml`'s `plugins.entry_points.include` (none were enabled in this dev environment before, even pre-migration).
-- `mpes_app` also references FIELD_STATISTICS-derived columns (`energy__min`/`energy__max`/`data__size`) — **done, in two passes**: first re-implemented (committed `9ff9dda2` on `nexus-metainfo-phase4`), scoped to numeric array quantities inside `Data`-derived classes (`node.nx_class == "NXdata"`), including variadic DATA/AXISNAME signals via a wildcard-shape fallback used only for the has_statistics decision (never written back onto the quantity's own declared shape — doing so initially broke real ARPES parsing, since it changed how the parser populates the field; fixed). No `{name}__mean` quantity exists — confirmed empirically that v1's own mean-into-bare-field write fails silently too (no working precedent to preserve); only `__min`/`__max`/`__size`/`__ndim` are generated, with `__ndim` as `np.int8` (NOMAD has no real unsigned-int type and silently downcasts `np.uint8`). **This first pass turned out to be incomplete**: it still missed concretely-named NXdata axes with no NXDL `<dimensions>` (e.g. NXmpes's `energy`/`kx`/`ky`/`delay` — `name_type="specified"`, not the variadic `AXISNAME`/`DATA` pattern the first pass's `is_effectively_array` check was scoped to). A second, narrower widening of `is_effectively_array` (drop the `name_type` restriction entirely — any field inside an NXdata-derived class is array-like by NeXus convention, named or not) closed this; confirmed no regression in the ARPES test that originally motivated the restriction.
+- **NOMAD apps — done, all 6.** `mpes_app`/`raman_app`/`spm_app` (the 3 that already shipped) migrated to v2 paths; `em_app`/`apm_app` (previously disabled, trivial stubs) re-enabled with the same pattern; **`xps_app` written from scratch** — NXxps never had a shipped NOMAD app before this work, unlike the other 5. Every `search_quantity`/`quantity` string verified against the real generated schema, not just pydantic-validated. Several v1-era references turned out to be structurally unsearchable and were dropped rather than faked: array-shaped quantities (`shape=["*"]`, e.g. `axes`, `incident_energy`, `incident_polarization`) are unconditionally excluded from NOMAD's dynamic search-quantity registration; several `spm_app` v1 concepts (scan region/mesh scan, bias-spectroscopy sweep, `SPM_POSITIONER` controller/z-controller, cantilever oscillator) no longer exist in the current `NXspm`/`NXsensor_scan` definitions at all (version drift since v1). `nomad-FAIR`'s app-search allowlist was also missing `'Entry'` and `'Spm'` — both added. All 6 apps added to `nomad.yaml`'s `plugins.entry_points.include`.
+- **Found while writing `xps_app` field-by-field against the real schema (not copied from the other apps): `name_quantity` was stale everywhere it appeared.** The generator's actual rule only suffixes a reserved `BaseSection` name (`name`/`datetime`/`lab_id`/`description`) when the field is array-shaped — a scalar override, the common case for `Sample`/`Instrument`/`User.name`, stays unsuffixed. `app_v2.py`, `mpes_app`, and `raman_app` all still referenced `name_quantity`; fixed everywhere. `spm_app`/`em_app`/`apm_app` never referenced these paths.
+- `mpes_app`/`xps_app` also reference FIELD_STATISTICS-derived columns (`energy__min`/`energy__max`/`data__size`) — **done, in two passes**: first re-implemented, scoped to numeric array quantities inside `Data`-derived classes (`node.nx_class == "NXdata"`), including variadic DATA/AXISNAME signals via a wildcard-shape fallback used only for the has_statistics decision (never written back onto the quantity's own declared shape — doing so initially broke real ARPES parsing, since it changed how the parser populates the field; fixed). No `{name}__mean` quantity exists — confirmed empirically that v1's own mean-into-bare-field write fails silently too (no working precedent to preserve); only `__min`/`__max`/`__size`/`__ndim` are generated, with `__ndim` as `np.int8` (NOMAD has no real unsigned-int type and silently downcasts `np.uint8`). **This first pass was incomplete**: it still missed concretely-named NXdata axes with no NXDL `<dimensions>` (e.g. NXmpes's `energy`/`kx`/`ky`/`delay`). **Now genuinely closed**: `is_effectively_array` widened to treat any field inside an `NXdata`-derived class as array-like regardless of naming pattern; all affected classes regenerated repo-wide via `pynx nomad generate-metainfo --all` (`NXentry`/`NXroot` correctly left untouched by the additive-only guard — confirmed via direct member-diff, nothing lost). Documented in pynxtools's `docs/learn/pynxtools/nexus-metainfo-generation.md`.
+- **Also found and fixed**: a rebase-artifact `NameError` (`_qty_field_suffix_for` referenced in the generator's field-processing branch but never defined — a prior refactor had already removed this exact check from a sibling code path, but a later rebase left one copy behind) that broke `pynx nomad generate-metainfo --nxdl ... --force`.
 
   **Forward-looking, not in scope for Phase 4**: writing the mean into an array-shaped quantity is a workaround. See [NOMAD Core Asks](#nomad-core-asks) item 3 — the better long-term answer is `HDF5Reference` for NXdata's DATA/AXISNAME-derived axes/signal fields. Not blocking; FIELD_STATISTICS as implemented is the pragmatic answer until/unless that lands.
-- **Example uploads**: lower risk than apps — they mostly glob raw example files, not pre-baked archive JSON. Risk is any bundled ELN/template `.archive.yaml` files referencing old paths. **No existing harness tests the true end-to-end path** (raw file → `.nxs` → `nexus_parser_v2` → archive) without running real NOMAD infrastructure; the existing helper (`pynxtools.testing.nomad_example.parse_nomad_examples`) only validates bundled ELN schema/archive files via NOMAD's generic `ArchiveParser`, not actual NeXus parsing. Still open.
-- **Docs**: backlog, not migration — no plugin has dedicated NOMAD/NeXus data-model docs yet. Still open — write now that the app migrations have landed.
-- `dataconverter.py` — **no change needed (confirmed during Phase 4)**. `populate_nexus_subsection()` hardcodes `NexusParser` (v1) but is dead code: never imported or called by any plugin (introduced for nomad-measurements but never integrated — see [nomad-measurements#118](https://github.com/FAIRmat-NFDI/nomad-measurements/pull/118)). The live ELN path is `NexusDataConverter.normalize()`, which calls `process_updated_raw_file()` — this dispatches through NOMAD's configured `plugins.entry_points.include`, already routing to `nexus_parser_v2` in this dev environment. `populate_nexus_subsection()` is a Phase 7 cleanup candidate.
-- **Gate**: each migrated app/plugin's own test suite passes on the v2 stack. Met for all 5 apps.
+- **App-level testing — done.** Every one of the 6 apps has a comprehensive `tests/nomad/test_nomad_apps.py` (properties, schema/filters_locked, columns, menu structure, dashboard widgets) — mechanically upgraded from a single import-smoke-test each. `pynxtools-xps`'s additionally walks every `search_quantity` in the app and resolves it attribute-by-attribute against the real generated `Xps` class — confirmed to catch the `name_quantity` bug above automatically. Kept XPS-only by explicit choice, not backported to the other five.
+- **Example uploads / true end-to-end — still open, by design.** Example uploads are lower risk than apps: they mostly glob raw example files, not pre-baked archive JSON. **No harness tests the true end-to-end path** (raw file → `.nxs` → `nexus_parser_v2` → archive) without running real NOMAD infrastructure; `pynxtools.testing.nomad_example.parse_nomad_examples` only validates bundled ELN schema/archive files via NOMAD's generic `ArchiveParser`, not actual NeXus parsing. Manually verified (example uploads run cleanly, correct `.nxs` output, apps load and show real examples) but not automated — deliberately left open to test later.
+- **Docs — rescoped, not a Phase 4 blocker.** Per-plugin *schema* documentation isn't needed: the NeXus schema is self-documenting. What's still worth doing — documenting each plugin's entry points (readers, apps) — is independent of this work package.
+- `dataconverter.py` — **no change needed (confirmed during Phase 4)**. `populate_nexus_subsection()` hardcodes `NexusParser` (v1) but is dead code: never imported or called by any plugin (introduced for nomad-measurements but never integrated — see [nomad-measurements#118](https://github.com/FAIRmat-NFDI/nomad-measurements/pull/118)). The live ELN path is `NexusDataConverter.normalize()`, which calls `process_updated_raw_file()` — this dispatches through NOMAD's configured `plugins.entry_points.include`, already routing to `nexus_parser_v2` in this dev environment. `populate_nexus_subsection()` is a Phase 8 cleanup candidate.
+- **Gate**: each migrated app/plugin's own test suite passes on the v2 stack. Met for all 6 apps.
 - **Coordination**: publish a compatibility matrix (which pynxtools-* version requires which pynxtools) as part of the v1 release announcement.
 
-#### Phase 5 — Port `NORMALIZER_MAP` Logic to `normalize()` Methods (**not started** — newly identified)
+#### Phase 5 — Align Basesections v2 with the NeXus Schema (**done, pending H/S review** — `nomad-FAIR` branch `basesections-v2-nexus-alignment`, `pynxtools` branch `nexus-metainfo-phase5`; promoted from the former "Phase N" to a sequential phase between Phase 4 and Phase 6)
 
-*The old runtime-generated schema's `NORMALIZER_MAP` (`schema_packages/schema.py`) still dispatches hand-written normalizers per NXDL class. None of this has an equivalent on the Phase 1–3 generated classes yet — their `normalize()` stubs just call `super().normalize()`. Distinct from Phase N (which restructures basesections *shape*) — this phase ports *behavior* onto the shape that already exists.*
+*Resolves two shape mismatches raised in team discussion: (a) `basesections.Instrument` describes a static piece of equipment, but NeXus's `NXinstrument` describes the instrument *in use* with live per-measurement settings — these need two different classes, not one inheriting the other (nomad-measurements' XRD plugin already sidesteps `basesections.Instrument` for this reason, embedding settings inline on `XRDSettings` instead); (b) `basesections.Measurement` has `samples`/`instruments`/`results` where the generated `Entry` has `sample`/`instrument`/`data`. See the internal plan (§19 Phase 5) for the full findings/decisions breakdown and ADR-009 (below and at `adr/ADR-009-experiment-basesections-alignment.md`). **Scope: the basesections v2 redesign, `BASESECTIONS_MAP`, and ADR-009 — needs H's review, since the redesign touches shared infrastructure `nomad-measurements` depends on.** What it does *not* include is migrating `nomad-measurements`' own plugin code — that's Phase N below, done later.*
 
-- The `identifierNAME` normalizer (`NexusIdentifiers.normalize()`): turns NeXus's loose `identifierNAME` convention into a real, searchable NOMAD entity reference (`AnchoredReference`). Needs v2 naming (no `__field` suffix, variadic via `MQuantity`) and likely belongs on the universal `Object` base, not scattered per-class.
-- The old `NexusMeasurement`/`Root`-level normalizer: walked `m_all_contents()` to bucket sections by base type because v1 had no properly-typed `sample`/`instrument`/`data` SubSections to populate directly. **Likely obsolete, not just renameable** — `NexusParserV2` already populates those SubSections directly. What may still be needed: the `method` label and `archive.workflow2` stamping — requires real investigation during the phase, not a decision made in advance.
+- **Migration risk, not just naming**: `basesections.Instrument` already has real downstream consumers (nomad-measurements' `transmission`/`quantumdesign` plugins). Repurposing the same class name for a different meaning would silently change behavior for existing code. Resolution: **rename**, don't repurpose — the static concept becomes `InstrumentEntry`, freeing `Instrument` for the NeXus-shaped, per-measurement concept (composition via a `instrument_entry` SubSection, not inheritance).
+- ADR-009 written and all 9 decisions implemented (`nomad-FAIR`: `basesections/v2.py` + 8 passing tests in `test_basesections.py`; `pynxtools`: `BASESECTIONS_MAP` retargeted to v2, all 227+ generated files regenerated).
+- Requires Phase 1 base classes and Phase 2 application definitions to be available
+- Gates Phase 6: `NexusMeasurement.normalize()`'s porting target depends on the final `Measurement` shape decided here
+- Manual multi-subentry-file parse check and full pynxtools + all-6-apps test re-run both done (2026-07-29), all green — surfaced and fixed two real gaps along the way (`Measurement`/`Process.normalize()` crash on direct-containment samples; `Entry.subentry` not reflected in `workflow2.tasks`), see ADR-009's "Implementation notes".
+- **Not yet done**: H/S review of ADR-009 and the branches — the only remaining item before this phase closes.
+
+**Status update (2026-11-09)**: `nomad-FAIR`'s `basesections-v2-nexus-alignment` is otherwise
+settled and clean — a rebase had left a syntax error and several stale/duplicated tests in
+`test_basesections.py` (testing removed functionality, undefined names/fixtures); fixed, all 16
+tests pass, `ruff check` clean across the branch diff. Two things moved since ADR-009 was first
+decided, both already captured in its own status update: decision (b)'s singular naming was
+reverted back to plural (`samples`/`instruments`); decision (c) (`Activity.sub_activities`) was
+removed outright — same-entry activity nesting is being redesigned from scratch on a separate,
+not-yet-settled branch (`nomad-FAIR`'s `nesting-at-activity-level`), which this phase does not
+depend on. `basesections.MeasurementResult` is now `MeasurementData`. A parallel pynxtools-side
+pluralization pass (branch `pluralize-subsections`, off `nexus-metainfo-phase5`, not yet merged)
+keeps the generated schema's own naming (`Entry.samples`/`.instruments`/etc.) consistent with the
+corrected decision (b) — see ADR-011's status update for a real override-matching bug that
+surfaced and was fixed along the way. [ADR-012](adr/ADR-012-provenance-tracked-generator-regeneration.md)
+(provenance-tracked regeneration) is implemented and usable from `nexus-metainfo-phase5` via
+`pynx nomad generate-metainfo --all --fix`, but not yet merged to pynxtools `develop` either.
+**Before Phase N starts**: pynxtools's own branch stack (`nexus-metainfo-phase5` →
+`nexus-metainfo-phase6` → `pluralize-subsections`) needs consolidating onto one line and landing
+on pynxtools `develop` — `phase5` has its own rebase-artifact commit (titled, literally, "rebase
+issues") that hasn't been checked for the same kind of damage just found and fixed on the
+nomad-FAIR side, and `pluralize-subsections` is currently 8 commits behind `phase5` with its own
+work still entirely uncommitted in its worktree.
+
+#### Phase N — nomad-measurements Migration (**not started** — separate from Phase 5, done later together with H/S; not part of the 0–8 sequence)
+
+*`nomad-measurements` actually adopts the shape Phase 5 decides on (plus its independently-planned v1→v2 basesections migration, done in the same pass). A cross-team effort with its own pace, gated on Phase 5's decisions/ADR-009 being settled first but not required to start immediately after. See the internal plan (§19 Phase N) for the full nomad-measurements-side findings and per-plugin migration breakdown (XRD lowest cost, transmission highest cost).*
+
+- `nomad-measurements` sections inherit from generated Python NeXus classes; XRD as pilot (already has `NEXUS_DATASET_MAP`): `class XRayDiffraction(XRD):`
+- Engage H before this phase's migration work starts (beyond the Phase 5 ADR review H already did) — plan the actual `xrd`/`transmission`/`quantumdesign` code changes together, not just review
+- Per-plugin findings and sequencing recorded in [ADR-011](adr/ADR-011-nomad-measurements-migration.md) — **its original naming targets are superseded, see its own status update** (samples/instruments stay plural; the quantumdesign class-attribute landmine it flagged no longer applies)
+- `nomad-measurements` becomes the authoritative FAIRmat measurement schema layer
+
+**Status update (2026-11-09)**:
+- `nomad-measurements` now has its own `main`/`develop`/`release` branching model, mirroring
+  pynxtools and its plugins (`develop` integration branch, `main` release-only, `release/vX.Y.Z`
+  branches gate publishing) — PR [#208](https://github.com/FAIRmat-NFDI/nomad-measurements/pull/208),
+  including a `compatibility-with-nomad-release.yml` check that installs against the latest
+  *released* `nomad-lab` independently of whatever ref `develop`'s own `pyproject.toml` is pinned
+  to during the migration.
+- **Real, not-yet-resolved coupling risk**: until both `nomad-FAIR`'s basesections v2 work and
+  pynxtools's generator branch stack are released, `nomad-measurements`'s `develop` branch can
+  only generate/import against *unreleased* branches of both — any `nomad-lab` pin on `develop`
+  during this window is necessarily a git ref, not a release, and a `nomad-measurements` build
+  made from `develop` will not work against a released `nomad-lab`. This is expected during the
+  migration and is exactly what `compatibility-with-nomad-release.yml` is meant to surface, not
+  hide — it is the real gate before cutting a `release/*` branch, not a Phase N blocker on its
+  own.
+- **Phase 2b (submodule-per-appdef layout) reconsidered**: worth doing as part of Phase N after
+  all, not deferred to Phase 8 — `nomad-measurements` has zero existing consumers of the
+  generated schema today, so there is no backward-compat cost to generating straight into a
+  submodule layout; waiting until after Phase N would mean touching `nomad-measurements`'
+  plugin-side import paths (`xrd`/`transmission`/`quantumdesign`) twice instead of once. Sequencing:
+  build and verify the submodule-layout generator output against pynxtools's own existing flat
+  output first (structural diff, same technique already used for the pluralization reference
+  files), as its own separate, verified step immediately before Phase N's actual transfer — not
+  bundled into the same change as the transfer itself.
+- The provenance manifest (`generated_manifest.json`, ADR-012) moves to `nomad-measurements`
+  alongside the generated files it tracks, not left behind in pynxtools — it only makes sense
+  relative to the specific files it annotates.
+
+#### Phase 6 — Port `NORMALIZER_MAP` Logic to `normalize()` Methods (**implementation in progress** — identifier resolution and `NexusMeasurement` obsolescence resolved, see [ADR-010](adr/ADR-010-identifier-resolution-and-normalizer-porting.md))
+
+*The old runtime-generated schema's `NORMALIZER_MAP` (`schema_packages/schema.py`) still dispatches hand-written normalizers per NXDL class. None of this has an equivalent on the Phase 1–3 generated classes yet — their `normalize()` stubs just call `super().normalize()`. Distinct from Phase 5 (which restructures basesections *shape*) — this phase ports *behavior* onto the shape that already exists.*
+
+- **`identifierNAME` normalizer — resolved, see [ADR-010](adr/ADR-010-identifier-resolution-and-normalizer-porting.md).** No `AnchoredReference` class was built. Lands on `Object.normalize()`: the first identifier on an `Entity`-typed object sets its own `lab_id`; any further identifier resolves-or-creates a `basesections.EntityReference` via a new `resolve_or_create_entity()` helper.
+- **`NexusMeasurement`/`Root`-level normalizer — confirmed obsolete, not ported, see ADR-010.** `NexusParserV2` already populates `sample`/`instrument`/`data` SubSections directly, so the old bucketing walk has no v2 equivalent to port. Each individual responsibility (workflow stamping, `method` label, results.eln.methods) was checked and found already handled elsewhere in v2.
 - Smaller per-class normalizers (fabrication/sample/sample_component/entry/process/data naming logic) are lower-risk, mostly 1:1 ports.
-- **Gate**: `NORMALIZER_MAP` cannot be removed (Phase 7) until every normalizer it dispatches to has a ported equivalent or a documented reason it's superseded.
+- **Gate**: `NORMALIZER_MAP` cannot be removed (Phase 8) until every normalizer it dispatches to has a ported equivalent or a documented reason it's superseded.
 
-#### Phase 6 — Backwards Converter (`metainfo_to_nxdl.py`) (**not started** — file does not exist)
+#### Phase 7 — Backwards Converter (`metainfo_to_nxdl.py`) (**not started** — file does not exist)
 
-*Reads all six annotation models → emits NXDL XML, so community schema authors can verify no semantic loss before migrating off the old stack. Required before Phase 7 deprecation begins — it is the safety net.*
+*Reads all six annotation models → emits NXDL XML, so community schema authors can verify no semantic loss before migrating off the old stack. Required before Phase 8 deprecation begins — it is the safety net.*
 
 - Warns on type changes against existing NXDL; never emits removals
 - Detects description edits by comparing `description=` against the annotation's `doc=`
 - **Gate**: round-trip NXDL → Python → NXDL recovers all structural content
 
-#### Phase 7 — Cleanup (**not started**)
+#### Phase 8 — Cleanup (**not started**)
 
-*Remove all legacy runtime generation code, shims, and intermediate compatibility layers. Hard gate: Phase 4, Phase 5 (normalizer porting), and Phase 6 all complete.*
+*Remove all legacy runtime generation code, shims, and intermediate compatibility layers. Hard gate: Phase 4, Phase 6 (normalizer porting), and Phase 7 all complete.*
 
 - Remove XML-parsing generation code from `schema.py`
 - Remove `NexusBaseSection`, `NexusMeasurement`, `NexusActivityStep`, `NexusActivityResult`
 - Remove `_rename_nx_for_nomad` (or keep with `DeprecationWarning` for external users)
 - Remove `BASESECTIONS_MAP`, `NORMALIZER_MAP`, `section_definitions` global
 - Submodule layout for application definitions (Phase 2b, deferred here as non-breaking reorganisation)
-
-#### Phase N — nomad-measurements Alignment (**early draft, deprioritized while Phase 4 is the active focus**)
-
-*`nomad-measurements` inherits from the generated NeXus base classes, becoming the authoritative FAIRmat measurement schema layer. The design below is a first pass, not yet reviewed by the team — see the internal plan for the full findings/decisions/migration breakdown and the ADR-009 draft.*
-
-- `nomad-measurements` sections inherit from generated Python NeXus classes
-- XRD as pilot (already has `NEXUS_DATASET_MAP`): `class XRayDiffraction(XRD):`
-- Requires a nomad-measurements-specific mapping-table/backward-compat ADR (not yet written — not numbered until it is, per this project's "name ADRs as they're written" convention) and ADR-009 (basesections alignment, drafted in the internal plan, not yet written here)
-- Requires Phase 1 base classes and Phase 2 application definitions to be available
-- `nomad-measurements` becomes the authoritative FAIRmat measurement schema layer
 
 ---
 
@@ -687,18 +761,19 @@ updates. No dependency inversion needed, ever.
 
 ### Architectural Design Tensions
 
-1. **`AnchoredReference` / identifiers** — open, now has a concrete home: `identifierNAME` →
-   entity-reference logic is NeXus-specific; porting the old `identifierNAME` normalizer
-   (`NexusIdentifiers.normalize()`) onto the generated v2 classes is in-scope for
-   [Phase 5](#phase-5--port-normalizer_map-logic-to-normalize-methods-not-started--newly-identified).
-   The "stay in pynxtools vs. move to nomad-measurements" question, and the long-term goal of
-   identifiers being instances of their class (e.g. `Sample`) rather than abstract references,
-   should be resolved there rather than left open indefinitely.
+1. **`AnchoredReference` / identifiers — resolved, see [ADR-010](adr/ADR-010-identifier-resolution-and-normalizer-porting.md).**
+   No `AnchoredReference` class was built. `identifierNAME` resolution lands on `Object.normalize()`
+   plus a new `resolve_or_create_entity()` helper and an `Object.nexus_identifiers` SubSection —
+   see ADR-010 for the full mechanism. This also resolves the "stay in pynxtools vs. move to
+   nomad-measurements" question: the mechanism lives in `Object.normalize()`, which stays in
+   pynxtools permanently per the Long-Term Dependency Architecture. The long-term goal of
+   identifiers being instances of their own class (e.g. `Sample`) rather than abstract references
+   remains open but is no longer blocked on this decision.
 
 2. **NXdata special handling** — **resolved, not a tension**: the old runtime schema's
    `nxdata_ensure_definition`-style override is unused in the new system. `AXISNAME`/`DATA` are
    handled as ordinary variadic quantities; no special-casing was needed on the generated `Data`
-   class. The corresponding dead code remains in the old `schema.py` until Phase 7 removes it.
+   class. The corresponding dead code remains in the old `schema.py` until Phase 8 removes it.
 
 3. **Application definitions extending base classes** — **resolved via
    [ADR-006](adr/ADR-006-application-definitions-are-entry-subclasses.md)**: not the
@@ -716,6 +791,19 @@ updates. No dependency inversion needed, ever.
    # nomad-measurements: future location
    from nomad_measurements.nexus.base_classes.entry import Entry
    ```
+
+5. **ELN → `eln_data.yaml` → NeXus round-trip is convoluted** — raised during Phase 4, worth a
+   real look rather than accepting as a given. Every plugin follows the same shape: archive
+   section → flat YAML → NeXus → archive section again. This round-trip exists because the
+   dataconverter's `Template`/`Writer` machinery only knows how to consume flat YAML/JSON, not
+   NOMAD archive sections directly. A cleaner shape, worth a separate design pass (not blocking
+   Phase 4/6): since `NexusParserV2` already navigates the generated Python metainfo directly (no
+   flat-dict intermediate), the ELN side could plausibly skip `eln_data.yaml` entirely and
+   populate the same generated `Entry`/application-class instance the parser would otherwise
+   build — unifying "ELN-authored values" and "parsed-from-file values" as two ways of populating
+   the *same* Python object graph. A real simplification opportunity surfaced by Phase 1–3
+   already existing, but a separate, follow-on investigation, not a decision made here.
+
 ---
 
 ### NOMAD Core Asks
@@ -723,6 +811,11 @@ updates. No dependency inversion needed, ever.
 Consolidated list of capabilities this project needs from the NOMAD core team. Each should be
 framed as a general NOMAD platform improvement, not a NeXus-specific request — the mechanism
 must be useful to any schema, not just this one.
+
+0. **Confirm `AnnotationModel.m_registry[...]` at import time is a stable, supported API.** The
+   six annotation classes register themselves into this registry at plugin import time (see
+   [ADR-001](adr/ADR-001-nexus-annotations.md)); this project depends on that pattern remaining
+   supported rather than becoming an internal implementation detail NOMAD core is free to change.
 
 1. **Optionality-driven visibility** (the most significant ask). Optional inherited quantities
    should be hidden by default in ELN, metainfo viewer, and search; required/recommended
@@ -768,6 +861,28 @@ not listed here.
 v1 is the transition window where both worlds coexist. v2 is the clean break.
 
 **pynxtools-* family coordination**: pynxtools-xps, -mpes, -em, -apm, -xas, -xrd, -raman, -spm, -ellips must be informed before v2. A compatibility matrix should be published at the v2 release.
+
+**Specific backward-compatibility promises for the v1 window**:
+- `_quantity` suffix: generated Python files use clean names (`start_time`, not
+  `start_time__field`). `__getattr__` shims on old `schema.py` classes may ease migration but
+  aren't required for v1 — v1 keeps the old stack unchanged and the new schema is purely
+  additive.
+- Old entry points (`nexus_schema`, `nexus_parser`, `nexus_app`) stay untouched until Phase 3
+  (new parser validated) *and* Phase 4 (all plugins migrated). `DeprecationWarning` added in
+  Phase 8; removed at v2.0.
+- `section.more["nx_*"]` stays populated (as deprecated) until the old parser is removed.
+- `from pynxtools.nomad.schema import NexusMeasurement` must still work — re-export shim from
+  `schema.py` until 2.0.
+- `_rename_nx_for_nomad` stays available with a `DeprecationWarning` if any external code uses it.
+
+**Rollout mechanism is deployment-wide, not per-plugin** — the original framing (imagining a
+per-plugin v1/v2 toggle) was wrong. `NexusParserV2`/`nexus_app_v2` are `MatchingParser`/app entry
+points that match *any* `.nxs` file system-wide — `is_mainfile()` doesn't filter by which
+`pynxtools-*` reader produced the file — so "v2 for mpes only, v1 for everything else" isn't a
+real choice; activation is necessarily deployment-wide via the existing `nomad.yaml`
+`plugins.entry_points.include` allowlist. What remains genuinely open is a Phase 7/8 question:
+when a production NOMAD distribution's *default* config (not this dev override) flips from v1 to
+v2 — a deprecation-timing decision, not a Phase 4 blocker.
 ---
 
 ## References
@@ -780,10 +895,10 @@ v1 is the transition window where both worlds coexist. v2 is the clean break.
 | #708 | Split nexus package into smaller packages | Closeable — Phase 1/2 (`nexus_base_classes` + `nexus_applications`); multi-package search confirmed unlimited during Phase 4 |
 | #542 | Search quantities in NOMAD | Phase 1 (`nx_optionality` drives indexing) |
 | #534 | Unsigned int type mapping | Phase 1 (`NeXusField.type = "NX_UINT"`) |
-| #702 | Parsing/normalization improvements | Parser rewrite: Phase 3 (complete); normalization improvements: Phase 5 |
-| #551 | NXapm normalizer | Phase 5 (move to pynxtools-apm) |
+| #702 | Parsing/normalization improvements | Parser rewrite: Phase 3 (complete); normalization improvements: Phase 6 |
+| #551 | NXapm normalizer | Phase 6 (move to pynxtools-apm) |
 | #737 | Memory for large datasets | Phase 4 (FIELD_STATISTICS, annotation-based type info for smarter stats) |
-| #725 | Materials card not instantiated | Phase 5 (normalization via `normalize()` methods) |
+| #725 | Materials card not instantiated | Phase 6 (normalization via `normalize()` methods) |
 
 ---
 
@@ -800,7 +915,7 @@ pynx nomad generate-metainfo --all --dry-run  # CI check
 # Phase 3: parser v2 golden-output + parity (complete)
 python -m pytest tests/nomad/test_parsing_v2.py -v
 
-# Phase 6: round-trip (not started)
+# Phase 7: round-trip (not started)
 pynx nomad export-nxdl --all --check-only  # NXDL recovered from Python annotations
 
 # Phase N: ELN visibility (not started)
@@ -813,6 +928,6 @@ pynx nomad export-nxdl --all --check-only  # NXDL recovered from Python annotati
 ### Open Questions (for ADR process)
 
 - Attribute naming: `{field}__units` vs. storing units directly on the Quantity's `unit` parameter? — resolved in practice: units go on the Quantity's `unit` parameter (`a_nexus_field=NeXusField(units="NX_VOLTAGE")` records the NXDL unit *category*, separately from the resolved pint `unit=` on the Quantity itself).
-- `AnchoredReference`/`identifierNAME`: stay in pynxtools or migrate to nomad-measurements? — tracked under [Architectural Design Tensions](#architectural-design-tensions) item 1, to be resolved as part of Phase 5.
+- `AnchoredReference`/`identifierNAME`: stay in pynxtools or migrate to nomad-measurements? — tracked under [Architectural Design Tensions](#architectural-design-tensions) item 1, to be resolved as part of Phase 6.
 - Backward compat period for `__field` suffix: already resolved by the Versioning Strategy above — no shim; v1 keeps the old stack unchanged and v2 is the clean break for plugin code using old names.
-- **`_quantity` suffix rule for reserved `BaseSection` names** (`name`/`datetime`/`lab_id`/`description` → `name_quantity`/etc.) may not be necessary — NOMAD allows redefining an inherited quantity in a subclass (adding NXDL-specific annotations/`description=`) without renaming, as long as the type stays compatible (all four reserved names match their NXDL counterparts' types exactly). One thing to verify first: `BaseSection.normalize()`'s `entry_name`-from-`self.name` side effect only fires for the entry's top-level section, not nested SubSections — confirm before assuming the collapse is safe everywhere. **Not fixing now**: Phase N's basesections-alignment work will anyway reconcile NeXus concepts with NOMAD's base sections, so this is deferred there rather than patched as a one-off generator tweak.
+- **`_quantity` suffix rule for reserved `BaseSection` names** (`name`/`datetime`/`lab_id`/`description` → `name_quantity`/etc.) may not be necessary — NOMAD allows redefining an inherited quantity in a subclass (adding NXDL-specific annotations/`description=`) without renaming, as long as the type stays compatible (all four reserved names match their NXDL counterparts' types exactly). One thing to verify first: `BaseSection.normalize()`'s `entry_name`-from-`self.name` side effect only fires for the entry's top-level section, not nested SubSections — confirm before assuming the collapse is safe everywhere. **Not fixing now**: Phase 5's basesections-alignment work will anyway reconcile NeXus concepts with NOMAD's base sections, so this is deferred there rather than patched as a one-off generator tweak.

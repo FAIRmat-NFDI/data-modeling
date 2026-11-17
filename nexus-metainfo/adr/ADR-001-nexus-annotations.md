@@ -87,7 +87,9 @@ class NeXusAttribute(AnnotationModel):
 
 ### `NeXusLink`
 
-Attached to every `Quantity(type=str)` derived from a NXDL `<link>` element. A link is a named HDF5 reference to another node in the file; the `target` is the schema-level default path and the parser resolves the actual target at read time.
+Attached to the `Quantity` generated from a NXDL `<link>` element. A link is a named HDF5 reference to another node in the file; the `target` is the schema-level default path and the parser resolves the actual target at read time.
+
+**Quantity type resolution** (Phase 6): the generator resolves `target` against the field/attribute it points to within the same application's tree and uses that target's `type`/`unit`/`shape` for the generated `Quantity` — e.g. a link to a `NX_FLOAT` field becomes `Quantity(type=np.float64, unit=...)`, not `Quantity(type=str)`. It falls back to `type=str` only when the target can't be resolved. This affects only the Quantity's declared type; the `NeXusLink` annotation's own fields (`name`, `target`, `optionality`, `deprecated`) are unchanged.
 
 ```python
 class NeXusLink(AnnotationModel):

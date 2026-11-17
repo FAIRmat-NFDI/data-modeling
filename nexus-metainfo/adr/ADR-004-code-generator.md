@@ -40,15 +40,23 @@ One Python file per NXDL class, written to `metainfo/base_classes/` (category `"
 | `<link>` | `Quantity(type=str)` | `NeXusLink` |
 | `<choice>` | One `SubSection` per alternative | `NeXusChoice` |
 
-**`<link>` handling**: emitted as `Quantity(type=str)` carrying `a_nexus_link`. The `target` field stores the schema-level default target path from the NXDL. The actual HDF5 target is resolved by the parser at read time. Links share the quantity name namespace with fields (a link name that conflicts with a field name would be a NXDL error).
+**`<link>` handling**: emitted as a `Quantity` carrying `a_nexus_link`. The `target` field stores the schema-level default target path from the NXDL. Since Phase 6, the generator resolves `target` against the field/attribute it points to and gives the Quantity that target's real `type`/`unit`/`shape` (e.g. a link to a `NX_FLOAT` field becomes `Quantity(type=np.float64, unit=...)`), falling back to `type=str` only when the target can't be resolved — see ADR-001 §`NeXusLink`. The actual HDF5 target is resolved by the parser at read time. Links share the quantity name namespace with fields (a link name that conflicts with a field name would be a NXDL error).
 
 **`<choice>` handling**: each alternative group inside the `<choice>` block becomes a separate `SubSection` named `{choice_name}_{class_suffix}` (e.g. `pixel_shape_off_geometry`, `pixel_shape_cylindrical_geometry`). All alternatives carry `NeXusChoice` with the shared `group_name`. The parser selects the matching SubSection by comparing `NeXusChoice.nx_class` against the HDF5 group's `NX_class` attribute. Only alternatives whose target class is already in `base_classes/` are generated (same rule as for regular groups).
 
 ### Additive-only write policy
 
-The generator never removes existing members. When a file already exists:
-- **No user additions**: rewrite if content differs (propagates description changes, new members, annotation updates)
-- **User additions present** (methods or quantities not in new output): skip; protect customizations. Use `--force` to override.
+The generator never removes existing members. When a file already exists, protection is
+**content-based, not name-based** (fixed during Phase 4/6 — see Consequences): `_class_member_sources()`
+collects `{member_name: source_text}` for both the on-disk file and the freshly rendered template.
+A shared member counts as user-modified — and is protected from being overwritten — only when its
+*content* differs, not merely when it's present under both names. Every generated class always
+defines a `normalize()` stub (even a trivial `super().normalize(...)` call), so a purely
+name-based check could never tell a hand-written body apart from the stub and would silently
+overwrite hand-authored `normalize()` implementations; that gap is what the content-based check
+closes.
+- **No user modifications**: rewrite if content differs (propagates description changes, new members, annotation updates)
+- **User modifications present** (member content differs from the freshly rendered template): skip that member; protect the customization. Use `--force` to override.
 - **`--dry-run`**: report whether the file would change; no write
 
 This allows `normalize()` methods added by plugin developers to survive regeneration.
@@ -59,10 +67,15 @@ This allows `normalize()` methods added by plugin developers to survive regenera
 - **Quantity names**: NXDL field names as-is; `_quantity` suffix for:
   - Reserved NOMAD `BaseSection` names (`name`, `datetime`, `lab_id`, `description`)
   - Field-vs-group collisions (group wins the unqualified name)
+  - Python keyword conflicts (`lambda` → `lambda_quantity`, via `keyword.iskeyword()`)
 - **Subsection names**: NXDL group name; `_group` suffix when a group in a child class
   collides with a Quantity (field) of the same name inherited from an ancestor class
   (symmetric inheritance rule — the ancestor always keeps the unqualified name)
 - **Field-attribute quantities**: `{field_name}__{attr_name}` (double underscore)
+- **De-duplication of named-concept class names** applies only to `name_type="any"` groups
+  (variadic groups with no fixed NXDL name): the concept's own class-name prefix is not repeated
+  even if it matches its parent's name — e.g. `XpsCoordinateSystem`, not
+  `XpsXpsCoordinateSystem`. Fixed-name groups are not subject to this rule.
 
 ### Naming for application definition nested classes (deferred from Phase 2 to Phase 7)
 
@@ -120,5 +133,10 @@ produces clean, readable output.
 - Generated files are committed to the repository and treated as source artifacts. They must be regenerated whenever the NXDL definitions change.
 - The `--dry-run` flag enables CI to enforce that committed files match generator output.
 - The `--force` flag is needed to propagate non-structural changes (descriptions,
-  annotation values) to files that have no user additions.
+  annotation values) to files that have no user modifications.
+- A real bug shipped and was fixed during Phase 4: `pynx nomad generate-metainfo --all` was
+  unconditionally forcing base-class regeneration regardless of the `--force` flag's actual
+  value, which destroyed `entry.py`'s `m_nx_data_path` and `root.py`'s `m_entry_paths`/hand-written
+  `normalize()` on a plain `--all` run. `cli.py` now passes the user's actual `--force` value
+  through instead of hardcoding it.
 - Named concept classes are internal implementation detail; `__all__` exposes only the primary class. Imports of named concepts are possible but not part of the public API.

@@ -1,6 +1,6 @@
 # ADR-003: Canonical NeXus ↔ NOMAD Base Section Mapping
 
-**Status**: Decided (Phase 1 implementation); the `NXinstrument` open question below is being revisited concretely in Phase N — see note at the bottom  
+**Status**: Decided (Phase 1 implementation); the `NXinstrument` open question below is being revisited concretely in Phase 5 — see note at the bottom  
 **Date**: 2026-06  
 **Deciders**: Lukas Pielsticker, Hampus Näsström, Area B core team
 
@@ -76,5 +76,5 @@ Until that mechanism exists, `BASESECTIONS_MAP` is the single source of truth. A
 - `schema.py`'s `BASESECTIONS_MAP` (which maps to Python class objects) is superseded for new code; `converters/_mapping.py` is canonical.
 - New NXDL classes with strong semantic matches to NOMAD concepts can be added by
   extending `BASESECTIONS_MAP` — this is a design decision, not a mechanical change.
-- The `NXinstrument` / `basesections.Instrument` question is being revisited as part of Phase N (`nomad-measurements` alignment) — no longer just a future possibility: a concrete draft resolution exists (rename `basesections.Instrument` → `InstrumentEntry`; `Instrument` gets a composed `instrument_entry: SubSection(InstrumentReference)` instead of inheriting it), written up as draft ADR-009 inside the internal plan (not yet split into its own file). Nothing has been implemented yet — pending team review.
+- The `NXinstrument` / `basesections.Instrument` question is being revisited as part of Phase 5 (basesections v2 alignment) — no longer just a future possibility: a concrete resolution is proposed (rename `basesections.Instrument` → `InstrumentEntry`; `Instrument` gets a composed `instrument_entry: SubSection(InstrumentReference)` instead of inheriting it), written up as [ADR-009](ADR-009-experiment-basesections-alignment.md). Nothing has been implemented yet — pending team review. Note this is distinct from Phase N, which is `nomad-measurements` actually adopting the resulting shape, a separate later phase.
 - When `BASESECTIONS_MAP` is eventually replaced by per-class declarations, the generator must be updated to read from the new source; the generated files will be regenerated without changing the inheritance in the Python classes.
